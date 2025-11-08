@@ -94,7 +94,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\"",
     "check": "pnpm run lint && pnpm run format:check",
     "deps:update": "pnpm update --latest",
     "deps:check": "pnpm outdated",

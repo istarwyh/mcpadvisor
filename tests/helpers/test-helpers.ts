@@ -61,10 +61,12 @@ export class SmartWaiter {
 
   async waitForSearchResults(timeout = TEST_CONFIG.timeout) {
     await this.page.waitForFunction(() => {
-      const content = document.body.textContent || '';
-      return content.includes('Title:') || 
-             content.includes('No results') || 
-             content.includes('error') || 
+      const content = (document.body.textContent || '').toLowerCase();
+      return content.includes('title:') ||
+             content.includes('no results') ||
+             content.includes('no mcp servers found') ||
+             content.includes('no matching mcp servers found') ||
+             content.includes('error') ||
              content.includes('failed');
     }, { timeout });
   }

@@ -6,12 +6,17 @@ set -e
 
 echo "🚀 Starting local Meilisearch for MCPAdvisor..."
 
-# Check if master key is provided
+# Check or generate master key
 if [ -z "$MEILI_MASTER_KEY" ]; then
-    echo "❌ MEILI_MASTER_KEY environment variable is required"
-    echo "Please set it to a secure value:"
-    echo "  export MEILI_MASTER_KEY=your_secure_master_key_here"
-    exit 1
+    echo "🔐 MEILI_MASTER_KEY not set. Generating a secure key..."
+    if command -v openssl >/dev/null 2>&1; then
+        MEILI_MASTER_KEY=$(openssl rand -hex 32)
+        echo "✅ Generated MEILI_MASTER_KEY via openssl"
+    else
+        # Fallback: generate 64-char alphanumeric
+        MEILI_MASTER_KEY=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64)
+        echo "✅ Generated MEILI_MASTER_KEY via /dev/urandom fallback"
+    fi
 fi
 
 # Check if meilisearch binary exists
