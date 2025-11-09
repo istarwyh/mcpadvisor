@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/istarwyh-mcpadvisor-badge.png)](https://mseep.ai/app/istarwyh-mcpadvisor)
+
 # MCP Advisor
 
 [![Model Context Protocol](https://img.shields.io/badge/Model%20Context%20Protocol-purple)](https://modelcontextprotocol.org)
