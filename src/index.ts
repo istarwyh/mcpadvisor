@@ -4,6 +4,8 @@ import { SearchService } from './services/searchService.js';
 import { CompassSearchProvider } from './services/core/search/CompassSearchProvider.js';
 import { ServerService, TransportType, TransportConfig } from './services/core/server/index.js';
 import logger from './utils/logger.js';
+import path from 'path';
+import { spawn } from 'child_process';
 import { GetMcpSearchProvider } from './services/core/search/GetMcpSearchProvider.js';
 import { MeilisearchSearchProvider } from './services/core/search/MeilisearchSearchProvider.js';
 import { getParamValue } from '@chatmcp/sdk/utils/index.js';
@@ -88,6 +90,22 @@ async function main() {
     }
     
     const searchService = new SearchService(searchProviders);
+
+    // Best-effort async bootstrap for local Meilisearch
+    try {
+      if ((process.env.MEILISEARCH_INSTANCE || 'cloud') === 'local') {
+        const scriptPath = path.resolve(process.cwd(), 'scripts', 'bootstrap-meilisearch.mjs');
+        const child = spawn(process.execPath, ['--no-deprecation', scriptPath], {
+          env: { ...process.env },
+          stdio: 'ignore',
+          detached: true,
+        });
+        child.unref();
+        logger.info('Triggered async Meilisearch bootstrap');
+      }
+    } catch (e) {
+      logger.warn('Skip Meilisearch bootstrap');
+    }
 
     // Determine transport type
     let transportType = TransportType.STDIO;
