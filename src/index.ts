@@ -94,14 +94,31 @@ async function main() {
     // Best-effort async bootstrap for local Meilisearch
     try {
       if ((process.env.MEILISEARCH_INSTANCE || 'cloud') === 'local') {
-        const scriptPath = path.resolve(process.cwd(), 'scripts', 'bootstrap-meilisearch.mjs');
-        const child = spawn(process.execPath, ['--no-deprecation', scriptPath], {
-          env: { ...process.env },
-          stdio: 'ignore',
-          detached: true,
+        // Try multiple potential script locations
+        const possiblePaths = [
+          path.resolve(process.cwd(), 'scripts', 'meilisearch', 'meilisearch.bootstrap.mjs'),
+          path.resolve(process.cwd(), 'scripts', 'bootstrap-meilisearch.mjs'),
+        ];
+
+        const scriptPath = possiblePaths.find(p => {
+          try {
+            return require('fs').existsSync(p);
+          } catch {
+            return false;
+          }
         });
-        child.unref();
-        logger.info('Triggered async Meilisearch bootstrap');
+
+        if (scriptPath) {
+          const child = spawn(process.execPath, ['--no-deprecation', scriptPath], {
+            env: { ...process.env },
+            stdio: 'ignore',
+            detached: true,
+          });
+          child.unref();
+          logger.info('Triggered async Meilisearch bootstrap');
+        } else {
+          logger.debug('Bootstrap script not found, skipping');
+        }
       }
     } catch (e) {
       logger.warn('Skip Meilisearch bootstrap');

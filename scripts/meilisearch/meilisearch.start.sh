@@ -23,7 +23,7 @@ if [ -z "$MEILI_MASTER_KEY" ]; then
         echo "✅ Generated MEILI_MASTER_KEY via openssl: $MEILI_MASTER_KEY"
     else
         # Fallback: generate 64-char alphanumeric
-        MEILI_MASTER_KEY=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64)
+        MEILI_MASTER_KEY=$(head -c 64 /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 64)
         echo "✅ Generated MEILI_MASTER_KEY via /dev/urandom fallback"
     fi
 fi
@@ -58,7 +58,7 @@ while ! curl -sf http://localhost:7700/health > /dev/null 2>&1; do
     if [ $counter -eq $timeout ]; then
         echo "❌ Meilisearch failed to start within ${timeout}s"
         if [ ! -z "$MEILISEARCH_PID" ]; then
-            kill $MEILISEARCH_PID 2>/dev/null || true
+            kill -- -$MEILISEARCH_PID 2>/dev/null || true
         fi
         exit 1
     fi
@@ -95,7 +95,7 @@ echo "🔧 Saved environment to $ENV_FILE (source this file to load vars)"
 # Bootstrap local index with data if available (best-effort)
 if command -v node >/dev/null 2>&1; then
   echo "🧩 Bootstrapping Meilisearch index with local data (best-effort)..."
-  SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+  SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
   NODE_OPTIONS='--no-deprecation' MEILISEARCH_MASTER_KEY="$MEILI_MASTER_KEY" MEILISEARCH_LOCAL_HOST="http://localhost:7700" node "$SCRIPT_DIR/meilisearch.bootstrap.mjs" || \
     echo "⚠️  Bootstrap skipped or failed"
 else
