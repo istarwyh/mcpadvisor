@@ -90,6 +90,35 @@ npx -y @smithery/cli install @istarwyh/mcpadvisor --client claude
 
 For more installation methods and detailed configuration, see the [Quick Start Guide](docs/GETTING_STARTED.md).
 
+### Optional: Local Meilisearch (improves recommendations)
+
+To boost recommendation quality, you can run a local Meilisearch instance:
+
+```bash
+pnpm meilisearch:start
+```
+
+This starts Meilisearch at http://localhost:7700, bootstraps the `mcp_servers` index
+from local data, and persists environment variables to `~/.meilisearch/env`.
+Load them in your current shell with:
+
+```bash
+source ~/.meilisearch/env
+```
+
+Or enable it automatically with a single flag when launching MCPAdvisor (no manual env needed):
+
+```json
+{
+  "mcpServers": {
+    "mcpadvisor": {
+      "command": "npx",
+      "args": ["-y", "@xiaohui-wang/mcpadvisor", "--local-meilisearch"]
+    }
+  }
+}
+```
+
 ## Developer Guide
 
 ### Architecture Overview

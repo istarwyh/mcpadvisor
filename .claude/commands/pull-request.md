@@ -123,10 +123,6 @@ After implementing all fixes:
    - Improve specific issue 2 from review
    - Add specific improvement 3 suggested
 
-   🤖 Generated with [Claude Code](https://claude.ai/code)
-
-   Co-Authored-By: Claude <noreply@anthropic.com>
-
    Addresses review comments in PR #$PR_NUMBER
    ```
 
