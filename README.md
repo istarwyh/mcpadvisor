@@ -106,6 +106,19 @@ Load them in your current shell with:
 source ~/.meilisearch/env
 ```
 
+Or enable it automatically with a single flag when launching MCPAdvisor (no manual env needed):
+
+```json
+{
+  "mcpServers": {
+    "mcpadvisor": {
+      "command": "npx",
+      "args": ["-y", "@xiaohui-wang/mcpadvisor", "--local-meilisearch"]
+    }
+  }
+}
+```
+
 ## Developer Guide
 
 ### Architecture Overview

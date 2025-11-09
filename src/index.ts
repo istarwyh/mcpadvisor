@@ -6,6 +6,9 @@ import { ServerService, TransportType, TransportConfig } from './services/core/s
 import logger from './utils/logger.js';
 import path from 'path';
 import { spawn } from 'child_process';
+import fs from 'fs';
+import os from 'os';
+import { randomBytes } from 'crypto';
 import { GetMcpSearchProvider } from './services/core/search/GetMcpSearchProvider.js';
 import { MeilisearchSearchProvider } from './services/core/search/MeilisearchSearchProvider.js';
 import { getParamValue } from '@chatmcp/sdk/utils/index.js';
@@ -41,6 +44,12 @@ async function main() {
       messagePath,
       endpoint,
     };
+
+    // If user opts in, ensure local Meilisearch is running and configured
+    const wantLocalMeili = process.argv.includes('--local-meilisearch');
+    if (wantLocalMeili) {
+      await ensureLocalMeilisearch();
+    }
 
     // Initialize search providers
     const searchProviders: SearchProvider[] = [
@@ -151,3 +160,99 @@ main().catch(error => {
   );
   process.exit(1);
 });
+
+// Helpers
+async function ensureLocalMeilisearch(): Promise<void> {
+  const baseDir = path.join(os.homedir(), '.meilisearch');
+  const dbPath = path.join(baseDir, 'data.ms');
+  const host = process.env.MEILISEARCH_LOCAL_HOST || 'http://localhost:7700';
+  const indexName = process.env.MEILISEARCH_INDEX_NAME || 'mcp_servers';
+
+  const healthy = async (): Promise<boolean> => {
+    try {
+      const fetchFn: any = (globalThis as any).fetch;
+      if (!fetchFn) return false;
+      const res = await fetchFn(`${host}/health`);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  };
+
+  if (await healthy()) {
+    // Just enforce local instance mode for provider alignment
+    process.env.MEILISEARCH_INSTANCE = 'local';
+    process.env.MEILISEARCH_LOCAL_HOST = host;
+    if (!process.env.MEILISEARCH_INDEX_NAME) process.env.MEILISEARCH_INDEX_NAME = indexName;
+    logger.info('Detected running local Meilisearch; using it');
+    return;
+  }
+
+  // Try to start a local Meilisearch instance
+  try {
+    fs.mkdirSync(baseDir, { recursive: true });
+  } catch {}
+
+  const candidates = [
+    process.env.MEILISEARCH_BIN,
+    'meilisearch',
+    path.join(baseDir, 'bin', 'meilisearch'),
+  ].filter(Boolean) as string[];
+
+  const pickExisting = (): string | null => {
+    for (const c of candidates) {
+      try {
+        // If absolute path, check fs; otherwise rely on PATH execution
+        if (path.isAbsolute(c)) {
+          if (fs.existsSync(c)) return c;
+        } else {
+          return c; // let spawn resolve from PATH
+        }
+      } catch {}
+    }
+    return null;
+  };
+
+  const bin = pickExisting();
+  if (!bin) {
+    logger.warn('Meilisearch binary not found in PATH or ~/.meilisearch/bin; skip auto-start');
+    return;
+  }
+
+  const masterKey = process.env.MEILISEARCH_MASTER_KEY || randomKey();
+  const args = [`--master-key=${masterKey}`, `--db-path=${dbPath}`];
+
+  try {
+    const child = spawn(bin, args, { stdio: 'ignore', detached: true });
+    child.unref();
+    logger.info('Starting local Meilisearch (background)...');
+  } catch (e) {
+    logger.warn('Failed to start Meilisearch automatically');
+    return;
+  }
+
+  // Wait for health up to 60s
+  const startedAt = Date.now();
+  while (Date.now() - startedAt < 60000) {
+    if (await healthy()) break;
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  if (!(await healthy())) {
+    logger.warn('Meilisearch did not become healthy in 60s; continuing without local instance');
+    return;
+  }
+
+  // Configure in-process env so provider uses local
+  process.env.MEILISEARCH_INSTANCE = 'local';
+  process.env.MEILISEARCH_LOCAL_HOST = host;
+  process.env.MEILISEARCH_MASTER_KEY = masterKey;
+  process.env.MEILISEARCH_INDEX_NAME = indexName;
+  process.env.MEILISEARCH_DB_PATH = dbPath;
+  logger.info('Local Meilisearch is ready; environment configured in-process');
+}
+
+function randomKey(): string {
+  // 64 hex chars using Node crypto
+  return randomBytes(32).toString('hex');
+}

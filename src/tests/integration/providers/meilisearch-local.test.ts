@@ -6,21 +6,47 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { LocalMeilisearchController } from '../../../services/providers/meilisearch/localController.js';
 import { MeilisearchInstanceConfig } from '../../../config/meilisearch.js';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 
-// 测试配置
-const TEST_CONFIG: MeilisearchInstanceConfig = {
-  type: 'local',
-  host: process.env.TEST_MEILISEARCH_HOST || 'http://localhost:7700',
-  masterKey: process.env.TEST_MEILISEARCH_KEY || process.env.MEILISEARCH_MASTER_KEY || 'developmentKey123',
-  indexName: 'mcp_servers_test'
-};
+// 测试配置（在 beforeAll 中构建，便于先加载本地 ~/.meilisearch/env）
+let TEST_CONFIG: MeilisearchInstanceConfig;
 
 describe('Local Meilisearch Provider Integration', () => {
   let controller: LocalMeilisearchController;
   let isMeilisearchAvailable = false;
   
   beforeAll(async () => {
-    // 创建控制器实例
+    // 若未提供测试用 key，则尝试从 ~/.meilisearch/env 加载
+    if (!process.env.TEST_MEILISEARCH_KEY && !process.env.MEILISEARCH_MASTER_KEY) {
+      try {
+        const envPath = path.join(os.homedir(), '.meilisearch', 'env');
+        if (fs.existsSync(envPath)) {
+          const content = fs.readFileSync(envPath, 'utf8');
+          for (const line of content.split('\n')) {
+            const m = line.match(/^export\s+([A-Z0-9_]+)=(.*)$/);
+            if (m) {
+              const key = m[1];
+              let val = m[2];
+              if (val.startsWith('"') && val.endsWith('"')) {
+                val = val.slice(1, -1);
+              }
+              process.env[key] = val;
+            }
+          }
+        }
+      } catch {}
+    }
+
+    // 构建测试配置并创建控制器实例
+    TEST_CONFIG = {
+      type: 'local',
+      host: process.env.TEST_MEILISEARCH_HOST || 'http://localhost:7700',
+      masterKey: process.env.TEST_MEILISEARCH_KEY || process.env.MEILISEARCH_MASTER_KEY || 'developmentKey123',
+      indexName: 'mcp_servers_test',
+    };
+
     controller = new LocalMeilisearchController(TEST_CONFIG);
     
     // 检查 Meilisearch 是否可用
@@ -29,12 +55,12 @@ describe('Local Meilisearch Provider Integration', () => {
       
       if (isHealthy) {
         isMeilisearchAvailable = true;
-        
+
         // 创建测试索引
         try {
           await controller.createIndex();
           await controller.configureSearchAttributes();
-          
+
           // 添加测试数据
           const testDocuments = [
             {
@@ -67,10 +93,17 @@ describe('Local Meilisearch Provider Integration', () => {
           ];
           
           await controller.addDocuments(testDocuments);
-          
+
           // 等待索引完成
           await new Promise(resolve => setTimeout(resolve, 2000));
-        } catch (error) {
+        } catch (error: any) {
+          const msg = (error?.message || '').toLowerCase();
+          // 如果是鉴权问题，则跳过后续集成测试
+          if (msg.includes('api key is invalid') || msg.includes('unauthorized') || msg.includes('invalid api key')) {
+            console.warn('Meilisearch auth failed in setup, skipping integration tests');
+            isMeilisearchAvailable = false;
+            return;
+          }
           console.warn('Test setup warning:', error);
         }
       }

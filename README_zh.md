@@ -110,6 +110,36 @@ src/
 
 更多安装方法和详细配置请参阅 [快速开始指南](docs/GETTING_STARTED.md)。
 
+### 可选：本地 Meilisearch（提升推荐效果）
+
+运行本地 Meilisearch 可以显著提升推荐质量：
+
+```bash
+pnpm meilisearch:start
+```
+
+这会在 http://localhost:7700 启动 Meilisearch，自动初始化 `mcp_servers` 索引，
+并将环境变量持久化到 `~/.meilisearch/env`。在当前 Shell 中加载：
+
+```bash
+source ~/.meilisearch/env
+```
+
+或者，在启动 MCPAdvisor 时只加一个参数即可自动启用本地 Meilisearch（无需手动设置 env）：
+
+```json
+{
+  "mcpServers": {
+    "mcpadvisor": {
+      "command": "npx",
+      "args": ["-y", "@xiaohui-wang/mcpadvisor", "--local-meilisearch"]
+    }
+  }
+}
+```
+
+ 
+
 
 
 ## 开发者指南
