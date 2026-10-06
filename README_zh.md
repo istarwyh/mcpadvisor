@@ -1,5 +1,6 @@
 # MCP Advisor
 
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/istarwyh-mcpadvisor-badge.png)](https://mseep.ai/app/istarwyh-mcpadvisor)
 [![Model Context Protocol](https://img.shields.io/badge/Model%20Context%20Protocol-purple)](https://modelcontextprotocol.org)
 [![npm version](https://img.shields.io/npm/v/@xiaohui-wang/mcpadvisor.svg)](https://www.npmjs.com/package/@xiaohui-wang/mcpadvisor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
