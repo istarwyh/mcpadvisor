@@ -17,9 +17,9 @@ To identify the next logical story based on project progress and epic definition
 #### 1.1 Locate Epic Files and Review Existing Stories
 
 - Based on `prdSharded` from config, locate epic files (sharded location/pattern or monolithic PRD sections)
-- If `devStoryLocation` has story files, load the highest `{epicNum}.{storyNum}.story.md` file
+- If `devStoryLocation` has story files, find `{epicNum}.{storyNum}.*.md` files (including legacy `{epicNum}.{storyNum}.story.md`) and select the highest epic/story pair numerically, not lexicographically. If multiple files have the same pair, stop and ask which is authoritative; do not overwrite either file.
 - **If highest story exists:**
-  - Verify status is 'Done'. If not, alert user: "ALERT: Found incomplete story! File: {lastEpicNum}.{lastStoryNum}.story.md Status: [current status] You should fix this story first, but would you like to accept risk & override to create the next story in draft?"
+  - Verify status is 'Done'. If not, alert user: "ALERT: Found incomplete story! File: {actualStoryPath} Status: [current status] You should fix this story first, but would you like to accept risk & override to create the next story in draft?"
   - If proceeding, select next sequential story in the current epic
   - If epic is complete, prompt user: "Epic {epicNum} Complete: All stories in Epic {epicNum} have been completed. Would you like to: 1) Begin Epic {epicNum + 1} with story 1 2) Select a specific story to work on 3) Cancel story creation"
   - **CRITICAL**: NEVER automatically skip to another epic. User MUST explicitly instruct which story to create.
@@ -75,7 +75,8 @@ ALWAYS cite source documents: `[Source: architecture/{filename}.md#{section}]`
 
 ### 5. Populate Story Template with Full Context
 
-- Create new story file: `{devStoryLocation}/{epicNum}.{storyNum}.story.md` using Story Template
+- Apply the Output Path Safety checks from `.bmad-core/tasks/create-doc.md` to the configured `devStoryLocation` and all filename variables before any write.
+- Create new story file: `{devStoryLocation}/{epicNum}.{storyNum}.{story_title_short}.md` using `.bmad-core/templates/story-tmpl.yaml`; use a safe lowercase-dash-case short title and reject an existing epic/story pair even if its title differs.
 - Fill in basic story information: Title, Status (Draft), Story statement, Acceptance Criteria from Epic
 - **`Dev Notes` section (CRITICAL):**
   - CRITICAL: This section MUST contain ONLY information extracted from architecture documents. NEVER invent or assume technical details.
@@ -104,7 +105,7 @@ ALWAYS cite source documents: `[Source: architecture/{filename}.md#{section}]`
 - Update status to "Draft" and save the story file
 - Execute `.bmad-core/tasks/execute-checklist` `.bmad-core/checklists/story-draft-checklist`
 - Provide summary to user including:
-  - Story created: `{devStoryLocation}/{epicNum}.{storyNum}.story.md`
+  - Story created: `{devStoryLocation}/{epicNum}.{storyNum}.{story_title_short}.md`
   - Status: Draft
   - Key technical components included from architecture docs
   - Any deviations or conflicts noted between epic and architecture

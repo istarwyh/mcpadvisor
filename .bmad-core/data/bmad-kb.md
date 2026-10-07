@@ -315,7 +315,7 @@ You are the "Vibe CEO" - thinking like a CEO with unlimited resources and a sing
 - `*exit` - Exit the agent mode
 - `*shard-doc docs/prd.md prd` - Shard PRD into manageable pieces
 - `*shard-doc docs/architecture.md architecture` - Shard architecture document
-- `*create` - Run create-next-story task (SM agent)
+- `*draft` - Run create-next-story task (SM agent)
 
 **In Web UI**:
 
@@ -504,7 +504,7 @@ Resulting Folder Structure:
    - **ALWAYS start new chat between SM, Dev, and QA work**
 
    **Step 1 - Story Creation**:
-   - **NEW CLEAN CHAT** → Select powerful model → `@sm` → `*create`
+   - **NEW CLEAN CHAT** → Select powerful model → `@sm` → `*draft`
    - SM executes create-next-story task
    - Review generated story in `docs/stories/`
    - Update status from "Draft" to "Approved"
@@ -556,7 +556,7 @@ Each status change requires user verification and approval before proceeding.
 **Option 1: PRD-First (Recommended for Large Codebases/Monorepos)**:
 
 1. **Upload project to Gemini Web** (GitHub URL, files, or zip)
-2. **Create PRD first**: `@pm` → `*create-doc brownfield-prd`
+2. **Create PRD first**: `@pm` → `*create-brownfield-prd`
 3. **Focused documentation**: `@analyst` → `*document-project`
    - Analyst asks for focus if no PRD provided
    - Choose "single document" format for Web UI
@@ -568,7 +568,7 @@ Each status change requires user verification and approval before proceeding.
 
 1. **Upload project to Gemini Web**
 2. **Document everything**: `@analyst` → `*document-project`
-3. **Then create PRD**: `@pm` → `*create-doc brownfield-prd`
+3. **Then create PRD**: `@pm` → `*create-brownfield-prd`
    - More thorough but can create excessive documentation
 
 4. **Requirements Gathering**:
@@ -587,8 +587,8 @@ Each status change requires user verification and approval before proceeding.
 
 **Templates**:
 
-- `brownfield-prd-tmpl.md`: Comprehensive enhancement planning with existing system analysis
-- `brownfield-architecture-tmpl.md`: Integration-focused architecture for existing systems
+- `brownfield-prd-tmpl.yaml`: Comprehensive enhancement planning with existing system analysis
+- `brownfield-architecture-tmpl.yaml`: Integration-focused architecture for existing systems
 
 **Tasks**:
 

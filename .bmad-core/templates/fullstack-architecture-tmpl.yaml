@@ -670,7 +670,7 @@ sections:
         title: Testing Pyramid
         type: code
         language: text
-        template: |
+        template: |2
                   E2E Tests
                  /        \
             Integration Tests

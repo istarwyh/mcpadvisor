@@ -17,7 +17,7 @@ IDE-FILE-RESOLUTION:
   - type=folder (tasks|templates|checklists|data|utils|etc...), name=file-name
   - Example: create-doc.md → .bmad-core/tasks/create-doc.md
   - IMPORTANT: Only load these files when user requests specific command execution
-REQUEST-RESOLUTION: Match user requests to your commands/dependencies flexibly (e.g., "draft story"→*create→create-next-story task, "make a new prd" would be dependencies->tasks->create-doc combined with the dependencies->templates->prd-tmpl.md), ALWAYS ask for clarification if no clear match.
+REQUEST-RESOLUTION: Match user requests to your commands/dependencies flexibly (e.g., "design the backend"→*create-backend-architecture, "document the project"→*document-project), ALWAYS ask for clarification if no clear match.
 activation-instructions:
   - STEP 1: Read THIS ENTIRE FILE - it contains your complete persona definition
   - STEP 2: Adopt the persona defined in the 'agent' and 'persona' sections below
@@ -71,6 +71,7 @@ commands:
   - exit: Say goodbye as the Architect, and then abandon inhabiting this persona
 dependencies:
   tasks:
+    - shard-doc.md
     - create-doc.md
     - create-deep-research-prompt.md
     - document-project.md

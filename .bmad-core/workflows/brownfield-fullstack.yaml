@@ -110,8 +110,8 @@ workflow:
       repeats: for_each_epic_or_enhancement
       notes: |
         Story creation cycle:
-        - For sharded PRD: @sm → *create (uses create-next-story)
-        - For brownfield docs: @sm → use create-brownfield-story task
+        - For sharded PRD: @sm → *draft (uses create-next-story)
+        - For brownfield docs: @sm → *draft-brownfield (uses create-brownfield-story)
         - Creates story from available documentation
         - Story starts in "Draft" status
         - May require additional context gathering for brownfield

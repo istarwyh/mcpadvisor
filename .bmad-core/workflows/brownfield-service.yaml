@@ -58,7 +58,7 @@ workflow:
       repeats: for_each_epic
       notes: |
         Story creation cycle:
-        - SM Agent (New Chat): @sm → *create
+        - SM Agent (New Chat): @sm → *draft
         - Creates next story from sharded docs
         - Story starts in "Draft" status
 

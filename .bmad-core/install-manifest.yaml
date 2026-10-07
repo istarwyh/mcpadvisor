@@ -22,22 +22,22 @@ files:
     hash: a7d1007020c0702f
     modified: false
   - path: .bmad-core/workflows/greenfield-ui.yaml
-    hash: 1317dedfc4609a87
+    hash: 2f933f6a1c602d82
     modified: false
   - path: .bmad-core/workflows/greenfield-service.yaml
-    hash: 64a32ede2aa02ec6
+    hash: 94d5aec6f6785de5
     modified: false
   - path: .bmad-core/workflows/greenfield-fullstack.yaml
-    hash: f6f399871f78450f
+    hash: 6d531e0330dc6ae1
     modified: false
   - path: .bmad-core/workflows/brownfield-ui.yaml
-    hash: 675a533e0c6b4285
+    hash: 8ae873b8a447ae95
     modified: false
   - path: .bmad-core/workflows/brownfield-service.yaml
-    hash: cb65b32c82edf897
+    hash: c09bc72c69ff8e5f
     modified: false
   - path: .bmad-core/workflows/brownfield-fullstack.yaml
-    hash: 43aee996cfa1f75a
+    hash: c90b48aef3953167
     modified: false
   - path: .bmad-core/utils/workflow-management.md
     hash: b148df3ebb1f9c61
@@ -55,7 +55,7 @@ files:
     hash: 2dae43f4464f1ad2
     modified: false
   - path: .bmad-core/data/bmad-kb.md
-    hash: 8900cde5b6a560e9
+    hash: 7d53052fd40d2a6b
     modified: false
   - path: .bmad-core/templates/story-tmpl.yaml
     hash: dee630bee4fcaad3
@@ -64,13 +64,13 @@ files:
     hash: cd4b269b0722c361
     modified: false
   - path: .bmad-core/templates/prd-tmpl.yaml
-    hash: 2b082af71b872d2d
+    hash: 9794c328cc5fa5ae
     modified: false
   - path: .bmad-core/templates/market-research-tmpl.yaml
     hash: 949ab9c006cfaf6f
     modified: false
   - path: .bmad-core/templates/fullstack-architecture-tmpl.yaml
-    hash: ef0aea75ac4946ee
+    hash: 35a600e220c63c68
     modified: false
   - path: .bmad-core/templates/front-end-spec-tmpl.yaml
     hash: ceb07429c009df27
@@ -91,13 +91,13 @@ files:
     hash: e4261b61b915ee9b
     modified: false
   - path: .bmad-core/templates/architecture-tmpl.yaml
-    hash: df1b0cec27c7e861
+    hash: 4efbf90a84903466
     modified: false
   - path: .bmad-core/tasks/validate-next-story.md
-    hash: e38e62f4fc2c1da2
+    hash: e2478dfbf1910eb4
     modified: false
   - path: .bmad-core/tasks/shard-doc.md
-    hash: 5abe7f081a225b8a
+    hash: c69ebb5974a1e267
     modified: false
   - path: .bmad-core/tasks/review-story.md
     hash: 1f9afc5930b0e3f2
@@ -121,16 +121,16 @@ files:
     hash: 32903527f7a25f21
     modified: false
   - path: .bmad-core/tasks/create-next-story.md
-    hash: fa18ad2a04b6a93f
+    hash: 9980651235d8354a
     modified: false
   - path: .bmad-core/tasks/create-doc.md
-    hash: 395719b8a002f7f9
+    hash: d63c6b8d2a8754cf
     modified: false
   - path: .bmad-core/tasks/create-deep-research-prompt.md
     hash: a1592f421540e40e
     modified: false
   - path: .bmad-core/tasks/create-brownfield-story.md
-    hash: faa0c75a70f2e209
+    hash: 3fb292d5b6cb8158
     modified: false
   - path: .bmad-core/tasks/correct-course.md
     hash: 1c9dd46177b0ac6b
@@ -162,38 +162,35 @@ files:
   - path: .bmad-core/checklists/architect-checklist.md
     hash: 24cc8a63ea467636
     modified: false
-  - path: .bmad-core/bmad-core/user-guide.md
-    hash: e3b0c44298fc1c14
-    modified: false
   - path: .bmad-core/agents/ux-expert.md
-    hash: dc538703809ff200
+    hash: f0017c76134c354e
     modified: false
   - path: .bmad-core/agents/sm.md
-    hash: 81254b523dba1b63
+    hash: 0dec37e065d05e75
     modified: false
   - path: .bmad-core/agents/qa.md
-    hash: 308512d4bf9baba9
+    hash: 3e33de0501d9a0bf
     modified: false
   - path: .bmad-core/agents/po.md
-    hash: 1f222db903222562
+    hash: 565c79a495776f5e
     modified: false
   - path: .bmad-core/agents/pm.md
-    hash: cac5a913038cd7d6
+    hash: 29b5580a96949c85
     modified: false
   - path: .bmad-core/agents/dev.md
-    hash: 12611c39d7115f89
+    hash: 01fef9b586bb4470
     modified: false
   - path: .bmad-core/agents/bmad-orchestrator.md
-    hash: d9c116ea35f53e04
+    hash: ae62e4b90aa4feeb
     modified: false
   - path: .bmad-core/agents/bmad-master.md
-    hash: ca97feef0cbc1688
+    hash: dbbfdc687892f095
     modified: false
   - path: .bmad-core/agents/architect.md
-    hash: 889b168bd33ff22d
+    hash: 75e9f6c30c3cae14
     modified: false
   - path: .bmad-core/agents/analyst.md
-    hash: e8d7488ff12e44f1
+    hash: 7baa71c59b250ea3
     modified: false
   - path: .bmad-core/agent-teams/team-no-ui.yaml
     hash: 56e7e3a9e1a243f6

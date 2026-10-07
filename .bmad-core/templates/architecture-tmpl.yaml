@@ -127,7 +127,7 @@ sections:
     instruction: |
       This is the DEFINITIVE technology selection section. Work with the user to make specific choices:
       
-      1. Review PRD technical assumptions and any preferences from .bmad-core/data/technical-preferences.yaml or an attached technical-preferences
+      1. Review PRD technical assumptions and any preferences from .bmad-core/data/technical-preferences.md or an attached technical-preferences
       2. For each category, present 2-3 viable options with pros/cons
       3. Make a clear recommendation based on project needs
       4. Get explicit user approval for each selection

@@ -8,6 +8,8 @@ When this command is used, execute the following task:
 
 Create detailed, implementation-ready stories for brownfield projects where traditional sharded PRD/architecture documents may not exist. This task bridges the gap between various documentation formats (document-project output, brownfield PRDs, epics, or user documentation) and executable stories for the Dev agent.
 
+For a tiny, isolated enhancement requiring only one focused session, use `brownfield-create-story.md` instead. Keep this task for detailed stories that need documentation discovery and additional context.
+
 ## When to Use This Task
 
 **Use this task when:**
