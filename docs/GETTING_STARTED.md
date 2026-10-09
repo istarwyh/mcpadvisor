@@ -1,5 +1,7 @@
 # MCP Advisor 快速开始指南
 
+[English](./GETTING_STARTED.en.md) | [简体中文](./GETTING_STARTED.md)
+
 这是 MCP Advisor 的完整安装、配置和使用指南，让您快速上手并充分利用 MCP Advisor 的功能。
 
 ## 目录

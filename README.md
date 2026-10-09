@@ -52,12 +52,12 @@ Search for MCP servers with natural language processing capabilities
 
 ## Documentation Navigation
 
-- [Quick Start Guide](docs/GETTING_STARTED.md) - Installation, configuration, and basic usage
-- [Technical Reference](docs/TECHNICAL_REFERENCE.md) - Advanced features and search providers
-- [Contributing Guide](CONTRIBUTING.md) - Development setup and contribution guidelines
-- [Architecture Documentation](docs/ARCHITECTURE.md) - System architecture details
-- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
-- [Roadmap](ROADMAP.md) - Future development plans
+- [Quick Start Guide](docs/GETTING_STARTED.en.md) - Installation, configuration, and basic usage
+- [Technical Reference (Chinese)](docs/TECHNICAL_REFERENCE.md) - Advanced features and search providers
+- [Contributing Guide (Chinese)](CONTRIBUTING.md) - Development setup and contribution guidelines
+- [Architecture Documentation (Chinese)](docs/ARCHITECTURE.md) - System architecture details
+- [Troubleshooting (Chinese)](docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [Roadmap](docs/ROADMAP.md) - Future development plans
 
 ## Quick Start
 
@@ -89,7 +89,7 @@ To install Advisor for Claude Desktop automatically via [Smithery](https://smith
 npx -y @smithery/cli install @istarwyh/mcpadvisor --client claude
 ```
 
-For more installation methods and detailed configuration, see the [Quick Start Guide](docs/GETTING_STARTED.md).
+For more installation methods and detailed configuration, see the [Quick Start Guide](docs/GETTING_STARTED.en.md).
 
 ### Optional: Local Meilisearch (improves recommendations)
 
@@ -221,7 +221,7 @@ For more detailed architecture documentation, see [ARCHITECTURE.md](docs/ARCHITE
    ```bash
    pnpm run build
    ```
-4. Configure environment variables (see [Quick Start Guide](docs/GETTING_STARTED.md))
+4. Configure environment variables (see [Quick Start Guide](docs/GETTING_STARTED.en.md))
 
 ### Testing
 
@@ -370,7 +370,7 @@ gantt
    - Refine recommendation effectiveness
    - Introduce more indices
 
-For a detailed roadmap, see [ROADMAP.md](ROADMAP.md).
+For a detailed roadmap, see [ROADMAP.md](docs/ROADMAP.md).
 
 To Implement the above features, we need to:
 
