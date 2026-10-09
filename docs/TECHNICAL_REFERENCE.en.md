@@ -1083,6 +1083,6 @@ The Chinese reference describes `SEARCH_PROVIDER`, `hybrid`, and sequential `fal
 This technical reference provides in-depth technical details about MCP Advisor. For more information, see:
 
 - [Quick Start Guide](./GETTING_STARTED.en.md) - Installation and basic usage
-- [Architecture (Chinese)](./ARCHITECTURE.md) - Detailed system architecture
-- [Contributing Guide (Chinese)](../CONTRIBUTING.md) - Developer guide
+- [Architecture](./ARCHITECTURE.en.md) - Detailed system architecture
+- [Contributing Guide](../CONTRIBUTING.en.md) - Developer guide
 - [Troubleshooting](./TROUBLESHOOTING.en.md) - Solutions to common problems

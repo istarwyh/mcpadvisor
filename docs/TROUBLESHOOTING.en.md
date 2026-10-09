@@ -696,5 +696,5 @@ Related documentation:
 
 - [Getting Started Guide](./GETTING_STARTED.en.md) - Installation, configuration, and basic usage
 - [Technical Reference](./TECHNICAL_REFERENCE.en.md) - Advanced technical features and configuration
-- [Architecture (Chinese)](./ARCHITECTURE.md) - System architecture and component details
-- [Contributing Guide (Chinese)](../CONTRIBUTING.md) - Development environment setup and code contributions
+- [Architecture](./ARCHITECTURE.en.md) - System architecture and component details
+- [Contributing Guide](../CONTRIBUTING.en.md) - Development environment setup and code contributions

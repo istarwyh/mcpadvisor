@@ -1,5 +1,7 @@
 # 系统架构
 
+[English](./ARCHITECTURE.en.md) | [简体中文](./ARCHITECTURE.md)
+
 本文档详细介绍了 MCP Advisor 的系统架构、核心组件和数据流。
 
 ## 目录

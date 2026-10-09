@@ -1,5 +1,7 @@
 # MCP Advisor 贡献指南
 
+[English](./CONTRIBUTING.en.md) | [简体中文](./CONTRIBUTING.md)
+
 欢迎为 MCP Advisor 项目做出贡献！本文档提供了开发环境设置、代码规范、测试指南和提交流程的完整指导。
 
 ## 目录

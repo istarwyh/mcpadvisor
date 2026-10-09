@@ -54,8 +54,8 @@ Search for MCP servers with natural language processing capabilities
 
 - [Quick Start Guide](docs/GETTING_STARTED.en.md) - Installation, configuration, and basic usage
 - [Technical Reference](docs/TECHNICAL_REFERENCE.en.md) - Advanced features and search providers
-- [Contributing Guide (Chinese)](CONTRIBUTING.md) - Development setup and contribution guidelines
-- [Architecture Documentation (Chinese)](docs/ARCHITECTURE.md) - System architecture details
+- [Contributing Guide](CONTRIBUTING.en.md) - Development setup and contribution guidelines
+- [Architecture Documentation](docs/ARCHITECTURE.en.md) - System architecture details
 - [Troubleshooting](docs/TROUBLESHOOTING.en.md) - Common issues and solutions
 - [Roadmap](docs/ROADMAP.md) - Future development plans
 
@@ -205,7 +205,7 @@ src/
    - SSE (Web integration)
    - REST API endpoints
 
-For more detailed architecture documentation, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+For more detailed architecture documentation, see [ARCHITECTURE.en.md](docs/ARCHITECTURE.en.md).
 
 
 ## Developer Quick Start
@@ -261,7 +261,7 @@ MCP Advisor supports multiple transport methods:
 2. **SSE Transport** - Suitable for web integration
 3. **REST Transport** - Provides REST API endpoints
 
-For more development details, see [Contributing Guide](CONTRIBUTING.md).
+For more development details, see [Contributing Guide](CONTRIBUTING.en.md).
 
 ## Contribution Guidelines
 

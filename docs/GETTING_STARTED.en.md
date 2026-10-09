@@ -7,9 +7,9 @@ started and make the most of its features.
 
 This is the English translation of the [Chinese guide](./GETTING_STARTED.md).
 English [technical reference](./TECHNICAL_REFERENCE.en.md) and
-[troubleshooting](./TROUBLESHOOTING.en.md) guides are also available. Architecture
-and contribution documents remain in Chinese. Runtime messages may also still
-contain Chinese.
+[troubleshooting](./TROUBLESHOOTING.en.md) guides are also available. English [architecture](./ARCHITECTURE.en.md) and
+[contribution](../CONTRIBUTING.en.md) guides are available too. Runtime messages
+may still contain Chinese.
 
 ## Translation and Current-Source Updates
 
@@ -561,5 +561,5 @@ If you encounter a problem that this guide does not cover:
 For advanced configuration and technical details, see:
 
 - [Technical Reference](./TECHNICAL_REFERENCE.en.md)
-- [Architecture Documentation (Chinese)](./ARCHITECTURE.md)
-- [Contributing Guide (Chinese)](../CONTRIBUTING.md)
+- [Architecture Documentation](./ARCHITECTURE.en.md)
+- [Contributing Guide](../CONTRIBUTING.en.md)
