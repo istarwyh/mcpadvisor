@@ -8,6 +8,7 @@ import { SearchOptions, MCPServerResponse } from '../../../types/index.js';
 import type { SearchParams } from '../../../types/search.js';
 import { OfflineSearchProvider } from './OfflineSearchProvider.js';
 import { GetMcpSearchProvider } from './GetMcpSearchProvider.js';
+import { ClineSearchProvider } from './ClineSearchProvider.js';
 import { CompassSearchProvider } from './CompassSearchProvider.js';
 import { MeilisearchSearchProvider } from './MeilisearchSearchProvider.js';
 import { NacosMcpProvider } from './NacosMcpProvider.js';
@@ -279,6 +280,18 @@ export async function searchNacosMcp(
   }
 }
 
+// Reuse the opt-in provider so separate factory calls share its catalog cache.
+let clineProvider: ClineSearchProvider | undefined;
+
+export async function searchCline(
+  query: string | SearchParams,
+  options: SearchOptions = {},
+): Promise<MCPServerResponse[]> {
+  clineProvider ??= new ClineSearchProvider();
+  const params = typeof query === 'string' ? { taskDescription: query } : query;
+  return new SearchService([clineProvider]).search(params, options);
+}
+
 export function getSearchFunction(providerName: string) {
   const normalizedProviderName = providerName.toLowerCase();
   
@@ -287,6 +300,8 @@ export function getSearchFunction(providerName: string) {
       return searchOffline;
     case 'getmcp':
       return searchGetMcp;
+    case 'cline':
+      return searchCline;
     case 'compass':
       return searchCompass;
     case 'meilisearch':
