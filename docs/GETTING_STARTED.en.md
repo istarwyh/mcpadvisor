@@ -6,8 +6,19 @@ This guide covers installing, configuring, and using MCP Advisor to help you get
 started and make the most of its features.
 
 This is the English translation of the [Chinese guide](./GETTING_STARTED.md).
-The linked technical, architecture, contribution, and troubleshooting documents
-are currently in Chinese. Runtime messages may also still contain Chinese.
+English [technical reference](./TECHNICAL_REFERENCE.en.md) and
+[troubleshooting](./TROUBLESHOOTING.en.md) guides are also available. Architecture
+and contribution documents remain in Chinese. Runtime messages may also still
+contain Chinese.
+
+## Translation and Current-Source Updates
+
+This English guide follows the Chinese guide's structure, with source-verified
+corrections to configuration, response fields, logging, and verification steps.
+These corrections are documented in the relevant sections; the Chinese original
+is unchanged. The instructions were checked against source, not exercised in a
+full installation or runtime test. Advanced reference examples marked historical
+or illustrative are not supported configuration recipes.
 
 ## Contents
 
@@ -52,9 +63,10 @@ The fastest way to integrate MCP Advisor is through MCP configuration:
 
 Add this configuration to your AI assistant's MCP settings file:
 
-- **MacOS/Linux**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **macOS (Claude Desktop)**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%AppData%\Claude\claude_desktop_config.json`
 
+For Linux or a different MCP client, use that client's documented settings path.
 Restart your AI assistant after configuring it.
 
 ### NPM Package Installation
@@ -155,8 +167,12 @@ MCP Advisor returns results containing the following information:
 - **Server name**: The name of the MCP server
 - **Description**: A brief description of the server's capabilities
 - **GitHub URL**: A link to the server's repository
-- **Installation instructions**: How to install and configure the server
 - **Relevance score**: How closely the server matches your query
+
+The recommendation tool currently formats these fields as text. The following
+JSON illustrates the underlying server data, not the exact MCP wire response.
+The `sourceUrl` field follows [the current response type](../src/types/index.ts);
+the Chinese source guide uses the older `github_url` example.
 
 #### Example Result
 
@@ -165,7 +181,7 @@ MCP Advisor returns results containing the following information:
   {
     "title": "NLP Toolkit",
     "description": "Comprehensive natural language processing toolkit with sentiment analysis, entity recognition, and text summarization capabilities.",
-    "github_url": "https://github.com/example/nlp-toolkit",
+    "sourceUrl": "https://github.com/example/nlp-toolkit",
     "similarity": 0.92
   }
 ]
@@ -216,103 +232,109 @@ For other AI assistants that support the Model Context Protocol:
 
 ### Environment Variables
 
-MCP Advisor can be configured with the following environment variables.
-All variables are optional unless otherwise noted.
+The tables below describe settings read by the current
+[CLI entry point](../src/index.ts), [logger](../src/utils/logger.ts), and
+[configuration modules](../src/config/constants.ts). They correct stale settings
+in the Chinese source guide.
 
 #### Core Configuration
 
-| Variable              | Description                          | Default | Required |
-| --------------------- | ------------------------------------ | ------- | -------- |
-| `TRANSPORT_TYPE`      | Transport method (stdio, sse, rest)  | `stdio` | No       |
-| `LOG_LEVEL`           | Log level (debug, info, warn, error) | `info`  | No       |
-| `DEBUG`               | Enable debug logging                 | `false` | No       |
-| `ENABLE_FILE_LOGGING` | Enable file logging                  | `false` | No       |
+| Variable              | Description                                         | Default  | Required |
+| --------------------- | --------------------------------------------------- | -------- | -------- |
+| `TRANSPORT_TYPE`      | Transport method (stdio, sse, rest)                 | `stdio`  | No       |
+| `LOG_LEVEL`           | Log level (debug, info, warn, error)                | `info`   | No       |
+| `ENABLE_FILE_LOGGING` | Enable file logging; create the log directory first | `false`  | No       |
+| `LOGS_DIR`            | Directory for `all.log` and `error.log`             | `./logs` | No       |
+
+`DEBUG=true` alone does not enable the current logger. For debug file logging in
+a source checkout after building:
+
+```bash
+mkdir -p logs
+ENABLE_FILE_LOGGING=true LOG_LEVEL=debug node build/index.js
+```
 
 #### HTTP Server Configuration (SSE/REST Transports)
 
-| Variable       | Description           | Default     | Required |
-| -------------- | --------------------- | ----------- | -------- |
-| `SERVER_PORT`  | HTTP server port      | `3000`      | No       |
-| `SERVER_HOST`  | HTTP server host      | `localhost` | No       |
-| `SSE_PATH`     | SSE endpoint path     | `/sse`      | No       |
-| `MESSAGE_PATH` | Message endpoint path | `/messages` | No       |
-| `ENDPOINT`     | REST endpoint path    | `/rest`     | No       |
+| Variable      | Description        | Default     | Required |
+| ------------- | ------------------ | ----------- | -------- |
+| `SERVER_PORT` | HTTP server port   | `3000`      | No       |
+| `SERVER_HOST` | HTTP server host   | `localhost` | No       |
+| `ENDPOINT`    | REST endpoint path | `/rest`     | No       |
+
+The CLI fixes the SSE path at `/sse`. It reads the `messagePath` command-line
+parameter, defaulting to `/messages`. The source guide's `SSE_PATH` and
+`MESSAGE_PATH` environment variables are not read by this entry point.
 
 #### Search Configuration
 
-| Variable             | Description                                         | Default  | Required |
-| -------------------- | --------------------------------------------------- | -------- | -------- |
-| `MIN_SIMILARITY`     | Minimum similarity score for search results         | `0.5`    | No       |
-| `MAX_RESULTS`        | Maximum number of search results to return          | `10`     | No       |
-| `ENABLE_CACHE`       | Enable search-result caching                        | `false`  | No       |
-| `CACHE_TTL`          | Cached-result time to live (seconds)                | `3600`   | No       |
-| `VECTOR_ENGINE_TYPE` | Vector engine type (memory, oceanbase, meilisearch) | `memory` | No       |
+[SearchService](../src/services/searchService.ts) defines defaults of `limit: 5`
+and `minSimilarity: 0.4`; programmatic callers can provide search options as
+shown under [Advanced Search Options](#advanced-search-options). The source
+guide's `MIN_SIMILARITY`, `MAX_RESULTS`, `ENABLE_CACHE`, and `CACHE_TTL`
+environment settings are not wired into this service and should not be used as
+configuration instructions.
+
+`VECTOR_ENGINE_TYPE` is read by the vector-engine implementation and defaults to
+`oceanbase` in [constants.ts](../src/config/constants.ts), rather than the
+source guide's `memory`. It is not a switch for selecting the CLI's provider
+list. The CLI initializes Meilisearch, Compass, and GetMCP, with Nacos conditional
+on its credentials and offline fallback managed by SearchService.
 
 #### API Configuration
 
-| Variable           | Description                          | Default                      | Required             |
-| ------------------ | ------------------------------------ | ---------------------------- | -------------------- |
-| `COMPASS_API_BASE` | Base URL for the COMPASS API         | `https://registry.mcphub.io` | No                   |
-| `OCEANBASE_URL`    | OceanBase database connection string | -                            | When using OceanBase |
+| Variable           | Description                          | Default                              | Required             |
+| ------------------ | ------------------------------------ | ------------------------------------ | -------------------- |
+| `COMPASS_API_BASE` | Base URL for the COMPASS API         | `https://registry.mcphub.io`         | No                   |
+| `GETMCP_API_URL`   | GetMCP server-list URL               | `https://getmcp.io/api/servers.json` | No                   |
+| `OCEANBASE_URL`    | OceanBase database connection string | None                                 | When using OceanBase |
+
+For local/cloud Meilisearch settings, see the English
+[Local Meilisearch Guide](./MEILISEARCH_LOCAL.md) and
+[current configuration source](../src/config/meilisearch.ts).
 
 #### Nacos Provider Configuration
 
-If you choose Nacos as a search provider:
+The CLI only initializes Nacos when all three connection credentials below are
+set. This corrects the source guide's conditional credential requirements.
 
-| Environment Variable | Description                      | Default         | Required                         |
-| -------------------- | -------------------------------- | --------------- | -------------------------------- |
-| `NACOS_SERVER_ADDR`  | Nacos server address             | None            | Yes                              |
-| `NACOS_NAMESPACE`    | Nacos namespace                  | `public`        | No                               |
-| `NACOS_GROUP`        | Nacos group                      | `DEFAULT_GROUP` | No                               |
-| `NACOS_USERNAME`     | Nacos username                   | None            | If Nacos requires authentication |
-| `NACOS_PASSWORD`     | Nacos password                   | None            | If Nacos requires authentication |
-| `MCP_SERVICE_NAME`   | Name of the MCP service in Nacos | `mcp-servers`   | No                               |
+| Environment Variable | Description                                | Default      | Required |
+| -------------------- | ------------------------------------------ | ------------ | -------- |
+| `NACOS_SERVER_ADDR`  | Nacos server address                       | None         | Yes      |
+| `NACOS_USERNAME`     | Nacos username                             | None         | Yes      |
+| `NACOS_PASSWORD`     | Nacos password                             | None         | Yes      |
+| `MCP_HOST`           | MCP host passed to Nacos provider          | `localhost`  | No       |
+| `MCP_PORT`           | MCP port passed to Nacos provider          | `3000`       | No       |
+| `AUTH_TOKEN`         | Auth token passed to Nacos provider        | Empty string | No       |
+| `NACOS_DEBUG`        | Enable Nacos debug mode when set to `true` | `false`      | No       |
+
+The source guide's `NACOS_NAMESPACE`, `NACOS_GROUP`, and `MCP_SERVICE_NAME`
+settings are not passed by this CLI entry point. Use the source-linked
+configuration above rather than assuming those variables change its behavior.
 
 #### Logging Configuration
 
-| Variable  | Description        | Default  | Required |
-| --------- | ------------------ | -------- | -------- |
-| `LOG_DIR` | Log file directory | `./logs` | No       |
+`LOGS_DIR` selects the logger's output directory. `LOG_DIR` (or `LOGS_DIR` as its
+fallback) instead selects directories for the
+[log-reading MCP resource](../src/services/core/server/resources/LogResourceHandler.ts).
+These are distinct settings, unlike the source guide's generic `LOG_DIR` row.
 
 ### Configuration Files
 
-You can also configure MCP Advisor using a configuration file.
-Create `.mcpadvisorrc.json`:
+The current CLI does not automatically load `.mcpadvisorrc.json`.
+The source guide's `.mcpadvisorrc.json` and `config/default.json` transport/search
+examples are historical examples, not working alternatives to the CLI settings
+above.
 
-```json
-{
-  "transport": "stdio",
-  "port": 3000,
-  "enableFileLogging": true,
-  "logLevel": "info",
-  "vectorEngineType": "memory",
-  "search": {
-    "provider": "hybrid",
-    "limit": 5,
-    "minSimilarity": 0.3
-  }
-}
-```
-
-Or use `config/default.json`:
-
-```json
-{
-  "server": {
-    "port": 3000,
-    "transportType": "stdio"
-  },
-  "search": {
-    "provider": "hybrid",
-    "limit": 5,
-    "minSimilarity": 0.3
-  }
-}
-```
+[configLoader.ts](../src/config/configLoader.ts) is used by the data-loading
+service and supports a custom `CONFIG_FILE` plus MCP source overrides. This does
+not mean it configures the CLI's transport or provider list. Consult that module
+and [config/default.json](../config/default.json) when changing data sources.
 
 ### Transport Configuration
 
-MCP Advisor supports multiple transports:
+MCP Advisor supports multiple transports. The commands below assume a source
+checkout with dependencies installed and `pnpm run build` already completed:
 
 #### 1. Stdio Transport (Default)
 
@@ -327,7 +349,7 @@ node build/index.js
 Suitable for web integration:
 
 ```bash
-TRANSPORT_TYPE=sse SERVER_PORT=3000 DEBUG=true ENABLE_FILE_LOGGING=true node build/index.js
+TRANSPORT_TYPE=sse SERVER_PORT=3000 node build/index.js
 ```
 
 #### 3. REST Transport
@@ -338,10 +360,16 @@ Provides RESTful endpoints:
 TRANSPORT_TYPE=rest SERVER_PORT=8080 ENDPOINT=/api/mcp node build/index.js
 ```
 
-#### Production Configuration Example
+#### REST with File Logging
+
+This example binds to localhost. The server has no built-in authentication layer;
+binding to all interfaces as in the Chinese source guide is not production
+hardening. Keep it local unless you have appropriate network restrictions and an
+authenticated reverse proxy.
 
 ```bash
-TRANSPORT_TYPE=rest SERVER_PORT=8080 SERVER_HOST=0.0.0.0 LOG_LEVEL=warn ENABLE_FILE_LOGGING=true node build/index.js
+mkdir -p logs
+TRANSPORT_TYPE=rest SERVER_PORT=8080 SERVER_HOST=localhost LOG_LEVEL=warn ENABLE_FILE_LOGGING=true node build/index.js
 ```
 
 ## Usage Tips
@@ -389,14 +417,14 @@ Find a lightweight MCP server for image processing that works offline
 ### Advanced Search Options
 
 When using MCP Advisor programmatically, you can specify additional search
-parameters:
+parameters. This uses the current public `SearchParams`/`SearchOptions` types;
+the source guide's `includeMetadata` option is not defined in those types:
 
 ```typescript
-const results = await searchService.search('vector database', {
-  limit: 10,
-  minSimilarity: 0.2,
-  includeMetadata: true,
-});
+const results = await searchService.search(
+  { taskDescription: 'vector database' },
+  { limit: 10, minSimilarity: 0.2 },
+);
 ```
 
 ## Common Troubleshooting
@@ -405,38 +433,28 @@ const results = await searchService.search('vector database', {
 
 #### 1. Permission Errors
 
-If you encounter permission errors, try using administrator privileges:
-
-```bash
-# macOS/Linux
-sudo npm install -g @xiaohui-wang/mcpadvisor
-
-# Windows (run Command Prompt as administrator)
-npm install -g @xiaohui-wang/mcpadvisor
-```
+Avoid using administrator privileges to work around a global-install problem.
+Use the MCP configuration's `npx` invocation above, or a user-writable Node.js
+installation. This replaces the source guide's `sudo npm install` workaround.
 
 #### 2. Version Conflicts
 
-If there are version conflicts with other packages:
-
-```bash
-npm install @xiaohui-wang/mcpadvisor --force
-```
+Read the package manager's conflict details and use a compatible dependency
+version. Do not use `--force` as the default fix; it can bypass compatibility
+checks. The source guide's force-install example is not recommended here.
 
 #### 3. Command Not Found
 
-Make sure the global npm bin directory is in your PATH:
+For a global npm installation, inspect the prefix:
 
 ```bash
-# Show the global npm path
-npm bin -g
-
-# Add it to PATH (macOS/Linux)
-export PATH="$PATH:$(npm bin -g)"
-
-# Windows
-set PATH=%PATH%;%APPDATA%\npm
+npm prefix -g
 ```
+
+On macOS/Linux, the command directory is the prefix's `bin` subdirectory. On
+Windows, it is the prefix itself. Add the appropriate directory to PATH using
+your operating system's settings, then reopen the terminal. This replaces the
+source guide's `npm bin -g` command, which newer npm versions removed.
 
 ### Configuration Issues
 
@@ -447,11 +465,12 @@ Check the configuration file path:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%AppData%\Claude\claude_desktop_config.json`
 
-Make sure the JSON is valid:
+On macOS, with Python available, check that the JSON is valid
+(use your actual settings path on other platforms):
 
 ```bash
 # Validate JSON formatting
-cat ~/.../claude_desktop_config.json | python -m json.tool
+python -m json.tool "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 ```
 
 #### 2. Environment Variables Have No Effect
@@ -500,7 +519,7 @@ Check your network connection:
 
 ```bash
 # Test connectivity to external APIs
-curl -I https://api.getmcp.org
+curl -I https://getmcp.io/api/servers.json
 ping registry.mcphub.io
 ```
 
@@ -510,37 +529,37 @@ Consider the following optimizations:
 
 - Use more specific search terms
 - Check server resources (CPU/memory)
-- Enable caching: `ENABLE_CACHE=true`
-- Adjust the search limit: `MAX_RESULTS=5`
+- For programmatic callers, adjust the `limit` search option
+- Do not rely on the source guide's `ENABLE_CACHE` or `MAX_RESULTS` variables;
+  they are not read by the search service
 
 ### Verify the Installation
 
-Run the following commands to verify the installation:
+The CLI has no explicit `--version` or `--help` handling, so the source guide's
+commands are not reliable installation checks. Instead, restart your configured
+MCP client, confirm that it lists MCP Advisor's `recommend-mcp-servers` tool,
+and run a query from [Basic Usage](#basic-usage).
+
+For a built source checkout using SSE or REST, the HTTP server exposes `/health`:
 
 ```bash
-# Check the version
-mcpadvisor --version
-
-# Or
-npx @xiaohui-wang/mcpadvisor --version
-
-# Test basic functionality
-mcpadvisor --help
+curl http://localhost:3000/health
 ```
 
-If the version number and help information are displayed, the installation was
-successful.
+Use the port you configured. This health endpoint does not apply to stdio
+transport, and a successful health response alone does not verify external
+search providers.
 
 ---
 
 If you encounter a problem that this guide does not cover:
 
-1. Read the [Troubleshooting Guide (Chinese)](./TROUBLESHOOTING.md)
+1. Read the [Troubleshooting Guide](./TROUBLESHOOTING.en.md)
 2. Check [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
 3. Open a new issue to ask for help
 
 For advanced configuration and technical details, see:
 
-- [Technical Reference (Chinese)](./TECHNICAL_REFERENCE.md)
+- [Technical Reference](./TECHNICAL_REFERENCE.en.md)
 - [Architecture Documentation (Chinese)](./ARCHITECTURE.md)
 - [Contributing Guide (Chinese)](../CONTRIBUTING.md)

@@ -1,5 +1,7 @@
 # 故障排除
 
+[English](./TROUBLESHOOTING.en.md) | [简体中文](./TROUBLESHOOTING.md)
+
 本文档提供了 MCP Advisor 常见问题的解决方案和诊断技巧。
 
 ## 目录

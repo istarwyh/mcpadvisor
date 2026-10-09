@@ -53,10 +53,10 @@ Search for MCP servers with natural language processing capabilities
 ## Documentation Navigation
 
 - [Quick Start Guide](docs/GETTING_STARTED.en.md) - Installation, configuration, and basic usage
-- [Technical Reference (Chinese)](docs/TECHNICAL_REFERENCE.md) - Advanced features and search providers
+- [Technical Reference](docs/TECHNICAL_REFERENCE.en.md) - Advanced features and search providers
 - [Contributing Guide (Chinese)](CONTRIBUTING.md) - Development setup and contribution guidelines
 - [Architecture Documentation (Chinese)](docs/ARCHITECTURE.md) - System architecture details
-- [Troubleshooting (Chinese)](docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [Troubleshooting](docs/TROUBLESHOOTING.en.md) - Common issues and solutions
 - [Roadmap](docs/ROADMAP.md) - Future development plans
 
 ## Quick Start
@@ -225,7 +225,7 @@ For more detailed architecture documentation, see [ARCHITECTURE.md](docs/ARCHITE
 
 ### Testing
 
-MCP Advisor includes comprehensive testing suites to ensure code quality and functionality. For detailed testing information including unit tests, integration tests, end-to-end testing, and manual testing procedures, see the [Technical Reference](docs/TECHNICAL_REFERENCE.md).
+MCP Advisor includes comprehensive testing suites to ensure code quality and functionality. For detailed testing information including unit tests, integration tests, end-to-end testing, and manual testing procedures, see the [Technical Reference](docs/TECHNICAL_REFERENCE.en.md).
 
 #### Testing
 
@@ -238,7 +238,7 @@ pnpm run check && pnpm run test && pnpm run test:e2e
 ./scripts/run-e2e-test.sh
 ```
 
-For detailed testing information, see [Technical Reference](docs/TECHNICAL_REFERENCE.md).
+For detailed testing information, see [Technical Reference](docs/TECHNICAL_REFERENCE.en.md).
 
 ### Library Usage
 
@@ -297,7 +297,7 @@ Here are some example queries you can use with MCP Advisor:
 ]
 ```
 
-For more examples and advanced usage, see [Technical Reference](docs/TECHNICAL_REFERENCE.md).
+For more examples and advanced usage, see [Technical Reference](docs/TECHNICAL_REFERENCE.en.md).
 
 ## Troubleshooting
 
@@ -315,7 +315,7 @@ For more examples and advanced usage, see [Technical Reference](docs/TECHNICAL_R
    - Consider adding more specific search terms
    - Check server resources (CPU/memory)
 
-For more troubleshooting information, see [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
+For more troubleshooting information, see [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.en.md).
 
 ## Search Providers
 
@@ -325,7 +325,7 @@ MCP Advisor supports multiple search providers that can be used simultaneously:
 2. **GetMCP Search Provider**: Uses the GetMCP API and vector search for semantic matching
 3. **Meilisearch Search Provider**: Uses Meilisearch for fast, fault-tolerant text search
 
-For detailed information about search providers, see [Technical Reference](docs/TECHNICAL_REFERENCE.md).
+For detailed information about search providers, see [Technical Reference](docs/TECHNICAL_REFERENCE.en.md).
 
 ## Roadmap
 

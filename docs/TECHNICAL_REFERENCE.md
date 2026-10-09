@@ -1,5 +1,7 @@
 # MCP Advisor 技术参考手册
 
+[English](./TECHNICAL_REFERENCE.en.md) | [简体中文](./TECHNICAL_REFERENCE.md)
+
 本文档详细介绍了 MCP Advisor 的技术实现、搜索提供者、高级特性和配置选项，面向需要深度集成或自定义的开发者。
 
 ## 目录
