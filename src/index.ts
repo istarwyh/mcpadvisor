@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { createOptionalProfessionalReranker } from './services/core/search/ProfessionalReranker.js';
 import { SearchService } from './services/searchService.js';
 import { CompassSearchProvider } from './services/core/search/CompassSearchProvider.js';
 import { ServerService, TransportType, TransportConfig } from './services/core/server/index.js';
@@ -15,6 +14,7 @@ import { MeilisearchSearchProvider } from './services/core/search/MeilisearchSea
 import { getParamValue } from '@chatmcp/sdk/utils/index.js';
 import { NacosMcpProvider } from './services/core/search/NacosMcpProvider.js';
 import type { SearchProvider } from './types/index.js';
+import { createOptionalProfessionalReranker } from './services/core/search/ProfessionalReranker.js';
 
 /**
  * Main application entry point
