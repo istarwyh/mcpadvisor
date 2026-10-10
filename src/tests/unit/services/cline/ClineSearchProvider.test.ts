@@ -205,6 +205,9 @@ describe('ClineSearchProvider', () => {
     ).rejects.toThrow('request aborted');
     await vi.advanceTimersByTimeAsync(21);
     await pending;
+    // Node 22 abort dispatch can leave a nextTick queued in fake timers.
+    // Flush microtasks before checking that no request timeout remains.
+    vi.runAllTicks();
     expect(vi.getTimerCount()).toBe(0);
   });
 
