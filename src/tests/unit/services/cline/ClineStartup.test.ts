@@ -36,6 +36,7 @@ vi.mock('../../../../services/core/server/index.js', () => ({
 }));
 
 beforeEach(() => {
+  vi.clearAllMocks();
   vi.resetModules();
   vi.stubEnv('MEILISEARCH_INSTANCE', 'cloud');
   vi.stubEnv('NACOS_SERVER_ADDR', '');
