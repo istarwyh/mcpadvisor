@@ -1,57 +1,80 @@
-# MCP Advisor 技术参考手册
+# MCP Advisor Technical Reference
 
-[English](./TECHNICAL_REFERENCE.en.md) | [简体中文](./TECHNICAL_REFERENCE.md)
+[English](./TECHNICAL_REFERENCE.md) | [Simplified Chinese](./TECHNICAL_REFERENCE.zh-CN.md)
 
-本文档详细介绍了 MCP Advisor 的技术实现、搜索提供者、高级特性和配置选项，面向需要深度集成或自定义的开发者。
+> Translation scope: This English counterpart preserves every section of the Chinese reference, but corrects source-confirmed configuration drift. Conceptual code examples inherited from the original are explicitly labeled below; they are not validated current APIs or runnable recipes.
 
-## 目录
+**Current-source compatibility notes**:
 
-- [搜索提供者详解](#搜索提供者详解)
+- Provider initialization is defined in [src/index.ts](../src/index.ts): Meilisearch, Compass, and GetMCP are constructed together, Nacos is conditional on three required environment variables, and `SearchService` enables offline search by default. `SEARCH_PROVIDER`, hybrid weight environment variables, and the illustrated `fallbackOrder` schema do not control this entry point.
+- [Meilisearch configuration](../src/config/meilisearch.ts) uses `MEILISEARCH_INSTANCE`, `MEILISEARCH_LOCAL_HOST`, `MEILISEARCH_MASTER_KEY`, and `MEILISEARCH_CLOUD_API_KEY`, rather than the original reference's `MEILISEARCH_URL` and `MEILISEARCH_API_KEY`. The configured default instance is `cloud`.
+- The current [SearchProvider interface](../src/types/index.ts) accepts structured `SearchParams` and returns `MCPServerResponse[]`; it has no `getName()` or `getWeight()`. [SearchService](../src/services/searchService.ts) registers providers with `addProvider()`, not `registerProvider()`. Its public TypeScript overload exposes structured parameters; the implementation also handles strings at runtime.
+
+Configuration blocks below use POSIX shell `export` statements. Set equivalent
+environment values in your MCP client on other platforms; the CLI does not
+automatically load a `.env` file.
+
+For practical startup instructions, use the [Quick Start Guide](./GETTING_STARTED.md).
+
+This document details MCP Advisor's technical implementation, search providers, advanced features, and configuration options for developers who need deep integration or customization.
+
+## Contents
+
+- [Search Providers in Detail](#search-providers-in-detail)
   - [Meilisearch Provider](#meilisearch-provider)
   - [GetMCP Provider](#getmcp-provider)
   - [Compass Provider](#compass-provider)
   - [Nacos Provider](#nacos-provider)
   - [Offline Provider](#offline-provider)
   - [OceanBase Provider](#oceanbase-provider)
-  - [自定义提供者开发](#自定义提供者开发)
-- [混合搜索策略](#混合搜索策略)
-- [高级技术特性](#高级技术特性)
-  - [向量归一化](#向量归一化)
-  - [并行搜索执行](#并行搜索执行)
-  - [加权结果合并](#加权结果合并)
-- [错误处理系统](#错误处理系统)
-- [数据更新策略](#数据更新策略)
-- [日志系统](#日志系统)
-- [性能优化](#性能优化)
-- [系统配置](#系统配置)
+  - [Developing Custom Providers](#developing-custom-providers)
+- [Hybrid Search Strategy](#hybrid-search-strategy)
+- [Advanced Technical Features](#advanced-technical-features)
+  - [Vector Normalization](#vector-normalization)
+  - [Parallel Search Execution](#parallel-search-execution)
+  - [Weighted Result Merging](#weighted-result-merging)
+- [Error Handling System](#error-handling-system)
+- [Data Update Strategy](#data-update-strategy)
+- [Logging System](#logging-system)
+- [Performance Optimization](#performance-optimization)
+- [End-to-End Testing Framework](#end-to-end-testing-framework)
+- [System Configuration](#system-configuration)
 
-## 搜索提供者详解
+## Search Providers in Detail
 
-MCP Advisor 使用多提供者搜索架构，允许不同的搜索引擎并行工作，合并结果以提供最佳推荐。每个提供者都有特定的优势和用例，系统设计为在任何提供者不可用时优雅降级。
+MCP Advisor uses a multi-provider search architecture that allows different search engines to work in parallel and merges their results to provide the best recommendations. Each provider has specific strengths and use cases, and the system is designed to degrade gracefully when any provider is unavailable.
 
 ### Meilisearch Provider
 
-一个使用 Meilisearch 作为后端的向量搜索提供者。
+The current [MeilisearchSearchProvider](../src/services/core/search/MeilisearchSearchProvider.ts) sends text queries with a result limit to Meilisearch. The vector-search/HNSW implementation shown below is a historical concept, not the active query path.
 
-**主要特性**：
-- 快速向量相似度搜索
-- 支持过滤和分面搜索
-- 低延迟响应
-- HNSW 索引用于高效的最近邻搜索
+**Key features**:
 
-**配置选项**：
+- Text-query search through Meilisearch
+- Local/cloud client configuration and failover
+- Conversion of indexed server records to MCP server responses
+
+Vector/HNSW, filtering, and faceting are capabilities discussed in the original
+reference; the current provider call does not request those features.
+
+**Configuration options**:
+
 ```bash
-SEARCH_PROVIDER=meilisearch
-MEILISEARCH_URL=http://localhost:7700
-MEILISEARCH_API_KEY=your_api_key
+export MEILISEARCH_INSTANCE=local
+export MEILISEARCH_LOCAL_HOST=http://localhost:7700
+export MEILISEARCH_MASTER_KEY="${MEILISEARCH_MASTER_KEY:?Set the key for your local instance}"
+export MEILISEARCH_INDEX_NAME=mcp_servers
 ```
 
-**最适用于**：
-- 拥有专用 Meilisearch 实例的生产环境
-- 需要快速搜索响应的应用
-- 对搜索质量要求较高的场景
+**Best suited for**:
 
-**技术实现**：
+- Production environments with a dedicated Meilisearch instance
+- Applications requiring fast search responses
+- Scenarios with high search-quality requirements
+
+**Technical implementation**:
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 class MeilisearchProvider implements ISearchProvider {
@@ -60,17 +83,17 @@ class MeilisearchProvider implements ISearchProvider {
 
   async search(query: string, options?: SearchOptions): Promise<Server[]> {
     const index = this.client.index(this.indexName);
-    
-    // 生成查询向量
+
+    // Generate the query vector
     const queryVector = await this.generateEmbedding(query);
-    
-    // 执行向量搜索
+
+    // Perform vector search
     const results = await index.search('', {
       vector: queryVector,
       limit: options?.limit || 10,
-      filter: this.buildFilters(options)
+      filter: this.buildFilters(options),
     });
-    
+
     return this.formatResults(results.hits);
   }
 }
@@ -78,26 +101,32 @@ class MeilisearchProvider implements ISearchProvider {
 
 ### GetMCP Provider
 
-基于 API 的提供者，查询 GetMCP 注册表获取最新的服务器信息。
+**Current implementation:** [GetMcpResourceFetcher](../src/services/common/api/getMcpResourceFetcher.ts) retrieves the configured JSON feed with a GET request, then [GetMcpSearchProvider](../src/services/core/search/GetMcpSearchProvider.ts) indexes it and performs vector search. The inherited POST `/search` example below is conceptual and does not describe that implementation.
 
-**主要特性**：
-- 始终保持最新的 MCP 服务器信息
-- 丰富的元数据和描述
-- 社区维护的服务器信息
-- 无需本地基础设施
+An API-based provider that queries the GetMCP registry for the latest server information.
 
-**配置选项**：
+**Key features**:
+
+- Up-to-date MCP server information
+- Rich metadata and descriptions
+- Community-maintained server information
+- No local infrastructure required
+
+**Configuration options**:
+
 ```bash
-SEARCH_PROVIDER=getmcp
-GETMCP_API_URL=https://api.getmcp.org
+export GETMCP_API_URL=https://getmcp.io/api/servers.json
 ```
 
-**最适用于**：
-- 确保访问最新 MCP 服务器
-- 没有本地搜索基础设施的环境
-- 用社区数据补充本地搜索结果
+**Best suited for**:
 
-**技术实现**：
+- Ensuring access to the latest MCP servers
+- Environments without local search infrastructure
+- Supplementing local search results with community data
+
+**Technical implementation**:
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 class GetMcpProvider implements ISearchProvider {
@@ -105,29 +134,29 @@ class GetMcpProvider implements ISearchProvider {
   private cache: Map<string, CachedResult> = new Map();
 
   async search(query: string, options?: SearchOptions): Promise<Server[]> {
-    // 检查缓存
+    // Check the cache
     const cacheKey = `${query}_${JSON.stringify(options)}`;
     const cached = this.cache.get(cacheKey);
-    
+
     if (cached && !this.isCacheExpired(cached)) {
       return cached.results;
     }
-    
-    // API 调用
+
+    // API call
     const response = await fetch(`${this.apiUrl}/search`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, ...options })
+      body: JSON.stringify({ query, ...options }),
     });
-    
+
     const results = await response.json();
-    
-    // 更新缓存
+
+    // Update the cache
     this.cache.set(cacheKey, {
       results,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
-    
+
     return results;
   }
 }
@@ -135,79 +164,89 @@ class GetMcpProvider implements ISearchProvider {
 
 ### Compass Provider
 
-基于 API 的提供者，查询 Compass 注册表获取 MCP 服务器信息。
+An API-based provider that queries the Compass registry for MCP server information.
 
-**主要特性**：
-- 精选的服务器列表
-- 验证过的安装说明
-- 基于分类的浏览
-- 定期更新
+**Key features**:
 
-**配置选项**：
+- Curated server listings
+- Verified installation instructions
+- Category-based browsing
+- Regular updates
+
+**Configuration options**:
+
 ```bash
-SEARCH_PROVIDER=compass
-COMPASS_API_URL=https://compass-api.example.org
+export COMPASS_API_BASE=https://registry.mcphub.io
 ```
 
-**最适用于**：
-- 需要验证过服务器的企业环境
-- 需要精选服务器推荐的应用
-- 补充其他搜索提供者
+**Best suited for**:
+
+- Enterprise environments requiring verified servers
+- Applications needing curated server recommendations
+- Supplementing other search providers
 
 ### Nacos Provider
 
-与 Nacos（命名和配置服务）集成的提供者，用于发现在 Nacos 集群中注册的 MCP 服务器。
+A provider that integrates with Nacos (Naming and Configuration Service) to discover MCP servers registered in a Nacos cluster.
 
-**主要特性**：
-- 从 Nacos 动态发现 MCP 服务器
-- 支持 Nacos 认证和命名空间
-- 自动健康检查注册的服务
-- 与现有 Nacos 服务基础设施集成
+**Key features**:
 
-**配置选项**：
+- Dynamic discovery of MCP servers from Nacos
+- Support for Nacos authentication and namespaces
+- Automatic health checks for registered services
+- Integration with existing Nacos service infrastructure
+
+**Configuration options**:
+
 ```bash
-SEARCH_PROVIDER=nacos
-NACOS_SERVER_ADDR=localhost:8848
-NACOS_NAMESPACE=public
-NACOS_GROUP=DEFAULT_GROUP
-NACOS_USERNAME=nacos
-NACOS_PASSWORD=nacos
-MCP_SERVICE_NAME=mcp-servers
+export NACOS_SERVER_ADDR=localhost:8848
+export NACOS_USERNAME="${NACOS_USERNAME:?Set your Nacos username}"
+export NACOS_PASSWORD="${NACOS_PASSWORD:?Set your Nacos password}"
+export MCP_HOST=localhost
+export MCP_PORT=3000
+export NACOS_DEBUG=false
 ```
 
-**环境变量**：
-- `NACOS_SERVER_ADDR`: Nacos 服务器地址列表（必需）
-- `NACOS_NAMESPACE`: Nacos 命名空间 ID（默认：public）
-- `NACOS_GROUP`: Nacos 组名（默认：DEFAULT_GROUP）
-- `NACOS_USERNAME`: Nacos 认证用户名（可选）
-- `NACOS_PASSWORD`: Nacos 认证密码（可选）
-- `MCP_SERVICE_NAME`: Nacos 中 MCP 服务的服务名（默认：mcp-servers）
+**Environment variables**:
 
-**最适用于**：
-- 使用 Nacos 进行服务发现的企业环境
-- 动态 MCP 服务器注册和发现
-- 需要服务健康监控的环境
+- `NACOS_SERVER_ADDR`: Nacos server address (required)
+- `NACOS_USERNAME`: Nacos authentication username (required by the entry point)
+- `NACOS_PASSWORD`: Nacos authentication password (required by the entry point)
+- `MCP_HOST`: MCP host (default: localhost)
+- `MCP_PORT`: MCP port (default: 3000)
+- `AUTH_TOKEN`: Optional authentication token (default: empty)
+- `NACOS_DEBUG`: Enable debugging when set to `true` (default: false)
 
-**技术实现**：
+**Correction from the Chinese reference:** The current [entry point](../src/index.ts) does not read `NACOS_NAMESPACE`, `NACOS_GROUP`, or `MCP_SERVICE_NAME` when constructing the provider. Its original optional-credential description and example credentials should not be used.
+
+**Best suited for**:
+
+- Enterprise environments using Nacos for service discovery
+- Dynamic MCP server registration and discovery
+- Environments requiring service health monitoring
+
+**Technical implementation**:
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 class NacosProvider implements ISearchProvider {
   private nacosClient: NacosClient;
 
   async search(query: string, options?: SearchOptions): Promise<Server[]> {
-    // 从 Nacos 获取服务实例
+    // Retrieve service instances from Nacos
     const instances = await this.nacosClient.getAllInstances(
       this.serviceName,
       this.group,
-      this.namespace
+      this.namespace,
     );
-    
-    // 过滤健康实例
+
+    // Filter healthy instances
     const healthyInstances = instances.filter(instance => instance.healthy);
-    
-    // 转换为服务器格式并应用搜索过滤
+
+    // Convert to the server format and apply search filtering
     const servers = healthyInstances.map(this.instanceToServer);
-    
+
     return this.filterByQuery(servers, query);
   }
 }
@@ -215,26 +254,35 @@ class NacosProvider implements ISearchProvider {
 
 ### Offline Provider
 
-本地搜索提供者，无需外部依赖即可工作，结合向量搜索和文本匹配。
+A local-data search provider combining vector search and text matching. Its embedding implementation loads a Universal Sentence Encoder model; that initialization can require a network download. The name “offline” does not guarantee network-free startup.
 
-**主要特性**：
-- 完全离线工作
-- 结合向量和文本匹配的混合搜索
-- 预打包的服务器数据
-- 无外部 API 依赖
+**Key features**:
 
-**配置选项**：
+- Local server-data search
+- Hybrid search combining vector and text matching
+- Prepackaged server data
+- Embedding initialization may need network access; see [embedding.ts](../src/utils/embedding.ts)
+
+**Configuration options**:
+
+There is no `SEARCH_PROVIDER=offline` switch in the current entry point. [SearchService](../src/services/searchService.ts) enables its offline provider by default. The following selects the in-memory vector engine for consumers of [VectorEngineFactory](../src/services/vectorEngineFactory.ts); it does not disable the other providers or guarantee network-free startup.
+
 ```bash
-SEARCH_PROVIDER=offline
+export VECTOR_ENGINE_TYPE=memory
 ```
 
-**最适用于**：
-- 离线环境
-- 其他提供者不可用时的备用方案
-- 快速本地开发
-- 隐私敏感的应用
+**Best suited for**:
 
-**技术实现**：
+- A fallback when other providers are unavailable
+- Local development with model dependencies available
+
+For disconnected or privacy-sensitive deployments, verify model availability
+and network behavior separately. The standard CLI still initializes external
+providers; this page does not establish a no-network mode.
+
+**Technical implementation**:
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 class OfflineProvider implements ISearchProvider {
@@ -242,16 +290,16 @@ class OfflineProvider implements ISearchProvider {
   private textMatcher: TextMatcher;
 
   async search(query: string, options?: SearchOptions): Promise<Server[]> {
-    // 并行执行向量和文本搜索
+    // Run vector and text searches in parallel
     const [vectorResults, textResults] = await Promise.all([
       this.vectorEngine.search(query, options),
-      this.textMatcher.search(query, options)
+      this.textMatcher.search(query, options),
     ]);
-    
-    // 合并结果
+
+    // Merge results
     return this.mergeResults(vectorResults, textResults, {
       vectorWeight: 0.7,
-      textWeight: 0.3
+      textWeight: 0.3,
     });
   }
 }
@@ -259,32 +307,35 @@ class OfflineProvider implements ISearchProvider {
 
 ### OceanBase Provider
 
-使用 OceanBase 进行存储和检索的向量搜索提供者。
+**Current implementation:** OceanBase is a vector engine selected by [VectorEngineFactory](../src/services/vectorEngineFactory.ts), rather than an independent provider selected by `SEARCH_PROVIDER`. It uses `OCEANBASE_URL`; when that URL is absent, the factory falls back to memory. The original separate host, port, user, password, and database environment variables are not the configuration consumed here.
 
-**主要特性**：
-- 企业级数据库后端
-- 高可用性和可扩展性
-- 向量搜索的 HNSW 索引
-- 支持复杂查询和过滤
+A vector search provider that uses OceanBase for storage and retrieval.
 
-**配置选项**：
+**Key features**:
+
+- Enterprise-grade database backend
+- High availability and scalability
+- HNSW indexing for vector search
+- Support for complex queries and filtering
+
+**Configuration options**:
+
 ```bash
-SEARCH_PROVIDER=oceanbase
-OCEANBASE_HOST=localhost
-OCEANBASE_PORT=2881
-OCEANBASE_USER=root
-OCEANBASE_PASSWORD=password
-OCEANBASE_DATABASE=mcpadvisor
+export VECTOR_ENGINE_TYPE=oceanbase
+export OCEANBASE_URL="${OCEANBASE_URL:?Set your OceanBase connection URL}"
 ```
 
-**最适用于**：
-- 已经使用 OceanBase 的企业环境
-- 需要高可用性的应用
-- 有大量服务器数据的场景
+**Best suited for**:
 
-### 自定义提供者开发
+- Enterprise environments already using OceanBase
+- Applications requiring high availability
+- Scenarios with large amounts of server data
 
-MCP Advisor 支持通过简单接口实现自定义搜索提供者：
+### Developing Custom Providers
+
+The Chinese reference illustrates custom providers through the following conceptual interface. For an actual implementation, use `SearchProvider` from [src/types/index.ts](../src/types/index.ts), implement `search(params: SearchParams): Promise<MCPServerResponse[]>`, and register the instance with `SearchService.addProvider()`. The inherited interface and registration code below are historical illustrations.
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 interface ISearchProvider {
@@ -294,7 +345,9 @@ interface ISearchProvider {
 }
 ```
 
-**实现自定义提供者**：
+**Implementing a custom provider**:
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 import { ISearchProvider, SearchOptions, Server } from '../types';
@@ -303,15 +356,15 @@ export class CustomProvider implements ISearchProvider {
   private weight = 0.5;
 
   async search(query: string, options?: SearchOptions): Promise<Server[]> {
-    // 实现您的搜索逻辑
+    // Implement your search logic
     const results = await this.performCustomSearch(query, options);
-    
+
     return results.map(result => ({
       name: result.name,
       description: result.description,
       githubUrl: result.repository_url,
       category: result.tags.join(', '),
-      relevanceScore: result.score
+      relevanceScore: result.score,
     }));
   }
 
@@ -323,40 +376,45 @@ export class CustomProvider implements ISearchProvider {
     return this.weight;
   }
 
-  private async performCustomSearch(query: string, options?: SearchOptions): Promise<any[]> {
-    // 自定义搜索实现
-    // 可以调用外部 API、查询数据库等
+  private async performCustomSearch(
+    query: string,
+    options?: SearchOptions,
+  ): Promise<any[]> {
+    // Custom search implementation
+    // Can call external APIs, query databases, etc.
     return [];
   }
 }
 
-// 注册提供者
+// Register the provider
 import { SearchService } from '../services';
 const searchService = new SearchService();
 searchService.registerProvider(new CustomProvider());
 ```
 
-## 混合搜索策略
+## Hybrid Search Strategy
 
-MCP Advisor 实现了复杂的混合搜索策略，结合多种搜索技术：
+MCP Advisor implements a sophisticated hybrid search strategy combining multiple search techniques:
 
-### 搜索组合策略
+### Search Combination Strategy
 
-1. **向量搜索**: 将查询转换为向量嵌入进行语义相似度匹配
-2. **文本匹配**: 使用关键词和元数据匹配获得精确结果
-3. **加权合并**: 用可配置权重合并结果（默认：70% 向量，30% 文本）
-4. **并行执行**: 并行运行搜索以获得最佳性能
-5. **自适应过滤**: 根据结果质量动态调整相似度阈值
+1. **Vector search**: Convert queries to vector embeddings for semantic similarity matching
+2. **Text matching**: Use keyword and metadata matching for precise results
+3. **Weighted merging**: The current [offline provider](../src/services/core/search/OfflineSearchProvider.ts) defaults to 70% text and 30% vector weight, correcting the reversed weights in the Chinese reference. These are provider-level options, not `SearchOptions` environment settings.
+4. **Parallel execution**: Run searches in parallel for optimal performance
+5. **Adaptive filtering (historical concept)**: The source reference proposes dynamically adjusting thresholds; the current score filter uses the supplied threshold directly.
 
-### 提供者选择逻辑
+### Provider Selection Logic
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 class ProviderSelectionEngine {
   selectProviders(query: string, options: SearchOptions): ISearchProvider[] {
-    // 分析查询特征
+    // Analyze query characteristics
     const queryFeatures = this.analyzeQuery(query);
-    
-    // 根据查询特征选择提供者
+
+    // Select providers based on query characteristics
     if (queryFeatures.isHighlySpecific) {
       return [this.getProvider('meilisearch'), this.getProvider('getmcp')];
     } else if (queryFeatures.isGeneral) {
@@ -368,82 +426,90 @@ class ProviderSelectionEngine {
 }
 ```
 
-混合方法提供了几个优势：
-- 更好地处理模糊查询
-- 改善非英语查询的结果
-- 对词汇不匹配的恢复能力
-- 在语义理解和关键词精度之间取得平衡
+The hybrid approach offers several advantages:
 
-## 高级技术特性
+- Better handling of ambiguous queries
+- Improved results for non-English queries
+- Resilience to vocabulary mismatches
+- A balance between semantic understanding and keyword precision
 
-### 向量归一化
+## Advanced Technical Features
 
-向量归一化是提高搜索质量的关键技术。
+### Vector Normalization
 
-**实现原理**：
-- 将所有向量转换为单位长度（大小 = 1）
-- 使用欧几里得范数进行归一化
-- 确保一致的余弦相似度计算
+Vector normalization is a key technique for improving search quality.
 
-**技术优势**：
-- 通过关注方向而非大小来提高搜索精度
-- 减少向量维度变化的影响
-- 改善跨语言查询的性能
+**How it works**:
+
+- Convert all vectors to unit length (magnitude = 1)
+- Normalize using the Euclidean norm
+- Ensure consistent cosine similarity calculations
+
+**Technical advantages**:
+
+- Improve search accuracy by focusing on direction rather than magnitude
+- Reduce the impact of changes in vector dimensionality
+- Improve performance for cross-language queries
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 将向量归一化为单位长度
- * @param vector 输入向量
- * @returns 归一化后的向量
+ * Normalize a vector to unit length
+ * @param vector Input vector
+ * @returns Normalized vector
  */
 function normalizeVector(vector: number[]): number[] {
-  // 计算向量大小（欧几里得范数）
+  // Calculate the vector magnitude (Euclidean norm)
   const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
-  
-  // 防止除以零
+
+  // Prevent division by zero
   if (magnitude === 0 || !isFinite(magnitude)) {
     return vector;
   }
-  
-  // 归一化向量
+
+  // Normalize the vector
   return vector.map(val => val / magnitude);
 }
 ```
 
-### 并行搜索执行
+### Parallel Search Execution
 
-MCP Advisor 使用并行搜索策略来优化性能。
+MCP Advisor uses a parallel search strategy to optimize performance.
 
-**实现方式**：
-- 使用 `Promise.all` 同时执行多个搜索
-- 显著减少总搜索时间
-- 提高系统响应性
-- 允许不同搜索策略的结果合并
+**Implementation**:
+
+- Use `Promise.all` to execute multiple searches concurrently
+- Significantly reduce total search time
+- Improve system responsiveness
+- Allow results from different search strategies to be merged
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 并行执行多个搜索提供者
- * @param query 搜索查询
- * @param providers 搜索提供者列表
- * @returns 合并的搜索结果
+ * Execute multiple search providers in parallel
+ * @param query Search query
+ * @param providers List of search providers
+ * @returns Merged search results
  */
 async function parallelSearch(
-  query: string, 
-  providers: SearchProvider[]
+  query: string,
+  providers: SearchProvider[],
 ): Promise<SearchResult[]> {
   try {
-    // 并行执行所有提供者的搜索
-    const resultsPromises = providers.map(provider => 
+    // Execute searches across all providers in parallel
+    const resultsPromises = providers.map(provider =>
       provider.search(query).catch(error => {
         logger.error(`Provider ${provider.name} failed:`, error);
-        return []; // 失败时返回空结果
-      })
+        return []; // Return empty results on failure
+      }),
     );
-    
-    // 等待所有搜索完成
+
+    // Wait for all searches to finish
     const results = await Promise.all(resultsPromises);
-    
-    // 合并并去重结果
+
+    // Merge and deduplicate results
     return deduplicateResults(results.flat());
   } catch (error) {
     logger.error('Parallel search failed:', error);
@@ -452,125 +518,132 @@ async function parallelSearch(
 }
 ```
 
-### 加权结果合并
+### Weighted Result Merging
 
-加权结果合并技术允许智能组合不同搜索策略的结果。
+Weighted result merging allows results from different search strategies to be intelligently combined.
 
-**实现原理**：
-- 基于可配置权重合并向量和文本搜索结果
-- 默认配置：向量相似度 (70%)，文本匹配 (30%)
-- 根据查询特征动态调整权重
+**How it works**:
+
+- Merge vector and text search results using configurable weights
+- Current offline-provider defaults: text matching (70%), vector similarity (30%). The source reference reverses these values; the illustrative snippets below retain its conceptual API rather than the current provider implementation.
+- Dynamic query-dependent weights are a historical design idea from the source reference; the current offline provider keeps the weights configured at construction.
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 合并向量和文本搜索结果
- * @param textResults 文本搜索结果
- * @param vectorResults 向量搜索结果
- * @param weights 合并权重配置
- * @returns 合并后的结果
+ * Merge vector and text search results
+ * @param textResults Text search results
+ * @param vectorResults Vector search results
+ * @param weights Merge weight configuration
+ * @returns Merged results
  */
 function mergeSearchResults(
   textResults: SearchResult[],
   vectorResults: SearchResult[],
-  weights: { textMatchWeight: number; vectorMatchWeight: number }
+  weights: { textMatchWeight: number; vectorMatchWeight: number },
 ): SearchResult[] {
   const { textMatchWeight, vectorMatchWeight } = weights;
   const mergedMap = new Map<string, SearchResult>();
-  
-  // 处理文本搜索结果
+
+  // Process text search results
   for (const result of textResults) {
     const key = result.github_url || result.title;
     mergedMap.set(key, {
       ...result,
-      similarity: result.similarity * textMatchWeight
+      similarity: result.similarity * textMatchWeight,
     });
   }
-  
-  // 处理向量搜索结果，合并相同项
+
+  // Process vector search results, merging matching items
   for (const result of vectorResults) {
     const key = result.github_url || result.title;
     if (mergedMap.has(key)) {
       const existing = mergedMap.get(key)!;
       mergedMap.set(key, {
         ...existing,
-        similarity: existing.similarity + (result.similarity * vectorMatchWeight)
+        similarity: existing.similarity + result.similarity * vectorMatchWeight,
       });
     } else {
       mergedMap.set(key, {
         ...result,
-        similarity: result.similarity * vectorMatchWeight
+        similarity: result.similarity * vectorMatchWeight,
       });
     }
   }
-  
-  // 转换回数组并排序
-  return Array.from(mergedMap.values())
-    .sort((a, b) => b.similarity - a.similarity);
+
+  // Convert back to an array and sort
+  return Array.from(mergedMap.values()).sort(
+    (a, b) => b.similarity - a.similarity,
+  );
 }
 ```
 
-## 错误处理系统
+## Error Handling System
 
-MCP Advisor 实现了强大的错误处理系统，确保可靠性并提供详细的诊断信息。
+MCP Advisor implements a robust error handling system to ensure reliability and provide detailed diagnostic information.
 
-### 优雅降级策略
+### Graceful Degradation Strategy
 
-- **多提供者后备**：如果一个搜索提供者失败，系统会使用其他提供者
-- **部分结果处理**：即使某些提供者失败，系统仍能返回部分结果
-- **默认响应**：对于关键失败，系统提供默认响应
-- **用户友好错误消息**：将技术错误转换为用户可理解的消息
+- **Multi-provider fallback**: If one search provider fails, the system uses other providers
+- **Partial result handling**: The system can return partial results even if some providers fail
+- **Default responses**: The system provides default responses for critical failures
+- **User-friendly error messages**: Convert technical errors into messages users can understand
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 实现优雅降级的搜索函数
- * @param query 搜索查询
- * @param options 搜索选项
- * @returns 搜索结果
+ * Search function with graceful degradation
+ * @param query Search query
+ * @param options Search options
+ * @returns Search results
  */
 async function resilientSearch(
-  query: string, 
-  options: SearchOptions
+  query: string,
+  options: SearchOptions,
 ): Promise<SearchResult[]> {
   try {
-    // 尝试使用所有提供者
+    // Try using all providers
     return await searchWithAllProviders(query, options);
   } catch (primaryError) {
     logger.warn('Primary search failed, falling back:', primaryError);
-    
+
     try {
-      // 尝试使用离线提供者
+      // Try using the offline provider
       return await searchWithOfflineProvider(query, options);
     } catch (fallbackError) {
       logger.error('Fallback search failed:', fallbackError);
-      
-      // 返回默认结果
+
+      // Return default results
       return getDefaultResults(query);
     }
   }
 }
 ```
 
-### 上下文错误格式化
+### Contextual Error Formatting
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 格式化错误对象，添加上下文信息
- * @param error 原始错误
- * @param context 错误上下文
- * @returns 格式化后的错误
+ * Format an error object and add contextual information
+ * @param error Original error
+ * @param context Error context
+ * @returns Formatted error
  */
 function formatError(error: any, context: ErrorContext): FormattedError {
-  // 提取错误消息
-  const message = error instanceof Error 
-    ? error.message 
-    : String(error);
-  
-  // 提取和格式化堆栈
-  const stack = error instanceof Error && error.stack
-    ? error.stack.split('\n').map(line => line.trim())
-    : [];
-  
-  // 创建格式化的错误对象
+  // Extract the error message
+  const message = error instanceof Error ? error.message : String(error);
+
+  // Extract and format the stack trace
+  const stack =
+    error instanceof Error && error.stack
+      ? error.stack.split('\n').map(line => line.trim())
+      : [];
+
+  // Create the formatted error object
   return {
     message,
     stack,
@@ -581,57 +654,65 @@ function formatError(error: any, context: ErrorContext): FormattedError {
       operation: context.operation,
       params: context.params,
       timestamp: new Date().toISOString(),
-      ...context.additionalInfo
-    }
+      ...context.additionalInfo,
+    },
   };
 }
 ```
 
-## 数据更新策略
+## Data Update Strategy
 
-MCP Advisor 实现了智能数据更新策略，平衡性能和数据新鲜度。
+The following timestamp-tracking and conditional-indexing descriptions are
+historical design examples from the Chinese reference, not verified current
+configuration features. Current GetMCP and Meilisearch providers cache feed data
+using `CACHE_TTL_MS` (one hour); this does not implement the generalized
+`getLastUpdateTimestamp` / `getFreshnessWindow` APIs shown below.
 
-### 时间戳跟踪
+### Timestamp Tracking
 
-- 每个数据源维护最后更新时间戳
-- 系统跟踪更新频率和模式
-- 可配置的新鲜度窗口（默认：1 小时）
+- Each data source maintains a last-update timestamp
+- The system tracks update frequency and patterns
+- Configurable freshness window (default: 1 hour)
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 检查数据是否需要更新
- * @param dataSource 数据源
- * @returns 是否需要更新
+ * Check whether data needs updating
+ * @param dataSource Data source
+ * @returns Whether an update is needed
  */
 function shouldUpdateData(dataSource: DataSource): boolean {
   const lastUpdate = dataSource.getLastUpdateTimestamp();
   const now = Date.now();
   const freshnessWindow = config.getFreshnessWindow();
-  
-  // 如果没有上次更新时间或超过新鲜度窗口，则更新
-  return !lastUpdate || (now - lastUpdate) > freshnessWindow;
+
+  // Update if there is no last-update timestamp or the freshness window has elapsed
+  return !lastUpdate || now - lastUpdate > freshnessWindow;
 }
 ```
 
-### 条件索引
+### Conditional Indexing
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 条件更新向量索引
- * @param dataSource 数据源
+ * Conditionally update the vector index
+ * @param dataSource Data source
  */
 async function conditionalIndexUpdate(dataSource: DataSource): Promise<void> {
-  // 检查是否需要更新
+  // Check whether an update is needed
   if (!shouldUpdateData(dataSource)) {
     logger.debug('Index is fresh, skipping update');
     return;
   }
-  
+
   try {
-    // 获取新数据
+    // Fetch new data
     const newData = await dataSource.fetchLatestData();
-    
-    // 检查数据是否有变化
+
+    // Check whether the data has changed
     if (dataSource.hasDataChanged(newData)) {
       logger.info('Data changed, rebuilding index');
       await vectorDatabase.rebuildIndex(newData);
@@ -642,28 +723,30 @@ async function conditionalIndexUpdate(dataSource: DataSource): Promise<void> {
     }
   } catch (error) {
     logger.error('Index update failed:', error);
-    // 失败不会阻止使用现有索引
+    // Failure does not prevent use of the existing index
   }
 }
 ```
 
-## 日志系统
+## Logging System
 
-MCP Advisor 实现了增强的日志系统，提供详细的系统操作可见性。
+MCP Advisor implements an enhanced logging system providing detailed visibility into system operations.
 
-### 上下文感知日志
+### Context-Aware Logging
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 创建上下文感知的日志条目
- * @param level 日志级别
- * @param message 日志消息
- * @param context 日志上下文
+ * Create a context-aware log entry
+ * @param level Log level
+ * @param message Log message
+ * @param context Log context
  */
 function logWithContext(
   level: LogLevel,
   message: string,
-  context: LogContext
+  context: LogContext,
 ): void {
   const logEntry = {
     timestamp: new Date().toISOString(),
@@ -671,78 +754,88 @@ function logWithContext(
     message,
     component: context.component,
     operation: context.operation,
-    ...context.metadata
+    ...context.metadata,
   };
-  
-  // 输出到控制台
+
+  // Write to the console
   if (config.consoleLogging) {
     console[level](JSON.stringify(logEntry));
   }
-  
-  // 输出到文件
+
+  // Write to a file
   if (config.fileLogging) {
     fileLogger.write(logEntry);
   }
 }
 ```
 
-### 性能跟踪
+### Performance Tracking
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 性能跟踪包装器
- * @param operation 操作名称
- * @param func 要执行的函数
- * @returns 函数结果
+ * Performance tracking wrapper
+ * @param operation Operation name
+ * @param func Function to execute
+ * @returns Function result
  */
 async function trackPerformance<T>(
   operation: string,
-  func: () => Promise<T>
+  func: () => Promise<T>,
 ): Promise<T> {
   const start = performance.now();
   try {
     const result = await func();
     const duration = performance.now() - start;
-    
-    logger.debug(`Operation ${operation} completed in ${duration.toFixed(2)}ms`);
-    
-    // 记录性能指标
+
+    logger.debug(
+      `Operation ${operation} completed in ${duration.toFixed(2)}ms`,
+    );
+
+    // Record performance metrics
     metrics.recordOperationDuration(operation, duration);
-    
+
     return result;
   } catch (error) {
     const duration = performance.now() - start;
-    logger.error(`Operation ${operation} failed after ${duration.toFixed(2)}ms:`, error);
+    logger.error(
+      `Operation ${operation} failed after ${duration.toFixed(2)}ms:`,
+      error,
+    );
     throw error;
   }
 }
 ```
 
-## 性能优化
+## Performance Optimization
 
-MCP Advisor 采用了多种性能优化技术。
+The following sections translate optimization ideas from the source reference.
+They are not all implemented as described; check the specific notes below.
 
-### 缓存策略
+### Caching Strategy
 
-- **查询缓存**：缓存常见查询的结果
-- **嵌入缓存**：重用计算成本高的嵌入向量
-- **LRU 策略**：限制缓存大小，优先保留最近使用的项
+- **Feed caching (current)**: GetMCP and Meilisearch providers cache fetched feed data with a TTL.
+- **Embedding caching (current)**: [embedding.ts](../src/utils/embedding.ts) maintains an embedding LRU cache.
+- **General query-result caching (historical concept)**: The source reference describes this as a feature, but the example below is not the current search-service implementation.
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 创建 LRU 缓存
- * @param maxSize 最大缓存项数
- * @returns 缓存对象
+ * Create an LRU cache
+ * @param maxSize Maximum number of cache entries
+ * @returns Cache object
  */
 function createLRUCache<K, V>(maxSize: number): Cache<K, V> {
   const cache = new Map<K, V>();
   const keys: K[] = [];
-  
+
   return {
     get(key: K): V | undefined {
       const value = cache.get(key);
       if (value !== undefined) {
-        // 将项移到最近使用的位置
+        // Move the item to the most recently used position
         const index = keys.indexOf(key);
         if (index > -1) {
           keys.splice(index, 1);
@@ -751,112 +844,118 @@ function createLRUCache<K, V>(maxSize: number): Cache<K, V> {
       }
       return value;
     },
-    
+
     set(key: K, value: V): void {
-      // 如果达到最大大小，删除最旧的项
+      // Remove the oldest item if the maximum size is reached
       if (keys.length >= maxSize && !cache.has(key)) {
         const oldestKey = keys.shift();
         if (oldestKey !== undefined) {
           cache.delete(oldestKey);
         }
       }
-      
-      // 添加或更新项
+
+      // Add or update an item
       if (!cache.has(key)) {
         keys.push(key);
       }
       cache.set(key, value);
     },
-    
+
     clear(): void {
       cache.clear();
       keys.length = 0;
-    }
+    },
   };
 }
 ```
 
-### 批处理
+### Batch Processing
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 批量生成嵌入向量
- * @param texts 要嵌入的文本列表
- * @returns 嵌入向量列表
+ * Generate embeddings in batches
+ * @param texts List of texts to embed
+ * @returns List of embedding vectors
  */
-async function batchGenerateEmbeddings(
-  texts: string[]
-): Promise<number[][]> {
-  // 如果只有一个文本，直接处理
+async function batchGenerateEmbeddings(texts: string[]): Promise<number[][]> {
+  // Process directly if there is only one text
   if (texts.length === 1) {
     return [await generateEmbedding(texts[0])];
   }
-  
-  // 批量处理多个文本
+
+  // Process multiple texts in a batch
   logger.debug(`Generating embeddings for ${texts.length} texts in batch`);
-  
+
   try {
-    // 调用嵌入模型的批处理 API
+    // Call the embedding model's batch API
     const embeddings = await embeddingModel.embedBatch(texts);
-    
-    // 归一化所有嵌入
+
+    // Normalize all embeddings
     return embeddings.map(normalizeVector);
   } catch (error) {
     logger.error('Batch embedding generation failed:', error);
-    
-    // 回退到单个处理
+
+    // Fall back to individual processing
     logger.info('Falling back to individual embedding generation');
     const results: number[][] = [];
-    
+
     for (const text of texts) {
       try {
         results.push(await generateEmbedding(text));
       } catch (innerError) {
-        logger.error(`Failed to generate embedding for text: ${text.substring(0, 50)}...`, innerError);
-        // 对于失败的文本，添加零向量
+        logger.error(
+          `Failed to generate embedding for text: ${text.substring(0, 50)}...`,
+          innerError,
+        );
+        // Add a zero vector for any text that fails
         results.push(new Array(embeddingModel.dimensions).fill(0));
       }
     }
-    
+
     return results;
   }
 }
 ```
 
-### 延迟加载
+### Lazy Loading
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
 /**
- * 延迟加载搜索提供者
+ * Lazily load a search provider
  */
 class LazyLoadedProvider implements SearchProvider {
   private provider: SearchProvider | null = null;
   private readonly factory: () => SearchProvider;
-  
+
   constructor(factory: () => SearchProvider) {
     this.factory = factory;
   }
-  
+
   async search(query: string): Promise<SearchResult[]> {
-    // 按需初始化提供者
+    // Initialize the provider on demand
     if (!this.provider) {
       this.provider = this.factory();
     }
-    
+
     return this.provider.search(query);
   }
 }
 ```
 
-## 端到端测试框架
+## End-to-End Testing Framework
 
-### 端口管理
+### Port Management
 
-在端到端测试中增加了对 MCP Inspector 和代理端口的自动清理机制，确保端口冲突不会影响测试运行。
+An automatic cleanup mechanism for MCP Inspector and proxy ports has been added to end-to-end tests to ensure port conflicts do not affect test runs.
 
-**端口清理机制**:
+**Historical port cleanup mechanism (destructive):** This inherited shell example force-kills processes on ports 6274 and 6277 and every process matching `inspector`. Do not run it as a general cleanup recipe; first identify the specific test processes you own.
+
 ```bash
-# 清理端口占用
+# Clean up processes occupying ports
 cleanup_ports() {
     local ports=(6274 6277)
     for port in "${ports[@]}"; do
@@ -871,52 +970,54 @@ cleanup_ports() {
 }
 ```
 
-### 测试辅助工具
+### Testing Utilities
 
-新增了模块化的测试辅助工具类，提供了更好的测试环境管理：
+Modular testing utility classes have been added to improve test environment management:
 
-**测试工具类**:
-- `EnvironmentManager`: 环境变量保存和恢复
-- `SmartWaiter`: 智能等待机制
-- `MCPConnectionManager`: MCP 连接管理
-- `SearchOperations`: 搜索操作封装
-- `ScreenshotManager`: 截图管理
-- `TestValidator`: 测试结果验证
+**Testing utility classes**:
+
+- `EnvironmentManager`: Save and restore environment variables
+- `SmartWaiter`: Smart waiting mechanism
+- `MCPConnectionManager`: MCP connection management
+- `SearchOperations`: Search operation wrappers
+- `ScreenshotManager`: Screenshot management
+- `TestValidator`: Test result validation
+
+**Historical / illustrative example:** This inherited snippet explains the concept; its classes, helpers, and signatures are not a current, runnable API recipe.
 
 ```typescript
-// 使用示例
+// Usage example
 const envManager = new EnvironmentManager();
 envManager.saveEnvironment();
 envManager.setMeilisearchConfig({
   instance: 'local',
-  host: 'http://localhost:7700'
+  host: 'http://localhost:7700',
 });
-// ... 测试代码
+// ... Test code
 envManager.restoreEnvironment();
 ```
 
+## System Configuration
 
-## 系统配置
+### Provider Configuration
 
-### 提供者配置
+The current entry point constructs multiple providers together and `SearchService` manages their results. The original reference's environment switches and JSON provider schema are not implemented as the described runtime controls; the working environment names below replace those obsolete recommendations.
 
-MCP Advisor 允许同时配置多个提供者，具有优先级和回退机制。
+**Environment variable configuration**:
 
-**环境变量配置**：
 ```bash
-# 主要提供者
-SEARCH_PROVIDER=hybrid
+# Local Meilisearch configuration
+export MEILISEARCH_INSTANCE=local
+export MEILISEARCH_LOCAL_HOST=http://localhost:7700
+export MEILISEARCH_MASTER_KEY="${MEILISEARCH_MASTER_KEY:?Set the key for your local instance}"
 
-# 提供者权重（用于混合搜索）
-VECTOR_SEARCH_WEIGHT=0.7
-TEXT_SEARCH_WEIGHT=0.3
-
-# 提供者特定选项
-MEILISEARCH_URL=http://localhost:7700
-GETMCP_API_URL=https://api.getmcp.org
+# Provider data sources
+export GETMCP_API_URL=https://getmcp.io/api/servers.json
+export COMPASS_API_BASE=https://registry.mcphub.io
 ```
 
-**配置文件**：
+**Historical / illustrative configuration file:** The following retains the original design example for context. The current entry point does not read this `search.providers` / `fallbackOrder` schema; do not use it to select, weight, or disable providers. See [src/index.ts](../src/index.ts), [SearchService](../src/services/searchService.ts), and the repository's [default configuration](../config/default.json).
+
 ```json
 {
   "search": {
@@ -943,14 +1044,18 @@ GETMCP_API_URL=https://api.getmcp.org
 }
 ```
 
-### 提供者选择逻辑
+### Provider Selection Logic
 
-1. 如果 `SEARCH_PROVIDER` 设置为特定提供者，则只使用该提供者
-2. 如果设置为 `hybrid`，则使用所有启用的提供者及其配置权重
-3. 如果提供者失败，系统会回退到 `fallbackOrder` 中的下一个提供者
-4. 如果所有提供者都失败，系统返回错误
+The Chinese reference describes `SEARCH_PROVIDER`, `hybrid`, and sequential `fallbackOrder` selection. That description does not match the current source:
 
-### 性能调优配置
+1. [src/index.ts](../src/index.ts) creates Meilisearch, Compass, and GetMCP providers directly.
+2. Nacos is added only when its server address, username, and password are present and initialization succeeds.
+3. [SearchService](../src/services/searchService.ts) adds the offline provider by default and searches providers in parallel; it does not consume the illustrated `fallbackOrder` setting.
+4. Result handling and failure behavior are implemented by `SearchService`, rather than the historical JSON schema. No `SEARCH_PROVIDER` environment switch is read by this entry point.
+
+### Performance Tuning Configuration
+
+**Historical / illustrative configuration:** This inherited `performance` JSON is a conceptual tuning example, not a verified configuration contract consumed by the current runtime. Its caching, batching, and parallelism values should not be presented as active defaults.
 
 ```json
 {
@@ -975,9 +1080,9 @@ GETMCP_API_URL=https://api.getmcp.org
 
 ---
 
-本技术参考手册提供了 MCP Advisor 的深入技术细节。对于更多信息，请参阅：
+This technical reference provides in-depth technical details about MCP Advisor. For more information, see:
 
-- [快速开始指南](./GETTING_STARTED.md) - 安装和基本使用
-- [架构文档](./ARCHITECTURE.md) - 系统架构详解
-- [贡献指南](../CONTRIBUTING.md) - 开发者指南
-- [故障排除](./TROUBLESHOOTING.md) - 常见问题解决
+- [Quick Start Guide](./GETTING_STARTED.md) - Installation and basic usage
+- [Architecture](./ARCHITECTURE.md) - Detailed system architecture
+- [Contributing Guide](../CONTRIBUTING.md) - Developer guide
+- [Troubleshooting](./TROUBLESHOOTING.md) - Solutions to common problems

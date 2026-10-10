@@ -1,297 +1,328 @@
-# 系统架构
+# System Architecture
 
-[English](./ARCHITECTURE.en.md) | [简体中文](./ARCHITECTURE.md)
+[English](./ARCHITECTURE.md) | [Simplified Chinese](./ARCHITECTURE.zh-CN.md)
 
-本文档详细介绍了 MCP Advisor 的系统架构、核心组件和数据流。
+This guide describes MCP Advisor's architecture, core components, and data flow.
+It follows the Chinese guide's topics while correcting descriptions that no
+longer match the source. In particular, the active Meilisearch provider performs
+text search, query-dependent weight selection is not implemented, and the
+reranker does not guarantee a minimum result count. Diagrams below describe the
+current implementation rather than the original proposed design. Verification
+here is by source inspection, not runtime or performance testing.
 
-## 目录
+## Contents
 
-- [架构概述](#架构概述)
-- [核心组件](#核心组件)
-- [数据流](#数据流)
-- [搜索策略](#搜索策略)
-- [技术实现](#技术实现)
+- [Architecture Overview](#architecture-overview)
+- [Core Components](#core-components)
+- [Data Flow](#data-flow)
+- [Search Strategy](#search-strategy)
+- [Technical Implementation](#technical-implementation)
+- [Summary](#summary)
 
-## 架构概述
+## Architecture Overview
 
-MCP Advisor 采用模块化架构，遵循函数式编程原则和关注点分离。系统由以下主要部分组成：
+MCP Advisor separates transport handling, tool handlers, search providers, result
+processing, and shared utilities. The [CLI entry point](../src/index.ts)
+constructs Meilisearch, Compass, and GetMCP providers. It additionally initializes
+Nacos when `NACOS_SERVER_ADDR`, `NACOS_USERNAME`, and `NACOS_PASSWORD` are all set.
+`SearchService` enables an offline provider by default.
 
-### 系统架构图
+### System Diagram
 
 ```mermaid
 graph TD
-    Client["客户端应用"] --> |"MCP 协议"| Transport["传输层"]
-    
-    subgraph "MCP Advisor 服务器"
-        Transport --> |"请求"| SearchService["搜索服务"]
-        SearchService --> |"查询"| Providers["搜索提供者"]
-        
-        subgraph "搜索提供者"
-            Providers --> MeilisearchProvider["Meilisearch 提供者"]
-            Providers --> GetMcpProvider["GetMCP 提供者"]
-            Providers --> CompassProvider["Compass 提供者"]
-            Providers --> NacosProvider["Nacos 服务发现"]
-            Providers --> OfflineProvider["离线提供者"]
-        end
-        
-        OfflineProvider --> |"混合搜索"| HybridSearch["混合搜索引擎"]
-        HybridSearch --> TextMatching["文本匹配"]
-        HybridSearch --> VectorSearch["向量搜索"]
-        
-        MeilisearchProvider --> |"API 调用"| MeilisearchAPI["Meilisearch API"]
-        GetMcpProvider --> |"API 调用"| GetMcpAPI["GetMCP API"]
-        CompassProvider --> |"API 调用"| CompassAPI["Compass API"]
-        NacosProvider --> |"服务发现"| NacosServer["Nacos 注册中心"]
-        
-        SearchService --> |"合并和过滤"| ResultProcessor["结果处理器"]
-        ResultProcessor --> |"优先级"| PriorityEngine["提供者优先级引擎"]
-        ResultProcessor --> |"去重"| Deduplicator["结果去重器"]
-        ResultProcessor --> |"过滤"| SimilarityFilter["相似度过滤器"]
-        
-        SearchService --> Logger["日志系统"]
-    end
-    
-    GetMcpAPI --> |"数据"| ExternalMCPRegistry[("外部 MCP 注册表")]
-    CompassAPI --> |"数据"| ExternalMCPRegistry
-    MeilisearchAPI --> |"数据"| MeilisearchDB[("Meilisearch 数据库")]
+    Client["MCP client"] --> Transport["Stdio, SSE, or REST transport"]
+    Transport --> Server["ServerService request handlers"]
+    Server --> Recommend["Recommendation tool"]
+    Server --> Install["Installation guidance tool"]
+    Server --> Logs["Log-reading resources"]
+    Recommend --> Search["SearchService"]
+    Search --> Meili["Meilisearch text search"]
+    Search --> Compass["Compass recommendation API"]
+    Search --> GetMCP["GetMCP feed and vector engine"]
+    Search --> Nacos["Nacos discovery, when configured"]
+    Search --> Offline["Offline data: text and vector search"]
+    Meili --> MeiliService["Local or cloud Meilisearch"]
+    Compass --> CompassAPI["Compass API"]
+    GetMCP --> Feed["GetMCP server feed"]
+    Nacos --> Registry["Nacos registry"]
+    Offline --> Data["Local fallback data and embedding model"]
+    Search --> Rerank["Merge, deduplicate, score, filter, sort, limit"]
+    Rerank --> Format["Format MCP text content"]
+    Format --> Client
 ```
 
-## 核心组件
+The search branches in the diagram are launched together. Offline search is not
+only invoked after all online providers fail. A provider failure is logged and
+converted to an empty result list so other providers can still contribute.
 
-### 1. 搜索服务层
+## Core Components
 
-搜索服务是系统的核心，负责协调不同的搜索提供者并处理结果：
+### 1. Search Service Layer
 
-- **统一搜索接口**：提供简单的 API 用于查询 MCP 服务器
-- **提供者聚合**：从多个搜索提供者收集结果
-- **并行执行**：同时查询多个提供者以提高性能
-- **可配置选项**：支持自定义限制、相似度阈值等
-- **智能结果合并**：基于相似度和提供者优先级合并结果
-- **去重机制**：基于 GitHub URL 或标题删除重复结果
+[SearchService](../src/services/searchService.ts) coordinates providers and
+passes their named result lists to the reranker:
+
+- **Unified interface:** Structured `SearchParams` contain `taskDescription` and
+  optional `keywords` and `capabilities`.
+- **Provider aggregation:** Providers execute concurrently through `Promise.all`.
+- **Search options:** Defaults are `limit: 5` and `minSimilarity: 0.4`.
+- **Failure isolation:** An individual provider rejection becomes an empty list.
+- **Result processing:** The reranker merges and deduplicates before scoring,
+  filtering, sorting, and limiting results.
+
+The current public signatures are summarized below; this is a declaration
+excerpt, not a standalone implementation:
 
 ```typescript
-class SearchService {
-  constructor(options?: SearchOptions);
-  search(query: string): Promise<SearchResult[]>;
+declare class SearchService {
+  constructor(
+    providers?: SearchProvider[],
+    offlineConfig?: Partial<OfflineConfig>,
+  );
+  search(
+    params: SearchParams,
+    options?: SearchOptions,
+  ): Promise<MCPServerResponse[]>;
 }
 ```
 
-### 2. 搜索提供者
+Unlike the original guide's `constructor(options)` example, the first constructor
+argument is a provider array. The public TypeScript search overload accepts
+structured parameters, although its implementation also accepts strings at
+runtime. See [the response and option types](../src/types/index.ts) and
+[search parameter types](../src/types/search.ts).
 
-系统支持多个搜索提供者，每个提供者实现相同的接口但使用不同的数据源或搜索策略：
+### 2. Search Providers
 
-#### Meilisearch 提供者
+All providers implement `search(params: SearchParams)` but use different sources
+and retrieval strategies.
 
-使用 Meilisearch 进行向量搜索：
+#### Meilisearch Provider
 
-- 高性能向量数据库集成
-- 支持语义相似度搜索
-- 使用 HNSW 索引进行快速检索
+[MeilisearchSearchProvider](../src/services/core/search/MeilisearchSearchProvider.ts)
+combines the task description, keywords, and capabilities into a text query. It
+ensures feed data is loaded and then calls its client with a result limit of 10.
+The client supports local/cloud configuration and failover.
 
-#### GetMCP 提供者
+The original guide describes vector/HNSW search here. That is not the active
+provider query path: this provider does not send a query vector. A separate
+[Meilisearch vector engine](../src/services/providers/meilisearch/vectorEngine.ts)
+exists, but it should not be confused with this text-search provider.
 
-从 GetMCP 注册表获取数据：
+#### GetMCP Provider
 
-- 直接与官方 MCP 注册表集成
-- 实时数据更新
-- 支持元数据过滤
+[GetMcpSearchProvider](../src/services/core/search/GetMcpSearchProvider.ts)
+fetches the GetMCP server feed, caches it, indexes searchable text into its vector
+engine, and searches that engine. The feed URL is configurable with
+`GETMCP_API_URL`; the default is `https://getmcp.io/api/servers.json`.
 
-#### Compass 提供者
+This is an external feed integration, not an assertion that GetMCP is the official
+MCP registry. Feed caching also means the original guide's “real-time updates”
+claim is not a freshness guarantee.
 
-使用 Compass API 检索 MCP 服务器信息：
+#### Compass Provider
 
-- 与 Compass 注册表集成
-- 支持高级过滤和排序
-- 提供额外的元数据
+[CompassSearchProvider](../src/services/core/search/CompassSearchProvider.ts)
+combines the supplied query fields and requests `/recommend?description=...`
+from `COMPASS_API_BASE`. It maps the returned `github_url` to `sourceUrl` and
+retains the returned score. The provider does not expose the original guide's
+unspecified advanced filtering controls.
 
-#### 离线提供者
+#### Nacos Provider
 
-结合文本和向量的混合搜索：
+[NacosMcpProvider](../src/services/core/search/NacosMcpProvider.ts) integrates
+service discovery. The CLI constructs it with the required credentials, awaits
+`init()`, and adds it to the search provider list only after successful
+initialization. An initialization failure is logged without preventing the other
+providers from being used.
 
-- 在本地执行搜索，无需外部 API
-- 结合关键词匹配和向量相似度
-- 可配置的权重平衡
-- 作为其他提供者的备用机制
+#### Offline Provider
 
-### 3. 混合搜索引擎
+[OfflineSearchProvider](../src/services/core/search/OfflineSearchProvider.ts)
+uses local fallback data with an enhanced in-memory vector engine. It combines
+text matching and vector search, with a text-first path for recognized keywords.
 
-混合搜索引擎结合了文本匹配和向量搜索的优点：
+“Offline” refers to its local server-data search. Embedding-model initialization
+can require a network download, and the standard CLI still constructs online
+providers. It is not a network-isolation or privacy guarantee. See
+[embedding utilities](../src/utils/embedding.ts).
 
-- **文本匹配**：基于关键词的精确和模糊匹配
-- **向量搜索**：使用嵌入向量的语义相似度
-- **可配置权重**：文本和向量搜索之间的可调平衡
-- **智能回退**：即使在高相似度阈值下也能确保最小结果数
+### 3. Hybrid Search Engine
 
-### 4. 结果处理管道
+Within the offline provider:
 
-结果处理管道负责优化和过滤搜索结果：
+- **Text matching:** Scores matches against local server data.
+- **Vector search:** Uses the enhanced memory engine and embeddings.
+- **Constructor weights:** Defaults are 0.7 for text and 0.3 for vectors.
+- **Text-first path:** When recognized keywords produce text matches, those
+  matches are returned while a background vector search is logged.
+- **Combined path:** Otherwise text and vector searches run in parallel and their
+  results are merged by ID.
 
-- **合并**：组合来自多个提供者的结果
-- **去重**：基于 GitHub URL 或标题删除重复结果
-- **提供者优先级**：基于提供者可靠性对结果进行排名
-- **相似度过滤**：基于可配置阈值过滤结果
-- **自适应回退**：确保最小结果数以获得更好的用户体验
+The weights are configured at construction, not dynamically switched between
+0.7 and 0.3 based on query classification. Provider-local recall behavior does not
+guarantee a minimum number of results after the global rerank filters.
 
-### 5. 传输层
+### 4. Result Processing Pipeline
 
-传输层处理与客户端的通信：
+[RerankMcpServer](../src/services/core/search/RerankMcpService.ts) first merges
+provider results using `sourceUrl`, or `title:<title>` if no URL is present.
+When a duplicate is found, higher similarity wins; equal similarity is broken by
+provider priority. A supplied `minSimilarity` can filter records at this stage.
 
-- **Stdio**：默认用于命令行工具
-- **SSE**：用于 Web 集成的服务器发送事件
-- **REST API**：提供 RESTful 端点
+The [processor chain](../src/services/core/search/RerankMcpProcessorFactory.ts)
+then applies:
 
-## 数据流
+1. **Score calculation:** Preserve an existing score; otherwise multiply
+   similarity by provider priority (using a fallback factor of 1).
+2. **Score filtering:** Compare the score, or similarity if no score exists,
+   against `minScore ?? minSimilarity` when supplied.
+3. **Professional rerank placeholder:** Disabled by default; no external rerank
+   model is implemented in this processor.
+4. **Sorting:** Default to descending score, with configured sort options.
+5. **Limit:** Apply a positive result limit when specified.
 
-以下序列图展示了 MCP Advisor 中的数据流：
+This corrects the original description of priority-first sorting and adaptive
+thresholds. An empty final result list remains possible.
+
+### 5. Transport Layer
+
+[ServerService](../src/services/core/server/ServerService.ts) supports:
+
+- **Stdio:** Default MCP transport for local client processes.
+- **SSE:** HTTP event and message endpoints.
+- **REST:** The REST transport supplied by `@chatmcp/sdk`.
+
+The server registers recommendation and installation-guidance tool handlers and
+log-reading resources. The CLI reads `TRANSPORT_TYPE`, `SERVER_PORT`,
+`SERVER_HOST`, and `ENDPOINT`; see the [Quick Start Guide](./GETTING_STARTED.md)
+for current settings. HTTP health checks do not apply to stdio. Keep diagnostic
+console output off the stdio protocol stream. HTTP binding is not authentication;
+use localhost unless suitable network restrictions and authentication are in
+place.
+
+## Data Flow
+
+The following sequence describes a recommendation request. It does not posit a
+separate centralized keyword-extraction/vector-normalization stage: providers
+receive the supplied structured fields and perform their own retrieval work.
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant Agent as AI 代理
-    participant MCP as MCP Advisor
-    participant QP as 查询处理器
-    participant Search as 搜索提供者
-    participant Results as 结果处理器
-    
-    User->>Agent: 自然语言查询
-    Agent->>MCP: 搜索请求
-    MCP->>QP: 处理查询
-    
-    par 并行处理
-        QP->>QP: 提取关键词
-        QP->>QP: 生成嵌入向量
-    end
-    
-    par 并行搜索执行
-        QP->>Search: 基于文本的搜索（关键词）
-        Note over Search: Compass 提供者
-        Note over Search: GetMCP 提供者
-        Note over Search: 离线提供者
-        
-        QP->>QP: 归一化向量
-        QP->>Search: 向量相似度搜索
-        Note over Search: Meilisearch 提供者
-        Note over Search: 离线向量搜索
-    end
-    
-    Search->>Results: 所有搜索结果
-    
-    Results->>Results: 智能结果合并
-    Results->>Results: 基于 URL 的去重
-    Results->>Results: 提供者优先级排名
-    Results->>Results: 自适应相似度过滤
-    Results->>Results: 结果数量限制
-    
-    Results->>MCP: 处理后的结果
-    MCP->>Agent: MCP 服务器推荐
-    Agent->>User: 带上下文的推荐
+    participant Client as MCP client
+    participant Tool as Recommendation handler
+    participant Search as SearchService
+    participant Providers as Enabled providers
+    participant Rerank as RerankMcpServer
+    Client->>Tool: taskDescription, keywords, capabilities
+    Tool->>Tool: Validate tool arguments
+    Tool->>Search: search(structured parameters)
+    Search->>Providers: Launch provider searches concurrently
+    Note over Providers: Each provider handles its own data source and query
+    Providers-->>Search: Results, or empty list on provider failure
+    Search->>Rerank: Named provider results and options
+    Rerank->>Rerank: Merge and deduplicate
+    Rerank->>Rerank: Calculate score and filter
+    Rerank->>Rerank: Sort and apply limit
+    Rerank-->>Search: Processed server results
+    Search-->>Tool: Server results
+    Tool->>Tool: Format results as MCP text content
+    Tool-->>Client: Recommendation response
 ```
 
-## 搜索策略
+## Search Strategy
 
-MCP Advisor 使用复杂的搜索策略来提供最相关的结果：
+The offline provider's two paths are shown below. The broader search service
+launches this provider alongside the other configured providers.
 
 ```mermaid
 graph TD
-    Query["用户查询"] --> Analysis["查询分析"]
-    
-    Analysis --> |"包含关键词"| TextBias["文本偏向搜索"]
-    Analysis --> |"语义查询"| VectorBias["向量偏向搜索"]
-    
-    TextBias --> |"textMatchWeight: 0.7"| HybridSearch1["混合搜索引擎"]
-    VectorBias --> |"textMatchWeight: 0.3"| HybridSearch2["混合搜索引擎"]
-    
-    subgraph "向量处理"
-        RawVector["原始嵌入向量"] --> Normalization["向量归一化"]
-        Normalization --> |"单位向量"| IndexedSearch["HNSW 索引搜索"]
-        IndexedSearch --> |"余弦相似度"| VectorResults["向量结果"]
-    end
-    
-    subgraph "文本处理"
-        Keywords["提取的关键词"] --> ExactMatch["精确匹配"]
-        Keywords --> FuzzyMatch["模糊匹配"]
-        ExactMatch & FuzzyMatch --> |"匹配分数"| TextResults["文本结果"]
-    end
-    
-    subgraph "混合搜索过程"
-        HybridSearch1 & HybridSearch2 --> |"并行执行"| Providers["多个提供者"]
-        VectorResults & TextResults --> WeightedMerge["加权结果合并"]
-        Providers --> |"原始结果"| Merging["智能合并"]
-        WeightedMerge --> Merging
-        Merging --> |"提供者优先级"| Prioritization["基于优先级的选择"]
-        Prioritization --> |"唯一结果"| Filtering["自适应过滤"]
-    end
-    
-    Filtering --> |"minSimilarity: 0.5"| FinalResults["最终结果"]
-    Filtering --> |"回退"| TopResults["前 5 个结果"]
+    Query["Combined task, keywords, and capabilities"] --> Load["Ensure fallback data is loaded"]
+    Load --> Check{"Recognized keywords?"}
+    Check -->|Yes| TextFirst["Run text matching"]
+    TextFirst --> Found{"Text matches found?"}
+    Found -->|Yes| ReturnText["Return text matches"]
+    ReturnText --> Background["Background vector search, logged only"]
+    Check -->|No| Parallel["Run vector and text search concurrently"]
+    Found -->|No| Parallel
+    Parallel --> Merge["Merge by ID using constructor weights"]
+    Merge --> OfflineResults["Offline provider results"]
+    ReturnText --> OfflineResults
+    OfflineResults --> Global["Global merge, scoring, filtering, sorting, and limit"]
 ```
 
-## 技术实现
+Unlike the source guide's proposed diagram, this does not imply query-dependent
+weight changes, universal HNSW indexing, adaptive global thresholds, or a
+“top five” guarantee.
 
-### 向量归一化
+## Technical Implementation
 
-所有向量在存储和搜索前都经过归一化处理：
+### Vector Normalization
+
+[vectorUtils.ts](../src/utils/vectorUtils.ts) implements L2 normalization and
+uses it inside cosine-similarity calculation. The implementation also handles
+zero or non-finite magnitudes by returning a copy:
 
 ```typescript
 function normalizeVector(vector: number[]): number[] {
   const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
-  if (magnitude === 0) return vector;
+  if (magnitude === 0 || !isFinite(magnitude)) {
+    return [...vector];
+  }
   return vector.map(val => val / magnitude);
 }
 ```
 
-### 混合搜索实现
+This does not establish that every storage backend normalizes every vector before
+storage. The source guide's universal statement is narrowed to the verified
+utility behavior here.
 
-混合搜索结合了文本和向量搜索的结果：
+### Hybrid Search Implementation
 
-```typescript
-async function hybridSearch(query: string, options: SearchOptions): Promise<SearchResult[]> {
-  const [textResults, vectorResults] = await Promise.all([
-    textSearch(query, options),
-    vectorSearch(query, options)
-  ]);
-  
-  return mergeSearchResults(textResults, vectorResults, {
-    textMatchWeight: 0.3,
-    vectorMatchWeight: 0.7
-  });
-}
-```
+The offline provider's merge method uses the following operations:
 
-### 提供者优先级系统
+1. Add vector results that have an ID, weighted by `vectorSearchWeight`.
+2. Add text results that have an ID, weighted by `textMatchWeight`.
+3. For an ID present in both sets, retain the maximum weighted similarity, rather
+   than summing the two values.
+4. Copy the resulting similarity to score, sort by similarity, and return the
+   merged results to the search service for global processing.
 
-提供者优先级系统确保最可靠的结果排在前面：
+The source guide's `textSearch` / `vectorSearch` / `mergeSearchResults` free-function
+snippet is a conceptual example, not an exported API. For the actual
+implementation, read
+[OfflineSearchProvider.mergeResults](../src/services/core/search/OfflineSearchProvider.ts).
+Default weights here are 70% text and 30% vectors, correcting the reversed weights
+in that snippet.
+
+### Provider Priority System
+
+The current priorities from [SearchService](../src/services/searchService.ts) are:
 
 ```typescript
 const PROVIDER_PRIORITIES = {
-  'compass': 3,
-  'getmcp': 2,
-  'meilisearch': 2,
-  'offline': 1
+  OfflineSearchProvider: 5,
+  GetMcpSearchProvider: 10,
+  CompassSearchProvider: 8,
+  MeilisearchSearchProvider: 9,
 };
-
-function prioritizeResults(results: SearchResult[]): SearchResult[] {
-  return results.sort((a, b) => {
-    // 首先按提供者优先级排序
-    const priorityDiff = 
-      (PROVIDER_PRIORITIES[b.provider] || 0) - 
-      (PROVIDER_PRIORITIES[a.provider] || 0);
-    
-    if (priorityDiff !== 0) return priorityDiff;
-    
-    // 然后按相似度排序
-    return b.similarity - a.similarity;
-  });
-}
 ```
 
-## 总结
+These keys are provider class names. Unknown provider names have priority zero at
+merge time, and score calculation falls back to factor 1 when no nonzero priority
+is available. Priorities influence duplicate tie-breaking and calculated scores;
+existing scores are retained. They are not a separate priority-first sort as in
+the Chinese guide's older sample.
 
-MCP Advisor 的架构设计注重模块化、可扩展性和性能。通过结合多种搜索策略和智能结果处理，系统能够提供高质量的 MCP 服务器推荐，同时保持良好的响应时间和用户体验。
+## Summary
 
----
+The architecture separates client transport, search orchestration, source-specific
+retrieval, and result processing. Reading the provider and reranker implementations
+is important when extending the system: conceptual examples in older documents
+may differ from the current API or defaults.
 
-有关更多技术实现细节和搜索提供者配置，请参阅：
-- [技术参考手册](./TECHNICAL_REFERENCE.md) - 详细的技术实现和搜索提供者
-- [快速开始指南](./GETTING_STARTED.md) - 安装配置和基本使用
-- [贡献指南](../CONTRIBUTING.md) - 开发环境设置和代码贡献
+- [Technical Reference](./TECHNICAL_REFERENCE.md): Details and current-source caveats
+- [Quick Start Guide](./GETTING_STARTED.md): Installation, configuration, and use
+- [Contributing Guide](../CONTRIBUTING.md): Development and contribution workflow
+- [Troubleshooting](./TROUBLESHOOTING.md): Diagnosis and known documentation drift

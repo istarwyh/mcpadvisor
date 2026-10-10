@@ -94,7 +94,8 @@ export class OfflineSearchProvider implements SearchProvider {
 
     // 将关键词与能力拼接到查询文本中以复用现有逻辑
     const combinedQueryParts = [taskDescription];
-    if (keywords && keywords.length) combinedQueryParts.push(keywords.join(' '));
+    if (keywords && keywords.length)
+      combinedQueryParts.push(keywords.join(' '));
     if (capabilities && capabilities.length)
       combinedQueryParts.push(capabilities.join(' '));
 
@@ -221,7 +222,7 @@ export class OfflineSearchProvider implements SearchProvider {
    */
   private checkQueryForKeywords(query: string): boolean {
     const queryLower = query.toLowerCase();
-    
+
     // 精确匹配关键词
     const exactKeywords = [
       '小红书',
@@ -234,7 +235,7 @@ export class OfflineSearchProvider implements SearchProvider {
       '知乎',
       'zhihu',
     ];
-    
+
     // 相关语义词组
     const relatedPhrases = [
       '今日热门',
@@ -252,21 +253,21 @@ export class OfflineSearchProvider implements SearchProvider {
       '锐评',
       '点评',
     ];
-    
+
     // 检查精确匹配
     const hasExactKeyword = exactKeywords.some(keyword =>
-      queryLower.includes(keyword.toLowerCase())
+      queryLower.includes(keyword.toLowerCase()),
     );
-    
+
     if (hasExactKeyword) {
       return true;
     }
-    
+
     // 检查相关语义
     const hasRelatedPhrase = relatedPhrases.some(phrase =>
-      queryLower.includes(phrase.toLowerCase())
+      queryLower.includes(phrase.toLowerCase()),
     );
-    
+
     // 如果包含相关语义词组，也认为是相关查询
     return hasRelatedPhrase;
   }
@@ -285,15 +286,17 @@ export class OfflineSearchProvider implements SearchProvider {
       });
 
       // 调试信息：检查加载的服务器数据
-      console.log(`[DEBUG] 文本搜索 - 加载了 ${allServers.length} 个服务器`);
-      
+      console.log(`[DEBUG] Text search - loaded ${allServers.length} servers`);
+
       // 检查是否包含小红书相关服务器
-      const redNoteServers = allServers.filter(server => 
-        server.id === 'rednote-mcp' || server.id === 'mcp-hotnews-server'
+      const redNoteServers = allServers.filter(
+        server =>
+          server.id === 'rednote-mcp' || server.id === 'mcp-hotnews-server',
       );
-      
-      console.log(`[DEBUG] 文本搜索 - 找到 ${redNoteServers.length} 个小红书相关服务器:`, 
-        redNoteServers.map(s => ({ id: s.id, title: s.title }))
+
+      console.log(
+        `[DEBUG] Text search - found ${redNoteServers.length} RedNote-related servers:`,
+        redNoteServers.map(s => ({ id: s.id, title: s.title })),
       );
 
       // 将查询分解为关键词
@@ -302,11 +305,13 @@ export class OfflineSearchProvider implements SearchProvider {
         .split(/\s+/)
         .filter(k => k.length > 1);
 
-      console.log(`[DEBUG] 文本搜索 - 查询关键词:`, keywords);
+      console.log(`[DEBUG] Text search - query keywords:`, keywords);
 
       // 如果没有有效关键词，返回空结果
       if (keywords.length === 0) {
-        console.log(`[DEBUG] 文本搜索 - 没有有效关键词，返回空结果`);
+        console.log(
+          `[DEBUG] Text search - no valid keywords; returning no results`,
+        );
         return [];
       }
 
@@ -360,7 +365,9 @@ export class OfflineSearchProvider implements SearchProvider {
       const filteredResults = results.filter(
         result => (result.similarity || 0) >= this.config.minSimilarity!,
       );
-      logger.debug(`[DEBUG] 文本搜索 - 过滤后剩余 ${filteredResults.length} 个结果`);
+      logger.debug(
+        `[DEBUG] Text search - results after filtering: ${filteredResults.length} results`,
+      );
 
       return filteredResults;
     } catch (error) {
@@ -501,9 +508,9 @@ export class OfflineSearchProvider implements SearchProvider {
     // 计算最终分数，考虑匹配质量和覆盖率
     const coverage = matchedTerms / queryTerms.length;
     const avgScore = totalScore / matchedTerms;
-    
+
     // 综合考虑匹配质量和覆盖率
-    return (avgScore * 0.7 + coverage * 0.3);
+    return avgScore * 0.7 + coverage * 0.3;
   }
 
   /**
@@ -558,13 +565,13 @@ export class OfflineSearchProvider implements SearchProvider {
 
     // 转换为数组并按相似度排序
     const results = Array.from(mergedMap.values());
-    
+
     // 确保每个结果都有 score 属性，用于排序功能测试
     results.forEach(result => {
       // 将 similarity 值复制到 score 属性
       result.score = result.similarity || 0;
     });
-    
+
     // 按相似度排序
     results.sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
 

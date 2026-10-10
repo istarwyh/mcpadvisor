@@ -4,7 +4,11 @@
  */
 
 import { MeiliSearch } from 'meilisearch';
-import { MEILISEARCH_CONFIG, MeilisearchConfigManager, MeilisearchInstanceConfig } from '../../../config/meilisearch.js';
+import {
+  MEILISEARCH_CONFIG,
+  MeilisearchConfigManager,
+  MeilisearchInstanceConfig,
+} from '../../../config/meilisearch.js';
 import { LocalMeilisearchController } from './localController.js';
 import logger from '../../../utils/logger.js';
 
@@ -14,12 +18,15 @@ import logger from '../../../utils/logger.js';
 export interface MeilisearchClient {
   search(query: string, options?: Record<string, any>): Promise<any>;
   healthCheck?(): Promise<boolean>;
+  indexDocuments?(documents: Record<string, unknown>[]): Promise<void>;
 }
 
 /**
  * 创建云端 Meilisearch 客户端
  */
-const createCloudMeilisearchClient = (config: MeilisearchInstanceConfig): MeilisearchClient => {
+const createCloudMeilisearchClient = (
+  config: MeilisearchInstanceConfig,
+): MeilisearchClient => {
   try {
     const client = new MeiliSearch({
       host: config.host,
@@ -28,17 +35,25 @@ const createCloudMeilisearchClient = (config: MeilisearchInstanceConfig): Meilis
 
     const index = client.index(config.indexName);
 
-    logger.info(`Cloud Meilisearch client initialized with host: ${config.host}`);
+    logger.info(
+      `Cloud Meilisearch client initialized with host: ${config.host}`,
+    );
     logger.info(`Using index: ${config.indexName}`);
 
     return {
-      search: async (query: string, options: Record<string, any> = {}): Promise<any> => {
+      search: async (
+        query: string,
+        options: Record<string, any> = {},
+      ): Promise<any> => {
         try {
           const results = await index.search(query, options);
-          logger.debug(`Cloud Meilisearch search for "${query}" returned ${results.hits.length} results`);
+          logger.debug(
+            `Cloud Meilisearch search for "${query}" returned ${results.hits.length} results`,
+          );
           return results;
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
           logger.error(`Cloud Meilisearch search error: ${message}`);
           throw error;
         }
@@ -51,7 +66,7 @@ const createCloudMeilisearchClient = (config: MeilisearchInstanceConfig): Meilis
           logger.warn('Cloud Meilisearch health check failed:', error);
           return false;
         }
-      }
+      },
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -65,13 +80,13 @@ const createCloudMeilisearchClient = (config: MeilisearchInstanceConfig): Meilis
  */
 export class MeilisearchClientFactory {
   private static configManager = MeilisearchConfigManager.getInstance();
-  
+
   /**
    * 创建主要客户端
    */
   static createPrimaryClient(): MeilisearchClient {
     const config = this.configManager.getActiveConfig();
-    
+
     if (config.type === 'local') {
       logger.info('Creating local Meilisearch client');
       return new LocalMeilisearchController(config);
@@ -80,18 +95,18 @@ export class MeilisearchClientFactory {
       return createCloudMeilisearchClient(config);
     }
   }
-  
+
   /**
    * 创建 fallback 客户端
    */
   static createFallbackClient(): MeilisearchClient | null {
     const fallbackConfig = this.configManager.getFallbackConfig();
-    
+
     if (fallbackConfig) {
       logger.info('Creating fallback Meilisearch client');
       return createCloudMeilisearchClient(fallbackConfig);
     }
-    
+
     return null;
   }
 }
@@ -102,12 +117,17 @@ export class MeilisearchClientFactory {
 export class FailoverMeilisearchClient implements MeilisearchClient {
   private primaryClient: MeilisearchClient;
   private fallbackClient: MeilisearchClient | null;
-  
+
   constructor() {
     this.primaryClient = MeilisearchClientFactory.createPrimaryClient();
     this.fallbackClient = MeilisearchClientFactory.createFallbackClient();
   }
-  
+
+  /** Catalog writes never fail over to the read-only cloud search index. */
+  async indexDocuments(documents: Record<string, unknown>[]): Promise<void> {
+    await this.primaryClient.indexDocuments?.(documents);
+  }
+
   async search(query: string, options?: Record<string, any>): Promise<any> {
     try {
       return await this.primaryClient.search(query, options);
@@ -124,7 +144,7 @@ export class FailoverMeilisearchClient implements MeilisearchClient {
       throw error;
     }
   }
-  
+
   async healthCheck(): Promise<boolean> {
     try {
       if (this.primaryClient.healthCheck) {

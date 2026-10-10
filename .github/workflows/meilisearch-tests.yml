@@ -1,46 +1,69 @@
 name: Meilisearch Integration Tests
 
-on: 
+on:
+  workflow_dispatch:
+    inputs:
+      inspector_ui:
+        description: 'Run the legacy Inspector browser suite (requires separate configuration)'
+        type: boolean
+        default: false
   push:
     paths:
       - 'src/services/providers/meilisearch/**'
       - 'src/config/meilisearch.ts'
       - 'src/tests/**/*meilisearch*.test.ts'
-      - 'tests/e2e/meilisearch-*.spec.ts'
+      - 'src/services/core/search/MeilisearchSearchProvider.ts'
+      - 'tests/e2e/meilisearch-*'
+      - 'tests/e2e/fixtures/**'
+      - 'scripts/e2e/e2e.meilisearch*'
+      - '.github/workflows/meilisearch-tests.yml'
   pull_request:
     paths:
       - 'src/services/providers/meilisearch/**'
       - 'src/config/meilisearch.ts'
       - 'src/tests/**/*meilisearch*.test.ts'
-      - 'tests/e2e/meilisearch-*.spec.ts'
+      - 'src/services/core/search/MeilisearchSearchProvider.ts'
+      - 'tests/e2e/meilisearch-*'
+      - 'tests/e2e/fixtures/**'
+      - 'scripts/e2e/e2e.meilisearch*'
+      - '.github/workflows/meilisearch-tests.yml'
+
+concurrency:
+  group: meilisearch-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: '22'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9.15.0
+          version: 8.15.9
           run_install: false
-          
+
       - name: Install dependencies
-        run: pnpm install
-        
+        run: pnpm install --frozen-lockfile
+
       - name: Build project
         run: pnpm run build
-        
+
+      - name: Check test project types
+        run: pnpm exec tsc --noEmit -p tsconfig.test.json
+
       - name: Run Meilisearch unit tests
-        run: pnpm test:meilisearch:config && pnpm test:meilisearch:failover
+        run: |
+          pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts src/tests/unit/services/meilisearch-factory-cache.test.ts
+          node --test scripts/e2e/e2e.meilisearch.test.mjs
         timeout-minutes: 5
-        
+
   integration-tests:
     runs-on: ubuntu-latest
     services:
@@ -57,38 +80,40 @@ jobs:
           --health-interval 30s
           --health-timeout 10s
           --health-retries 5
-          
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: '22'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9.15.0
+          version: 8.15.9
           run_install: false
-          
+
       - name: Install dependencies
-        run: pnpm install
-        
+        run: pnpm install --frozen-lockfile
+
       - name: Build project
         run: pnpm run build
-        
+
       - name: Wait for Meilisearch
         run: |
           timeout 180 bash -c 'until curl -f http://localhost:7700/health; do sleep 2; done'
-        
+
       - name: Run Meilisearch integration tests
-        run: pnpm test:meilisearch:local
+        run: pnpm exec vitest run src/tests/integration/providers/meilisearch-fulltext.test.ts
         timeout-minutes: 10
         env:
+          MEILI_FULLTEXT_TEST_HOST: http://localhost:7700
+          MEILI_FULLTEXT_TEST_KEY: ${{ secrets.MEILI_MASTER_KEY || 'test-key-for-ci-only' }}
           TEST_MEILISEARCH_HOST: http://localhost:7700
           TEST_MEILISEARCH_KEY: ${{ secrets.MEILI_MASTER_KEY || 'test-key-for-ci-only' }}
-          
+
   e2e-tests:
     runs-on: ubuntu-latest
     services:
@@ -105,50 +130,101 @@ jobs:
           --health-interval 30s
           --health-timeout 10s
           --health-retries 5
-          
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: '22'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9.15.0
+          version: 8.15.9
           run_install: false
-          
+
       - name: Install dependencies
-        run: pnpm install
-        
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-        
+        run: pnpm install --frozen-lockfile
+
       - name: Build project
         run: pnpm run build
-        
+
       - name: Wait for Meilisearch
         run: |
           timeout 180 bash -c 'until curl -f http://localhost:7700/health; do sleep 2; done'
-        
+
+      - name: Run real MCP protocol E2E tests
+        run: node --test tests/e2e/meilisearch-mcp.test.mjs
+        timeout-minutes: 2
+        env:
+          MEILI_FULLTEXT_TEST_HOST: http://localhost:7700
+          MEILI_FULLTEXT_TEST_KEY: ${{ secrets.MEILI_MASTER_KEY || 'test-key-for-ci-only' }}
+
+  inspector-ui-tests:
+    if: github.event_name == 'workflow_dispatch' && inputs.inspector_ui
+    runs-on: ubuntu-latest
+    services:
+      meilisearch:
+        image: getmeili/meilisearch:v1.15
+        env:
+          # Use GitHub Secret for better security
+          MEILI_MASTER_KEY: ${{ secrets.MEILI_MASTER_KEY || 'test-key-for-ci-only' }}
+          MEILI_ENV: development
+        ports:
+          - 7700:7700
+        options: >-
+          --health-cmd "curl -f http://localhost:7700/health"
+          --health-interval 30s
+          --health-timeout 10s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Wait for Meilisearch
+        run: |
+          timeout 180 bash -c 'until curl -f http://localhost:7700/health; do sleep 2; done'
+
       - name: Run Meilisearch E2E tests
         run: pnpm test:meilisearch:e2e
         timeout-minutes: 15
         env:
           MCP_INSPECTOR_URL: ${{ secrets.MCP_INSPECTOR_URL }}
           MCP_AUTH_TOKEN: ${{ secrets.MCP_AUTH_TOKEN }}
+          MEILI_FULLTEXT_TEST_HOST: http://localhost:7700
+          MEILI_FULLTEXT_TEST_KEY: ${{ secrets.MEILI_MASTER_KEY || 'test-key-for-ci-only' }}
           TEST_MEILISEARCH_HOST: http://localhost:7700
           TEST_MEILISEARCH_KEY: ${{ secrets.MEILI_MASTER_KEY || 'test-key-for-ci-only' }}
-          
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-          
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:

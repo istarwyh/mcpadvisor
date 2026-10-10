@@ -1,14 +1,14 @@
 # MCP Advisor Quick Start Guide
 
-[English](./GETTING_STARTED.en.md) | [简体中文](./GETTING_STARTED.md)
+[English](./GETTING_STARTED.md) | [Simplified Chinese](./GETTING_STARTED.zh-CN.md)
 
 This guide covers installing, configuring, and using MCP Advisor to help you get
 started and make the most of its features.
 
-This is the English translation of the [Chinese guide](./GETTING_STARTED.md).
-English [technical reference](./TECHNICAL_REFERENCE.en.md) and
-[troubleshooting](./TROUBLESHOOTING.en.md) guides are also available. English [architecture](./ARCHITECTURE.en.md) and
-[contribution](../CONTRIBUTING.en.md) guides are available too. Runtime messages
+This is the English translation of the [Chinese guide](./GETTING_STARTED.zh-CN.md).
+English [technical reference](./TECHNICAL_REFERENCE.md) and
+[troubleshooting](./TROUBLESHOOTING.md) guides are also available. English [architecture](./ARCHITECTURE.md) and
+[contribution](../CONTRIBUTING.md) guides are available too. Runtime messages
 may still contain Chinese.
 
 ## Translation and Current-Source Updates
@@ -554,12 +554,12 @@ search providers.
 
 If you encounter a problem that this guide does not cover:
 
-1. Read the [Troubleshooting Guide](./TROUBLESHOOTING.en.md)
+1. Read the [Troubleshooting Guide](./TROUBLESHOOTING.md)
 2. Check [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
 3. Open a new issue to ask for help
 
 For advanced configuration and technical details, see:
 
-- [Technical Reference](./TECHNICAL_REFERENCE.en.md)
-- [Architecture Documentation](./ARCHITECTURE.en.md)
-- [Contributing Guide](../CONTRIBUTING.en.md)
+- [Technical Reference](./TECHNICAL_REFERENCE.md)
+- [Architecture Documentation](./ARCHITECTURE.md)
+- [Contributing Guide](../CONTRIBUTING.md)

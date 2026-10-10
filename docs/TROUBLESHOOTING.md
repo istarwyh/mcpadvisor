@@ -1,608 +1,703 @@
-# 故障排除
+# Troubleshooting
 
-[English](./TROUBLESHOOTING.en.md) | [简体中文](./TROUBLESHOOTING.md)
+[English](./TROUBLESHOOTING.md) | [Simplified Chinese](./TROUBLESHOOTING.zh-CN.md)
 
-本文档提供了 MCP Advisor 常见问题的解决方案和诊断技巧。
+This document provides solutions and diagnostic techniques for common MCP Advisor issues.
 
-## 目录
+> Scope: This English edition translates the Chinese troubleshooting guide and corrects verified differences from the current source. Examples marked illustrative or historical require adaptation; they are not supported configuration instructions. Check the [Getting Started Guide](./GETTING_STARTED.md), [Technical Reference](./TECHNICAL_REFERENCE.md), and current source before applying an example. Redact secrets before sharing environment variables or logs.
 
-- [连接问题](#连接问题)
-- [搜索问题](#搜索问题)
-- [性能问题](#性能问题)
-- [配置问题](#配置问题)
-- [日志和调试](#日志和调试)
-- [常见错误代码](#常见错误代码)
+## Current Implementation Caveats
 
-## 连接问题
+The sections below correct practical commands where verified against source and label illustrative examples where they are not implemented. These checks inspect source code only; they do not constitute runtime validation.
 
-### 连接被拒绝
+- **Startup and logging:** [`package.json`](../package.json) defines no `start` or `restart` script. Build with `pnpm run build`, then run `node build/index.js` (set `TRANSPORT_TYPE=sse` for SSE). The [logger](../src/utils/logger.ts) writes `all.log` and `error.log` under `LOGS_DIR`, or `logs` by default, rather than `mcpadvisor.log`. File logging requires `MCP_COMPASS_MAIN=true` or `ENABLE_FILE_LOGGING=true` and an existing log directory; the main-application mode can create that directory. `ENABLE_PERFORMANCE_LOGGING` has no handler in the current source.
+- **SSE:** The `EventSource` example only enables credentials; it does not set a timeout. WebSocket is not an implemented alternative: the supported [transport types](../src/services/core/server/types.ts) are `stdio`, `sse`, and `rest`.
+- **Search APIs and defaults:** The [GetMCP endpoint](../src/config/constants.ts) defaults to `https://getmcp.io/api/servers.json`. The [search service](../src/services/searchService.ts) defaults to `minSimilarity: 0.4`, not `0.5`; its provider priorities use class names (`GetMcpSearchProvider: 10`, `MeilisearchSearchProvider: 9`, `CompassSearchProvider: 8`, `OfflineSearchProvider: 5`). `textMatchWeight` and `vectorMatchWeight` are not fields in the current [`SearchOptions`](../src/types/index.ts). The public TypeScript search overload takes structured `SearchParams`, although the implementation also handles a string. Cache, batching, PCA, and memory-monitoring examples are illustrative and may require additional implementation or dependencies.
+- **Development and diagnostics:** [`pnpm run check`](../package.json) runs lint and formatting checks; `pnpm run build` invokes TypeScript compilation. The named `ERR_*` codes below are diagnostic categories from the source guide, not a guaranteed exported error-code API. A rejected commit does not create a commit to amend: use `git commit` after fixing it, and use `--amend` only when you intend to change the existing last commit. Deleting `pnpm-lock.yaml` can change dependency versions; preserve it unless deliberately regenerating the lockfile.
 
-**症状**: 尝试连接到 MCP Advisor 服务器时收到 "Connection refused" 错误。
+## Contents
 
-**可能的原因**:
-1. 服务器未运行
-2. 端口配置不正确
-3. 防火墙阻止连接
-4. 主机地址不正确
+- [Connection Issues](#connection-issues)
+- [Search Issues](#search-issues)
+- [Performance Issues](#performance-issues)
+- [Configuration Issues](#configuration-issues)
+- [Development and Commit Issues](#development-and-commit-issues)
+- [Logging and Debugging](#logging-and-debugging)
+- [Common Error Codes](#common-error-codes)
+- [Advanced Troubleshooting](#advanced-troubleshooting)
+- [Getting Help](#getting-help)
 
-**解决方案**:
-1. 确保服务器正在运行：
+## Connection Issues
+
+### Connection Refused
+
+**Symptom**: You receive a "Connection refused" error when trying to connect to the MCP Advisor server.
+
+**Possible causes**:
+
+1. The server is not running
+2. The port configuration is incorrect
+3. A firewall is blocking the connection
+4. The host address is incorrect
+
+**Solutions**:
+
+1. Make sure the server is running:
+
    ```bash
    ps aux | grep mcpadvisor
    ```
 
-2. 验证端口配置：
+2. Verify the port configuration:
+
    ```bash
-   # 检查端口是否被使用
+   # Check whether the port is in use
    lsof -i :3000
-   
-   # 确认环境变量设置
+
+   # Confirm the environment variable setting
    echo $SERVER_PORT
    ```
 
-3. 检查防火墙设置：
+3. Check the firewall settings:
+
    ```bash
    # MacOS
    sudo pfctl -s rules
-   
+
    # Linux
    sudo iptables -L
    ```
 
-4. 验证主机地址：
+4. Verify the host address:
    ```bash
-   # 确认环境变量设置
+   # Confirm the environment variable setting
    echo $SERVER_HOST
    ```
 
-### SSE 连接断开
+### SSE Disconnections
 
-**症状**: 服务器发送事件 (SSE) 连接频繁断开。
+**Symptom**: The Server-Sent Events (SSE) connection disconnects frequently.
 
-**可能的原因**:
-1. 客户端超时设置太短
-2. 服务器资源限制
-3. 网络不稳定
-4. CORS 配置问题
+**Possible causes**:
 
-**解决方案**:
-1. 增加客户端超时设置：
+1. The client timeout is too short
+2. Server resource limits
+3. An unstable network
+4. CORS configuration issues
+
+**Solutions**:
+
+1. Check client connection handling. The source guide presents the following as a timeout change, but it only enables credentials; the browser `EventSource` constructor has no timeout option:
+
    ```javascript
    const eventSource = new EventSource('/sse', {
-     withCredentials: true
+     withCredentials: true,
    });
    ```
 
-2. 检查服务器日志中的错误消息：
+2. Check the server logs for error messages:
+
    ```bash
    tail -f logs/error.log
    ```
 
-3. 确保正确的 CORS 配置（从浏览器连接时）：
+3. Ensure that CORS is configured correctly (when connecting from a browser). This is illustrative Express code, not a configuration setting; restrict origins to trusted clients before enabling credentials:
+
    ```javascript
-   // 服务器端 CORS 配置
-   app.use(cors({
-     origin: true,
-     credentials: true
-   }));
+   // Server-side CORS configuration
+   app.use(
+     cors({
+       origin: true,
+       credentials: true,
+     }),
+   );
    ```
 
-4. 考虑使用 WebSocket 而不是 SSE 以获得更好的连接稳定性。
+4. The source guide suggests WebSocket as an alternative. MCP Advisor implements no WebSocket transport; use a supported transport (`stdio`, `sse`, or `rest`) and diagnose network or proxy interruptions.
 
-## 搜索问题
+## Search Issues
 
-### 未返回结果
+### No Results Returned
 
-**症状**: 搜索查询未返回任何结果，即使应该有匹配项。
+**Symptom**: A search query returns no results, even when matches are expected.
 
-**可能的原因**:
-1. 查询太具体
-2. 网络连接问题
-3. API 端点配置不正确
-4. 相似度阈值太高
+**Possible causes**:
 
-**解决方案**:
-1. 尝试更一般的查询：
+1. The query is too specific
+2. Network connection issues
+3. Incorrect API endpoint configuration
+4. The similarity threshold is too high
+
+**Solutions**:
+
+1. Try a more general query:
+
    ```
-   # 太具体
-   "用于金融数据分析的 MCP 服务器，支持实时数据流和高级可视化"
-   
-   # 更一般
-   "金融数据分析 MCP"
+   # Too specific
+   "An MCP server for financial data analysis with real-time data streaming and advanced visualization"
+
+   # More general
+   "Financial data analysis MCP"
    ```
 
-2. 检查与注册表 API 的网络连接：
+2. Check network connectivity to the registry API:
+
    ```bash
-   curl -v https://getmcp.io/api/servers
+   curl -v https://getmcp.io/api/servers.json
    ```
 
-3. 验证 API 端点配置：
+3. Verify the API endpoint configuration:
+
    ```bash
-   # 检查环境变量
+   # Check environment variables
    env | grep API
    ```
 
-4. 降低相似度阈值：
+4. Lower the similarity threshold:
    ```javascript
-   // 默认值为 0.5，尝试降低
-   const results = await searchService.search(query, { minSimilarity: 0.3 });
+   // The current default is 0.4; try lowering it
+   const results = await searchService.search(
+     { taskDescription: query },
+     { minSimilarity: 0.3 },
+   );
    ```
 
-### 结果不相关
+### Irrelevant Results
 
-**症状**: 搜索返回的结果与查询不相关。
+**Symptom**: Search results are unrelated to the query.
 
-**可能的原因**:
-1. 向量嵌入质量问题
-2. 文本匹配权重不平衡
-3. 提供者优先级不正确
-4. 语言不匹配
+**Possible causes**:
 
-**解决方案**:
-1. 检查向量嵌入模型：
+1. Vector embedding quality issues
+2. Unbalanced text matching weights
+3. Incorrect provider priorities
+4. A language mismatch
+
+**Solutions**:
+
+1. Check the vector embedding model:
+
    ```bash
-   # 确认使用的嵌入模型
+   # Confirm which embedding model is used
    grep -r "embeddingModel" src/
    ```
 
-2. 调整文本和向量搜索权重：
+2. The source guide illustrates adjusting text and vector search weights. The following historical example is not supported by current `SearchOptions`; implementing such weights requires code changes:
+
    ```javascript
-   // 增加文本匹配权重
-   const results = await searchService.search(query, {
-     textMatchWeight: 0.5,
-     vectorMatchWeight: 0.5
-   });
+   // Increase the text matching weight
+   const results = await searchService.search(
+     { taskDescription: query },
+     {
+       textMatchWeight: 0.5,
+       vectorMatchWeight: 0.5,
+     },
+   );
    ```
 
-3. 调整提供者优先级：
+3. Review or change the provider priority constant in `src/services/searchService.ts` (a source change, not a configuration-file override). Current values:
+
    ```javascript
-   // 在配置文件中
+   // In src/services/searchService.ts
    const PROVIDER_PRIORITIES = {
-     'compass': 3,
-     'getmcp': 2,
-     'meilisearch': 2,
-     'offline': 1
+     CompassSearchProvider: 8,
+     GetMcpSearchProvider: 10,
+     MeilisearchSearchProvider: 9,
+     OfflineSearchProvider: 5,
    };
    ```
 
-4. 确保使用多语言支持的嵌入模型。
+4. Make sure the embedding model supports multiple languages.
 
-## 性能问题
+## Performance Issues
 
-### 搜索响应缓慢
+### Slow Search Responses
 
-**症状**: 搜索查询需要很长时间才能返回结果。
+**Symptom**: Search queries take a long time to return results.
 
-**可能的原因**:
-1. 服务器资源限制
-2. 外部 API 延迟
-3. 向量计算开销大
-4. 缺少缓存
+**Possible causes**:
 
-**解决方案**:
-1. 检查服务器资源使用情况：
+1. Server resource limits
+2. External API latency
+3. Expensive vector calculations
+4. Missing caching
+
+**Solutions**:
+
+1. Check server resource usage:
+
    ```bash
    top -u <username>
    ```
 
-2. 监控外部 API 调用时间：
+2. Enable debug logs while investigating external API latency. The source guide's `ENABLE_PERFORMANCE_LOGGING` switch has no current implementation; timing instrumentation requires a code change:
+
    ```bash
-   # 启用性能日志
-   LOG_LEVEL=debug ENABLE_PERFORMANCE_LOGGING=true npm start
+   # Enable diagnostic debug logging
+   mkdir -p logs
+   ENABLE_FILE_LOGGING=true LOG_LEVEL=debug node build/index.js
    ```
 
-3. 实现查询缓存：
-   ```javascript
-   // 使用内存缓存
-   const queryCache = new Map();
-   
-   async function cachedSearch(query, options) {
-     const cacheKey = `${query}-${JSON.stringify(options)}`;
-     
-     if (queryCache.has(cacheKey)) {
-       return queryCache.get(cacheKey);
-     }
-     
-     const results = await actualSearch(query, options);
-     queryCache.set(cacheKey, results);
-     
-     return results;
-   }
-   ```
+3. Implement query caching if needed. This illustrative code requires an `actualSearch` implementation and a cache size/expiry policy:
 
-4. 优化向量计算：
+```javascript
+// Use an in-memory cache
+const queryCache = new Map();
+
+async function cachedSearch(query, options) {
+  const cacheKey = `${query}-${JSON.stringify(options)}`;
+
+  if (queryCache.has(cacheKey)) {
+    return queryCache.get(cacheKey);
+  }
+
+  const results = await actualSearch(query, options);
+  queryCache.set(cacheKey, results);
+
+  return results;
+}
+```
+
+4. Optimize vector calculations. This illustrative example requires a `batchGenerateEmbeddings` implementation:
    ```javascript
-   // 使用批处理
+   // Use batching
    const embeddings = await batchGenerateEmbeddings(queries);
    ```
 
-### 内存使用过高
+### Excessive Memory Usage
 
-**症状**: 服务器内存使用量持续增加，可能导致崩溃。
+**Symptom**: Server memory usage keeps increasing, potentially causing crashes.
 
-**可能的原因**:
-1. 内存泄漏
-2. 缓存无限增长
-3. 大型向量数据集
-4. 日志记录过多
+**Possible causes**:
 
-**解决方案**:
-1. 使用内存分析工具：
+1. Memory leaks
+2. Unbounded cache growth
+3. Large vector datasets
+4. Excessive logging
+
+**Solutions**:
+
+1. Use memory profiling tools:
+
    ```bash
-   # 使用 Node.js 内置的堆快照
-   node --inspect server.js
+   # Use Node.js built-in heap snapshots
+   node --inspect build/index.js
    ```
 
-2. 实现 LRU 缓存限制大小：
+2. Implement an LRU cache to limit its size. This historical CommonJS example requires an additional `lru-cache` dependency and adaptation to its installed API and this project's ES module format:
+
    ```javascript
    const LRU = require('lru-cache');
-   
+
    const cache = new LRU({
-     max: 500, // 最大项数
-     maxAge: 1000 * 60 * 60 // 1小时过期
+     max: 500, // Maximum number of items
+     maxAge: 1000 * 60 * 60, // Expires after 1 hour
    });
    ```
 
-3. 减少向量维度或使用维度减少技术：
+3. Reduce vector dimensions or use dimensionality reduction techniques. This illustrative example requires an `applyPCA` implementation and consistent dimensions for stored and query vectors:
+
    ```javascript
-   // 使用 PCA 减少维度
+   // Use PCA to reduce dimensions
    const reducedVector = applyPCA(originalVector, 100);
    ```
 
-4. 限制日志详细程度：
+4. Limit logging verbosity:
    ```bash
-   LOG_LEVEL=info npm start
+   mkdir -p logs
+   ENABLE_FILE_LOGGING=true LOG_LEVEL=info node build/index.js
    ```
 
-## 配置问题
+## Configuration Issues
 
-### 环境变量不生效
+### Environment Variables Have No Effect
 
-**症状**: 更改环境变量但没有影响。
+**Symptom**: Changing environment variables has no effect.
 
-**可能的原因**:
-1. 环境变量格式不正确
-2. 应用程序未重启
-3. 配置加载顺序问题
-4. 变量名拼写错误
+**Possible causes**:
 
-**解决方案**:
-1. 检查环境变量格式：
+1. Incorrect environment variable format
+2. The application has not been restarted
+3. Configuration loading order issues
+4. Misspelled variable names
+
+**Solutions**:
+
+1. Check the environment variable format:
+
+```bash
+# Correct format
+export TRANSPORT_TYPE=sse
+
+# The CLI does not automatically load a .env file.
+# Export settings in the launching shell or configure your MCP client.
+```
+
+2. Stop the running process and start it again after building. There is no `restart` package script:
+
    ```bash
-   # 正确格式
-   export TRANSPORT_TYPE=sse
-   
-   # 或在 .env 文件中
-   TRANSPORT_TYPE=sse
+   node build/index.js
    ```
 
-2. 重启应用程序：
-   ```bash
-   npm restart
-   ```
+3. Verify the configuration loading order:
 
-3. 验证配置加载顺序：
    ```javascript
-   // 检查配置加载代码
+   // Check the configuration loading code
    console.log('Loading configuration...');
-   console.log(process.env);
+   // Inspect only non-secret settings; do not print the full environment.
+   console.log({ TRANSPORT_TYPE: process.env.TRANSPORT_TYPE });
    ```
 
-4. 仔细检查变量名：
+4. Double-check variable names:
    ```bash
-   # 列出所有环境变量
+   # List all environment variables
    env | grep MCP
    ```
 
-### 配置文件冲突
+### Configuration File Conflicts
 
-**症状**: 配置文件和环境变量设置冲突。
+**Symptom**: Configuration file settings conflict with environment variables.
 
-**可能的原因**:
-1. 多个配置源
-2. 优先级不明确
-3. 配置文件格式错误
+**Possible causes**:
 
-**解决方案**:
-1. 了解配置优先级：
-   - 命令行参数 > 环境变量 > 配置文件 > 默认值
+1. Multiple configuration sources
+2. Unclear precedence
+3. Incorrect configuration file format
 
-2. 检查配置文件格式：
+**Solutions**:
+
+1. Understand configuration precedence:
+
+   - The source guide gives the general ordering: command-line arguments > environment variables > configuration files > defaults. Verify each setting rather than treating this as universal. [`src/index.ts`](../src/index.ts) applies CLI > environment > default for transport mode, host, and port. [`loadConfig()`](../src/config/configLoader.ts) returns early when loading an existing custom configuration file, before its separate environment-override step.
+
+2. Check the configuration file format:
+
    ```bash
-   # 验证 JSON 格式
+   # Validate JSON format
    jq . config.json
    ```
 
-3. 明确设置单一配置源：
+3. Inspect which code loads the affected setting. The following preserves the source guide's custom-config example, but it does not make `CONFIG_FILE` the sole source for every setting; transport mode is selected separately in `src/index.ts`:
+
    ```bash
-   # 清除环境变量
+   # Clear the environment variable
    unset TRANSPORT_TYPE
-   
-   # 使用配置文件
-   CONFIG_FILE=./custom-config.json npm start
+
+   # Use a configuration file
+   CONFIG_FILE=./custom-config.json node build/index.js
    ```
 
-## 开发和提交问题
+## Development and Commit Issues
 
-### Pre-commit 钩子失败
+### Pre-commit Hook Failures
 
-**症状**: Git 提交被 pre-commit 钩子拦截。
+**Symptom**: A Git hook blocks a commit. The current [pre-commit hook](../.husky/pre-commit) runs `npx tsc --noEmit`; the [commit-msg hook](../.husky/commit-msg) validates commit messages. ESLint troubleshooting below applies to separately run lint checks.
 
-**可能原因**:
-1. TypeScript 类型错误
-2. ESLint 代码风格问题
-3. 提交消息格式不符合规范
+**Possible causes**:
 
-**解决方案**:
+1. TypeScript type errors
+2. ESLint code style issues
+3. A commit message that does not follow the required format
 
-1. **TypeScript 类型检查失败**:
+**Solutions**:
+
+1. **TypeScript type checking fails**:
+
    ```bash
-   # 运行类型检查
+   # Run the same type check as the pre-commit hook
+   npx tsc --noEmit
+
+   # Run lint and formatting checks separately
    pnpm run check
-   
-   # 修复类型错误后重新构建
+
+   # Rebuild after fixing type errors
    pnpm run build
-   
-   # 重新提交
+
+   # Commit again
    git commit -m "fix: Fix type errors"
    ```
 
-2. **ESLint 检查失败**:
+2. **ESLint checks fail**:
+
    ```bash
-   # 自动修复 lint 问题
+   # Automatically fix lint issues
    pnpm run lint:fix
-   
-   # 手动检查剩余问题
+
+   # Manually check the remaining issues
    pnpm run lint
-   
-   # 重新提交
+
+   # Commit again
    git add .
    git commit -m "style: Fix linting issues"
    ```
 
-3. **提交消息格式错误**:
+3. **Incorrect commit message format**:
+
    ```bash
-   # 错误示例 (小写开头)
+   # Incorrect example (starts with a lowercase letter)
    git commit -m "feat: add new feature"
-   # ❌ 错误: subject must be sentence-case [subject-case]
-   
-   # 正确格式 (大写开头)
+   # ❌ Error: subject must be sentence-case [subject-case]
+
+   # Correct format (starts with an uppercase letter)
    git commit -m "feat: Add new feature"
-   # ✅ 正确
-   
-   # 如果已经提交但被拦截，修改最后一次提交消息
+   # ✅ Correct
+
+   # Amend only an existing last commit that you intend to change.
+   # A rejected commit creates no new commit; retry git commit after fixing it.
    git commit --amend -m "feat: Add new feature with proper case"
    ```
 
-4. **完全跳过预提交钩子** (不推荐):
+4. **Skip pre-commit hooks entirely** (not recommended):
    ```bash
-   # 仅在紧急情况下使用
+   # Use only in emergencies
    git commit --no-verify -m "feat: Emergency commit"
    ```
 
-### 常见提交消息错误
+### Common Commit Message Errors
 
-**错误类型及修复**:
+**Error types and fixes**:
 
-1. **句子格式错误**:
+1. **Incorrect sentence case**:
+
    ```bash
-   # ❌ 错误
+   # ❌ Incorrect
    feat: add vector search functionality
-   
-   # ✅ 正确
+
+   # ✅ Correct
    feat: Add vector search functionality
    ```
 
-2. **类型错误**:
+2. **Incorrect type**:
+
    ```bash
-   # ❌ 错误
+   # ❌ Incorrect
    feature: Add new search provider
-   
-   # ✅ 正确
+
+   # ✅ Correct
    feat: Add new search provider
    ```
 
-3. **过长的主题行**:
+3. **Subject line too long**:
+
    ```bash
-   # ❌ 错误 (超过 72 个字符)
+   # ❌ Incorrect (more than 72 characters)
    feat: Add comprehensive vector similarity search functionality with Meilisearch integration and fallback mechanisms
-   
-   # ✅ 正确
+
+   # ✅ Correct
    feat: Add vector similarity search with Meilisearch
-   
+
    Add comprehensive search functionality with proper fallback
    mechanisms and error handling.
    ```
 
-### 开发环境问题
+### Development Environment Issues
 
-**Node.js 版本不兼容**:
+**Incompatible Node.js version**:
+
+The source guide uses Node.js 18 below. This is a historical example, not a current supported-version recommendation; choose a maintained release compatible with the project and its dependencies.
+
 ```bash
-# 检查当前 Node.js 版本
+# Check the current Node.js version
 node --version
 
-# 使用 nvm 切换到推荐版本
+# Historical source-guide example: switch with nvm
 nvm use 18
 
-# 或安装推荐版本
+# Historical source-guide example: install with nvm
 nvm install 18
 nvm alias default 18
 ```
 
-**依赖安装问题**:
+**Dependency installation issues**:
+
 ```bash
-# 清理依赖缓存
+# Clean the dependency cache
 pnpm store prune
 
-# 删除 node_modules 和 lockfile
-rm -rf node_modules pnpm-lock.yaml
+# Remove installed dependencies while preserving the lockfile
+rm -rf node_modules
 
-# 重新安装
-pnpm install
+# Reinstall the locked dependency versions
+pnpm install --frozen-lockfile
 ```
 
-## 日志和调试
+## Logging and Debugging
 
-### 启用详细日志
+Keep console logging disabled for stdio MCP transport: diagnostic output on
+stdout can corrupt protocol messages. The examples below use file-only logging.
+Do not set `MCP_COMPASS_MAIN=true` or `ENABLE_CONSOLE_LOGGING=true` for a stdio
+client connection.
 
-要启用详细日志记录以进行故障排除：
+### Enable Verbose Logging
+
+To enable verbose logging for troubleshooting:
 
 ```bash
-# 启用调试日志
-DEBUG=true LOG_LEVEL=debug npm start
+# Enable debug logging
+mkdir -p logs
+ENABLE_FILE_LOGGING=true LOG_LEVEL=debug node build/index.js
 
-# 启用文件日志
-ENABLE_FILE_LOGGING=true npm start
+# Enable file logging
+mkdir -p logs
+ENABLE_FILE_LOGGING=true node build/index.js
 
-# 启用性能日志
-ENABLE_PERFORMANCE_LOGGING=true npm start
+# No ENABLE_PERFORMANCE_LOGGING switch is implemented.
+# Use the performance profiling commands below for diagnostics.
 ```
 
-### 查看日志文件
+### View Log Files
 
-日志文件位于 `logs` 目录：
+With file logging enabled, log files are located in `LOGS_DIR`, or `logs` by default. The following commands assume the default directory:
 
 ```bash
-# 查看最新日志
-tail -f logs/mcpadvisor.log
+# View the latest logs
+tail -f logs/all.log
 
-# 查看错误日志
-grep ERROR logs/mcpadvisor.log
+# View error logs
+grep error logs/all.log
 
-# 查看特定组件的日志
-grep "SearchService" logs/mcpadvisor.log
+# View logs for a specific component
+grep "SearchService" logs/all.log
 ```
 
-### 使用调试工具
+### Use Debugging Tools
 
-使用 Node.js 调试工具：
+Use the Node.js debugging tools:
 
 ```bash
-# 启用检查器
+# Enable the inspector
 node --inspect build/index.js
 
-# 在 Chrome 中打开
+# Open in Chrome
 chrome://inspect
 ```
 
-## 常见错误代码
+## Common Error Codes
+
+These labels are diagnostic categories retained from the source guide, not a guaranteed error-code API emitted by MCP Advisor.
 
 ### ERR_CONNECTION_REFUSED
 
-**描述**: 无法建立到服务器的连接。
+**Description**: Unable to establish a connection to the server.
 
-**解决方案**:
-1. 确保服务器正在运行
-2. 检查主机和端口配置
-3. 验证网络连接
+**Solutions**:
+
+1. Make sure the server is running
+2. Check the host and port configuration
+3. Verify network connectivity
 
 ### ERR_INVALID_QUERY
 
-**描述**: 查询格式无效或为空。
+**Description**: The query format is invalid or the query is empty.
 
-**解决方案**:
-1. 确保查询不为空
-2. 检查查询格式
-3. 移除特殊字符
+**Solutions**:
+
+1. Make sure the query is not empty
+2. Check the query format
+3. Remove special characters
 
 ### ERR_PROVIDER_UNAVAILABLE
 
-**描述**: 一个或多个搜索提供者不可用。
+**Description**: One or more search providers are unavailable.
 
-**解决方案**:
-1. 检查外部 API 状态
-2. 验证 API 密钥和凭据
-3. 确认网络连接
+**Solutions**:
+
+1. Check the external API status
+2. Verify API keys and credentials
+3. Confirm network connectivity
 
 ### ERR_VECTOR_GENERATION
 
-**描述**: 无法生成文本的向量嵌入。
+**Description**: Unable to generate vector embeddings for the text.
 
-**解决方案**:
-1. 检查嵌入模型配置
-2. 验证文本输入
-3. 确保有足够的内存
+**Solutions**:
+
+1. Check the embedding model configuration
+2. Validate the text input
+3. Make sure sufficient memory is available
 
 ### ERR_RATE_LIMIT
 
-**描述**: 已达到外部 API 的速率限制。
+**Description**: An external API rate limit has been reached.
 
-**解决方案**:
-1. 减少请求频率
-2. 实现请求节流
-3. 考虑升级 API 计划
+**Solutions**:
 
-## 高级故障排除
+1. Reduce request frequency
+2. Implement request throttling
+3. Consider upgrading the API plan
 
-### 诊断网络问题
+## Advanced Troubleshooting
 
-使用网络诊断工具：
+### Diagnose Network Issues
+
+Use network diagnostic tools:
 
 ```bash
-# 检查网络连接
+# Check network connectivity
 ping getmcp.io
 
-# 跟踪网络路由
+# Trace the network route
 traceroute getmcp.io
 
-# 检查 DNS 解析
+# Check DNS resolution
 dig getmcp.io
 
-# 测试 HTTP 连接
-curl -v https://getmcp.io/api/health
+# Test the HTTP connection
+curl -v https://getmcp.io/api/servers.json
 ```
 
-### 性能分析
+### Performance Profiling
 
-使用性能分析工具：
+Use performance profiling tools:
 
 ```bash
-# 使用 Node.js 内置分析器
+# Use the Node.js built-in profiler
 node --prof build/index.js
 
-# 分析结果
+# Analyze the results
 node --prof-process isolate-*.log > profile.txt
 
-# 使用 clinic.js
+# Use clinic.js
 npx clinic doctor -- node build/index.js
 ```
 
-### 内存泄漏调查
+### Investigate Memory Leaks
 
-识别和修复内存泄漏：
+Identify and fix memory leaks. The heap-snapshot commands use the current entry point. The `memwatch-next` installation and CommonJS snippet below are historical examples; that package is not a project dependency, and its runtime compatibility and ES module integration must be checked before use.
 
 ```bash
-# 生成堆快照
+# Generate a heap snapshot
 node --inspect build/index.js
-# 在 Chrome DevTools 中分析堆快照
+# Analyze the heap snapshot in Chrome DevTools
 
-# 使用 memwatch
+# Use memwatch
 npm install memwatch-next
-# 在代码中添加
+# Add to the code
 const memwatch = require('memwatch-next');
 memwatch.on('leak', (info) => {
   console.log('Memory leak detected:', info);
 });
 ```
 
-## 获取帮助
+## Getting Help
 
-如果您无法解决问题，请尝试以下资源：
+If you cannot resolve the issue, try these resources:
 
-1. 查看 [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
-2. 在 [GitHub Discussions](https://github.com/istarwyh/mcpadvisor/discussions) 中提问
-3. 提交带有详细信息的新 Issue：
-   - 操作系统和版本
-   - Node.js 版本
-   - MCP Advisor 版本
-   - 完整错误消息
-   - 重现步骤
-   - 日志片段
+1. Check [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
+2. Ask a question in [GitHub Discussions](https://github.com/istarwyh/mcpadvisor/discussions)
+3. Open a new issue with detailed information:
+   - Operating system and version
+   - Node.js version
+   - MCP Advisor version
+   - Complete error message
+   - Steps to reproduce
+   - Log excerpts
 
 ---
 
-相关文档：
-- [快速开始指南](./GETTING_STARTED.md) - 安装配置和基本使用
-- [技术参考手册](./TECHNICAL_REFERENCE.md) - 高级技术特性和配置
-- [架构文档](./ARCHITECTURE.md) - 系统架构和组件详解
-- [贡献指南](../CONTRIBUTING.md) - 开发环境设置和代码贡献
+Related documentation:
+
+- [Getting Started Guide](./GETTING_STARTED.md) - Installation, configuration, and basic usage
+- [Technical Reference](./TECHNICAL_REFERENCE.md) - Advanced technical features and configuration
+- [Architecture](./ARCHITECTURE.md) - System architecture and component details
+- [Contributing Guide](../CONTRIBUTING.md) - Development environment setup and code contributions

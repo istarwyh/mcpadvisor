@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createOptionalClineProvider } from './config/cline.js';
 import { SearchService } from './services/searchService.js';
 import { CompassSearchProvider } from './services/core/search/CompassSearchProvider.js';
 import { ServerService, TransportType, TransportConfig } from './services/core/server/index.js';
@@ -14,6 +15,7 @@ import { MeilisearchSearchProvider } from './services/core/search/MeilisearchSea
 import { getParamValue } from '@chatmcp/sdk/utils/index.js';
 import { NacosMcpProvider } from './services/core/search/NacosMcpProvider.js';
 import type { SearchProvider } from './types/index.js';
+import { createOptionalProfessionalReranker } from './services/core/search/ProfessionalReranker.js';
 
 /**
  * Main application entry point
@@ -45,6 +47,8 @@ async function main() {
       endpoint,
     };
 
+    const clineProvider = createOptionalClineProvider();
+
     // If user opts in, ensure local Meilisearch is running and configured
     const wantLocalMeili = process.argv.includes('--local-meilisearch');
     if (wantLocalMeili) {
@@ -57,6 +61,8 @@ async function main() {
       new CompassSearchProvider(),
       new GetMcpSearchProvider()
     ];
+
+    if (clineProvider) searchProviders.push(clineProvider);
 
     // Add Nacos provider if environment variables are configured
     const nacosServerAddr = process.env.NACOS_SERVER_ADDR;
@@ -98,7 +104,7 @@ async function main() {
       );
     }
     
-    const searchService = new SearchService(searchProviders);
+    const searchService = new SearchService(searchProviders, {}, createOptionalProfessionalReranker());
 
     // Best-effort async bootstrap for local Meilisearch
     try {

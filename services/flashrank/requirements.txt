@@ -1,0 +1,3 @@
+FlashRank==0.2.10
+fastapi==0.115.6
+uvicorn==0.34.0

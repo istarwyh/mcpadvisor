@@ -1,13 +1,13 @@
 # Contributing to MCP Advisor
 
-[English](./CONTRIBUTING.en.md) | [简体中文](./CONTRIBUTING.md)
+[English](./CONTRIBUTING.md) | [Simplified Chinese](./CONTRIBUTING.zh-CN.md)
 
 Thank you for contributing to MCP Advisor! This guide covers development setup,
 code conventions, testing, commits, pull requests, and releases.
 
 ## Translation and Current-Source Updates
 
-This English counterpart retains the sections of the [Chinese guide](./CONTRIBUTING.md),
+This English counterpart retains the sections of the [Chinese guide](./CONTRIBUTING.zh-CN.md),
 with corrections checked against the current repository. Commands and examples
 were reviewed against source, not validated by installing dependencies or running
 the application. The Chinese original may still contain older instructions.
@@ -26,8 +26,8 @@ Important corrections are explained where they apply:
 - Release instructions avoid creating a second tag after a version command that
   already creates one.
 
-For implementation context, see the [Architecture Guide](./docs/ARCHITECTURE.en.md),
-[Technical Reference](./docs/TECHNICAL_REFERENCE.en.md), and repository guidance in
+For implementation context, see the [Architecture Guide](./docs/ARCHITECTURE.md),
+[Technical Reference](./docs/TECHNICAL_REFERENCE.md), and repository guidance in
 [AGENT.md](./AGENT.md) and [CLAUDE.md](./CLAUDE.md). When older prose disagrees with
 checked-in scripts or types, use the current source references below.
 
@@ -55,7 +55,7 @@ checked-in scripts or types, use the current source references below.
 - **Node.js**: the repository's [.nvmrc](./.nvmrc) pins `18.18.0`.
   The original guide says Node.js 18 or later; this pin records the repository's
   baseline, not a claim that every newer release has been tested.
-- **pnpm**: [package.json](./package.json) specifies `pnpm@9.15.0`.
+- **pnpm**: [package.json](./package.json) specifies `pnpm@8.15.9`.
 - **Git**
 - A POSIX-compatible shell for the checked-in shell scripts and build command's
   `chmod` step; Windows contributors can use an appropriate Linux environment.
@@ -132,7 +132,7 @@ requires your own connection string in `OCEANBASE_URL`; never put real credentia
 in examples or commits. This setting does not replace the provider list in the
 CLI, which initializes Meilisearch, Compass, and GetMCP, conditionally adds
 Nacos, and uses SearchService's offline fallback. See the
-[Technical Reference](./docs/TECHNICAL_REFERENCE.en.md) for provider settings.
+[Technical Reference](./docs/TECHNICAL_REFERENCE.md) for provider settings.
 
 ### Build the Project
 
@@ -225,7 +225,7 @@ format scripts target `src/**/*.ts`; for Markdown, explicitly run Prettier on
 the documentation files you changed, for example:
 
 ```bash
-pnpm exec prettier --check CONTRIBUTING.en.md
+pnpm exec prettier --check CONTRIBUTING.md
 ```
 
 ### TypeScript Best Practices
@@ -797,10 +797,10 @@ Before submitting a PR:
 
 ## Getting Help
 
-1. Read the [Quick Start Guide](./docs/GETTING_STARTED.en.md).
-2. Check the [Troubleshooting Guide](./docs/TROUBLESHOOTING.en.md).
-3. Consult the [Architecture Guide](./docs/ARCHITECTURE.en.md) and
-   [Technical Reference](./docs/TECHNICAL_REFERENCE.en.md).
+1. Read the [Quick Start Guide](./docs/GETTING_STARTED.md).
+2. Check the [Troubleshooting Guide](./docs/TROUBLESHOOTING.md).
+3. Consult the [Architecture Guide](./docs/ARCHITECTURE.md) and
+   [Technical Reference](./docs/TECHNICAL_REFERENCE.md).
 4. Search existing [GitHub issues](https://github.com/istarwyh/mcpadvisor/issues).
 5. Open an issue with a clear description and redacted reproduction details if
    the existing documentation does not resolve the problem.

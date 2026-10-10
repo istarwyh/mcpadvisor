@@ -1,539 +1,808 @@
-# MCP Advisor 贡献指南
+# Contributing to MCP Advisor
 
-[English](./CONTRIBUTING.en.md) | [简体中文](./CONTRIBUTING.md)
+[English](./CONTRIBUTING.md) | [Simplified Chinese](./CONTRIBUTING.zh-CN.md)
 
-欢迎为 MCP Advisor 项目做出贡献！本文档提供了开发环境设置、代码规范、测试指南和提交流程的完整指导。
+Thank you for contributing to MCP Advisor! This guide covers development setup,
+code conventions, testing, commits, pull requests, and releases.
 
-## 目录
+## Translation and Current-Source Updates
 
-- [开发环境设置](#开发环境设置)
-- [代码规范](#代码规范)
-  - [TypeScript 最佳实践](#typescript-最佳实践)
-  - [函数式编程原则](#函数式编程原则)
-  - [命名约定](#命名约定)
-  - [路径处理最佳实践](#路径处理最佳实践)
-- [测试指南](#测试指南)
-- [错误处理最佳实践](#错误处理最佳实践)
-- [提交规范](#提交规范)
-- [PR 流程](#pr-流程)
-- [发布流程](#发布流程)
+This English counterpart retains the sections of the [Chinese guide](./CONTRIBUTING.zh-CN.md),
+with corrections checked against the current repository. Commands and examples
+were reviewed against source, not validated by installing dependencies or running
+the application. The Chinese original may still contain older instructions.
 
-## 开发环境设置
+Important corrections are explained where they apply:
 
-### 前提条件
+- Use the build-and-run workflow: there is no `dev` script in [package.json](./package.json).
+- The CLI does not automatically load `.env`; export variables before launch or
+  explicitly preload the installed `dotenv` package.
+- Logging requires the current logger settings and an existing directory.
+  Vector-engine configuration does not select the CLI's search providers.
+- Test examples use current types and paths. The default Vitest suite includes
+  both unit and integration tests.
+- The actual hooks run type checking at pre-commit and commitlint at commit-msg;
+  linting and tests remain explicit contributor checks.
+- Release instructions avoid creating a second tag after a version command that
+  already creates one.
 
-- **Node.js** (>= 18.x)
-- **pnpm** (>= 9.x) - 项目使用 pnpm 作为包管理器
+For implementation context, see the [Architecture Guide](./docs/ARCHITECTURE.md),
+[Technical Reference](./docs/TECHNICAL_REFERENCE.md), and repository guidance in
+[AGENT.md](./AGENT.md) and [CLAUDE.md](./CLAUDE.md). When older prose disagrees with
+checked-in scripts or types, use the current source references below.
+
+## Contents
+
+- [Development Setup](#development-setup)
+- [Code Conventions](#code-conventions)
+  - [TypeScript Best Practices](#typescript-best-practices)
+  - [Functional Programming Principles](#functional-programming-principles)
+  - [Naming Conventions](#naming-conventions)
+  - [Path Handling Best Practices](#path-handling-best-practices)
+- [Testing Guide](#testing-guide)
+- [Error Handling Best Practices](#error-handling-best-practices)
+- [Commit Guidelines](#commit-guidelines)
+- [Pull Request Process](#pull-request-process)
+- [Release Process](#release-process)
+- [Security and Quality Checklist](#security-and-quality-checklist)
+- [Development Reminders](#development-reminders)
+- [Getting Help](#getting-help)
+
+## Development Setup
+
+### Prerequisites
+
+- **Node.js**: the repository's [.nvmrc](./.nvmrc) pins `18.18.0`.
+  The original guide says Node.js 18 or later; this pin records the repository's
+  baseline, not a claim that every newer release has been tested.
+- **pnpm**: [package.json](./package.json) specifies `pnpm@8.15.9`.
 - **Git**
+- A POSIX-compatible shell for the checked-in shell scripts and build command's
+  `chmod` step; Windows contributors can use an appropriate Linux environment.
 
-### 克隆仓库
+### Clone the Repository
 
 ```bash
 git clone https://github.com/istarwyh/mcpadvisor.git
 cd mcpadvisor
 ```
 
-### 安装依赖
+If you use nvm, select the checked-in Node.js version with `nvm use` after making
+that version available locally.
+
+### Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-### 配置环境变量
+The `preinstall` script enforces pnpm, and the `prepare` script initializes Husky.
 
-创建 `.env` 文件：
+### Configure Environment Variables
+
+Set variables in the shell that launches the application. These examples use
+POSIX shell syntax; use your shell's equivalent on other platforms.
 
 ```bash
-# 开发模式
-NODE_ENV=development
+export NODE_ENV=development
+export TRANSPORT_TYPE=stdio
 
-# 传输类型 (stdio, sse, rest)
-TRANSPORT_TYPE=stdio
-
-# 日志配置
-DEBUG=true
-ENABLE_FILE_LOGGING=true
-LOG_LEVEL=debug
-
-# 向量引擎类型 (memory, oceanbase, meilisearch)
-VECTOR_ENGINE_TYPE=memory
-
-# 用于向量搜索的 OceanBase 连接字符串（可选）
-OCEANBASE_URL=mysql://username:password@localhost:3306/mcpadvisor
+# Optional debug file logging
+mkdir -p logs
+export ENABLE_FILE_LOGGING=true
+export LOG_LEVEL=debug
+export LOGS_DIR="$PWD/logs"
 ```
 
-### 构建项目
+[The entry point](./src/index.ts) reads `TRANSPORT_TYPE` (`stdio`, `sse`, or
+`rest`), `SERVER_PORT` (default `3000`), `SERVER_HOST` (default `localhost`), and
+`ENDPOINT` (REST path, default `/rest`). Command-line values take precedence for
+these settings. The SSE path is `/sse`; its message path defaults to `/messages`
+and is configurable through the `messagePath` command-line parameter.
+
+**Correction to the original `.env` recipe:** merely creating `.env` does not
+load it into the CLI process. You can put the same settings into a local `.env`
+file without the `export` prefixes, then explicitly preload dotenv after building:
+
+```bash
+mkdir -p logs
+node -r dotenv/config build/index.js
+```
+
+Do not commit secrets. `.env` is ignored by [.gitignore](./.gitignore).
+
+[The logger](./src/utils/logger.ts) uses `ENABLE_FILE_LOGGING=true`, `LOG_LEVEL`,
+and `LOGS_DIR`. Its ordinary CLI path only attaches file transports if the
+selected directory already exists. `DEBUG=true` alone does not enable it.
+Keep console logging disabled for stdio transport so logs do not contaminate
+MCP protocol output.
+
+For work specifically on vector engines, the
+[factory](./src/services/vectorEngineFactory.ts) supports `memory`, `oceanbase`,
+and `meilisearch`:
+
+```bash
+export VECTOR_ENGINE_TYPE=memory
+```
+
+This is an explicit development choice, not the configured default:
+[constants.ts](./src/config/constants.ts) defaults to `oceanbase`, and the
+factory falls back to memory if `OCEANBASE_URL` is missing. OceanBase work
+requires your own connection string in `OCEANBASE_URL`; never put real credentials
+in examples or commits. This setting does not replace the provider list in the
+CLI, which initializes Meilisearch, Compass, and GetMCP, conditionally adds
+Nacos, and uses SearchService's offline fallback. See the
+[Technical Reference](./docs/TECHNICAL_REFERENCE.md) for provider settings.
+
+### Build the Project
 
 ```bash
 pnpm run build
 ```
 
-### 运行开发服务器
+This runs TypeScript compilation and marks `build/index.js` executable.
+[tsconfig.json](./tsconfig.json) maps `src/` to `build/` and excludes test files
+from the production build.
+
+### Run the Development Server
 
 ```bash
-# 启动开发模式
-pnpm run dev
-
-# 或直接运行构建后的文件
+# Build again after changing source files, then start the compiled CLI
+pnpm run build
 node build/index.js
 ```
 
-### 项目结构
+There is no `pnpm run dev` script in the current package. Stdio mode waits for an
+MCP client; silence alone does not indicate failure. To develop against REST:
 
-```
-mcpadvisor/
-├── .github/            # GitHub 工作流和配置
-├── .husky/             # Git hooks
-├── docs/               # 文档
-├── src/                # 源代码
-│   ├── config/         # 配置相关
-│   ├── services/       # 核心服务
-│   │   ├── core/       # 核心业务逻辑
-│   │   ├── providers/  # 外部服务提供者
-│   │   ├── common/     # 共享工具
-│   │   └── interfaces/ # 类型定义
-│   ├── types/          # TypeScript 类型定义
-│   ├── utils/          # 工具函数
-│   └── tests/          # 测试文件
-│       ├── unit/       # 单元测试
-│       ├── integration/# 集成测试
-│       └── e2e/        # 端到端测试
-├── tests/              # E2E 测试 (Playwright)
-├── scripts/            # 自动化脚本
-├── package.json        # 项目配置
-└── tsconfig.json       # TypeScript 配置
-```
-
-## 代码规范
-
-### 代码风格与格式
-
-- **缩进**: 使用 2 个空格缩进
-- **行长度**: 尽量保持在 80 个字符以内
-- **字符串**: 优先使用模板字符串 `` `${variable}` ``
-- **分号**: 语句末尾使用分号
-- **引号**: 优先使用单引号 `'`，JSX 中使用双引号 `"`
-
-### TypeScript 最佳实践
-
-- **类型安全**: 始终为函数参数和返回值定义类型
-- **避免 `any`**: 尽量避免使用 `any` 类型，使用 `unknown` 或具体类型
-- **接口优于类型别名**: 对于对象类型，优先使用接口而非类型别名
-- **可空类型**: 使用联合类型 `string | null` 而非可选参数 `string?`
-- **枚举**: 对于有限集合的值，使用枚举类型
-- **类型守卫**: 使用类型守卫进行类型收窄
-- **泛型**: 适当使用泛型提高代码复用性和类型安全性
-- **导入/导出**: 使用命名导出而非默认导出，保持一致性
-
-**示例**:
-
-```typescript
-// 好的实践
-export interface SearchOptions {
-  minSimilarity?: number;
-  limit: number;
-}
-
-export function search<T>(query: string, options: SearchOptions): Promise<T[]> {
-  // 实现
-}
-
-// 避免的实践
-export default function search(query: any, options?: any): any {
-  // 实现
-}
-```
-
-### 函数式编程原则
-
-- **纯函数**: 尽量使用纯函数，避免副作用
-- **不可变性**: 避免修改传入的参数，返回新对象
-- **函数组合**: 使用小函数组合成复杂功能
-- **单一职责**: 每个函数只做一件事
-- **高阶函数**: 适当使用高阶函数如 `map`, `filter`, `reduce`
-- **避免深度嵌套**: 使用函数组合或 Promise 链避免回调地狱
-
-```typescript
-// 好的实践
-function normalizeVector(vector: number[]): number[] {
-  const magnitude = calculateMagnitude(vector);
-  return vector.map(value => value / magnitude);
-}
-
-// 避免的实践
-function processVector(vector: number[]): number[] {
-  // 做多件事: 计算、归一化、过滤等
-}
-```
-
-### 命名约定
-
-- **类名**: 使用 PascalCase (如 `OfflineDataLoader`)
-- **函数/方法名**: 使用 camelCase (如 `loadFallbackData`)
-- **常量**: 使用 UPPER_SNAKE_CASE (如 `DEFAULT_FALLBACK_DATA_PATH`)
-- **变量**: 使用 camelCase (如 `serverResponses`)
-- **接口名**: 使用 PascalCase 并以 `I` 开头 (如 `IVectorSearchEngine`)
-- **文件名**: 使用 kebab-case (如 `offline-data-loader.ts`)
-
-### 路径处理最佳实践
-
-- **统一工具**: 使用 `pathUtils.ts` 处理所有路径相关操作
-- **环境兼容**: 确保路径处理在不同环境（开发、测试、生产）中都能正常工作
-- **ESM 兼容**: 处理 `import.meta.url` 在不同环境中的兼容性
-- **相对路径**: 避免硬编码绝对路径，使用相对路径和项目根目录
-- **路径分隔符**: 使用 `path.join()` 和 `path.resolve()` 处理路径分隔符
-- **备用路径**: 提供备用路径机制，增强可靠性
-
-```typescript
-// 好的实践
-import { getMcpServerListPath } from '../utils/pathUtils.js';
-const dataPath = getMcpServerListPath(import.meta.url);
-
-// 避免的实践
-const dataPath = path.resolve(__dirname, '../../../../data/file.json');
-```
-
-## 测试指南
-
-### 端到端测试改进
-
-- 对 MCP Inspector 和代理端口的自动清理改进，避免端口冲突问题。
-- 采用模块化的测试辅助工具类进行环境管理。
-- 使用新脚本结构与智能等待机制确保测试稳定性。
-
-### 测试结构
-
-- 使用 `describe` 组织相关测试，`test`/`it` 用于具体测试用例
-- 遵循 Given-When-Then 模式
-- 使用 `beforeEach`/`afterEach` 进行设置和清理
-- 使用断言而非 `console.log` 进行验证
-
-### 测试设计原则
-
-- **单一职责**: 每个测试应验证一个功能
-- **边界值测试**: 测试边界值、空值、无效输入
-- **错误处理**: 明确测试错误条件和异常处理
-- **性能**: 测试应快速执行
-- **环境隔离**: 在 beforeEach/afterEach 中保存/恢复环境变量
-- **内容验证**: 验证结果内容的相关性，而不仅仅是数量
-- **网络请求**: 避免全局模拟，防止阻塞集成测试
-
-### 测试类型
-
-#### 单元测试
 ```bash
-# 运行所有单元测试
-pnpm run test
+TRANSPORT_TYPE=rest SERVER_HOST=localhost SERVER_PORT=3000 ENDPOINT=/rest node build/index.js
+```
 
-# 运行特定测试文件
+From another terminal, check the HTTP transport:
+
+```bash
+curl http://localhost:3000/health
+```
+
+A health response does not verify external search providers. Keep development
+HTTP services on localhost unless you have appropriate network restrictions and
+an authenticated proxy.
+
+### Project Structure
+
+```text
+mcpadvisor/
+├── .github/                 # GitHub workflows and configuration
+├── .husky/                  # Git hooks
+├── config/                  # Data-loading configuration and related utilities
+├── data/                    # Bundled data
+├── docs/                    # Documentation
+├── src/
+│   ├── config/              # Runtime constants and configuration loaders
+│   ├── services/
+│   │   ├── core/            # Search, installation, and MCP server logic
+│   │   ├── providers/       # Backend-specific implementations
+│   │   ├── common/          # Shared API, cache, and vector utilities
+│   │   └── interfaces/      # Service interfaces
+│   ├── types/               # Shared TypeScript types
+│   ├── utils/               # Utilities
+│   └── tests/
+│       ├── unit/            # Unit tests
+│       ├── integration/     # Integration tests
+│       └── fixtures/        # Test data
+├── tests/
+│   ├── e2e/                # Playwright end-to-end tests
+│   └── helpers/            # End-to-end test helpers
+├── scripts/                 # Automation, including e2e/ and meilisearch/
+├── package.json
+└── tsconfig.json
+```
+
+The original guide's `src/tests/e2e/` directory does not exist in this checkout;
+Playwright tests live under `tests/e2e/`.
+
+## Code Conventions
+
+### Code Style and Formatting
+
+Follow [.prettierrc.mjs](./.prettierrc.mjs):
+
+- Use two spaces for indentation and aim for an 80-character line width.
+- Use template strings for interpolation.
+- End statements with semicolons.
+- Prefer single quotes; use double quotes in JSX.
+- Use trailing commas and LF line endings.
+
+```bash
+pnpm run lint
+pnpm run format:check
+pnpm run check
+```
+
+`check` runs lint and formatting checks, not TypeScript checking. The package's
+format scripts target `src/**/*.ts`; for Markdown, explicitly run Prettier on
+the documentation files you changed, for example:
+
+```bash
+pnpm exec prettier --check CONTRIBUTING.md
+```
+
+### TypeScript Best Practices
+
+- Define clear parameter and return types.
+- Avoid `any`; prefer `unknown` or specific types.
+- Prefer interfaces for object shapes and use generics where they improve reuse.
+- Distinguish nullability (`string | null`) from optionality (`value?: string`).
+  These express different contracts; optional properties are valid in current
+  types and are not a substitute for explicit `null`.
+- Use enums or existing literal unions for finite sets of values.
+- Use type guards to narrow types.
+- Prefer named exports for new APIs while respecting existing module exports.
+- Use `.js` extensions for relative imports in this ESM TypeScript project.
+
+This source-aligned example uses the existing types rather than redefining an
+incompatible `SearchOptions` interface:
+
+```typescript
+import type {
+  SearchOptions,
+  SearchProvider,
+  MCPServerResponse,
+} from './types/index.js';
+import type { SearchParams } from './types/search.js';
+
+export async function searchProvider(
+  provider: SearchProvider,
+  params: SearchParams,
+  options: SearchOptions = {},
+): Promise<MCPServerResponse[]> {
+  const results = await provider.search(params);
+  return results.slice(0, options.limit ?? 5);
+}
+```
+
+The import paths above assume a module directly under `src/`. This small helper
+illustrates typing and limiting results, not the full SearchService ranking
+behavior. In the current [types](./src/types/index.ts), `limit` is optional.
+
+### Functional Programming Principles
+
+- Prefer pure functions and avoid unnecessary side effects.
+- Return new objects rather than mutating inputs.
+- Compose small functions for more complex behavior.
+- Give each function a single responsibility.
+- Use higher-order functions such as `map`, `filter`, and `reduce` appropriately.
+- Avoid deeply nested control flow; use composition or clear async functions.
+
+Illustrative, self-contained example:
+
+```typescript
+function normalizeVector(vector: number[]): number[] {
+  const magnitude = Math.sqrt(
+    vector.reduce((sum, value) => sum + value ** 2, 0),
+  );
+  return magnitude === 0 ? [...vector] : vector.map(value => value / magnitude);
+}
+```
+
+This adds a zero-vector guard to the original conceptual example. Avoid combining
+unrelated calculation, normalization, and filtering steps in one large function.
+
+### Naming Conventions
+
+- **Classes**: PascalCase, such as `OfflineDataLoader`.
+- **Functions and methods**: camelCase, such as `loadFallbackData`.
+- **Constants**: UPPER_SNAKE_CASE, such as `DEFAULT_FALLBACK_DATA_PATH`.
+- **Variables**: camelCase, such as `serverResponses`.
+- **Interfaces**: PascalCase; use an `I` prefix to distinguish an interface from
+  a same-named class, as in `IVectorSearchEngine`.
+- **Files**: the original guide recommends kebab-case for new files. Match the
+  surrounding module's established convention; existing files also use camelCase
+  and PascalCase. Do not rename unrelated files just to enforce a convention.
+
+Existing public interfaces such as `SearchProvider` and `SearchOptions` do not
+have an `I` prefix. Preserve their names when importing or implementing them.
+
+### Path Handling Best Practices
+
+- Use [pathUtils.ts](./src/utils/pathUtils.ts) for project-specific path handling.
+- Check development, test, and production layouts.
+- Handle ESM `import.meta.url` correctly.
+- Avoid hardcoded absolute paths; resolve from known project or module locations.
+- Use `path.join()` and `path.resolve()` for platform-specific separators.
+- Provide sensible fallback paths where needed.
+
+For example, from a file one directory below `src/`:
+
+```typescript
+import { getMcpServerListPath } from '../utils/pathUtils.js';
+
+const dataPath = getMcpServerListPath(import.meta.url);
+```
+
+Avoid brittle directory traversal based on an assumed CommonJS `__dirname` in
+ES modules.
+
+## Testing Guide
+
+### End-to-End Testing Improvements
+
+The project includes Inspector/proxy cleanup, modular environment helpers, and
+script-based startup. Prefer readiness checks over fixed sleeps when writing or
+improving tests.
+
+**Current script caveat:** [e2e.run.sh](./scripts/e2e/e2e.run.sh) kills processes
+on ports `6274` and `6277` and uses `pkill -f "inspector"`. Run it only in an
+isolated development environment where those processes can safely be stopped.
+Its cleanup function exits with status zero, including some startup-failure
+paths; inspect logs and Playwright results rather than treating a zero exit as
+proof of success. These are existing behaviors, not guarantees of test stability.
+
+### Test Structure
+
+- Group related tests with `describe`; use `test` or `it` for individual cases.
+- Follow Given-When-Then.
+- Use `beforeEach` and `afterEach` for setup and cleanup.
+- Verify behavior with assertions rather than `console.log`.
+
+### Test Design Principles
+
+- Test one responsibility per case.
+- Include boundaries, null values, invalid input, and failure paths.
+- Keep tests fast and independent.
+- Save and restore environment variables to avoid cross-test pollution.
+- Verify content quality and relevance, not just result counts.
+- Use targeted mocks for unit tests. Avoid global network mocks that prevent
+  integration tests from making real requests.
+- Check external service health and use appropriate credentials before running
+  integration suites.
+
+### Test Types
+
+#### Unit Tests
+
+```bash
+# Unit tests only
+pnpm run test src/tests/unit/
+
+# One existing test file
 pnpm run test src/tests/unit/services/searchService.test.ts
 
-# 监视模式
+# All Vitest tests matched by the configuration, including integration tests
+pnpm run test
+
+# Watch mode
 pnpm run test:watch
 ```
 
-#### 集成测试
-```bash
-# 运行集成测试
-pnpm run test src/tests/integration/
+The original guide labels `pnpm run test` as unit-only, but
+[vitest.config.ts](./vitest.config.ts) includes matching test files throughout
+`src/`. Use the directory filter when you need only unit tests.
 
-# Meilisearch 集成测试
+#### Integration Tests
+
+```bash
+pnpm run test src/tests/integration/
 pnpm run test:meilisearch:local
 ```
 
-#### 端到端测试
-```bash
-# 运行 E2E 测试
-pnpm run test:e2e
+These can need running services and network access. Follow the
+[Local Meilisearch Guide](./docs/MEILISEARCH_LOCAL.md) for that provider's setup.
 
-# Meilisearch E2E 测试
+#### End-to-End Tests
+
+```bash
+pnpm run test:e2e
 pnpm run test:meilisearch:e2e
 ```
 
-### 测试示例
+The first command runs [e2e.run.sh](./scripts/e2e/e2e.run.sh), which expects
+`mcp-inspector` on PATH and Playwright's browser dependencies. The second runs
+[e2e.meilisearch.sh](./scripts/e2e/e2e.meilisearch.sh). Review their service and
+cleanup behavior before running them. The standard E2E script defaults to headed
+mode; use `pnpm run test:e2e headless` to pass the headless mode to that script.
+
+### Test Example
+
+This example is intended for a file in `src/tests/unit/services/`. It uses the
+current structured search parameters and response fields, and disables offline
+fallback so a unit test does not depend on local fallback data. Unlike the
+original illustration, it does not use an undefined `MockProvider` type or call
+`search()` with a string against its public TypeScript overload.
 
 ```typescript
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { SearchService } from '../../../services/searchService.js';
+import type {
+  MCPServerResponse,
+  SearchProvider,
+} from '../../../types/index.js';
+
 describe('SearchService', () => {
   let service: SearchService;
-  let mockProvider: MockProvider;
-  let originalEnvVars: Record<string, string | undefined> = {};
+  let mockProvider: SearchProvider;
+  let originalLogLevel: string | undefined;
 
   beforeEach(() => {
-    // 保存原始环境变量
-    originalEnvVars = {
-      API_KEY: process.env.API_KEY,
-      DATABASE_URL: process.env.DATABASE_URL
+    originalLogLevel = process.env.LOG_LEVEL;
+    process.env.LOG_LEVEL = 'error';
+
+    const response: MCPServerResponse = {
+      id: '1',
+      title: 'Test server',
+      description: 'A test search provider',
+      sourceUrl: 'https://example.com/test-server',
+      similarity: 1,
+      score: 1,
     };
-    
     mockProvider = {
-      search: vi.fn().mockResolvedValue([{ id: '1', name: 'Test' }])
+      search: vi.fn().mockResolvedValue([response]),
     };
-    service = new SearchService([mockProvider]);
+    service = new SearchService([mockProvider], { enabled: false });
   });
 
   afterEach(() => {
-    // 恢复原始环境变量
-    Object.entries(originalEnvVars).forEach(([key, value]) => {
-      if (value === undefined) {
-        delete process.env[key];
-      } else {
-        process.env[key] = value;
-      }
-    });
+    if (originalLogLevel === undefined) {
+      delete process.env.LOG_LEVEL;
+    } else {
+      process.env.LOG_LEVEL = originalLogLevel;
+    }
+    vi.restoreAllMocks();
   });
 
-  test('should return search results', async () => {
+  test('returns provider results for structured search parameters', async () => {
     // Given
-    const query = 'test query';
-    
+    const params = { taskDescription: 'test query' };
+
     // When
-    const results = await service.search(query);
-    
+    const results = await service.search(params);
+
     // Then
     expect(results).toHaveLength(1);
-    expect(results[0]).toHaveProperty('name', 'Test');
-    expect(mockProvider.search).toHaveBeenCalledWith(query);
+    expect(results[0]).toHaveProperty('title', 'Test server');
+    expect(mockProvider.search).toHaveBeenCalledWith(params);
   });
 });
 ```
 
-## 错误处理最佳实践
+The environment save/restore demonstrates isolation; a logger already imported
+at module load does not reconfigure itself when `LOG_LEVEL` later changes.
+This documentation snippet has been checked against source signatures, not run
+as a new test.
 
-- **具体错误类型**: 使用具体错误类型而非通用 `Error`
-- **有用的错误消息**: 提供带上下文的有用错误消息
-- **错误传播**: 正确传播错误，不要忽略
-- **异步错误**: 使用 `try/catch` 或 Promise `.catch()` 处理异步错误
-- **错误日志**: 记录错误详情以便调试
-- **优雅降级**: 尽可能提供优雅的降级方案
-- **脚本退出码**: 脚本必须返回适当的退出码（成功 0，失败 1+）
+## Error Handling Best Practices
+
+- Use specific error types when they convey meaningful information.
+- Include useful context in messages without logging secrets.
+- Propagate failures correctly rather than silently swallowing them.
+- Handle asynchronous errors with `try/catch` or `.catch()`.
+- Log enough detail for debugging through the existing logger.
+- Return fallback results only when the caller's contract permits them.
+- Return proper script exit codes: zero for success and nonzero for failure.
+
+The original loading example is conceptual: `Data` and `HttpError` are not
+provided by that snippet. This self-contained illustration makes that explicit
+and leaves validation to a caller-supplied parser:
 
 ```typescript
-// 好的实践
-async function loadData(): Promise<Data[]> {
+import logger from './utils/logger.js';
+
+class HttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = 'HttpError';
+  }
+}
+
+async function loadData<T>(
+  url: string,
+  parse: (value: unknown) => T[],
+): Promise<T[]> {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new HttpError(`Request failed: ${response.status}`, response.status);
+      throw new HttpError(
+        `Request failed: ${response.status}`,
+        response.status,
+      );
     }
-    return await response.json();
+    const value: unknown = await response.json();
+    return parse(value);
   } catch (error) {
-    logger.error('Failed to load data', { error, url });
-    return []; // 优雅的降级
+    logger.error('Failed to load data', {
+      message: error instanceof Error ? error.message : String(error),
+    });
+    return []; // Only if an empty fallback is valid for this caller.
   }
 }
 ```
 
-## 提交规范
+The logger import assumes a module directly under `src/`. Do not log URLs that
+may contain passwords, tokens, or other secrets.
 
-遵循 [Conventional Commits](https://www.conventionalcommits.org/) 规范：
+## Commit Guidelines
 
-```
-<type>[optional scope]: <description>
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```text
+<type>[optional scope]: <Description>
 
 [optional body]
 
 [optional footer]
 ```
 
-### 提交类型
+### Commit Types
 
-- `feat`: 新功能
-- `fix`: Bug 修复
-- `docs`: 文档变更
-- `style`: 代码格式变更（格式化等）
-- `refactor`: 代码重构
-- `perf`: 性能改进
-- `test`: 添加或修复测试
-- `build`: 构建系统或依赖变更
-- `ci`: CI 配置变更
-- `chore`: 其他不修改 src 或 test 文件的变更
+The types allowed by [commitlint.config.js](./commitlint.config.js) are:
 
-### 提交消息格式要求
+- `feat`: New functionality
+- `fix`: Bug fixes
+- `docs`: Documentation changes
+- `style`: Formatting or other changes that do not alter code behavior
+- `refactor`: Refactoring without a new feature or bug fix
+- `perf`: Performance improvements
+- `test`: New or corrected tests
+- `build`: Build-system or dependency changes
+- `ci`: CI configuration or script changes
+- `chore`: Other changes outside source or test behavior
+- `revert`: Revert a previous commit
 
-**重要**: 项目配置了 commitlint 预提交钩子，确保提交消息符合规范：
+`revert` is present in the actual configuration even though the original guide
+omits it.
 
-- **主题行格式**: `<type>[optional scope]: <Description>` (注意首字母大写)
-- **类型**: 必须是有效的 conventional commit 类型
-- **描述**: 首字母必须大写，使用句子格式 (sentence-case)
-- **长度**: 主题行不超过 72 个字符
+### Commit Message Requirements
 
-### 提交示例
+- Use a lowercase valid type and a nonempty subject.
+- Use sentence case for the description, beginning with a capital letter.
+- Do not end the subject with a period.
+- Separate the body and footer with blank lines when present.
+- Keep body lines at most 100 characters, as configured.
+- Aim for the original guide's recommended 72-character subject line. The local
+  configuration does not explicitly set a 72-character header limit; it extends
+  `@commitlint/config-conventional`, so inherited rules also apply.
 
-```bash
-# ✅ 正确格式
+### Commit Examples
+
+Valid subject:
+
+```text
 feat(search): Add vector similarity search with Meilisearch
+```
 
-# ❌ 错误格式 - 描述首字母未大写
+Invalid subjects:
+
+```text
 feat(search): add vector similarity search with Meilisearch
-
-# ❌ 错误格式 - 无效类型
 feature(search): Add vector similarity search
+```
 
-# ✅ 完整示例
+The first violates sentence case; the second uses an unsupported type.
+
+Complete example:
+
+```text
 feat(search): Add vector similarity search with Meilisearch
 
-Add new vector search provider that integrates with Meilisearch
-for semantic similarity matching. Includes proper error handling
-and fallback mechanisms.
+Add a new provider for semantic similarity matching, with error handling
+and fallback behavior.
 
-- Implement MeilisearchProvider class
+- Implement the provider
 - Add vector normalization utilities
-- Include comprehensive unit tests
+- Include unit tests
 - Update documentation
 
 Closes #123
 ```
 
-### Pre-commit 钩子
+Use issue references only when they actually apply to the change.
 
-项目配置了以下 pre-commit 检查：
+### Pre-commit Hooks
 
-1. **TypeScript 类型检查**: 确保代码无类型错误
-2. **ESLint 检查**: 确保代码风格符合规范
-3. **Commitlint 检查**: 验证提交消息格式
+The checked-in hooks are:
 
-如果遇到提交被拦截的情况：
+1. [.husky/pre-commit](./.husky/pre-commit): runs `npx tsc --noEmit`.
+   Its test commands are commented out, and it does not run ESLint.
+2. [.husky/commit-msg](./.husky/commit-msg): runs commitlint against the commit
+   message supplied by Git.
+
+This corrects the original guide's claim that all three checks run in pre-commit.
+Run quality checks yourself rather than relying on hooks alone:
 
 ```bash
-# 如果类型检查失败
-pnpm run check
-pnpm run build
+# Diagnose type errors
+pnpm exec tsc --noEmit
 
-# 如果 lint 检查失败
+# Check lint and formatting
+pnpm run check
+
+# Fix lint findings where appropriate, then review the diff
 pnpm run lint:fix
 
-# 如果提交消息格式错误，修正后重新提交
-git commit --amend -m "feat: Add new feature description"
+# Confirm the production build
+pnpm run build
 ```
 
-## PR 流程
-
-### 1. 创建分支
+If commitlint rejects a new commit, correct the message and retry it:
 
 ```bash
-# 从 main 分支创建功能分支
+git commit -m "feat: Add new feature description"
+```
+
+A rejected commit has not created a new commit, so do not automatically use
+`--amend`: it would modify the previous commit. Amend only when deliberately
+correcting an existing commit and respecting the repository's history policy.
+
+## Pull Request Process
+
+### 1. Create a Branch
+
+```bash
 git checkout main
 git pull origin main
 git checkout -b feature/your-feature-name
-
-# 或 bugfix 分支
-git checkout -b fix/issue-description
 ```
 
-### 2. 开发和提交
+For a bug fix, use a branch such as `fix/issue-description` instead.
+
+### 2. Develop and Commit
+
+Make your changes, add tests, and update affected documentation. Then run:
 
 ```bash
-# 进行更改
-# ...
-
-# 运行测试和检查
 pnpm run check
 pnpm run test
 pnpm run build
-
-# 提交更改
-git add .
-git commit -m "feat: add new feature"
 ```
 
-### 3. 推送和创建 PR
+Review the diff and stage only files intended for this change:
 
 ```bash
-# 推送到远程仓库
-git push origin feature/your-feature-name
-
-# 在 GitHub 上创建 Pull Request
+git diff
+git add path/to/changed-file
+git commit -m "feat: Add new feature"
 ```
 
-### 4. PR 检查清单
+Replace the example path and subject with your actual changes. This corrects the
+original PR example's lowercase subject, which conflicts with commitlint.
 
-在提交 PR 之前，确保：
+### 3. Push and Open a Pull Request
 
-- [ ] 所有测试通过 (`pnpm run test`)
-- [ ] 代码风格检查通过 (`pnpm run lint`)
-- [ ] 代码格式正确 (`pnpm run format:check`)
-- [ ] 构建成功 (`pnpm run build`)
-- [ ] 更新了相关文档
-- [ ] 添加了适当的测试
-- [ ] PR 描述清楚说明了变更内容
-- [ ] 遵循了代码规范和最佳实践
+```bash
+git push origin feature/your-feature-name
+```
 
-### 5. 代码审查
+Open the PR on GitHub. If contributing from a fork, push to your fork and target
+the upstream repository's appropriate branch.
 
-- 响应审查意见
-- 进行必要的修改
-- 确保 CI 检查通过
+### 4. PR Checklist
 
-## 发布流程
+- [ ] Tests pass (`pnpm run test`), with required services available.
+- [ ] Lint checks pass (`pnpm run lint`).
+- [ ] TypeScript formatting passes (`pnpm run format:check`).
+- [ ] Changed documentation has been checked separately for formatting and links.
+- [ ] The build succeeds (`pnpm run build`).
+- [ ] Relevant documentation is updated.
+- [ ] Appropriate tests cover the change.
+- [ ] The PR description explains the changes and any verification limitations.
+- [ ] Code follows the project's conventions and best practices.
 
-### 版本号规范
+### 5. Code Review
 
-使用 [Semantic Versioning](https://semver.org/):
+- Respond to review comments.
+- Make necessary revisions.
+- Ensure required CI checks pass before merging.
 
-- **MAJOR** (X.0.0): 不兼容的 API 变更
-- **MINOR** (0.X.0): 向后兼容的功能新增
-- **PATCH** (0.0.X): 向后兼容的 Bug 修复
+## Release Process
 
-### 发布步骤
+### Versioning
 
-1. **更新版本号**:
+Use [Semantic Versioning](https://semver.org/):
+
+- **MAJOR** (`X.0.0`): Incompatible API changes
+- **MINOR** (`0.X.0`): Backward-compatible functionality
+- **PATCH** (`0.0.X`): Backward-compatible fixes
+
+### Release Steps
+
+Releases are maintainer actions and publish a public package. Begin with a clean,
+reviewed working tree and the correct npm account. The commands below describe
+the workflow; they do not authorize a contributor to publish.
+
+1. **Update the version**:
+
    ```bash
-   # 自动更新版本号
-   pnpm version patch  # 或 minor, major
+   pnpm version patch --no-git-tag-version
    ```
 
-2. **运行完整测试**:
+   Choose `minor` or `major` when appropriate. This workflow deliberately disables
+   automatic version commits/tags so verification happens before tagging. Review
+   the changed manifest and any lockfile changes.
+
+2. **Run the full checks**:
+
    ```bash
    pnpm run check
    pnpm run test
    pnpm run test:e2e
    ```
 
-3. **构建和验证**:
+   Run relevant provider suites as well. Inspect E2E results and logs, including
+   the script exit-code caveat under [Testing Guide](#testing-guide).
+
+3. **Build and inspect the package contents**:
+
    ```bash
    pnpm run build
    npm pack --dry-run
    ```
 
-4. **发布到 npm**:
+   Review [package.json](./package.json)'s `files` list and verify all required
+   runtime files are included. The package has a `prepublishOnly` build hook;
+   a dry run is a packaging check, not proof of runtime correctness.
+
+4. **Commit the reviewed release changes and publish to npm**:
+
+   Create a release commit using a sentence-case conventional subject, such as
+   `chore(release): Prepare next release`, after reviewing and staging the actual
+   version changes. An authorized maintainer can then publish:
+
    ```bash
    npm publish
    ```
 
-5. **创建 Git 标签**:
+   The package is `@xiaohui-wang/mcpadvisor` and its configured access is public.
+   Confirm the intended version and package before publishing.
+
+5. **Create and push the matching Git tag**:
+
    ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
+   VERSION=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")
+   git tag "v$VERSION"
+   git push origin "v$VERSION"
    ```
 
-## 安全和质量检查清单
+   Ensure the tag points to the reviewed release commit and push that commit
+   through the repository's approved branch workflow. Do not reuse the original
+   guide's fixed `v1.0.0` example. If you instead used a version command that
+   already created a commit and tag, verify and push that existing tag rather
+   than creating it again.
 
-提交 PR 前的安全质量检查：
+## Security and Quality Checklist
 
-- [ ] 代码或文档中没有硬编码的 API 密钥、密码或令牌
-- [ ] 所有机密信息使用环境变量或 GitHub Secrets
-- [ ] 脚本返回适当的退出码（成功 0，失败 1+）
-- [ ] 测试保存/恢复环境变量以防止污染
-- [ ] E2E 测试使用智能等待机制而非固定超时
-- [ ] 验证测试结果内容质量，而不仅仅是数量
-- [ ] 脚本中使用相对路径以实现跨平台兼容性
-- [ ] 接口和类名不冲突（使用 `IClassName` 模式）
-- [ ] CI 超时适合容器操作（推荐 180s）
-- [ ] Docker 配置使用必需的环境变量，而非弱默认值
+Before submitting a PR:
 
-## 开发备忘录
+- [ ] No hardcoded API keys, passwords, or tokens appear in code or documentation.
+- [ ] Secrets come from environment variables or GitHub Secrets.
+- [ ] Scripts return zero on success and nonzero on failure.
+- [ ] Tests restore environment variables they modify.
+- [ ] E2E tests use readiness checks rather than fixed waits.
+- [ ] Assertions check result quality, not only quantity.
+- [ ] Paths are portable and do not hardcode a developer's home directory.
+- [ ] Interface and class names do not conflict.
+- [ ] CI timeouts account for container startup; the original guide recommends
+      up to 180 seconds where appropriate, not a universal test timeout.
+- [ ] Container configuration requires real credentials instead of weak defaults.
 
-- 始终添加必要的文件到 package.json 和项目结构
-- 使用适当的路径解析以实现跨平台兼容性
-- 确保配置文件和依赖项包含在构建中
+## Development Reminders
 
-## 获取帮助
+- Update project structure and package metadata when adding required files.
+- Use appropriate path resolution across platforms and execution contexts.
+- Verify that required configuration files and dependencies are available in the
+  built and packaged application.
 
-如果您在贡献过程中遇到问题：
+## Getting Help
 
-1. 查看 [快速开始指南](docs/GETTING_STARTED.md)
-2. 查看 [故障排除文档](docs/TROUBLESHOOTING.md)
-3. 搜索现有的 [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
-4. 创建新的 Issue 描述您遇到的问题
+1. Read the [Quick Start Guide](./docs/GETTING_STARTED.md).
+2. Check the [Troubleshooting Guide](./docs/TROUBLESHOOTING.md).
+3. Consult the [Architecture Guide](./docs/ARCHITECTURE.md) and
+   [Technical Reference](./docs/TECHNICAL_REFERENCE.md).
+4. Search existing [GitHub issues](https://github.com/istarwyh/mcpadvisor/issues).
+5. Open an issue with a clear description and redacted reproduction details if
+   the existing documentation does not resolve the problem.
 
-感谢您对 MCP Advisor 的贡献！您的参与使这个项目变得更好。
+Thank you for helping improve MCP Advisor!

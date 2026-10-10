@@ -1,10 +1,10 @@
 # Troubleshooting
 
-[English](./TROUBLESHOOTING.en.md) | [简体中文](./TROUBLESHOOTING.md)
+[English](./TROUBLESHOOTING.md) | [Simplified Chinese](./TROUBLESHOOTING.zh-CN.md)
 
 This document provides solutions and diagnostic techniques for common MCP Advisor issues.
 
-> Scope: This English edition translates the Chinese troubleshooting guide and corrects verified differences from the current source. Examples marked illustrative or historical require adaptation; they are not supported configuration instructions. Check the [Getting Started Guide](./GETTING_STARTED.en.md), [Technical Reference](./TECHNICAL_REFERENCE.en.md), and current source before applying an example. Redact secrets before sharing environment variables or logs.
+> Scope: This English edition translates the Chinese troubleshooting guide and corrects verified differences from the current source. Examples marked illustrative or historical require adaptation; they are not supported configuration instructions. Check the [Getting Started Guide](./GETTING_STARTED.md), [Technical Reference](./TECHNICAL_REFERENCE.md), and current source before applying an example. Redact secrets before sharing environment variables or logs.
 
 ## Current Implementation Caveats
 
@@ -367,6 +367,7 @@ export TRANSPORT_TYPE=sse
 **Solutions**:
 
 1. Understand configuration precedence:
+
    - The source guide gives the general ordering: command-line arguments > environment variables > configuration files > defaults. Verify each setting rather than treating this as universal. [`src/index.ts`](../src/index.ts) applies CLI > environment > default for transport mode, host, and port. [`loadConfig()`](../src/config/configLoader.ts) returns early when loading an existing custom configuration file, before its separate environment-override step.
 
 2. Check the configuration file format:
@@ -377,6 +378,7 @@ export TRANSPORT_TYPE=sse
    ```
 
 3. Inspect which code loads the affected setting. The following preserves the source guide's custom-config example, but it does not make `CONFIG_FILE` the sole source for every setting; transport mode is selected separately in `src/index.ts`:
+
    ```bash
    # Clear the environment variable
    unset TRANSPORT_TYPE
@@ -476,6 +478,7 @@ export TRANSPORT_TYPE=sse
    ```
 
 3. **Subject line too long**:
+
    ```bash
    # ❌ Incorrect (more than 72 characters)
    feat: Add comprehensive vector similarity search functionality with Meilisearch integration and fallback mechanisms
@@ -694,7 +697,7 @@ If you cannot resolve the issue, try these resources:
 
 Related documentation:
 
-- [Getting Started Guide](./GETTING_STARTED.en.md) - Installation, configuration, and basic usage
-- [Technical Reference](./TECHNICAL_REFERENCE.en.md) - Advanced technical features and configuration
-- [Architecture](./ARCHITECTURE.en.md) - System architecture and component details
-- [Contributing Guide](../CONTRIBUTING.en.md) - Development environment setup and code contributions
+- [Getting Started Guide](./GETTING_STARTED.md) - Installation, configuration, and basic usage
+- [Technical Reference](./TECHNICAL_REFERENCE.md) - Advanced technical features and configuration
+- [Architecture](./ARCHITECTURE.md) - System architecture and component details
+- [Contributing Guide](../CONTRIBUTING.md) - Development environment setup and code contributions

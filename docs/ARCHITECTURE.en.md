@@ -1,6 +1,6 @@
 # System Architecture
 
-[English](./ARCHITECTURE.en.md) | [简体中文](./ARCHITECTURE.md)
+[English](./ARCHITECTURE.md) | [Simplified Chinese](./ARCHITECTURE.zh-CN.md)
 
 This guide describes MCP Advisor's architecture, core components, and data flow.
 It follows the Chinese guide's topics while correcting descriptions that no
@@ -196,7 +196,7 @@ thresholds. An empty final result list remains possible.
 
 The server registers recommendation and installation-guidance tool handlers and
 log-reading resources. The CLI reads `TRANSPORT_TYPE`, `SERVER_PORT`,
-`SERVER_HOST`, and `ENDPOINT`; see the [Quick Start Guide](./GETTING_STARTED.en.md)
+`SERVER_HOST`, and `ENDPOINT`; see the [Quick Start Guide](./GETTING_STARTED.md)
 for current settings. HTTP health checks do not apply to stdio. Keep diagnostic
 console output off the stdio protocol stream. HTTP binding is not authentication;
 use localhost unless suitable network restrictions and authentication are in
@@ -322,7 +322,7 @@ retrieval, and result processing. Reading the provider and reranker implementati
 is important when extending the system: conceptual examples in older documents
 may differ from the current API or defaults.
 
-- [Technical Reference](./TECHNICAL_REFERENCE.en.md): Details and current-source caveats
-- [Quick Start Guide](./GETTING_STARTED.en.md): Installation, configuration, and use
-- [Contributing Guide](../CONTRIBUTING.en.md): Development and contribution workflow
-- [Troubleshooting](./TROUBLESHOOTING.en.md): Diagnosis and known documentation drift
+- [Technical Reference](./TECHNICAL_REFERENCE.md): Details and current-source caveats
+- [Quick Start Guide](./GETTING_STARTED.md): Installation, configuration, and use
+- [Contributing Guide](../CONTRIBUTING.md): Development and contribution workflow
+- [Troubleshooting](./TROUBLESHOOTING.md): Diagnosis and known documentation drift

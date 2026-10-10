@@ -1,38 +1,54 @@
-# MCP Advisor 快速开始指南
+# MCP Advisor Quick Start Guide
 
-[English](./GETTING_STARTED.en.md) | [简体中文](./GETTING_STARTED.md)
+[English](./GETTING_STARTED.md) | [Simplified Chinese](./GETTING_STARTED.zh-CN.md)
 
-这是 MCP Advisor 的完整安装、配置和使用指南，让您快速上手并充分利用 MCP Advisor 的功能。
+This guide covers installing, configuring, and using MCP Advisor to help you get
+started and make the most of its features.
 
-## 目录
+This is the English translation of the [Chinese guide](./GETTING_STARTED.zh-CN.md).
+English [technical reference](./TECHNICAL_REFERENCE.md) and
+[troubleshooting](./TROUBLESHOOTING.md) guides are also available. English [architecture](./ARCHITECTURE.md) and
+[contribution](../CONTRIBUTING.md) guides are available too. Runtime messages
+may still contain Chinese.
 
-- [安装方式](#安装方式)
-  - [通过 MCP 配置集成（推荐）](#通过-mcp-配置集成推荐)
-  - [NPM 包安装](#npm-包安装)
-  - [全局安装](#全局安装)
-  - [直接使用](#直接使用)
-  - [通过 Smithery 安装](#通过-smithery-安装)
-- [基本使用](#基本使用)
-  - [寻找 MCP 服务器](#寻找-mcp-服务器)
-  - [理解搜索结果](#理解搜索结果)
-  - [与 AI 助手集成](#与-ai-助手集成)
-- [配置选项](#配置选项)
-  - [环境变量配置](#环境变量配置)
-  - [配置文件设置](#配置文件设置)
-  - [传输方式配置](#传输方式配置)
-- [使用技巧](#使用技巧)
-  - [高效查询技巧](#高效查询技巧)
-  - [高级搜索选项](#高级搜索选项)
-- [常见问题排查](#常见问题排查)
-  - [安装问题](#安装问题)
-  - [配置问题](#配置问题)
-  - [运行时问题](#运行时问题)
+## Translation and Current-Source Updates
 
-## 安装方式
+This English guide follows the Chinese guide's structure, with source-verified
+corrections to configuration, response fields, logging, and verification steps.
+These corrections are documented in the relevant sections; the Chinese original
+is unchanged. The instructions were checked against source, not exercised in a
+full installation or runtime test. Advanced reference examples marked historical
+or illustrative are not supported configuration recipes.
 
-### 通过 MCP 配置集成（推荐）
+## Contents
 
-最快的方式是通过 MCP 配置集成 MCP Advisor：
+- [Installation Methods](#installation-methods)
+  - [Integrate Through MCP Configuration (Recommended)](#integrate-through-mcp-configuration-recommended)
+  - [NPM Package Installation](#npm-package-installation)
+  - [Global Installation](#global-installation)
+  - [Run Directly](#run-directly)
+  - [Install Through Smithery](#install-through-smithery)
+- [Basic Usage](#basic-usage)
+  - [Find MCP Servers](#find-mcp-servers)
+  - [Understand Search Results](#understand-search-results)
+  - [Integrate with AI Assistants](#integrate-with-ai-assistants)
+- [Configuration Options](#configuration-options)
+  - [Environment Variables](#environment-variables)
+  - [Configuration Files](#configuration-files)
+  - [Transport Configuration](#transport-configuration)
+- [Usage Tips](#usage-tips)
+  - [Write Effective Queries](#write-effective-queries)
+  - [Advanced Search Options](#advanced-search-options)
+- [Common Troubleshooting](#common-troubleshooting)
+  - [Installation Issues](#installation-issues)
+  - [Configuration Issues](#configuration-issues)
+  - [Runtime Issues](#runtime-issues)
+
+## Installation Methods
+
+### Integrate Through MCP Configuration (Recommended)
+
+The fastest way to integrate MCP Advisor is through MCP configuration:
 
 ```json
 {
@@ -45,129 +61,140 @@
 }
 ```
 
-将此配置添加到您的 AI 助手的 MCP 设置文件中：
+Add this configuration to your AI assistant's MCP settings file:
 
-- **MacOS/Linux**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **macOS (Claude Desktop)**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%AppData%\Claude\claude_desktop_config.json`
 
-配置完成后重启您的 AI 助手即可使用。
+For Linux or a different MCP client, use that client's documented settings path.
+Restart your AI assistant after configuring it.
 
-### NPM 包安装
+### NPM Package Installation
 
-如果您需要在项目中集成 MCP Advisor：
+To integrate MCP Advisor into a project:
 
 ```bash
-# 使用 npm
+# Using npm
 npm install @xiaohui-wang/mcpadvisor
 
-# 使用 yarn
+# Using yarn
 yarn add @xiaohui-wang/mcpadvisor
 
-# 使用 pnpm
+# Using pnpm
 pnpm add @xiaohui-wang/mcpadvisor
 ```
 
-### 全局安装
+### Global Installation
 
-全局安装可以在任何地方使用 `mcpadvisor` 命令：
+A global installation makes the `mcpadvisor` command available from any directory:
 
 ```bash
-# 全局安装
+# Install globally
 npm install -g @xiaohui-wang/mcpadvisor
 
-# 运行
+# Run
 mcpadvisor
 ```
 
-### 直接使用
+### Run Directly
 
-无需安装直接使用：
+Run without a separate installation step:
 
 ```bash
-# 使用 npx 运行（无需安装）
+# Run using npx (no separate installation required)
 npx @xiaohui-wang/mcpadvisor
 
-# 或者使用 npx 运行特定版本
+# Or select a version with npx
 npx @xiaohui-wang/mcpadvisor@latest
 ```
 
-### 通过 Smithery 安装
+### Install Through Smithery
 
-使用 [Smithery](https://smithery.ai/server/@istarwyh/mcpadvisor) 自动安装到 Claude Desktop：
+Use [Smithery](https://smithery.ai/server/@istarwyh/mcpadvisor) to install
+MCP Advisor for Claude Desktop automatically:
 
 ```bash
 npx -y @smithery/cli install @istarwyh/mcpadvisor --client claude
 ```
 
-## 基本使用
+## Basic Usage
 
-### 寻找 MCP 服务器
+### Find MCP Servers
 
-MCP Advisor 允许您通过自然语言查询发现和使用 MCP 服务器。以下是使用方法：
+MCP Advisor lets you discover and use MCP servers through natural-language
+queries. Here are some examples:
 
-#### 1. 直接查询
-向您的 AI 助手询问特定任务的 MCP 服务器：
+#### 1. Direct Queries
 
+Ask your AI assistant for MCP servers suited to a particular task:
+
+```text
+Which MCP servers can be used for vector database integration?
 ```
-哪些 MCP 服务器可以用于向量数据库集成？
-```
 
-```
+```text
 Find MCP servers for natural language processing
 ```
 
-#### 2. 功能导向查询
-请求具有特定功能的服务器：
+#### 2. Feature-Oriented Queries
 
-```
-找一个用于图像生成的 MCP 服务器
+Ask for servers with specific capabilities:
+
+```text
+Find an MCP server for image generation
 ```
 
-```
+```text
 I need an MCP server for image generation
 ```
 
-#### 3. 任务导向查询
-描述您想要完成的任务：
+#### 3. Task-Oriented Queries
 
-```
-我需要分析金融数据，应该使用哪个 MCP 服务器？
+Describe the task you want to complete:
+
+```text
+I need to analyze financial data. Which MCP server should I use?
 ```
 
-```
+```text
 I need to analyze financial data, which MCP server should I use?
 ```
 
-### 理解搜索结果
+### Understand Search Results
 
-MCP Advisor 返回的结果包含以下信息：
+MCP Advisor returns results containing the following information:
 
-- **服务器名称**: MCP 服务器的名称
-- **描述**: 服务器功能的简要说明
-- **GitHub URL**: 服务器仓库的链接
-- **安装说明**: 如何安装和配置服务器
-- **相关性评分**: 服务器与您查询的匹配程度
+- **Server name**: The name of the MCP server
+- **Description**: A brief description of the server's capabilities
+- **GitHub URL**: A link to the server's repository
+- **Relevance score**: How closely the server matches your query
 
-#### 结果示例
+The recommendation tool currently formats these fields as text. The following
+JSON illustrates the underlying server data, not the exact MCP wire response.
+The `sourceUrl` field follows [the current response type](../src/types/index.ts);
+the Chinese source guide uses the older `github_url` example.
+
+#### Example Result
 
 ```json
 [
   {
     "title": "NLP Toolkit",
     "description": "Comprehensive natural language processing toolkit with sentiment analysis, entity recognition, and text summarization capabilities.",
-    "github_url": "https://github.com/example/nlp-toolkit",
+    "sourceUrl": "https://github.com/example/nlp-toolkit",
     "similarity": 0.92
   }
 ]
 ```
 
-### 与 AI 助手集成
+### Integrate with AI Assistants
 
 #### Claude Desktop
 
-1. **配置 MCP Advisor**：
-   
-   将以下配置添加到 `claude_desktop_config.json`：
+1. **Configure MCP Advisor**:
+
+   Add the following configuration to `claude_desktop_config.json`:
+
    ```json
    {
      "mcpServers": {
@@ -179,262 +206,276 @@ MCP Advisor 返回的结果包含以下信息：
    }
    ```
 
-2. **重启 Claude Desktop**
+2. **Restart Claude Desktop**
 
-3. **开始使用**：
+3. **Start using it**:
+
+   ```text
+   Claude, please help me find an MCP server for database operations
    ```
-   Claude，请帮我找一个用于数据库操作的 MCP 服务器
-   ```
 
-#### 其他 AI 助手
+#### Other AI Assistants
 
-对于支持 Model Context Protocol 的其他 AI 助手：
+For other AI assistants that support the Model Context Protocol:
 
-1. **全局安装 MCP Advisor**：
+1. **Install MCP Advisor globally**:
+
    ```bash
    npm install -g @xiaohui-wang/mcpadvisor
    ```
 
-2. **配置助手使用 MCP Advisor 作为服务器**
+2. **Configure the assistant to use MCP Advisor as a server**
 
-3. **参考您的助手文档了解具体的 MCP 集成步骤**
+3. **Consult your assistant's documentation for its specific MCP integration steps**
 
-## 配置选项
+## Configuration Options
 
-### 环境变量配置
+### Environment Variables
 
-MCP Advisor 可以使用以下环境变量进行配置。所有环境变量都是可选的，除非另有说明。
+The tables below describe settings read by the current
+[CLI entry point](../src/index.ts), [logger](../src/utils/logger.ts), and
+[configuration modules](../src/config/constants.ts). They correct stale settings
+in the Chinese source guide.
 
-#### 核心配置
+#### Core Configuration
 
-| 变量 | 描述 | 默认值 | 必需 |
-|------|------|--------|------|
-| `TRANSPORT_TYPE` | 传输方法 (stdio, sse, rest) | `stdio` | 否 |
-| `LOG_LEVEL` | 日志级别 (debug, info, warn, error) | `info` | 否 |
-| `DEBUG` | 启用调试日志 | `false` | 否 |
-| `ENABLE_FILE_LOGGING` | 启用文件日志 | `false` | 否 |
+| Variable              | Description                                         | Default  | Required |
+| --------------------- | --------------------------------------------------- | -------- | -------- |
+| `TRANSPORT_TYPE`      | Transport method (stdio, sse, rest)                 | `stdio`  | No       |
+| `LOG_LEVEL`           | Log level (debug, info, warn, error)                | `info`   | No       |
+| `ENABLE_FILE_LOGGING` | Enable file logging; create the log directory first | `false`  | No       |
+| `LOGS_DIR`            | Directory for `all.log` and `error.log`             | `./logs` | No       |
 
-#### HTTP 服务器配置（SSE/REST 传输）
+`DEBUG=true` alone does not enable the current logger. For debug file logging in
+a source checkout after building:
 
-| 变量 | 描述 | 默认值 | 必需 |
-|------|------|--------|------|
-| `SERVER_PORT` | HTTP 服务器端口 | `3000` | 否 |
-| `SERVER_HOST` | HTTP 服务器主机 | `localhost` | 否 |
-| `SSE_PATH` | SSE 端点路径 | `/sse` | 否 |
-| `MESSAGE_PATH` | 消息端点路径 | `/messages` | 否 |
-| `ENDPOINT` | REST 端点路径 | `/rest` | 否 |
-
-#### 搜索配置
-
-| 变量 | 描述 | 默认值 | 必需 |
-|------|------|--------|------|
-| `MIN_SIMILARITY` | 搜索结果的最小相似度分数 | `0.5` | 否 |
-| `MAX_RESULTS` | 返回的最大搜索结果数 | `10` | 否 |
-| `ENABLE_CACHE` | 启用搜索结果缓存 | `false` | 否 |
-| `CACHE_TTL` | 缓存结果的生存时间（秒） | `3600` | 否 |
-| `VECTOR_ENGINE_TYPE` | 向量引擎类型 (memory, oceanbase, meilisearch) | `memory` | 否 |
-
-#### API 配置
-
-| 变量 | 描述 | 默认值 | 必需 |
-|------|------|--------|------|
-| `COMPASS_API_BASE` | COMPASS API 的基础 URL | `https://registry.mcphub.io` | 否 |
-| `OCEANBASE_URL` | OceanBase 数据库连接字符串 | - | 使用 OceanBase 时必需 |
-
-#### Nacos Provider 配置
-
-如果您选择使用 Nacos 作为搜索提供者：
-
-| 环境变量 | 描述 | 默认值 | 必填 |
-|---------|------|--------|------|
-| `NACOS_SERVER_ADDR` | Nacos 服务器地址 | 无 | 是 |
-| `NACOS_NAMESPACE` | Nacos 命名空间 | `public` | 否 |
-| `NACOS_GROUP` | Nacos 分组 | `DEFAULT_GROUP` | 否 |
-| `NACOS_USERNAME` | Nacos 用户名 | 无 | 如果 Nacos 需要认证 |
-| `NACOS_PASSWORD` | Nacos 密码 | 无 | 如果 Nacos 需要认证 |
-| `MCP_SERVICE_NAME` | MCP 服务在 Nacos 中的名称 | `mcp-servers` | 否 |
-
-#### 日志配置
-
-| 变量 | 描述 | 默认值 | 必需 |
-|------|------|--------|------|
-| `LOG_DIR` | 日志文件目录 | `./logs` | 否 |
-
-### 配置文件设置
-
-您也可以使用配置文件进行设置。创建 `.mcpadvisorrc.json` 文件：
-
-```json
-{
-  "transport": "stdio",
-  "port": 3000,
-  "enableFileLogging": true,
-  "logLevel": "info",
-  "vectorEngineType": "memory",
-  "search": {
-    "provider": "hybrid",
-    "limit": 5,
-    "minSimilarity": 0.3
-  }
-}
+```bash
+mkdir -p logs
+ENABLE_FILE_LOGGING=true LOG_LEVEL=debug node build/index.js
 ```
 
-或者使用 `config/default.json`：
+#### HTTP Server Configuration (SSE/REST Transports)
 
-```json
-{
-  "server": {
-    "port": 3000,
-    "transportType": "stdio"
-  },
-  "search": {
-    "provider": "hybrid",
-    "limit": 5,
-    "minSimilarity": 0.3
-  }
-}
-```
+| Variable      | Description        | Default     | Required |
+| ------------- | ------------------ | ----------- | -------- |
+| `SERVER_PORT` | HTTP server port   | `3000`      | No       |
+| `SERVER_HOST` | HTTP server host   | `localhost` | No       |
+| `ENDPOINT`    | REST endpoint path | `/rest`     | No       |
 
-### 传输方式配置
+The CLI fixes the SSE path at `/sse`. It reads the `messagePath` command-line
+parameter, defaulting to `/messages`. The source guide's `SSE_PATH` and
+`MESSAGE_PATH` environment variables are not read by this entry point.
 
-MCP Advisor 支持多种传输方式：
+#### Search Configuration
 
-#### 1. Stdio Transport（默认）
-适用于命令行工具：
+[SearchService](../src/services/searchService.ts) defines defaults of `limit: 5`
+and `minSimilarity: 0.4`; programmatic callers can provide search options as
+shown under [Advanced Search Options](#advanced-search-options). The source
+guide's `MIN_SIMILARITY`, `MAX_RESULTS`, `ENABLE_CACHE`, and `CACHE_TTL`
+environment settings are not wired into this service and should not be used as
+configuration instructions.
+
+`VECTOR_ENGINE_TYPE` is read by the vector-engine implementation and defaults to
+`oceanbase` in [constants.ts](../src/config/constants.ts), rather than the
+source guide's `memory`. It is not a switch for selecting the CLI's provider
+list. The CLI initializes Meilisearch, Compass, and GetMCP, with Nacos conditional
+on its credentials and offline fallback managed by SearchService.
+
+#### API Configuration
+
+| Variable           | Description                          | Default                              | Required             |
+| ------------------ | ------------------------------------ | ------------------------------------ | -------------------- |
+| `COMPASS_API_BASE` | Base URL for the COMPASS API         | `https://registry.mcphub.io`         | No                   |
+| `GETMCP_API_URL`   | GetMCP server-list URL               | `https://getmcp.io/api/servers.json` | No                   |
+| `OCEANBASE_URL`    | OceanBase database connection string | None                                 | When using OceanBase |
+
+For local/cloud Meilisearch settings, see the English
+[Local Meilisearch Guide](./MEILISEARCH_LOCAL.md) and
+[current configuration source](../src/config/meilisearch.ts).
+
+#### Nacos Provider Configuration
+
+The CLI only initializes Nacos when all three connection credentials below are
+set. This corrects the source guide's conditional credential requirements.
+
+| Environment Variable | Description                                | Default      | Required |
+| -------------------- | ------------------------------------------ | ------------ | -------- |
+| `NACOS_SERVER_ADDR`  | Nacos server address                       | None         | Yes      |
+| `NACOS_USERNAME`     | Nacos username                             | None         | Yes      |
+| `NACOS_PASSWORD`     | Nacos password                             | None         | Yes      |
+| `MCP_HOST`           | MCP host passed to Nacos provider          | `localhost`  | No       |
+| `MCP_PORT`           | MCP port passed to Nacos provider          | `3000`       | No       |
+| `AUTH_TOKEN`         | Auth token passed to Nacos provider        | Empty string | No       |
+| `NACOS_DEBUG`        | Enable Nacos debug mode when set to `true` | `false`      | No       |
+
+The source guide's `NACOS_NAMESPACE`, `NACOS_GROUP`, and `MCP_SERVICE_NAME`
+settings are not passed by this CLI entry point. Use the source-linked
+configuration above rather than assuming those variables change its behavior.
+
+#### Logging Configuration
+
+`LOGS_DIR` selects the logger's output directory. `LOG_DIR` (or `LOGS_DIR` as its
+fallback) instead selects directories for the
+[log-reading MCP resource](../src/services/core/server/resources/LogResourceHandler.ts).
+These are distinct settings, unlike the source guide's generic `LOG_DIR` row.
+
+### Configuration Files
+
+The current CLI does not automatically load `.mcpadvisorrc.json`.
+The source guide's `.mcpadvisorrc.json` and `config/default.json` transport/search
+examples are historical examples, not working alternatives to the CLI settings
+above.
+
+[configLoader.ts](../src/config/configLoader.ts) is used by the data-loading
+service and supports a custom `CONFIG_FILE` plus MCP source overrides. This does
+not mean it configures the CLI's transport or provider list. Consult that module
+and [config/default.json](../config/default.json) when changing data sources.
+
+### Transport Configuration
+
+MCP Advisor supports multiple transports. The commands below assume a source
+checkout with dependencies installed and `pnpm run build` already completed:
+
+#### 1. Stdio Transport (Default)
+
+Suitable for command-line tools:
 
 ```bash
 node build/index.js
 ```
 
 #### 2. SSE Transport
-适用于 Web 集成：
+
+Suitable for web integration:
 
 ```bash
-TRANSPORT_TYPE=sse SERVER_PORT=3000 DEBUG=true ENABLE_FILE_LOGGING=true node build/index.js
+TRANSPORT_TYPE=sse SERVER_PORT=3000 node build/index.js
 ```
 
 #### 3. REST Transport
-提供 RESTful 端点：
+
+Provides RESTful endpoints:
 
 ```bash
 TRANSPORT_TYPE=rest SERVER_PORT=8080 ENDPOINT=/api/mcp node build/index.js
 ```
 
-#### 生产配置示例
+#### REST with File Logging
+
+This example binds to localhost. The server has no built-in authentication layer;
+binding to all interfaces as in the Chinese source guide is not production
+hardening. Keep it local unless you have appropriate network restrictions and an
+authenticated reverse proxy.
 
 ```bash
-TRANSPORT_TYPE=rest SERVER_PORT=8080 SERVER_HOST=0.0.0.0 LOG_LEVEL=warn ENABLE_FILE_LOGGING=true node build/index.js
+mkdir -p logs
+TRANSPORT_TYPE=rest SERVER_PORT=8080 SERVER_HOST=localhost LOG_LEVEL=warn ENABLE_FILE_LOGGING=true node build/index.js
 ```
 
-## 使用技巧
+## Usage Tips
 
-### 高效查询技巧
+### Write Effective Queries
 
-为了从 MCP Advisor 获得最佳结果：
+To get the best results from MCP Advisor:
 
-#### 1. 具体化描述
-包含关键功能需求：
+#### 1. Be Specific
 
+Include the capabilities you need:
+
+```text
+Find an MCP server for OCR that supports multiple languages
 ```
-找一个支持多语言的 OCR MCP 服务器
-```
 
-```
+```text
 Find an MCP server for OCR with support for multiple languages
 ```
 
-#### 2. 包含领域上下文
-提及您的应用领域：
+#### 2. Include Domain Context
 
-```
-需要一个具有合规功能的金融数据分析 MCP 服务器
+Mention your application domain:
+
+```text
+I need an MCP server for financial data analysis with compliance features
 ```
 
-```
+```text
 MCP server for financial data analysis with regulatory compliance features
 ```
 
-#### 3. 指定技术要求
-包含任何技术限制：
+#### 3. Specify Technical Requirements
 
-```
-找一个轻量级的离线图像处理 MCP 服务器
+Include any technical constraints:
+
+```text
+Find a lightweight MCP server for offline image processing
 ```
 
-```
+```text
 Find a lightweight MCP server for image processing that works offline
 ```
 
-### 高级搜索选项
+### Advanced Search Options
 
-当以编程方式使用 MCP Advisor 时，您可以指定其他搜索参数：
+When using MCP Advisor programmatically, you can specify additional search
+parameters. This uses the current public `SearchParams`/`SearchOptions` types;
+the source guide's `includeMetadata` option is not defined in those types:
 
 ```typescript
-const results = await searchService.search("vector database", {
-  limit: 10,
-  minSimilarity: 0.2,
-  includeMetadata: true
-});
+const results = await searchService.search(
+  { taskDescription: 'vector database' },
+  { limit: 10, minSimilarity: 0.2 },
+);
 ```
 
-## 常见问题排查
+## Common Troubleshooting
 
-### 安装问题
+### Installation Issues
 
-#### 1. 权限错误
+#### 1. Permission Errors
 
-如果遇到权限错误，请尝试使用管理员权限：
+Avoid using administrator privileges to work around a global-install problem.
+Use the MCP configuration's `npx` invocation above, or a user-writable Node.js
+installation. This replaces the source guide's `sudo npm install` workaround.
+
+#### 2. Version Conflicts
+
+Read the package manager's conflict details and use a compatible dependency
+version. Do not use `--force` as the default fix; it can bypass compatibility
+checks. The source guide's force-install example is not recommended here.
+
+#### 3. Command Not Found
+
+For a global npm installation, inspect the prefix:
 
 ```bash
-# macOS/Linux
-sudo npm install -g @xiaohui-wang/mcpadvisor
-
-# Windows (以管理员身份运行命令提示符)
-npm install -g @xiaohui-wang/mcpadvisor
+npm prefix -g
 ```
 
-#### 2. 版本冲突
+On macOS/Linux, the command directory is the prefix's `bin` subdirectory. On
+Windows, it is the prefix itself. Add the appropriate directory to PATH using
+your operating system's settings, then reopen the terminal. This replaces the
+source guide's `npm bin -g` command, which newer npm versions removed.
 
-如果与其他包有版本冲突：
+### Configuration Issues
 
-```bash
-npm install @xiaohui-wang/mcpadvisor --force
-```
+#### 1. MCP Configuration Has No Effect
 
-#### 3. 找不到命令
-
-确保全局 npm bin 目录在您的 PATH 中：
-
-```bash
-# 查看 npm 全局路径
-npm bin -g
-
-# 添加到 PATH（macOS/Linux）
-export PATH="$PATH:$(npm bin -g)"
-
-# Windows
-set PATH=%PATH%;%APPDATA%\npm
-```
-
-### 配置问题
-
-#### 1. MCP 配置不生效
-
-检查配置文件路径：
+Check the configuration file path:
 
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%AppData%\Claude\claude_desktop_config.json`
 
-确保 JSON 格式正确：
+On macOS, with Python available, check that the JSON is valid
+(use your actual settings path on other platforms):
 
 ```bash
-# 验证 JSON 格式
-cat ~/.../claude_desktop_config.json | python -m json.tool
+# Validate JSON formatting
+python -m json.tool "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 ```
 
-#### 2. 环境变量不生效
+#### 2. Environment Variables Have No Effect
 
-确认环境变量设置：
+Confirm your environment variable settings:
 
 ```bash
 # Linux/macOS
@@ -446,76 +487,79 @@ echo %TRANSPORT_TYPE%
 set TRANSPORT_TYPE=sse
 ```
 
-### 运行时问题
+### Runtime Issues
 
-#### 1. 连接被拒绝
+#### 1. Connection Refused
 
-确保服务器运行在指定端口并检查防火墙设置：
+Make sure the server is running on the specified port and check your firewall
+settings:
 
 ```bash
-# 检查端口占用
+# Check port usage
 netstat -an | grep 3000
 lsof -i :3000
 
-# 检查服务状态
+# Check service status
 curl http://localhost:3000/health
 ```
 
-#### 2. 搜索无结果
+#### 2. No Search Results
 
-尝试更通用的查询：
+Try a more general query:
 
-```
-# 从具体查询
+```text
+# Change a specific query
 "advanced machine learning vector database with GPU acceleration"
 
-# 改为通用查询  
-"machine learning" 或 "vector database"
+# To a more general query
+"machine learning" or "vector database"
 ```
 
-检查网络连接：
+Check your network connection:
 
 ```bash
-# 测试外部 API 连接
-curl -I https://api.getmcp.org
+# Test connectivity to external APIs
+curl -I https://getmcp.io/api/servers.json
 ping registry.mcphub.io
 ```
 
-#### 3. 性能问题
+#### 3. Performance Issues
 
-考虑以下优化：
+Consider the following optimizations:
 
-- 使用更具体的搜索词
-- 检查服务器资源（CPU/内存）
-- 启用缓存：`ENABLE_CACHE=true`
-- 调整搜索限制：`MAX_RESULTS=5`
+- Use more specific search terms
+- Check server resources (CPU/memory)
+- For programmatic callers, adjust the `limit` search option
+- Do not rely on the source guide's `ENABLE_CACHE` or `MAX_RESULTS` variables;
+  they are not read by the search service
 
-### 验证安装
+### Verify the Installation
 
-运行以下命令验证安装：
+The CLI has no explicit `--version` or `--help` handling, so the source guide's
+commands are not reliable installation checks. Instead, restart your configured
+MCP client, confirm that it lists MCP Advisor's `recommend-mcp-servers` tool,
+and run a query from [Basic Usage](#basic-usage).
+
+For a built source checkout using SSE or REST, the HTTP server exposes `/health`:
 
 ```bash
-# 检查版本
-mcpadvisor --version
-
-# 或者
-npx @xiaohui-wang/mcpadvisor --version
-
-# 测试基本功能
-mcpadvisor --help
+curl http://localhost:3000/health
 ```
 
-如果显示版本号和帮助信息，则表示安装成功。
+Use the port you configured. This health endpoint does not apply to stdio
+transport, and a successful health response alone does not verify external
+search providers.
 
 ---
 
-如果您遇到本指南未涵盖的问题，请：
+If you encounter a problem that this guide does not cover:
 
-1. 查看 [故障排除文档](./TROUBLESHOOTING.md)
-2. 检查 [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
-3. 创建新的 Issue 寻求帮助
+1. Read the [Troubleshooting Guide](./TROUBLESHOOTING.md)
+2. Check [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
+3. Open a new issue to ask for help
 
-更多高级配置和技术细节，请参阅：
-- [技术参考手册](./TECHNICAL_REFERENCE.md)
-- [架构文档](./ARCHITECTURE.md)
-- [贡献指南](../CONTRIBUTING.md)
+For advanced configuration and technical details, see:
+
+- [Technical Reference](./TECHNICAL_REFERENCE.md)
+- [Architecture Documentation](./ARCHITECTURE.md)
+- [Contributing Guide](../CONTRIBUTING.md)

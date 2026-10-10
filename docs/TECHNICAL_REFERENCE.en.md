@@ -1,6 +1,6 @@
 # MCP Advisor Technical Reference
 
-[English](./TECHNICAL_REFERENCE.en.md) | [简体中文](./TECHNICAL_REFERENCE.md)
+[English](./TECHNICAL_REFERENCE.md) | [Simplified Chinese](./TECHNICAL_REFERENCE.zh-CN.md)
 
 > Translation scope: This English counterpart preserves every section of the Chinese reference, but corrects source-confirmed configuration drift. Conceptual code examples inherited from the original are explicitly labeled below; they are not validated current APIs or runnable recipes.
 
@@ -14,7 +14,7 @@ Configuration blocks below use POSIX shell `export` statements. Set equivalent
 environment values in your MCP client on other platforms; the CLI does not
 automatically load a `.env` file.
 
-For practical startup instructions, use the [Quick Start Guide](./GETTING_STARTED.en.md).
+For practical startup instructions, use the [Quick Start Guide](./GETTING_STARTED.md).
 
 This document details MCP Advisor's technical implementation, search providers, advanced features, and configuration options for developers who need deep integration or customization.
 
@@ -1082,7 +1082,7 @@ The Chinese reference describes `SEARCH_PROVIDER`, `hybrid`, and sequential `fal
 
 This technical reference provides in-depth technical details about MCP Advisor. For more information, see:
 
-- [Quick Start Guide](./GETTING_STARTED.en.md) - Installation and basic usage
-- [Architecture](./ARCHITECTURE.en.md) - Detailed system architecture
-- [Contributing Guide](../CONTRIBUTING.en.md) - Developer guide
-- [Troubleshooting](./TROUBLESHOOTING.en.md) - Solutions to common problems
+- [Quick Start Guide](./GETTING_STARTED.md) - Installation and basic usage
+- [Architecture](./ARCHITECTURE.md) - Detailed system architecture
+- [Contributing Guide](../CONTRIBUTING.md) - Developer guide
+- [Troubleshooting](./TROUBLESHOOTING.md) - Solutions to common problems
