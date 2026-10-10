@@ -27,7 +27,7 @@ LIGHTNING="⚡"
 STOP="🛑"
 
 # 配置变量
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 MCP_INSPECTOR_PORT=6274
 MCP_PROXY_PORT=6277
 MEILISEARCH_PORT=7700
@@ -172,26 +172,6 @@ check_port() {
     return 0
 }
 
-# 清理MCP Inspector相关端口
-cleanup_inspector_ports() {
-    log_step "清理 MCP Inspector 端口..."
-    
-    # 清理主端口6274和代理端口6277
-    for port in $MCP_INSPECTOR_PORT $MCP_PROXY_PORT; do
-        local pids=$(lsof -Ti :$port 2>/dev/null || true)
-        if [[ -n "$pids" ]]; then
-            verbose_log "清理端口 $port 上的进程: $pids"
-            kill -9 $pids 2>/dev/null || true
-        fi
-    done
-    
-    # 额外清理inspector相关进程
-    pkill -f "inspector" 2>/dev/null || true
-    
-    sleep 2
-    log_success "MCP Inspector 端口清理完成"
-}
-
 # 等待端口可用
 wait_for_port() {
     local port=$1
@@ -207,7 +187,7 @@ wait_for_port() {
             return 1
         fi
         sleep 1
-        ((count++))
+        count=$((count + 1))
         if [[ $((count % 5)) -eq 0 ]]; then
             verbose_log "等待 $name 启动... (${count}s)"
         fi
@@ -231,7 +211,7 @@ wait_for_health() {
             return 1
         fi
         sleep 1
-        ((count++))
+        count=$((count + 1))
         if [[ $((count % 5)) -eq 0 ]]; then
             verbose_log "等待 $name 健康检查... (${count}s)"
         fi
@@ -259,7 +239,7 @@ cleanup() {
         local count=0
         while kill -0 "$INSPECTOR_PID" 2>/dev/null && [[ $count -lt 10 ]]; do
             sleep 1
-            ((count++))
+            count=$((count + 1))
         done
         # 如果还没退出，强制kill
         if kill -0 "$INSPECTOR_PID" 2>/dev/null; then
@@ -276,7 +256,7 @@ cleanup() {
             local count=0
             while kill -0 "$MEILISEARCH_PID" 2>/dev/null && [[ $count -lt 5 ]]; do
                 sleep 1
-                ((count++))
+                count=$((count + 1))
             done
             # 如果还没退出，强制kill
             if kill -0 "$MEILISEARCH_PID" 2>/dev/null; then
@@ -284,8 +264,7 @@ cleanup() {
             fi
         fi
         
-        # 额外清理 Meilisearch 进程
-        pkill -f "meilisearch" 2>/dev/null || true
+
     fi
     
     log_success "清理完成"
@@ -293,7 +272,9 @@ cleanup() {
 }
 
 # 设置清理陷阱
-trap cleanup EXIT INT TERM
+trap 'status=$?; cleanup; exit "$status"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 # 检查依赖
 check_dependencies() {
@@ -337,7 +318,7 @@ setup_environment() {
     # 生成认证令牌
     if [[ -z "${MCP_AUTH_TOKEN:-}" ]]; then
         export MCP_AUTH_TOKEN=$(openssl rand -hex 32 2>/dev/null || python3 -c "import secrets; print(secrets.token_hex(32))" 2>/dev/null || node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
-        verbose_log "生成 MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:0:8}..."
+        verbose_log "生成临时 MCP 认证令牌（不输出令牌）"
     fi
     
     # 设置 Meilisearch 环境变量
@@ -428,12 +409,9 @@ start_meilisearch() {
 start_inspector() {
     log_step "启动 MCP Inspector..."
     
-    # 先清理端口
-    cleanup_inspector_ports
-    
     # 检查端口可用性
-    check_port $MCP_INSPECTOR_PORT "MCP Inspector"
-    check_port $MCP_PROXY_PORT "MCP Proxy"
+    check_port $MCP_INSPECTOR_PORT "MCP Inspector" || exit 1
+    check_port $MCP_PROXY_PORT "MCP Proxy" || exit 1
     
     cd "$PROJECT_ROOT"
     
@@ -460,8 +438,7 @@ start_inspector() {
     # 等待启动
     if ! wait_for_port $MCP_INSPECTOR_PORT "MCP Inspector" 30; then
         log_error "MCP Inspector 启动失败"
-        cat "$inspector_log"
-        rm -f "$inspector_log"
+        log_error "Inspector 启动日志保留在本地临时目录，避免输出认证令牌"
         exit 1
     fi
     
@@ -478,7 +455,7 @@ start_inspector() {
         local extracted_token=$(grep -o "Session token: [a-f0-9]*" "$inspector_log" | sed 's/Session token: //' || true)
         if [[ -n "$extracted_token" ]]; then
             export MCP_AUTH_TOKEN="$extracted_token"
-            verbose_log "从 Inspector 输出中提取到令牌: ${MCP_AUTH_TOKEN:0:8}..."
+            verbose_log "已读取 Inspector 认证令牌（不输出令牌）"
         else
             verbose_log "无法提取令牌，使用生成的令牌"
         fi
@@ -494,7 +471,7 @@ start_inspector() {
     fi
     
     log_success "MCP Inspector 启动成功"
-    log_info "URL: http://localhost:$MCP_INSPECTOR_PORT/?MCP_PROXY_AUTH_TOKEN=$MCP_AUTH_TOKEN"
+    log_info "URL: http://localhost:$MCP_INSPECTOR_PORT"
 }
 
 # 验证 MCP 连接
@@ -583,13 +560,7 @@ run_tests() {
             log_info "测试截图和视频: $RESULTS_DIR"
         fi
         
-        # 如果是143 (SIGTERM)，这通常不是真正的测试失败
-        if [[ $exit_code -eq 143 ]]; then
-            log_warning "收到终止信号，但测试可能已成功完成"
-            return 0
-        fi
-        
-        return 1
+        return "$exit_code"
     fi
 }
 
@@ -621,8 +592,10 @@ main() {
     
     # 运行测试
     local test_result=0
-    if ! run_tests; then
-        test_result=1
+    if run_tests; then
+        test_result=0
+    else
+        test_result=$?
     fi
     
     echo
@@ -635,7 +608,7 @@ main() {
     
     if [[ "$NO_CLEANUP" == "true" ]]; then
         log_info "服务继续运行 (--no-cleanup)"
-        log_info "MCP Inspector: http://localhost:$MCP_INSPECTOR_PORT/?MCP_PROXY_AUTH_TOKEN=$MCP_AUTH_TOKEN"
+        log_info "MCP Inspector: http://localhost:$MCP_INSPECTOR_PORT"
         log_info "Meilisearch: http://localhost:$MEILISEARCH_PORT"
         log_info "按 Ctrl+C 停止服务"
         
@@ -660,4 +633,6 @@ main() {
 }
 
 # 执行主函数
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

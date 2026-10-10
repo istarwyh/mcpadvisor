@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -38,7 +38,9 @@ jobs:
         run: pnpm run build
 
       - name: Run Meilisearch unit tests
-        run: pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts
+        run: |
+          pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts
+          node --test scripts/e2e/e2e.meilisearch.test.mjs
         timeout-minutes: 5
 
   integration-tests:
@@ -64,7 +66,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -114,7 +116,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
