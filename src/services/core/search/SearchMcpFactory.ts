@@ -28,10 +28,9 @@ export async function searchOffline(
   fallbackDataPath?: string,
   textMatchWeight: number = 0.7,
 ): Promise<MCPServerResponse[]> {
-  const searchParams = typeof query === 'string' 
-    ? { taskDescription: query }
-    : query;
-  
+  const searchParams =
+    typeof query === 'string' ? { taskDescription: query } : query;
+
   try {
     logger.info(`Searching offline with query: "${query}"`, 'OfflineSearch', {
       query,
@@ -80,10 +79,9 @@ export async function searchGetMcp(
   query: string | SearchParams,
   options: SearchOptions = {},
 ): Promise<MCPServerResponse[]> {
-  const searchParams = typeof query === 'string' 
-    ? { taskDescription: query }
-    : query;
-    
+  const searchParams =
+    typeof query === 'string' ? { taskDescription: query } : query;
+
   try {
     logger.info(`Searching GetMCP with query: "${query}"`, 'GetMcpSearch', {
       query,
@@ -94,7 +92,10 @@ export async function searchGetMcp(
     logger.debug('Created GetMcpSearchProvider instance', 'GetMcpSearch');
 
     const service = new SearchService([provider]);
-    logger.debug('Created SearchService with GetMcpSearchProvider', 'GetMcpSearch');
+    logger.debug(
+      'Created SearchService with GetMcpSearchProvider',
+      'GetMcpSearch',
+    );
 
     const startTime = Date.now();
     const results = await service.search(searchParams, options);
@@ -129,10 +130,9 @@ export async function searchCompass(
   query: string | SearchParams,
   options: SearchOptions = {},
 ): Promise<MCPServerResponse[]> {
-  const searchParams = typeof query === 'string' 
-    ? { taskDescription: query }
-    : query;
-    
+  const searchParams =
+    typeof query === 'string' ? { taskDescription: query } : query;
+
   try {
     logger.info(`Searching Compass with query: "${query}"`, 'CompassSearch', {
       query,
@@ -143,7 +143,10 @@ export async function searchCompass(
     logger.debug('Created CompassSearchProvider instance', 'CompassSearch');
 
     const service = new SearchService([provider]);
-    logger.debug('Created SearchService with CompassSearchProvider', 'CompassSearch');
+    logger.debug(
+      'Created SearchService with CompassSearchProvider',
+      'CompassSearch',
+    );
 
     const startTime = Date.now();
     const results = await service.search(searchParams, options);
@@ -174,14 +177,15 @@ export async function searchCompass(
  * @param options Search options
  * @returns Array of MCP server responses
  */
+let sharedMeilisearchProvider: MeilisearchSearchProvider | undefined;
+
 export async function searchMeilisearch(
   query: string | SearchParams,
   options: SearchOptions = {},
 ): Promise<MCPServerResponse[]> {
-  const searchParams = typeof query === 'string' 
-    ? { taskDescription: query }
-    : query;
-    
+  const searchParams =
+    typeof query === 'string' ? { taskDescription: query } : query;
+
   try {
     logger.info(
       `Searching Meilisearch with query: "${query}"`,
@@ -189,11 +193,16 @@ export async function searchMeilisearch(
       { query, options },
     );
 
-    const provider = new MeilisearchSearchProvider();
-    logger.debug('Created MeilisearchSearchProvider instance', 'MeilisearchSearch');
+    // Retain the catalog cache and single-flight ingestion across helper calls.
+    const provider = (sharedMeilisearchProvider ??=
+      new MeilisearchSearchProvider());
+    logger.debug('Using shared MeilisearchSearchProvider', 'MeilisearchSearch');
 
     const service = new SearchService([provider]);
-    logger.debug('Created SearchService with MeilisearchSearchProvider', 'MeilisearchSearch');
+    logger.debug(
+      'Created SearchService with MeilisearchSearchProvider',
+      'MeilisearchSearch',
+    );
 
     const startTime = Date.now();
     const results = await service.search(searchParams, options);
@@ -235,17 +244,20 @@ export async function searchMeilisearch(
 export async function searchNacosMcp(
   query: string | SearchParams,
   options: SearchOptions = {},
-  config: NacosMcpProviderConfig
+  config: NacosMcpProviderConfig,
 ): Promise<MCPServerResponse[]> {
-  const searchParams = typeof query === 'string' 
-    ? { taskDescription: query }
-    : query;
+  const searchParams =
+    typeof query === 'string' ? { taskDescription: query } : query;
 
   try {
-    logger.info(`Searching Nacos MCP with query: "${query}"`, 'NacosMcpSearch', {
-      query,
-      options,
-    });
+    logger.info(
+      `Searching Nacos MCP with query: "${query}"`,
+      'NacosMcpSearch',
+      {
+        query,
+        options,
+      },
+    );
 
     const startTime = Date.now();
     const provider = new NacosMcpProvider({
@@ -272,16 +284,20 @@ export async function searchNacosMcp(
     return results;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logger.error(`Error searching Nacos MCP: ${errorMessage}`, 'NacosMcpSearch', {
-      error: errorMessage,
-    });
+    logger.error(
+      `Error searching Nacos MCP: ${errorMessage}`,
+      'NacosMcpSearch',
+      {
+        error: errorMessage,
+      },
+    );
     throw error;
   }
 }
 
 export function getSearchFunction(providerName: string) {
   const normalizedProviderName = providerName.toLowerCase();
-  
+
   switch (normalizedProviderName) {
     case 'offline':
       return searchOffline;
@@ -293,20 +309,25 @@ export function getSearchFunction(providerName: string) {
       return searchMeilisearch;
     case 'nacos':
     case 'nacos-mcp':
-      return (query: string | SearchParams, options: SearchOptions & { authToken?: string } = {}) => {
+      return (
+        query: string | SearchParams,
+        options: SearchOptions & { authToken?: string } = {},
+      ) => {
         // Create config with required fields and optional authToken
         const config = {
           serverAddr: process.env.NACOS_SERVER_ADDR || 'http://localhost:8848',
           username: process.env.NACOS_USERNAME || 'nacos',
           password: process.env.NACOS_PASSWORD || 'nacos',
           mcpHost: process.env.MCP_HOST || 'localhost',
-          mcpPort: process.env.MCP_PORT ? parseInt(process.env.MCP_PORT, 10) : 3000,
+          mcpPort: process.env.MCP_PORT
+            ? parseInt(process.env.MCP_PORT, 10)
+            : 3000,
           authToken: options.authToken || process.env.MCP_AUTH_TOKEN || '',
         };
-        
+
         // Remove authToken from options to avoid passing it twice
         const { authToken, ...searchOptions } = options;
-        
+
         return searchNacosMcp(query, searchOptions, config);
       };
     default:
