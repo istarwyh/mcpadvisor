@@ -14,9 +14,9 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
     return {
       name: 'recommend-mcp-servers',
       description: `
-        此工具用于寻找合适且专业MCP服务器。
-        基于您的具体需求，从互联网资源库以及内部MCP库中筛选并推荐最适合的MCP服务器解决方案。
-        返回结果包含服务器名称、功能描述、所属类别，为您的业务成功提供精准技术支持。
+        Find suitable MCP servers for a specific task.
+        Search configured online catalogs and local server data for relevant solutions.
+        Results include names, descriptions, source URLs and available category metadata.
       `,
       inputSchema: {
         type: 'object',
@@ -24,32 +24,34 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
           taskDescription: {
             type: 'string',
             description: `
-              请提供所需MCP服务器的精确任务描述。
+              Describe the exact task the MCP server should perform.
               
-              有效查询示例：
-              - '用于风控策略部署的MCP服务器'
-              - '保险产品精算定价的MCP服务器'
+              Useful examples:
+              - 'Deploy a risk-control strategy'
+              - 'Calculate actuarial pricing for an insurance product'
               
-              无效查询示例：
-              - '保险MCP服务器'（过于宽泛）
-              - '风控系统'（缺乏具体保险场景）
-              - '精算工具'（未指明具体功能需求）
+              Overly broad examples:
+              - 'Insurance MCP server'(too broad)
+              - 'Risk-control system'(missing the specific use case)
+              - 'Actuarial tool'(missing the required capability)
               
-              查询应明确指定：
-              1. 业务流程（如产品定价、核保、理赔、准备金计算等）
-              2. 具体功能需求（如风险分析、策略部署、策略研发、特征研发等）
+              Specify:
+              1. The workflow, such as pricing, underwriting, claims or reserve calculation
+              2. Required capabilities, such as risk analysis, strategy deployment or feature development
             `,
           },
           keywords: {
             type: 'array',
             items: { type: 'string' },
-            description: '当前任务对应的搜索关键词列表，当提供关键词会优先对 MCP Server 筛选',
+            description:
+              'Optional search keywords used alongside the task description.',
             default: [],
           },
           capabilities: {
             type: 'array',
             items: { type: 'string' },
-            description: '当前任务所需功能列表，当提供功能列表会综合任务描述和功能列表对 MCP Server 筛选',
+            description:
+              'Optional required capabilities used alongside the task description.',
             default: [],
           },
         },
@@ -67,9 +69,11 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
       const { arguments: args } = request.params;
       const parsedArgs = GeneralArgumentsSchema.parse(args);
       const { taskDescription, keywords = [], capabilities = [] } = parsedArgs;
-      
+
       if (!taskDescription) {
-        return this.createErrorResponse('taskDescription parameter is required for recommend-mcp-servers tool');
+        return this.createErrorResponse(
+          'taskDescription parameter is required for recommend-mcp-servers tool',
+        );
       }
 
       logger.info('Processing recommend-mcp-servers request', 'Search', {
@@ -80,8 +84,12 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
 
       const searchParams = {
         taskDescription,
-        keywords: Array.isArray(keywords) ? keywords : [keywords].filter(Boolean),
-        capabilities: Array.isArray(capabilities) ? capabilities : [capabilities].filter(Boolean),
+        keywords: Array.isArray(keywords)
+          ? keywords
+          : [keywords].filter(Boolean),
+        capabilities: Array.isArray(capabilities)
+          ? capabilities
+          : [capabilities].filter(Boolean),
       };
 
       const servers = await this.searchService.search(searchParams);
@@ -95,7 +103,9 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
       logger.error(
         `Error in RecommendMcpServerToolHandler: ${error instanceof Error ? error.message : String(error)}`,
       );
-      return this.createErrorResponse('Failed to process recommendation request');
+      return this.createErrorResponse(
+        'Failed to process recommendation request',
+      );
     }
   }
 }

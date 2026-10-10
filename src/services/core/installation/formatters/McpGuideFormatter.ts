@@ -1,5 +1,9 @@
 import { IInstallationGuideFormatter } from '../interfaces/IInstallationGuideFormatter.js';
-import { InstallationGuideContext, GuideGenerationResult, InstallationContentType } from '../types/InstallationGuideTypes.js';
+import {
+  InstallationGuideContext,
+  GuideGenerationResult,
+  InstallationContentType,
+} from '../types/InstallationGuideTypes.js';
 
 /**
  * MCP guide formatter
@@ -13,14 +17,16 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    */
   public formatGuide(context: InstallationGuideContext): GuideGenerationResult {
     try {
-      let guide = `我将指导你如何安装和配置 ${context.mcpName} MCP 服务器。\n\n`;
-      guide += `GitHub 仓库地址：${context.githubUrl}\n\n`;
-      guide += `## MCP 服务器配置步骤\n\n`;
-      guide += `根据项目文档，这是一个 MCP (Model Context Protocol) 服务器，需要通过配置文件进行集成：\n\n`;
-      
+      let guide = `Installation and configuration guide for ${context.mcpName} MCP server.\n\n`;
+      guide += `GitHub repository: ${context.githubUrl}\n\n`;
+      guide += `## MCP server configuration\n\n`;
+      guide += `This MCP (Model Context Protocol) server is integrated through your client's configuration:\n\n`;
+
       if (context.installationSection) {
         guide += `${context.installationSection.content}\n\n`;
-        guide += this.generateMcpSpecificGuidance(context.installationSection.content);
+        guide += this.generateMcpSpecificGuidance(
+          context.installationSection.content,
+        );
       }
 
       guide += this.generateHelpSection(context.githubUrl);
@@ -46,7 +52,10 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns True if this formatter can handle the context
    */
   public canHandle(context: InstallationGuideContext): boolean {
-    return context.installationSection?.type === InstallationContentType.MCP_CONFIGURATION;
+    return (
+      context.installationSection?.type ===
+      InstallationContentType.MCP_CONFIGURATION
+    );
   }
 
   /**
@@ -63,8 +72,8 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns MCP-specific guidance
    */
   private generateMcpSpecificGuidance(installationContent: string): string {
-    let guidance = `## 配置说明\n\n`;
-    
+    let guidance = `## Configuration details\n\n`;
+
     // Claude Desktop configuration guidance
     if (this.containsClaudeDesktopConfig(installationContent)) {
       guidance += this.generateClaudeDesktopGuidance();
@@ -94,7 +103,10 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns True if contains Claude Desktop config
    */
   private containsClaudeDesktopConfig(content: string): boolean {
-    return content.includes('claude_desktop_config') || content.includes('Claude Desktop');
+    return (
+      content.includes('claude_desktop_config') ||
+      content.includes('Claude Desktop')
+    );
   }
 
   /**
@@ -112,7 +124,11 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns True if contains env vars
    */
   private containsEnvironmentVariables(content: string): boolean {
-    return content.includes('"env"') || content.includes('环境变量');
+    return (
+      content.includes('"env"') ||
+      content.includes('环境变量') ||
+      /environment variables/i.test(content)
+    );
   }
 
   /**
@@ -129,13 +145,13 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns Claude Desktop guidance
    */
   private generateClaudeDesktopGuidance(): string {
-    let guidance = `### Claude Desktop 配置\n\n`;
-    guidance += `1. 找到 Claude Desktop 配置文件：\n`;
+    let guidance = `### Claude Desktop configuration\n\n`;
+    guidance += `1. Locate the Claude Desktop configuration file:\n`;
     guidance += `   - **Windows**: \`%APPDATA%\\Claude\\claude_desktop_config.json\`\n`;
     guidance += `   - **macOS**: \`~/Library/Application Support/Claude/claude_desktop_config.json\`\n`;
     guidance += `   - **Linux**: \`~/.config/claude/claude_desktop_config.json\`\n\n`;
-    guidance += `2. 将上述 JSON 配置添加到配置文件中\n`;
-    guidance += `3. 保存文件并重启 Claude Desktop\n\n`;
+    guidance += `2. Add the JSON configuration above to the file\n`;
+    guidance += `3. Save the file and restart Claude Desktop\n\n`;
     return guidance;
   }
 
@@ -144,8 +160,8 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns Other clients guidance
    */
   private generateOtherClientsGuidance(): string {
-    let guidance = `### 其他 MCP 客户端\n\n`;
-    guidance += `该 MCP 服务器也支持其他客户端，如 Cursor、Windsurf 等。请参考各客户端的 MCP 配置文档。\n\n`;
+    let guidance = `### Other MCP clients\n\n`;
+    guidance += `For other clients, such as Cursor and Windsurf, follow the client's current MCP configuration documentation.\n\n`;
     return guidance;
   }
 
@@ -154,8 +170,8 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns Environment variables guidance
    */
   private generateEnvironmentVariablesGuidance(): string {
-    let guidance = `### 环境变量配置\n\n`;
-    guidance += `如果需要自定义工作目录或其他设置，可以在配置中添加 \`env\` 字段。\n\n`;
+    let guidance = `### Environment variables\n\n`;
+    guidance += `To customize the working directory or other settings, add an \`env\` field to the configuration.\n\n`;
     return guidance;
   }
 
@@ -164,10 +180,10 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns NPX guidance
    */
   private generateNpxGuidance(): string {
-    let guidance = `### 注意事项\n\n`;
-    guidance += `- 该服务器使用 \`npx\` 运行，确保你的系统已安装 Node.js\n`;
-    guidance += `- 首次运行时可能需要下载依赖，请耐心等待\n`;
-    guidance += `- 如果遇到网络问题，可以尝试使用国内 npm 镜像\n\n`;
+    let guidance = `### Notes\n\n`;
+    guidance += `- This server uses \`npx\`; make sure Node.js is installed\n`;
+    guidance += `- The first run may download dependencies\n`;
+    guidance += `- For network failures, verify connectivity and your configured npm registry\n\n`;
     return guidance;
   }
 
@@ -177,11 +193,11 @@ export class McpGuideFormatter implements IInstallationGuideFormatter {
    * @returns Help section
    */
   private generateHelpSection(githubUrl: string): string {
-    let help = `## 需要帮助？\n\n`;
-    help += `如果你在安装过程中遇到任何问题，可以：\n`;
-    help += `- 查看项目的 [Issues 页面](${githubUrl}/issues)\n`;
-    help += `- 创建新的 Issue 寻求帮助\n`;
-    help += `- 查看项目文档了解更多详细信息\n`;
+    let help = `## Need help?\n\n`;
+    help += `If you encounter installation problems:\n`;
+    help += `- Check the project's [Issues page](${githubUrl}/issues)\n`;
+    help += `- Open an issue with the error and reproduction steps\n`;
+    help += `- Check the project documentation for more details\n`;
     return help;
   }
 }

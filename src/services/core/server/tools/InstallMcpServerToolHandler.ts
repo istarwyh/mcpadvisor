@@ -19,24 +19,24 @@ export class InstallMcpServerToolHandler extends BaseToolHandler {
     return {
       name: 'install-mcp-server',
       description: `
-        此工具用于安装MCP服务器。
-        请告诉我您想要安装哪个 MCP 以及其来源 Url比如 githubUrl，我将会告诉您如何安装对应的 MCP，
-        并指导您在不同AI助手环境中正确配置MCP服务器。
+        Get installation and configuration guidance for an MCP server.
+        Provide the MCP server name and source URL, such as its GitHub repository,
+        and receive installation instructions for your selected MCP client.
       `,
       inputSchema: {
         type: 'object',
         properties: {
           mcpName: {
             type: 'string',
-            description: `请输入您想要安装的MCP名称。`,
+            description: `Name of the MCP server to install.`,
           },
           sourceUrl: {
             type: 'string',
-            description: `请输入您想要安装的MCP的来源 Url。`,
+            description: `Source URL of the MCP server, such as its GitHub repository.`,
           },
           mcpClient: {
             type: 'string',
-            description: `可选，请指定您使用的MCP客户端（如Claude Desktop、Windsurf、Cursor、Cline等）。不同客户端的配置方式可能不同。`,
+            description: `Optional MCP client, such as Claude Desktop, Windsurf, Cursor or Cline. Configuration varies by client.`,
           },
         },
         required: ['mcpName', 'sourceUrl'],
@@ -57,7 +57,9 @@ export class InstallMcpServerToolHandler extends BaseToolHandler {
       const mcpClient = parsedArgs.mcpClient || '';
 
       if (!mcpName || !sourceUrl) {
-        return this.createErrorResponse('Both mcpName and Url parameters are required for install-mcp-server tool');
+        return this.createErrorResponse(
+          'Both mcpName and Url parameters are required for install-mcp-server tool',
+        );
       }
 
       logger.info('Processing install-mcp-server request', 'Installation', {
@@ -65,16 +67,18 @@ export class InstallMcpServerToolHandler extends BaseToolHandler {
         sourceUrl,
         mcpClient,
       });
-      const installationGuide = await this.installationGuideService.generateInstallationGuide(
-        sourceUrl,
-        mcpName,
-      );
+      const installationGuide =
+        await this.installationGuideService.generateInstallationGuide(
+          sourceUrl,
+          mcpName,
+        );
 
       // Generate client-specific configuration guide
-      const configGuide = this.configurationGuideService.generateConfigurationGuide(
-        mcpName,
-        mcpClient,
-      );
+      const configGuide =
+        this.configurationGuideService.generateConfigurationGuide(
+          mcpName,
+          mcpClient,
+        );
 
       // Combine installation guide and configuration guide
       const completeGuide = `${installationGuide}\n\n${configGuide}`;

@@ -1,11 +1,16 @@
 import { IInstallationSectionExtractor } from '../interfaces/IInstallationSectionExtractor.js';
-import { InstallationSection, InstallationContentType } from '../types/InstallationGuideTypes.js';
+import {
+  InstallationSection,
+  InstallationContentType,
+} from '../types/InstallationGuideTypes.js';
 
 /**
  * Traditional installation extractor
  * Specialized in extracting traditional installation sections from README content
  */
-export class TraditionalInstallationExtractor implements IInstallationSectionExtractor {
+export class TraditionalInstallationExtractor
+  implements IInstallationSectionExtractor
+{
   private readonly installationKeywords = [
     'installation',
     '安装',
@@ -21,7 +26,7 @@ export class TraditionalInstallationExtractor implements IInstallationSectionExt
     'usage',
     '使用',
     'running',
-    '运行'
+    '运行',
   ];
 
   /**
@@ -29,9 +34,11 @@ export class TraditionalInstallationExtractor implements IInstallationSectionExt
    * @param readmeContent - README content to extract from
    * @returns Installation section data or null if not found
    */
-  public extractInstallationSection(readmeContent: string): InstallationSection | null {
+  public extractInstallationSection(
+    readmeContent: string,
+  ): InstallationSection | null {
     const headings = this.extractHeadings(readmeContent);
-    console.log('找到的所有标题:', headings);
+    console.log('All discovered headings:', headings);
 
     let bestScore = 0;
     let bestMatch: { heading: string; index: number } | null = null;
@@ -44,7 +51,10 @@ export class TraditionalInstallationExtractor implements IInstallationSectionExt
       for (const keyword of this.installationKeywords) {
         if (lowerHeading.includes(keyword)) {
           // Exact match gets higher score
-          if (lowerHeading === `## ${keyword}` || lowerHeading === `# ${keyword}`) {
+          if (
+            lowerHeading === `## ${keyword}` ||
+            lowerHeading === `# ${keyword}`
+          ) {
             score += 10;
           } else {
             score += 5;
@@ -62,9 +72,13 @@ export class TraditionalInstallationExtractor implements IInstallationSectionExt
     }
 
     if (bestMatch) {
-      console.log('最佳匹配标题:', bestMatch.heading);
-      const content = this.extractSectionContent(readmeContent, bestMatch.heading, bestMatch.index);
-      
+      console.log('Best matching heading:', bestMatch.heading);
+      const content = this.extractSectionContent(
+        readmeContent,
+        bestMatch.heading,
+        bestMatch.index,
+      );
+
       return {
         content,
         type: InstallationContentType.TRADITIONAL_INSTALLATION,
@@ -118,19 +132,23 @@ export class TraditionalInstallationExtractor implements IInstallationSectionExt
    * @param headingIndex - Index of the heading
    * @returns Section content
    */
-  private extractSectionContent(content: string, heading: string, headingIndex: number): string {
+  private extractSectionContent(
+    content: string,
+    heading: string,
+    headingIndex: number,
+  ): string {
     const headingLevel = (heading.match(/^#+/) || [''])[0].length;
     const afterHeading = content.substring(headingIndex + heading.length);
-    
+
     // Find the next heading of the same or higher level
     const nextHeadingRegex = new RegExp(`^#{1,${headingLevel}}\\s+`, 'm');
     const nextHeadingMatch = afterHeading.match(nextHeadingRegex);
-    
+
     if (nextHeadingMatch) {
       const nextHeadingIndex = afterHeading.indexOf(nextHeadingMatch[0]);
       return (heading + afterHeading.substring(0, nextHeadingIndex)).trim();
     }
-    
+
     // If no next heading found, take the rest of the content
     return (heading + afterHeading).trim();
   }

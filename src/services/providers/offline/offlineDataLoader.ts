@@ -21,7 +21,7 @@ import {
  */
 const DEFAULT_FALLBACK_DATA_PATH = getMcpServerListPath(null);
 
-// 备用路径，用于在默认路径无法访问时尝试
+// 备用路径，用于在default path无法访问时尝试
 const ALTERNATIVE_FALLBACK_DATA_PATH = getNodeModulesPath(
   '@xiaohui-wang/mcpadvisor',
   'data/mcp_server_list.json',
@@ -39,7 +39,10 @@ export class OfflineDataLoader {
    * @param fallbackDataPath 可选的自定义兜底数据路径
    * @param options 选项对象，包含 disableFallbackPaths 属性
    */
-  constructor(fallbackDataPath?: string, options: { disableFallbackPaths?: boolean } = {}) {
+  constructor(
+    fallbackDataPath?: string,
+    options: { disableFallbackPaths?: boolean } = {},
+  ) {
     this.fallbackDataPath =
       fallbackDataPath || getMcpServerListPath() || DEFAULT_FALLBACK_DATA_PATH;
     this.disableFallbackPaths = options.disableFallbackPaths || false;
@@ -81,7 +84,8 @@ export class OfflineDataLoader {
           this.fallbackDataPath = ALTERNATIVE_FALLBACK_DATA_PATH;
         } else {
           // 尝试直接查找硬编码路径
-          const hardcodedPath = '/Users/mac/Desktop/code-open/mcpadvisor/data/mcp_server_list.json';
+          const hardcodedPath =
+            '/Users/mac/Desktop/code-open/mcpadvisor/data/mcp_server_list.json';
           if (fs.existsSync(hardcodedPath)) {
             logger.info(`Found data file at hardcoded path: ${hardcodedPath}`);
             this.fallbackDataPath = hardcodedPath;
@@ -89,23 +93,27 @@ export class OfflineDataLoader {
             // 尝试在当前目录及其父目录中查找
             let currentDir = process.cwd();
             let found = false;
-            
+
             // 最多向上查找3级目录
             for (let i = 0; i < 4 && !found; i++) {
-              const potentialPath = path.join(currentDir, 'data', 'mcp_server_list.json');
+              const potentialPath = path.join(
+                currentDir,
+                'data',
+                'mcp_server_list.json',
+              );
               logger.debug(`Checking for data file at: ${potentialPath}`);
-              
+
               if (fs.existsSync(potentialPath)) {
                 logger.info(`Found data file at: ${potentialPath}`);
                 this.fallbackDataPath = potentialPath;
                 found = true;
                 break;
               }
-              
+
               // 向上一级目录
               currentDir = path.dirname(currentDir);
             }
-            
+
             if (!found) {
               logger.error('No fallback data file found at any path');
               return [];
@@ -119,13 +127,20 @@ export class OfflineDataLoader {
       const parsedData = JSON.parse(rawData);
 
       // 增加调试信息：检查原始数据中是否包含小红书相关服务器
-      const redNoteServers = parsedData.filter((item: any) => 
-        item.id === 'rednote-mcp' || item.id === 'mcp-hotnews-server'
+      const redNoteServers = parsedData.filter(
+        (item: any) =>
+          item.id === 'rednote-mcp' || item.id === 'mcp-hotnews-server',
       );
-      
-      logger.info(`Found ${redNoteServers.length} RedNote related servers in raw data:`, {
-        redNoteServers: redNoteServers.map((s: any) => ({ id: s.id, name: s.name }))
-      });
+
+      logger.info(
+        `Found ${redNoteServers.length} RedNote related servers in raw data:`,
+        {
+          redNoteServers: redNoteServers.map((s: any) => ({
+            id: s.id,
+            name: s.name,
+          })),
+        },
+      );
 
       // 转换为MCPServerResponse格式
       const serverResponses = parsedData.map((item: any) => ({
@@ -184,28 +199,32 @@ export class OfflineDataLoader {
     }[]
   > {
     try {
-      logger.info(`开始加载兜底数据并生成嵌入向量`);
+      logger.info(`Loading fallback data and generating embeddings`);
       const serverResponses = await this.loadFallbackData();
-      logger.info(`加载了 ${serverResponses.length} 个原始服务器数据`);
-      
+      logger.info(`Loaded ${serverResponses.length} raw server records`);
+
       // 检查是否包含小红书相关服务器
-      const redNoteServers = serverResponses.filter(server => 
-        server.id === 'rednote-mcp' || server.id === 'mcp-hotnews-server'
+      const redNoteServers = serverResponses.filter(
+        server =>
+          server.id === 'rednote-mcp' || server.id === 'mcp-hotnews-server',
       );
-      
-      logger.info(`原始数据中包含 ${redNoteServers.length} 个小红书相关服务器:`, 
-        redNoteServers.map(s => ({ id: s.id, title: s.title }))
+
+      logger.info(
+        `Raw data includes ${redNoteServers.length} RedNote-related servers:`,
+        redNoteServers.map(s => ({ id: s.id, title: s.title })),
       );
-      
+
       const result = [];
 
       // 如果没有服务器数据，直接返回空结果
       if (serverResponses.length === 0) {
-        logger.info(`没有服务器数据可用，返回空结果`);
+        logger.info(`No server data is available; returning no results`);
         return [];
       }
 
-      logger.info(`开始为 ${serverResponses.length} 个服务器生成嵌入向量`);
+      logger.info(
+        `Generating embeddings for ${serverResponses.length} servers`,
+      );
       for (const server of serverResponses) {
         try {
           // 生成文本用于嵌入
@@ -214,7 +233,9 @@ export class OfflineDataLoader {
           }. ${Array.isArray(server.tags) ? server.tags.join(', ') : ''}`;
 
           // 获取嵌入向量
-          logger.debug(`为服务器 ${server.id || server.title} 生成嵌入向量`);
+          logger.debug(
+            `Server ${server.id || server.title} embedding generation`,
+          );
           const vector = await getTextEmbedding(textForEmbedding);
 
           // 归一化向量
@@ -228,9 +249,11 @@ export class OfflineDataLoader {
             vector: normalizedVector,
             data: server,
           });
-          
         } catch (embeddingError) {
-          logger.error(`为服务器 ${server.id || server.title} 生成嵌入向量失败:`, embeddingError);
+          logger.error(
+            `Server ${server.id || server.title} embedding generation failed:`,
+            embeddingError,
+          );
           logger.error(
             `Error generating embedding for server ${server.title}`,
             {
