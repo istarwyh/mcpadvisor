@@ -421,22 +421,13 @@ start_inspector() {
     # 启动 Inspector，确保使用正确的环境变量
     verbose_log "启动 MCP Inspector 进程..."
     
-    # 优先使用 npx（最新版本），如果失败则尝试本地命令
-    if npx @modelcontextprotocol/inspector --help >/dev/null 2>&1; then
-        verbose_log "使用 npx @modelcontextprotocol/inspector 启动（推荐）"
-        ENABLE_FILE_LOGGING=true npx @modelcontextprotocol/inspector node "$BUILD_DIR/index.js" > "$inspector_log" 2>&1 &
-    elif command -v mcp-inspector &> /dev/null; then
-        verbose_log "使用本地 mcp-inspector 命令启动"
-        ENABLE_FILE_LOGGING=true mcp-inspector node "$BUILD_DIR/index.js" > "$inspector_log" 2>&1 &
-    else
-        log_error "未找到 MCP Inspector，请运行: npm install -g @modelcontextprotocol/inspector"
-        rm -f "$inspector_log"
-        exit 1
-    fi
+    # Start once; --help is not a bounded readiness check for Inspector.
+    MCP_PROXY_AUTH_TOKEN="$MCP_AUTH_TOKEN" ENABLE_FILE_LOGGING=true \
+      npx --yes @modelcontextprotocol/inspector@2.10.1 node "$BUILD_DIR/index.js" > "$inspector_log" 2>&1 &
     INSPECTOR_PID=$!
     
     # 等待启动
-    if ! wait_for_port $MCP_INSPECTOR_PORT "MCP Inspector" 30; then
+    if ! wait_for_port $MCP_INSPECTOR_PORT "MCP Inspector" 180; then
         log_error "MCP Inspector 启动失败"
         log_error "Inspector 启动日志保留在本地临时目录，避免输出认证令牌"
         exit 1
