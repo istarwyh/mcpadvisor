@@ -4,6 +4,7 @@ import {
   createOptionalProfessionalReranker,
 } from '../../../services/core/search/ProfessionalReranker.js';
 import { SearchService } from '../../../services/searchService.js';
+import { formatServersToText } from '../../../utils/formatter.js';
 import type { MCPServerResponse } from '../../../types/index.js';
 
 const candidates: MCPServerResponse[] = [
@@ -22,6 +23,11 @@ const candidates: MCPServerResponse[] = [
 ];
 afterEach(() => vi.unstubAllGlobals());
 describe('专业模型重排', () => {
+  it('输出保留模型的零分，仅缺省分数回退到检索相似度', () => {
+    const zeroScore = formatServersToText([{ ...candidates[0], score: 0 }]);
+    expect(zeroScore).toContain('Score: 0.0%');
+    expect(formatServersToText([candidates[0]])).toContain('Score: 90.0%');
+  });
   it('默认关闭，验证配置且不发起请求', () => {
     const fetch = vi.fn();
     vi.stubGlobal('fetch', fetch);
