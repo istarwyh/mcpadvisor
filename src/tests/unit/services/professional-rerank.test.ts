@@ -188,4 +188,24 @@ describe('专业模型重排', () => {
     await service.search({ taskDescription: 'files' }, { limit: 0 });
     expect(model.rerank).not.toHaveBeenCalled();
   });
+  it('显式 undefined 限制保留全部结果，不截断为模型的 50 项上限', async () => {
+    const many = Array.from({ length: 60 }, (_, index) => ({
+      ...candidates[0],
+      title: `Server ${index}`,
+      sourceUrl: `https://github.com/example/server-${index}`,
+    }));
+    const provider = { search: async () => many };
+    const model = { rerank: vi.fn(async (_query, pool) => pool) };
+    const baseline = await new SearchService([provider], {
+      enabled: false,
+    }).search({ taskDescription: 'files' }, { limit: undefined });
+    const actual = await new SearchService(
+      [provider],
+      { enabled: false },
+      model,
+    ).search({ taskDescription: 'files' }, { limit: undefined });
+    expect(actual).toEqual(baseline);
+    expect(actual).toHaveLength(60);
+    expect(model.rerank).not.toHaveBeenCalled();
+  });
 });

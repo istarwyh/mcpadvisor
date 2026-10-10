@@ -106,7 +106,8 @@
     "README.md",
     "LICENSE",
     "data",
-    "services/flashrank"
+    "services/flashrank",
+    "docs/professional-reranking.md"
   ],
   "publishConfig": {
     "access": "public"

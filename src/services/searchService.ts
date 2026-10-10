@@ -200,8 +200,9 @@ export class SearchService {
       );
       if (
         !this.professionalReranker ||
-        (mergedOptions.limit !== undefined &&
-          (mergedOptions.limit <= 0 || mergedOptions.limit > 50)) ||
+        mergedOptions.limit === undefined ||
+        mergedOptions.limit <= 0 ||
+        mergedOptions.limit > 50 ||
         (mergedOptions.sortBy && mergedOptions.sortBy !== 'score')
       )
         return fallback;
