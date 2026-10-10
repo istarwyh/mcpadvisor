@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createOptionalProfessionalReranker } from './services/core/search/ProfessionalReranker.js';
 import { SearchService } from './services/searchService.js';
 import { CompassSearchProvider } from './services/core/search/CompassSearchProvider.js';
 import { ServerService, TransportType, TransportConfig } from './services/core/server/index.js';
@@ -98,7 +99,7 @@ async function main() {
       );
     }
     
-    const searchService = new SearchService(searchProviders);
+    const searchService = new SearchService(searchProviders, {}, createOptionalProfessionalReranker());
 
     // Best-effort async bootstrap for local Meilisearch
     try {
