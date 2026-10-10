@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 import { MeiliSearch, MeiliSearchApiError } from 'meilisearch';
 import { LocalMeilisearchController } from '../../../services/providers/meilisearch/localController.js';
 import { MeilisearchSearchProvider } from '../../../services/core/search/MeilisearchSearchProvider.js';
@@ -7,6 +7,7 @@ import type { GetMcpApiResponse } from '../../../services/common/api/getMcpResou
 const host = process.env.MEILI_FULLTEXT_TEST_HOST;
 const key = process.env.MEILI_FULLTEXT_TEST_KEY;
 const indexName = `mcp_fulltext_test_${Date.now()}_${process.pid}`;
+const indexes = [indexName];
 const engine = host ? new MeiliSearch({ host, apiKey: key }) : undefined;
 const catalog: GetMcpApiResponse = {
   filesystem: {
@@ -57,20 +58,21 @@ describe.skipIf(!host)(
   'Meilisearch full-text search against the real local engine',
   () => {
     afterAll(async () => {
-      if (engine) {
-        try {
-          const task = await engine.deleteIndex(indexName);
-          await engine.tasks.waitForTask(task.taskUid);
-        } catch (error) {
-          if (
-            !(
-              error instanceof MeiliSearchApiError &&
-              error.cause?.code === 'index_not_found'
+      if (engine)
+        for (const index of indexes) {
+          try {
+            const task = await engine.deleteIndex(index);
+            await engine.tasks.waitForTask(task.taskUid);
+          } catch (error) {
+            if (
+              !(
+                error instanceof MeiliSearchApiError &&
+                error.cause?.code === 'index_not_found'
+              )
             )
-          )
-            throw error;
+              throw error;
+          }
         }
-      }
     });
 
     it('creates and indexes a catalog, then retrieves title, description, category and tag matches', async () => {
@@ -131,6 +133,90 @@ describe.skipIf(!host)(
       await expect(
         controller.indexDocuments([{ id: 'invalid/id' }]),
       ).rejects.toThrow('failed');
+    });
+
+    it('returns the original catalog ID when the engine requires a hashed key', async () => {
+      const provider = new MeilisearchSearchProvider(
+        {
+          fetchData: async () => ({
+            'org/server name': {
+              ...catalog.filesystem,
+              display_name: 'UnusualCatalog',
+            },
+          }),
+        },
+        undefined,
+        new LocalMeilisearchController({
+          type: 'local',
+          host: host!,
+          masterKey: key,
+          indexName,
+          autoIndex: true,
+        }),
+      );
+      expect(
+        (await provider.search({ taskDescription: 'UnusualCatalog' }))[0].id,
+      ).toBe('org/server name');
+    });
+
+    it('allows independent controllers to create the same missing index concurrently', async () => {
+      const concurrentIndex = `${indexName}_concurrent`;
+      indexes.push(concurrentIndex);
+      let arrivals = 0;
+      let release!: () => void;
+      const barrier = new Promise<void>(resolve => {
+        release = resolve;
+      });
+      const originalIndex = MeiliSearch.prototype.index;
+      const spy = vi
+        .spyOn(MeiliSearch.prototype, 'index')
+        .mockImplementation(function (this: MeiliSearch, uid) {
+          const index = originalIndex.call(this, uid);
+          if (uid === concurrentIndex) {
+            const readInfo = index.getRawInfo.bind(index);
+            index.getRawInfo = async () => {
+              try {
+                return await readInfo();
+              } catch (error) {
+                if (
+                  error instanceof MeiliSearchApiError &&
+                  error.cause?.code === 'index_not_found'
+                ) {
+                  if (++arrivals === 2) release();
+                  await barrier;
+                }
+                throw error;
+              }
+            };
+          }
+          return index;
+        });
+      try {
+        const controllers = Array.from(
+          { length: 2 },
+          () =>
+            new LocalMeilisearchController({
+              type: 'local',
+              host: host!,
+              masterKey: key,
+              indexName: concurrentIndex,
+              autoIndex: true,
+            }),
+        );
+        await Promise.all(
+          controllers.map((controller, i) =>
+            controller.indexDocuments([
+              { id: `concurrent_${i}`, title: `Document ${i}` },
+            ]),
+          ),
+        );
+        expect(arrivals).toBe(2);
+      } finally {
+        spy.mockRestore();
+      }
+      expect(
+        (await engine!.index(concurrentIndex).getStats()).numberOfDocuments,
+      ).toBe(2);
     });
   },
 );

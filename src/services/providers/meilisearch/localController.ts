@@ -7,6 +7,15 @@ import { MeiliSearch, MeiliSearchApiError } from 'meilisearch';
 import { MeilisearchInstanceConfig } from '../../../config/meilisearch.js';
 import logger from '../../../utils/logger.js';
 
+class MeilisearchIndexingTaskError extends Error {
+  constructor(
+    taskUid: number,
+    readonly code: string,
+  ) {
+    super(`Meilisearch indexing task ${taskUid} failed: ${code}`);
+  }
+}
+
 /**
  * 本地 Meilisearch 控制器接口
  */
@@ -46,15 +55,28 @@ export class LocalMeilisearchController implements ILocalMeilisearchController {
       ) {
         throw error;
       }
-      const task = await this.client.createIndex(this.config.indexName, {
-        primaryKey: 'id',
-      });
-      await this.waitForIndexTask(task.taskUid);
+      try {
+        const task = await this.client.createIndex(this.config.indexName, {
+          primaryKey: 'id',
+        });
+        await this.waitForIndexTask(task.taskUid);
+      } catch (creationError) {
+        const alreadyExists =
+          (creationError instanceof MeilisearchIndexingTaskError &&
+            creationError.code === 'index_already_exists') ||
+          (creationError instanceof MeiliSearchApiError &&
+            creationError.cause?.code === 'index_already_exists');
+        if (!alreadyExists) throw creationError;
+        // Another process created the index after our initial absence check.
+        // Recheck it; do not suppress any other task or authorization failure.
+        await index.getRawInfo();
+      }
     }
     const settingsTask = await index.updateSettings({
       searchableAttributes: ['title', 'description', 'categories', 'tags'],
       displayedAttributes: [
         'id',
+        'catalog_id',
         'title',
         'description',
         'github_url',
@@ -76,8 +98,9 @@ export class LocalMeilisearchController implements ILocalMeilisearchController {
       interval: 50,
     });
     if (task.status !== 'succeeded') {
-      throw new Error(
-        `Meilisearch indexing task ${taskUid} failed: ${task.error?.code ?? task.status}`,
+      throw new MeilisearchIndexingTaskError(
+        taskUid,
+        task.error?.code ?? task.status,
       );
     }
   }

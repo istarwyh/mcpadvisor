@@ -135,7 +135,7 @@ describe('Meilisearch full-text catalog ingestion', () => {
   });
 
   it('makes unsafe catalog IDs indexable and skips incomplete entries', async () => {
-    const { provider, fetchData, indexDocuments } = setup();
+    const { provider, fetchData, indexDocuments, search } = setup();
     fetchData.mockResolvedValue({
       'org/server name': catalog.filesystem,
       broken: { display_name: 'Broken' },
@@ -144,5 +144,12 @@ describe('Meilisearch full-text catalog ingestion', () => {
     const documents = indexDocuments.mock.calls[0][0];
     expect(documents).toHaveLength(1);
     expect(documents[0].id).toMatch(/^[a-f0-9]{64}$/);
+    expect(documents[0].catalog_id).toBe('org/server name');
+    search.mockResolvedValue({
+      hits: [{ ...documents[0], _rankingScore: 0.9 }],
+    });
+    expect((await provider.search({ taskDescription: 'files' }))[0].id).toBe(
+      'org/server name',
+    );
   });
 });

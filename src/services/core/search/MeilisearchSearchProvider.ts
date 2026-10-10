@@ -38,6 +38,7 @@ const convertToMeilisearchDocuments = (
       id: /^[a-zA-Z0-9_-]+$/.test(id)
         ? id
         : createHash('sha256').update(id).digest('hex'),
+      catalog_id: id,
       title: server.display_name,
       description:
         typeof server.description === 'string' ? server.description : '',
@@ -57,7 +58,7 @@ const convertToMeilisearchDocuments = (
 const convertHitToServerResponse = (
   hit: Record<string, any>,
 ): MCPServerResponse => ({
-  id: hit.id,
+  id: typeof hit.catalog_id === 'string' ? hit.catalog_id : hit.id,
   title: hit.title,
   description: hit.description,
   sourceUrl: hit.github_url,

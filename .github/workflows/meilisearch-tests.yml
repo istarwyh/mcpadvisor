@@ -60,7 +60,7 @@ jobs:
 
       - name: Run Meilisearch unit tests
         run: |
-          pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts
+          pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts src/tests/unit/services/meilisearch-factory-cache.test.ts
           node --test scripts/e2e/e2e.meilisearch.test.mjs
         timeout-minutes: 5
 

@@ -59,3 +59,10 @@ test runner's environment after the server starts does not reconfigure that
 server. That suite has not passed this verification; the automatic protocol
 checks above verify the application directly and do not certify Inspector UI or
 cloud-versus-local performance.
+
+Catalog IDs containing characters unsupported by Meilisearch use a hashed internal
+primary key. The original ID is retained in the displayed `catalog_id` field and
+returned as the public result ID. The factory helper reuses its provider so repeated
+queries keep the catalog TTL and concurrent ingestion guard. Concurrent processes
+creating a missing index tolerate only the specific `index_already_exists` race
+and recheck the actual index; other task failures still propagate.
