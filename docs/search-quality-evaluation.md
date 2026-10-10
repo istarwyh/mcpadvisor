@@ -19,7 +19,7 @@ that limitation. Precision uses K as its denominator even when fewer hits return
 
 For a real Meilisearch index, omit `--rankings` and supply `MEILI_EVAL_HOST`,
 `MEILI_EVAL_INDEX` and optionally `MEILI_EVAL_API_KEY` as environment variables.
-The tool reads IDs only and does not alter index settings or documents. Keep
+The tool reads internal and original catalog IDs only and does not alter index settings or documents. Keep
 keys out of command arguments and output files. `--output report.json` saves
 the report; `--compare candidate-rankings.json` compares on the exact same
 queries and reports relative mean nDCG change, or null if baseline nDCG is zero.
@@ -36,3 +36,11 @@ ranking scores and metadata; #9 adds optional CPU model reranking. Business
 query labels, telemetry definitions and a reviewed embedding/model choice
 remain necessary before claiming the broader #13 acceptance targets. This PR
 does not invent popularity/activity metadata or close the entire roadmap.
+
+For auto-indexed catalogs, evaluation uses `catalog_id` (the public source ID),
+falling back to `id` only for legacy indexes where `catalog_id` is absent. This
+keeps judgments keyed by original IDs consistent with application results even
+when Meilisearch requires a hashed primary key. Invalid public ID types fail the
+CLI with a generic error and nonzero exit, without printing connection details.
+Actual-engine CI exercises both original and legacy IDs and verifies read-only
+behavior; its judgments remain illustrative, not business acceptance evidence.

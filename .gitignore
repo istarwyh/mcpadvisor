@@ -52,3 +52,6 @@ package-lock.json
 # yarn.lock
 
 .reference
+# Optional local FlashRank model cache and Python environment
+.flashrank-cache/
+.venv-flashrank/

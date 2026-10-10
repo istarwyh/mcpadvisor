@@ -47,10 +47,14 @@ async function main() {
     for (const item of dataset.queries) {
       const response = await client.index(index).search<{
         id: unknown;
-      }>(item.query, { limit: k, attributesToRetrieve: ['id'] });
-      if (response.hits.some(hit => typeof hit.id !== 'string'))
+        catalog_id?: unknown;
+      }>(item.query, { limit: k, attributesToRetrieve: ['id', 'catalog_id'] });
+      const ids = response.hits.map(hit =>
+        hit.catalog_id === undefined ? hit.id : hit.catalog_id,
+      );
+      if (ids.some(id => typeof id !== 'string'))
         throw new Error('Every search hit must have a string id');
-      rankings[item.id] = response.hits.map(hit => hit.id as string);
+      rankings[item.id] = ids as string[];
     }
   }
   const baseline = evaluateRun(dataset.queries, rankings, k);
