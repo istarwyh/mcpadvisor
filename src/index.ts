@@ -14,6 +14,7 @@ import { MeilisearchSearchProvider } from './services/core/search/MeilisearchSea
 import { getParamValue } from '@chatmcp/sdk/utils/index.js';
 import { NacosMcpProvider } from './services/core/search/NacosMcpProvider.js';
 import type { SearchProvider } from './types/index.js';
+import { createOptionalProfessionalReranker } from './services/core/search/ProfessionalReranker.js';
 
 /**
  * Main application entry point
@@ -98,7 +99,7 @@ async function main() {
       );
     }
     
-    const searchService = new SearchService(searchProviders);
+    const searchService = new SearchService(searchProviders, {}, createOptionalProfessionalReranker());
 
     // Best-effort async bootstrap for local Meilisearch
     try {
