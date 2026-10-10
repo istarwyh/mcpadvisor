@@ -1,6 +1,12 @@
-## 需求
-输入一个 URL ，返回 URL 中的 README.md 的 markdown 内容。
-比如：https://github.com/seansoreilly/abs
+# Retrieve a repository README
 
-在 utils 函数中实现.
-是不是可以利用 CDN 以及已有组件，请仔细调研。
+Given a supported repository URL, return the README Markdown through a reusable
+utility. Example source: `https://github.com/seansoreilly/abs`.
+
+Investigate the official/raw GitHub and suitable CDN retrieval paths before adding
+a custom client. Validate URLs, preserve the original Markdown, bound waits and
+handle missing README files, HTTP errors and unexpected responses explicitly.
+Test successful retrieval and fallback/error cases without executing README content.
+
+The original Chinese source, including historical code examples and timelines, is
+retained in [ feature-fetch-github-readme.zh-CN.md](./%20feature-fetch-github-readme.zh-CN.md).

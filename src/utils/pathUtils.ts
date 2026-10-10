@@ -25,9 +25,9 @@ export function isJestEnvironment(): boolean {
  */
 export function isTestEnvironment(): boolean {
   return (
-    isJestEnvironment() || 
-    typeof process !== 'undefined' && 
-    (process.env.VITEST !== undefined || process.env.NODE_ENV === 'test')
+    isJestEnvironment() ||
+    (typeof process !== 'undefined' &&
+      (process.env.VITEST !== undefined || process.env.NODE_ENV === 'test'))
   );
 }
 
@@ -101,42 +101,47 @@ export function getDataDirPath(metaUrl: string | null = null): string {
   // 检查是否在测试环境中（Jest 或 Vitest）
   if (isTestEnvironment()) {
     // 在测试环境中，尝试多个可能的路径
-    
+
     // 1. 首先尝试硬编码的项目路径（最可靠）
     const hardcodedPath = '/Users/mac/Desktop/code-open/mcpadvisor';
     const hardcodedDataPath = path.join(hardcodedPath, 'data');
-    
+
     // 检查硬编码路径是否存在
     if (fs.existsSync(hardcodedDataPath)) {
-      logger.info(`使用硬编码项目数据路径: ${hardcodedDataPath}`);
+      logger.info(`Using the project data path: ${hardcodedDataPath}`);
       return hardcodedDataPath;
     }
-    logger.info(`硬编码数据路径不存在: ${hardcodedDataPath}`);
-    
+    logger.info(`Project data path does not exist: ${hardcodedDataPath}`);
+
     // 2. 尝试从当前工作目录查找
     const cwdPath = process.cwd();
     const cwdDataPath = path.join(cwdPath, 'data');
-    
+
     if (fs.existsSync(cwdDataPath)) {
-      logger.info(`使用当前工作目录数据路径: ${cwdDataPath}`);
+      logger.info(`Using the working-directory data path: ${cwdDataPath}`);
       return cwdDataPath;
     }
-    logger.info(`当前工作目录数据路径不存在: ${cwdDataPath}`);
-    
+    logger.info(`Working-directory data path does not exist: ${cwdDataPath}`);
+
     // 3. 尝试从当前工作目录向上查找
     let searchDir = cwdPath;
-    for (let i = 0; i < 3; i++) { // 最多向上查找3级目录
+    for (let i = 0; i < 3; i++) {
+      // 最多向上查找3级目录
       searchDir = path.dirname(searchDir);
       const potentialDataPath = path.join(searchDir, 'data');
-      
+
       if (fs.existsSync(potentialDataPath)) {
-        logger.info(`在上级目录找到数据路径: ${potentialDataPath}`);
+        logger.info(
+          `Found a data path in a parent directory: ${potentialDataPath}`,
+        );
         return potentialDataPath;
       }
     }
-    
-    // 4. 如果都找不到，记录警告并返回默认路径
-    logger.warn(`无法找到有效的数据目录，使用默认路径: ${hardcodedDataPath}`);
+
+    // 4. 如果都找不到，记录警告并返回default path
+    logger.warn(
+      `No valid data directory found; using the default path: ${hardcodedDataPath}`,
+    );
     return hardcodedDataPath; // 即使不存在也返回这个路径，让调用方处理文件不存在的情况
   }
 
@@ -144,8 +149,10 @@ export function getDataDirPath(metaUrl: string | null = null): string {
   const srcDir = getDirPath(metaUrl);
   const projectRoot = path.resolve(srcDir, '../../');
   const dataPath = path.join(projectRoot, 'data');
-  
-  logger.info(`非测试环境，使用项目数据路径: ${dataPath}`);
+
+  logger.info(
+    `Using the project data path outside the test environment: ${dataPath}`,
+  );
   return dataPath;
 }
 

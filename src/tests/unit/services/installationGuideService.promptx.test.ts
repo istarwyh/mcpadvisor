@@ -75,35 +75,38 @@ PromptX 作为您和AI应用之间的"专业能力中间件"，通过标准的 M
       } as Response);
 
       try {
-        const guide = await service.generateInstallationGuide(githubUrl, mcpName);
+        const guide = await service.generateInstallationGuide(
+          githubUrl,
+          mcpName,
+        );
 
         // Verify that the guide contains MCP-specific content
-        expect(guide).toContain('MCP 服务器配置步骤');
+        expect(guide).toContain('MCP server configuration');
         expect(guide).toContain('Model Context Protocol');
-        expect(guide).toContain('配置文件进行集成');
-        
+        expect(guide).toContain('integrated through');
+
         // Verify that it contains the JSON configuration
         expect(guide).toContain('"mcpServers"');
         expect(guide).toContain('"command": "npx"');
         expect(guide).toContain('dpml-prompt@snapshot');
-        
+
         // Verify Claude Desktop configuration guidance
-        expect(guide).toContain('Claude Desktop 配置');
+        expect(guide).toContain('Claude Desktop configuration');
         expect(guide).toContain('claude_desktop_config.json');
         expect(guide).toContain('%APPDATA%');
         expect(guide).toContain('~/Library/Application Support/Claude');
-        
+
         // Verify NPX-specific guidance
-        expect(guide).toContain('注意事项');
+        expect(guide).toContain('Notes');
         expect(guide).toContain('Node.js');
-        expect(guide).toContain('首次运行时可能需要下载依赖');
-        
+        expect(guide).toContain('first run may download dependencies');
+
         // Verify environment variable guidance
-        expect(guide).toContain('环境变量配置');
+        expect(guide).toContain('Environment variables');
         expect(guide).toContain('env');
-        
+
         // Verify other MCP clients are mentioned
-        expect(guide).toContain('其他 MCP 客户端');
+        expect(guide).toContain('Other MCP clients');
         expect(guide).toContain('Cursor');
         expect(guide).toContain('Windsurf');
 
@@ -140,16 +143,19 @@ This is a traditional Node.js project.
       } as Response);
 
       try {
-        const guide = await service.generateInstallationGuide(githubUrl, mcpName);
+        const guide = await service.generateInstallationGuide(
+          githubUrl,
+          mcpName,
+        );
 
         // Should not contain MCP-specific content
-        expect(guide).not.toContain('MCP 服务器配置步骤');
+        expect(guide).not.toContain('MCP server configuration');
         expect(guide).not.toContain('claude_desktop_config');
-        
+
         // Should contain traditional installation guidance
-        expect(guide).toContain('安装步骤');
+        expect(guide).toContain('Installation steps');
         expect(guide).toContain('Clone the repository');
-        expect(guide).toContain('通用安装步骤');
+        expect(guide).toContain('General installation steps');
         expect(guide).toContain('git clone');
         expect(guide).toContain('npm install');
 
@@ -191,10 +197,13 @@ That's it!
       } as Response);
 
       try {
-        const guide = await service.generateInstallationGuide(githubUrl, mcpName);
+        const guide = await service.generateInstallationGuide(
+          githubUrl,
+          mcpName,
+        );
 
         // Should detect and extract MCP configuration
-        expect(guide).toContain('MCP 服务器配置步骤');
+        expect(guide).toContain('MCP server configuration');
         expect(guide).toContain('"mcpServers"');
         expect(guide).toContain('"command": "node"');
         expect(guide).toContain('server.js');
