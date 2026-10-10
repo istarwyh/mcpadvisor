@@ -1,5 +1,8 @@
 import { IReadmeContentExtractor } from './interfaces/IReadmeContentExtractor.js';
-import { InstallationGuideContext, InstallationContentType } from './types/InstallationGuideTypes.js';
+import {
+  InstallationGuideContext,
+  InstallationContentType,
+} from './types/InstallationGuideTypes.js';
 import { GitHubReadmeExtractor } from './extractors/GitHubReadmeExtractor.js';
 import { ExtractorFactory } from './factories/ExtractorFactory.js';
 import { FormatterFactory } from './factories/FormatterFactory.js';
@@ -8,7 +11,7 @@ import logger from '../../../utils/logger.js';
 /**
  * Installation Guide Service
  * Follows SOLID principles with dependency injection and separation of concerns
- * 
+ *
  * Single Responsibility: Orchestrates the installation guide generation process
  * Open/Closed: Extensible through new extractors and formatters without modification
  * Liskov Substitution: All extractors and formatters are interchangeable
@@ -40,7 +43,8 @@ export class InstallationGuideService {
   ): Promise<string> {
     try {
       // Step 1: Extract README content
-      const readmeContent = await this.readmeExtractor.extractReadmeContent(githubUrl);
+      const readmeContent =
+        await this.readmeExtractor.extractReadmeContent(githubUrl);
 
       if (!readmeContent) {
         return this.generateDefaultGuide(mcpName, githubUrl);
@@ -79,7 +83,6 @@ export class InstallationGuideService {
    * @returns Installation guide context
    */
 
-
   private async createInstallationGuideContext(
     readmeContent: string,
     mcpName: string,
@@ -92,7 +95,8 @@ export class InstallationGuideService {
     const extractor = ExtractorFactory.getBestExtractor(readmeContent);
 
     // Extract installation section
-    const installationSection = extractor.extractInstallationSection(readmeContent);
+    const installationSection =
+      extractor.extractInstallationSection(readmeContent);
 
     return {
       mcpName,
@@ -110,31 +114,31 @@ export class InstallationGuideService {
    */
   private generateDefaultGuide(mcpName: string, githubUrl: string): string {
     const repoName = this.extractRepoName(githubUrl);
-    
-    let guide = `我将指导你如何安装和配置 ${mcpName} MCP 服务器。\n\n`;
-    guide += `GitHub 仓库地址：${githubUrl}\n\n`;
-    guide += `## 安装步骤\n\n`;
-    guide += `由于无法获取项目的 README 文档，请按照以下通用步骤进行安装：\n\n`;
-    
-    guide += `1. **克隆仓库**：\n`;
+
+    let guide = `Installation and configuration guide for ${mcpName} MCP server.\n\n`;
+    guide += `GitHub repository: ${githubUrl}\n\n`;
+    guide += `## Installation steps\n\n`;
+    guide += `The repository README could not be retrieved. These generic steps may help; verify the actual requirements in the repository:\n\n`;
+
+    guide += `1. **Clone the repository**:\n`;
     guide += `   \`\`\`bash\n   git clone ${githubUrl}\n   \`\`\`\n\n`;
-    guide += `2. **进入项目目录**：\n`;
+    guide += `2. **Enter the project directory**:\n`;
     guide += `   \`\`\`bash\n   cd ${repoName}\n   \`\`\`\n\n`;
-    guide += `3. **安装依赖**：\n`;
+    guide += `3. **Install dependencies**:\n`;
     guide += `   \`\`\`bash\n   npm install\n   \`\`\`\n\n`;
-    guide += `4. **查看项目文档**：\n`;
-    guide += `   请查看项目中的 README.md、package.json 或其他文档文件了解具体的安装和配置步骤。\n\n`;
-    
-    guide += `## MCP 配置\n\n`;
-    guide += `如果这是一个 MCP 服务器，你可能需要：\n\n`;
-    guide += `1. 查看项目文档了解如何配置 MCP 客户端\n`;
-    guide += `2. 将服务器配置添加到 Claude Desktop 或其他 MCP 客户端的配置文件中\n`;
-    guide += `3. 重启 MCP 客户端以加载新配置\n\n`;
-    
-    guide += `## 需要帮助？\n\n`;
-    guide += `- 查看项目的 [GitHub 页面](${githubUrl}) 获取最新文档\n`;
-    guide += `- 查看项目的 [Issues 页面](${githubUrl}/issues) 寻找解决方案\n`;
-    guide += `- 创建新的 Issue 寻求帮助\n`;
+    guide += `4. **Read the project documentation**:\n`;
+    guide += `   Check README.md, package.json and other repository documentation for the actual installation and configuration steps.\n\n`;
+
+    guide += `## MCP configuration\n\n`;
+    guide += `For an MCP server, you may need to:\n\n`;
+    guide += `1. Read the repository's MCP client configuration instructions\n`;
+    guide += `2. Add the server configuration to Claude Desktop or your selected MCP client\n`;
+    guide += `3. Restart the client to load the configuration\n\n`;
+
+    guide += `## Need help?\n\n`;
+    guide += `- Check the project's [GitHub page](${githubUrl}) for current documentation\n`;
+    guide += `- Check the project's [Issues page](${githubUrl}/issues) for known problems and solutions\n`;
+    guide += `- Open an issue with the error and reproduction steps\n`;
 
     return guide;
   }
