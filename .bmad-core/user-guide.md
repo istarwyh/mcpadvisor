@@ -8,7 +8,7 @@ First, here is the full standard Greenfield Planning + Execution Workflow. Brown
 
 If you are going to use the BMad Method with a Brownfield project (an existing project), review **[Working in the Brownfield](./working-in-the-brownfield.md)**.
 
-If you do not see the diagrams that following rendering, you can install Markdown All in One along with the Markdown Preview Mermaid Support plugins to VSCode (or one of the forked clones). With these plugin's, if you right click on the tab when open, there should be a Open Preview option, or check the IDE documentation.
+If you do not see the diagrams below render correctly, you can install "Markdown All in One" along with the "Markdown Preview Mermaid Support" plugins for VSCode (or one of its forks). With these plugins, if you right-click on the tab when the file is open, there should be an "Open Preview" option. Alternatively, check your IDE's documentation.
 
 ### The Planning Workflow (Web UI or Powerful IDE Agents)
 
@@ -187,7 +187,7 @@ dependencies:
 **In IDE:**
 
 ```bash
-# Some Ide's, like Cursor or Windsurf for example, utilize manual rules so interaction is done with the '@' symbol
+# Some IDEs, like Cursor or Windsurf for example, utilize manual rules so interaction is done with the '@' symbol
 @pm Create a PRD for a task management app
 @architect Design the system architecture
 @dev Implement the user authentication

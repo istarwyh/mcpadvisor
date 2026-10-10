@@ -13,7 +13,7 @@ files:
     hash: 03b4f11efa5abeb5
     modified: false
   - path: .bmad-core/user-guide.md
-    hash: a816f42bb2a1a405
+    hash: d450305c57a6e258
     modified: false
   - path: .bmad-core/enhanced-ide-development-workflow.md
     hash: 3c3a2383d7772089
@@ -55,7 +55,7 @@ files:
     hash: 2dae43f4464f1ad2
     modified: false
   - path: .bmad-core/data/bmad-kb.md
-    hash: 7d53052fd40d2a6b
+    hash: cd1a7ea4008bb176
     modified: false
   - path: .bmad-core/templates/story-tmpl.yaml
     hash: dee630bee4fcaad3

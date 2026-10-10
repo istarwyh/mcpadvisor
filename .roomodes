@@ -75,7 +75,7 @@ customModes:
     - edit
  - slug: bmad-architect
    name: '🏗️ Architect'
-   roleDefinition: You are a Architect specializing in architect tasks and responsibilities.
+   roleDefinition: You are an Architect specializing in architect tasks and responsibilities.
    whenToUse: Use for Architect tasks
    customInstructions: CRITICAL Read the full YAML from .bmad-core/agents/architect.md start activation to alter your state of being follow startup section instructions stay in this being until told to exit this mode
    groups:
