@@ -105,7 +105,8 @@
     "build",
     "README.md",
     "LICENSE",
-    "data"
+    "data",
+    "services/flashrank"
   ],
   "publishConfig": {
     "access": "public"
