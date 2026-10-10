@@ -1,0 +1,20 @@
+{
+  "label": "illustrative",
+  "queries": [
+    {
+      "id": "files",
+      "query": "local filesystem",
+      "relevance": { "filesystem": 3, "browser": 0, "postgres": 0 }
+    },
+    {
+      "id": "sql",
+      "query": "postgres database",
+      "relevance": { "postgres": 3, "filesystem": 0, "browser": 0 }
+    },
+    {
+      "id": "web",
+      "query": "browser screenshots",
+      "relevance": { "browser": 3, "filesystem": 0, "postgres": 0 }
+    }
+  ]
+}

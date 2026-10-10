@@ -18,6 +18,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
   vi.useRealTimers();
 });
 
@@ -189,6 +190,8 @@ describe('ClineSearchProvider', () => {
 
   it('aborts a request that has not received headers', async () => {
     vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
     fetchMock.mockImplementationOnce(
       (_url, init) =>
         new Promise((_resolve, reject) => {
@@ -203,12 +206,12 @@ describe('ClineSearchProvider', () => {
     const pending = expect(
       provider.search({ taskDescription: 'Postman' }),
     ).rejects.toThrow('request aborted');
+    expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 20);
+    const requestTimer = setTimeoutSpy.mock.results[0].value;
     await vi.advanceTimersByTimeAsync(21);
     await pending;
-    // Node 22 abort dispatch can leave a nextTick queued in fake timers.
-    // Flush microtasks before checking that no request timeout remains.
-    vi.runAllTicks();
-    expect(vi.getTimerCount()).toBe(0);
+    // Verify our request timer directly; Node may schedule unrelated abort work.
+    expect(clearTimeoutSpy).toHaveBeenCalledWith(requestTimer);
   });
 
   it('aborts a slow response body and permits a later retry', async () => {

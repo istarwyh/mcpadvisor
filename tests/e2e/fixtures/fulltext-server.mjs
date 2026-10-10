@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { ServerService } from '../../../build/services/core/server/ServerService.js';
 import { SearchService } from '../../../build/services/searchService.js';
 import { MeilisearchSearchProvider } from '../../../build/services/core/search/MeilisearchSearchProvider.js';
