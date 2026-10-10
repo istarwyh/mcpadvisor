@@ -8,29 +8,50 @@ const host = process.env.MEILI_FULLTEXT_TEST_HOST;
 const key = process.env.MEILI_FULLTEXT_TEST_KEY;
 const indexName = `mcp_fulltext_test_${Date.now()}_${process.pid}`;
 const engine = host ? new MeiliSearch({ host, apiKey: key }) : undefined;
-const catalog = {
+const catalog: GetMcpApiResponse = {
   filesystem: {
+    name: 'filesystem',
+    homepage: '',
+    author: { name: 'Fixture' },
+    license: 'MIT',
+    examples: [],
+    arguments: {},
+    installations: {},
     display_name: 'Filesystem',
     description: 'Read and write local files',
-    repository: { url: 'https://github.com/example/filesystem' },
+    repository: { type: 'git', url: 'https://github.com/example/filesystem' },
     categories: ['storage'],
     tags: ['files'],
   },
   postgres: {
+    name: 'postgres',
+    homepage: '',
+    author: { name: 'Fixture' },
+    license: 'MIT',
+    examples: [],
+    arguments: {},
+    installations: {},
     display_name: 'Postgres',
     description: 'Query relational databases',
-    repository: { url: 'https://github.com/example/postgres' },
+    repository: { type: 'git', url: 'https://github.com/example/postgres' },
     categories: ['database'],
     tags: ['sql'],
   },
   browser: {
+    name: 'browser',
+    homepage: '',
+    author: { name: 'Fixture' },
+    license: 'MIT',
+    examples: [],
+    arguments: {},
+    installations: {},
     display_name: 'Browser',
     description: 'Automate web pages',
-    repository: { url: 'https://github.com/example/browser' },
+    repository: { type: 'git', url: 'https://github.com/example/browser' },
     categories: ['web'],
     tags: ['automation'],
   },
-} as GetMcpApiResponse;
+};
 
 describe.skipIf(!host)(
   'Meilisearch full-text search against the real local engine',

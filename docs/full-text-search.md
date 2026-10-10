@@ -36,3 +36,26 @@ pnpm test src/tests/integration/providers/meilisearch-fulltext.test.ts
 
 The test creates a unique fixture index and deletes it afterward. It uses a fixed
 catalog so search quality assertions do not depend on a changing external feed.
+
+CI runs unit tests, test-project type checking, real-engine integration tests,
+and real MCP stdio protocol tests. The protocol tests start the compiled server
+services against a unique local index, discover and invoke the recommendation
+tool, verify invalid input handling and exercise a failed catalog fetch. A failed
+catalog currently yields the existing empty-results response, not an MCP error.
+No real LLM, Tavily, Redis or cloud-search credentials are required.
+
+After building, run the protocol suite with the same host/key configuration:
+
+```sh
+MEILI_FULLTEXT_TEST_HOST=http://localhost:7700 \
+MEILI_FULLTEXT_TEST_KEY=<your-local-master-key> \
+node --test tests/e2e/meilisearch-mcp.test.mjs
+```
+
+The legacy Inspector browser suite is retained behind the explicit
+`workflow_dispatch` input `inspector_ui`. Its current Inspector connection waits
+time out, and its cloud comparisons require separate configuration. Changing the
+test runner's environment after the server starts does not reconfigure that
+server. That suite has not passed this verification; the automatic protocol
+checks above verify the application directly and do not certify Inspector UI or
+cloud-versus-local performance.

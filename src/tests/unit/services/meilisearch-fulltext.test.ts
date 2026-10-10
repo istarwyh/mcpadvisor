@@ -3,16 +3,22 @@ import { MeilisearchSearchProvider } from '../../../services/core/search/Meilise
 import { MemoryCache } from '../../../services/common/cache/memoryCache.js';
 import type { GetMcpApiResponse } from '../../../services/common/api/getMcpResourceFetcher.js';
 
-const catalog = {
+const catalog: GetMcpApiResponse = {
   filesystem: {
+    name: 'filesystem',
+    homepage: '',
+    author: { name: 'Fixture' },
+    license: 'MIT',
+    examples: [],
+    arguments: {},
+    installations: {},
     display_name: 'Filesystem',
     description: 'Read and write local files',
-    repository: { url: 'https://github.com/example/filesystem' },
+    repository: { type: 'git', url: 'https://github.com/example/filesystem' },
     categories: ['files'],
     tags: ['storage'],
-    installations: {},
   },
-} as GetMcpApiResponse;
+};
 
 function setup() {
   const fetchData = vi.fn().mockResolvedValue(catalog);
