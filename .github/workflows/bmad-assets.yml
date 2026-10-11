@@ -1,0 +1,28 @@
+name: BMad Asset Checks
+
+on:
+  pull_request:
+    paths:
+      - '.bmad-core/**'
+      - '.claude/commands/BMad/**'
+      - 'scripts/tests/bmad-assets.test.mjs'
+      - '.github/workflows/bmad-assets.yml'
+  push:
+    paths:
+      - '.bmad-core/**'
+      - '.claude/commands/BMad/**'
+      - 'scripts/tests/bmad-assets.test.mjs'
+      - '.github/workflows/bmad-assets.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  asset-consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/tests/bmad-assets.test.mjs
