@@ -1,4 +1,4 @@
-import { MCPServerResponse } from "./index.js";
+import { MCPServerResponse } from './index.js';
 
 /**
  * Search parameter structure for advanced search.

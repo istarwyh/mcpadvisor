@@ -13,6 +13,6 @@ describe('RerankMcpServer.reRank – parameterized baseline', () => {
       const results = reranker.reRank(providerResults, options);
       const receivedTitles = results.map(r => r.title);
       expect(receivedTitles).toEqual(expectedTitles);
-    }
+    },
   );
 });

@@ -26,7 +26,7 @@ describe('InstallationGuideService - SQLite Explorer', () => {
     // 获取 README 内容
     const readmeContent = await fetchGitHubReadme(repo.url);
     console.log(`GitHub README 获取结果：${readmeContent ? '成功' : '失败'}`);
-    
+
     // 测试环境中可能无法访问 GitHub，因此不强制要求内容存在
     if (!readmeContent) {
       console.log('无法获取 README 内容，跳过后续测试');
@@ -51,9 +51,9 @@ describe('InstallationGuideService - SQLite Explorer', () => {
     expect(guide.length).toBeGreaterThan(100);
     expect(guide).toContain(repo.name);
     expect(guide).toContain(repo.url);
-    
+
     // Check for installation-related content (flexible like the main test)
-    const hasInstallationContent = 
+    const hasInstallationContent =
       guide.includes('Installation') ||
       guide.includes('Setup') ||
       guide.includes('Getting Started') ||
@@ -61,7 +61,7 @@ describe('InstallationGuideService - SQLite Explorer', () => {
       guide.includes('git clone') ||
       guide.includes('配置') ||
       guide.includes('安装');
-    
+
     expect(hasInstallationContent).toBe(true);
 
     console.log(`Test for ${repo.name} completed successfully.\n`);

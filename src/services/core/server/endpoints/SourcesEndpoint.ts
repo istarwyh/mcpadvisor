@@ -5,7 +5,10 @@ import { addAdditionalSources } from '../../../loadService.js';
 import logger from '../../../../utils/logger.js';
 
 export class SourcesEndpoint {
-  public static async handleRequest(req: Request, res: Response): Promise<void> {
+  public static async handleRequest(
+    req: Request,
+    res: Response,
+  ): Promise<void> {
     try {
       const result = SourcesSchema.safeParse(req.body);
       if (!result.success) {
@@ -19,7 +22,7 @@ export class SourcesEndpoint {
 
       const { remote_urls, local_files, field_map } = result.data;
       const sources: Partial<McpSources> = {};
-      
+
       if (remote_urls?.length) sources.remote_urls = remote_urls;
       if (local_files?.length) sources.local_files = local_files;
 
@@ -31,7 +34,9 @@ export class SourcesEndpoint {
         itemCount: items.length,
       });
     } catch (error) {
-      logger.error(`Error adding sources: ${error instanceof Error ? error.message : String(error)}`);
+      logger.error(
+        `Error adding sources: ${error instanceof Error ? error.message : String(error)}`,
+      );
       res.status(400).json({
         success: false,
         error: error instanceof Error ? error.message : 'Invalid request',

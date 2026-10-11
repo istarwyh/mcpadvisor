@@ -12,8 +12,8 @@ vi.mock('../../../../utils/logger.js', () => ({
     info: vi.fn(),
     error: vi.fn(),
     warn: vi.fn(),
-    debug: vi.fn()
-  }
+    debug: vi.fn(),
+  },
 }));
 
 // Mock the VectorDB and McpManager to avoid real network calls
@@ -22,16 +22,16 @@ vi.mock('../../../../services/vector/VectorDB.js', () => ({
     start: vi.fn().mockResolvedValue(undefined),
     isReady: vi.fn().mockResolvedValue(true),
     close: vi.fn().mockResolvedValue(undefined),
-    _collectionId: 'test-collection'
-  }))
+    _collectionId: 'test-collection',
+  })),
 }));
 
 vi.mock('../../../../services/mcp/McpManager.js', () => ({
   McpManager: vi.fn().mockImplementation(() => ({
     startSync: vi.fn().mockResolvedValue(undefined),
     stopSync: vi.fn().mockResolvedValue(undefined),
-    search: vi.fn().mockResolvedValue([])
-  }))
+    search: vi.fn().mockResolvedValue([]),
+  })),
 }));
 
 describe('NacosMcpProvider', () => {
@@ -40,7 +40,7 @@ describe('NacosMcpProvider', () => {
   let mockVectorDB: any;
   let mockMcpManager: any;
   let mockLogger: any;
-  
+
   const mockConfig = {
     serverAddr: 'http://localhost:8848',
     username: 'test',
@@ -50,7 +50,7 @@ describe('NacosMcpProvider', () => {
     authToken: 'test-token',
     minSimilarity: 0.3,
     limit: 10,
-    debug: true
+    debug: true,
   };
 
   beforeEach(async () => {
@@ -62,47 +62,51 @@ describe('NacosMcpProvider', () => {
       init: vi.fn().mockResolvedValue(undefined),
       close: vi.fn().mockResolvedValue(undefined),
       isReady: vi.fn().mockResolvedValue(true),
-      searchMcpByKeyword: vi.fn().mockResolvedValue([{
-        name: 'test-server',
-        groupName: 'DEFAULT_GROUP',
-        metadata: {
-          description: 'Test server description'
-        },
-        toDict: () => ({
+      searchMcpByKeyword: vi.fn().mockResolvedValue([
+        {
           name: 'test-server',
-          description: 'Test server description',
-          agentConfig: {
-            categories: ['test'],
-            metadata: {
-              description: 'Test server description'
-            }
-          }
-        })
-      }]),
-      getAllServices: vi.fn().mockResolvedValue([])
+          groupName: 'DEFAULT_GROUP',
+          metadata: {
+            description: 'Test server description',
+          },
+          toDict: () => ({
+            name: 'test-server',
+            description: 'Test server description',
+            agentConfig: {
+              categories: ['test'],
+              metadata: {
+                description: 'Test server description',
+              },
+            },
+          }),
+        },
+      ]),
+      getAllServices: vi.fn().mockResolvedValue([]),
     };
 
     mockVectorDB = {
       start: vi.fn().mockResolvedValue(undefined),
       isReady: vi.fn().mockResolvedValue(true),
       close: vi.fn().mockResolvedValue(undefined),
-      _collectionId: 'test-collection'
+      _collectionId: 'test-collection',
     };
 
     mockMcpManager = {
       startSync: vi.fn().mockResolvedValue(undefined),
       stopSync: vi.fn().mockResolvedValue(undefined),
-      search: vi.fn().mockResolvedValue([{
-        id: 'test-server',
-        title: 'test-server',
-        description: 'Test server description',
-        categories: ['test'],
-        tags: ['test'],
-        score: 0.9,
-        similarity: 0.9,
-        sourceUrl: 'nacos://test-server',
-        installations: {}
-      }])
+      search: vi.fn().mockResolvedValue([
+        {
+          id: 'test-server',
+          title: 'test-server',
+          description: 'Test server description',
+          categories: ['test'],
+          tags: ['test'],
+          score: 0.9,
+          similarity: 0.9,
+          sourceUrl: 'nacos://test-server',
+          installations: {},
+        },
+      ]),
     };
 
     // Create a new instance in test mode to skip real initialization
@@ -154,7 +158,7 @@ describe('NacosMcpProvider', () => {
       await provider.close();
 
       await expect(
-        provider.search({ taskDescription: 'test after close' })
+        provider.search({ taskDescription: 'test after close' }),
       ).rejects.toThrow('NacosMcpProvider is closing or has been closed');
     });
 
@@ -173,13 +177,15 @@ describe('NacosMcpProvider', () => {
       const testProvider = new NacosMcpProvider(mockConfig);
 
       // Mock the init method to avoid real initialization
-      const initSpy = vi.spyOn(testProvider as any, 'init').mockImplementation(async () => {
-        // Set up the mocked dependencies after initialization
-        (testProvider as any).mcpManager = mockMcpManager;
-        (testProvider as any).vectorDB = mockVectorDB;
-        (testProvider as any).nacosClient = mockNacosClient;
-        (testProvider as any)._isInitialized = true;
-      });
+      const initSpy = vi
+        .spyOn(testProvider as any, 'init')
+        .mockImplementation(async () => {
+          // Set up the mocked dependencies after initialization
+          (testProvider as any).mcpManager = mockMcpManager;
+          (testProvider as any).vectorDB = mockVectorDB;
+          (testProvider as any).nacosClient = mockNacosClient;
+          (testProvider as any)._isInitialized = true;
+        });
 
       // Call search which should trigger initialization
       await testProvider.search({ taskDescription: 'test' });
@@ -190,11 +196,15 @@ describe('NacosMcpProvider', () => {
 
     it('should throw an error if initialization fails', async () => {
       const testProvider = new NacosMcpProvider(mockConfig);
-      vi.spyOn(testProvider as any, 'init').mockRejectedValue(new Error('Initialization failed'));
+      vi.spyOn(testProvider as any, 'init').mockRejectedValue(
+        new Error('Initialization failed'),
+      );
 
-      await expect(testProvider.search({ taskDescription: 'test' }))
-        .rejects
-        .toThrow('Failed to initialize NacosMcpProvider: Initialization failed');
+      await expect(
+        testProvider.search({ taskDescription: 'test' }),
+      ).rejects.toThrow(
+        'Failed to initialize NacosMcpProvider: Initialization failed',
+      );
 
       await testProvider.close();
     });
@@ -203,17 +213,19 @@ describe('NacosMcpProvider', () => {
   describe('search', () => {
     it('should return an array of MCPServerResponse', async () => {
       // Mock the search result
-      mockMcpManager.search.mockResolvedValue([{
-        id: 'test-server',
-        title: 'test-server',
-        description: 'Test server description',
-        categories: ['test'],
-        tags: ['test'],
-        score: 0.9,
-        similarity: 0.9,
-        sourceUrl: 'nacos://test-server',
-        installations: {}
-      }]);
+      mockMcpManager.search.mockResolvedValue([
+        {
+          id: 'test-server',
+          title: 'test-server',
+          description: 'Test server description',
+          categories: ['test'],
+          tags: ['test'],
+          score: 0.9,
+          similarity: 0.9,
+          sourceUrl: 'nacos://test-server',
+          installations: {},
+        },
+      ]);
 
       // Setup mock return value - match the actual response structure
       const mockServer = {
@@ -223,8 +235,8 @@ describe('NacosMcpProvider', () => {
           categories: ['test'],
           tags: ['test'],
           metadata: {
-            vector: [0.1, 0.2, 0.3]
-          }
+            vector: [0.1, 0.2, 0.3],
+          },
         },
         toDict: () => ({
           name: 'test-server',
@@ -233,26 +245,28 @@ describe('NacosMcpProvider', () => {
             categories: ['test'],
             tags: ['test'],
             metadata: {
-              vector: [0.1, 0.2, 0.3]
-            }
-          }
-        })
+              vector: [0.1, 0.2, 0.3],
+            },
+          },
+        }),
       };
 
       // Mock the searchMcpByKeyword to return our test server
       mockNacosClient.searchMcpByKeyword.mockResolvedValueOnce([mockServer]);
-      mockMcpManager.search.mockResolvedValueOnce([{
-        id: 'test-server',
-        score: 0.9,
-        metadata: {
-          original: mockServer.toDict()
-        }
-      }]);
+      mockMcpManager.search.mockResolvedValueOnce([
+        {
+          id: 'test-server',
+          score: 0.9,
+          metadata: {
+            original: mockServer.toDict(),
+          },
+        },
+      ]);
 
       const searchParams: SearchParams = {
         taskDescription: 'test search',
         keywords: ['test'],
-        capabilities: ['test-capability']
+        capabilities: ['test-capability'],
       };
 
       const results = await provider.search(searchParams);
@@ -272,7 +286,7 @@ describe('NacosMcpProvider', () => {
         score: expect.any(Number),
         installations: expect.any(Object),
         categories: expect.arrayContaining([expect.any(String)]),
-        tags: expect.arrayContaining([expect.any(String)])
+        tags: expect.arrayContaining([expect.any(String)]),
       });
 
       // Verify search was called with the first keyword
@@ -281,17 +295,19 @@ describe('NacosMcpProvider', () => {
 
     it('should handle empty keywords by extracting from task description', async () => {
       // Mock the search result
-      mockMcpManager.search.mockResolvedValue([{
-        id: 'test-server',
-        title: 'test-server',
-        description: 'Test server description',
-        categories: ['test'],
-        tags: ['test'],
-        score: 0.9,
-        similarity: 0.9,
-        sourceUrl: 'nacos://test-server',
-        installations: {}
-      }]);
+      mockMcpManager.search.mockResolvedValue([
+        {
+          id: 'test-server',
+          title: 'test-server',
+          description: 'Test server description',
+          categories: ['test'],
+          tags: ['test'],
+          score: 0.9,
+          similarity: 0.9,
+          sourceUrl: 'nacos://test-server',
+          installations: {},
+        },
+      ]);
 
       // Setup mock return value - match the actual response structure
       const mockServer = {
@@ -299,16 +315,16 @@ describe('NacosMcpProvider', () => {
         description: 'Test server description',
         agentConfig: {
           categories: ['test'],
-          tags: ['test']
+          tags: ['test'],
         },
         toDict: () => ({
           name: 'test-server',
           description: 'Test server description',
           agentConfig: {
             categories: ['test'],
-            tags: ['test']
-          }
-        })
+            tags: ['test'],
+          },
+        }),
       };
 
       mockNacosClient.searchMcpByKeyword.mockResolvedValueOnce([mockServer]);
@@ -334,7 +350,7 @@ describe('NacosMcpProvider', () => {
         score: expect.any(Number),
         installations: expect.any(Object),
         categories: expect.arrayContaining([expect.any(String)]),
-        tags: expect.arrayContaining([expect.any(String)])
+        tags: expect.arrayContaining([expect.any(String)]),
       });
 
       // Verify search was called with the first word of the task description
@@ -344,14 +360,18 @@ describe('NacosMcpProvider', () => {
 
     it('should handle errors during search', async () => {
       // Mock the searchNacosMcpServers method to throw an error
-      vi.spyOn(provider as any, 'searchNacosMcpServers').mockRejectedValue(new Error('Search failed'));
+      vi.spyOn(provider as any, 'searchNacosMcpServers').mockRejectedValue(
+        new Error('Search failed'),
+      );
 
       const searchParams: SearchParams = {
         taskDescription: 'test error handling',
         keywords: ['test'],
       };
 
-      await expect(provider.search(searchParams)).rejects.toThrow('Search failed');
+      await expect(provider.search(searchParams)).rejects.toThrow(
+        'Search failed',
+      );
     });
 
     it('should handle empty search results', async () => {
@@ -361,7 +381,7 @@ describe('NacosMcpProvider', () => {
 
       const searchParams: SearchParams = {
         taskDescription: 'test empty search',
-        keywords: ['empty']
+        keywords: ['empty'],
       };
 
       const results = await provider.search(searchParams);
@@ -375,8 +395,8 @@ describe('NacosMcpProvider', () => {
         agentConfig: {
           categories: ['vector'],
           metadata: {
-            vector: [0.1, 0.2, 0.3]
-          }
+            vector: [0.1, 0.2, 0.3],
+          },
         },
         toDict: () => ({
           name: 'vector-server',
@@ -384,23 +404,25 @@ describe('NacosMcpProvider', () => {
           agentConfig: {
             categories: ['vector'],
             metadata: {
-              vector: [0.1, 0.2, 0.3]
-            }
-          }
-        })
+              vector: [0.1, 0.2, 0.3],
+            },
+          },
+        }),
       };
 
       // Mock vector search results
-      mockMcpManager.search.mockResolvedValueOnce([{
-        id: 'vector-server',
-        score: 0.95,
-        metadata: {
-          original: vectorServer.toDict()
-        }
-      }]);
+      mockMcpManager.search.mockResolvedValueOnce([
+        {
+          id: 'vector-server',
+          score: 0.95,
+          metadata: {
+            original: vectorServer.toDict(),
+          },
+        },
+      ]);
 
       const searchParams: SearchParams = {
-        taskDescription: 'vector search test'
+        taskDescription: 'vector search test',
       };
 
       const results = await provider.search(searchParams);
@@ -412,33 +434,35 @@ describe('NacosMcpProvider', () => {
       // Mock vector search failure
       const error = new Error('Vector search failed');
       mockMcpManager.search.mockRejectedValueOnce(error);
-      
+
       // Mock the fallback keyword search
-      mockNacosClient.searchMcpByKeyword.mockResolvedValueOnce([{
-        name: 'fallback-server',
-        description: 'Fallback test',
-        agentConfig: {},
-        toDict: () => ({
+      mockNacosClient.searchMcpByKeyword.mockResolvedValueOnce([
+        {
           name: 'fallback-server',
           description: 'Fallback test',
-          agentConfig: {}
-        })
-      }]);
+          agentConfig: {},
+          toDict: () => ({
+            name: 'fallback-server',
+            description: 'Fallback test',
+            agentConfig: {},
+          }),
+        },
+      ]);
 
       const searchParams: SearchParams = {
-        taskDescription: 'fallback test'
+        taskDescription: 'fallback test',
       };
 
       const results = await provider.search(searchParams);
-      
+
       // Should still return results from the fallback search
       expect(results).toBeInstanceOf(Array);
       expect(mockNacosClient.searchMcpByKeyword).toHaveBeenCalled();
-      
+
       // Verify the error was logged
       expect(mockLogger.warn).toHaveBeenCalledWith(
         'Vector search failed, falling back to keyword search',
-        expect.any(Error)
+        expect.any(Error),
       );
     });
   });
@@ -446,61 +470,63 @@ describe('NacosMcpProvider', () => {
   describe('error handling', () => {
     it('should handle initialization errors in search', async () => {
       const testProvider = new NacosMcpProvider(mockConfig, true);
-      
+
       // Mock the initialization to fail
       const initError = new Error('Init failed');
       vi.spyOn(testProvider as any, 'init').mockRejectedValue(initError);
-      
+
       // Reset the initialization state
       (testProvider as any)._isInitialized = false;
       (testProvider as any)._initializationPromise = null;
-      
-      await expect(testProvider.search({ taskDescription: 'test' }))
-        .rejects
-        .toThrow('Failed to initialize NacosMcpProvider: Init failed');
-      
+
+      await expect(
+        testProvider.search({ taskDescription: 'test' }),
+      ).rejects.toThrow('Failed to initialize NacosMcpProvider: Init failed');
+
       // Verify the error was logged
       expect(mockLogger.error).toHaveBeenCalledWith(
         'Failed to initialize NacosMcpProvider:',
-        expect.any(Error)
+        expect.any(Error),
       );
-      
+
       await testProvider.close();
     });
 
     it('should handle errors during vector DB operations', async () => {
       // Create a new test provider
       const testProvider = new NacosMcpProvider(mockConfig, true);
-      
+
       // Mock the vector DB to fail
       const failingVectorDB = {
         start: vi.fn().mockResolvedValue(undefined),
         isReady: vi.fn().mockRejectedValue(new Error('Vector DB not ready')),
-        close: vi.fn().mockResolvedValue(undefined)
+        close: vi.fn().mockResolvedValue(undefined),
       };
-      
+
       // Mock the nacos client to also fail for fallback search
       const failingNacosClient = {
         init: vi.fn().mockResolvedValue(undefined),
         close: vi.fn().mockResolvedValue(undefined),
         isReady: vi.fn().mockResolvedValue(true),
-        searchMcpByKeyword: vi.fn().mockRejectedValue(new Error('Nacos search failed')),
-        getAllServices: vi.fn().mockResolvedValue([])
+        searchMcpByKeyword: vi
+          .fn()
+          .mockRejectedValue(new Error('Nacos search failed')),
+        getAllServices: vi.fn().mockResolvedValue([]),
       };
-      
+
       // Set up the test provider with the failing components
       (testProvider as any).vectorDB = failingVectorDB;
       (testProvider as any).nacosClient = failingNacosClient;
       (testProvider as any).mcpManager = {
-        search: vi.fn().mockRejectedValue(new Error('Vector search failed'))
+        search: vi.fn().mockRejectedValue(new Error('Vector search failed')),
       };
-      
+
       // Reset initialization state
       (testProvider as any)._isInitialized = true;
-      
-      await expect(testProvider.search({ taskDescription: 'test' }))
-        .rejects
-        .toThrow('Vector search failed');
+
+      await expect(
+        testProvider.search({ taskDescription: 'test' }),
+      ).rejects.toThrow('Vector search failed');
     });
   });
 });

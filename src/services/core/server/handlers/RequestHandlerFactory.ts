@@ -20,7 +20,9 @@ export class RequestHandlerFactory {
       try {
         const handler = toolHandlers.find(h => h.canHandle(name));
         if (!handler) {
-          return RequestHandlerFactory.createErrorResponse(`Unknown tool: ${name}`);
+          return RequestHandlerFactory.createErrorResponse(
+            `Unknown tool: ${name}`,
+          );
         }
         return await handler.handleRequest(request);
       } catch (error) {
@@ -31,13 +33,15 @@ export class RequestHandlerFactory {
     };
   }
 
-  public static createListResourcesHandler(resourceHandlers: BaseResourceHandler[]) {
+  public static createListResourcesHandler(
+    resourceHandlers: BaseResourceHandler[],
+  ) {
     return async () => {
       logger.debug('Handling ListResources request');
-      
+
       try {
         const allResources = [];
-        
+
         for (const handler of resourceHandlers) {
           const resources = await handler.listResources();
           allResources.push(...resources);
@@ -53,7 +57,9 @@ export class RequestHandlerFactory {
     };
   }
 
-  public static createReadResourceHandler(resourceHandlers: BaseResourceHandler[]) {
+  public static createReadResourceHandler(
+    resourceHandlers: BaseResourceHandler[],
+  ) {
     return async (request: any) => {
       const { uri } = request.params;
       logger.info(`Handling resource read: ${uri}`);
@@ -62,15 +68,16 @@ export class RequestHandlerFactory {
         // Find a handler that supports this URI
         let supportingHandler = null;
         for (const handler of resourceHandlers) {
-          const supports = typeof handler.supportsUri === 'function' 
-            ? await handler.supportsUri(uri)
-            : handler.supportsUri(uri);
+          const supports =
+            typeof handler.supportsUri === 'function'
+              ? await handler.supportsUri(uri)
+              : handler.supportsUri(uri);
           if (supports) {
             supportingHandler = handler;
             break;
           }
         }
-        
+
         if (!supportingHandler) {
           const errorMessage = `No handler found for URI: ${uri}`;
           logger.error(errorMessage);
@@ -82,7 +89,11 @@ export class RequestHandlerFactory {
         return content;
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        logger.error(`Error reading resource: ${message}`, 'RequestHandlerFactory', { error, uri });
+        logger.error(
+          `Error reading resource: ${message}`,
+          'RequestHandlerFactory',
+          { error, uri },
+        );
         return RequestHandlerFactory.createErrorResponse(message);
       }
     };
@@ -90,10 +101,12 @@ export class RequestHandlerFactory {
 
   private static createErrorResponse(message: string) {
     return {
-      content: [{
-        type: 'text',
-        text: `Error: ${message}`,
-      }],
+      content: [
+        {
+          type: 'text',
+          text: `Error: ${message}`,
+        },
+      ],
       isError: true,
     };
   }

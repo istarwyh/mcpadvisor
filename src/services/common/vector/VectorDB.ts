@@ -8,7 +8,9 @@ export class VectorDB {
   constructor() {
     this._collectionId = `nacos_mcp_router-collection-${process.pid}`;
     this.db = new MemoryVectorDB({ numDimensions: 384, clearOnStart: true });
-    logger.info(`VectorDB initialized with collection ID: ${this._collectionId}`);
+    logger.info(
+      `VectorDB initialized with collection ID: ${this._collectionId}`,
+    );
   }
 
   public async start() {
@@ -29,14 +31,14 @@ export class VectorDB {
   updateData(
     ids: string[],
     documents?: string[],
-    metadatas?: Record<string, any>[]
+    metadatas?: Record<string, any>[],
   ): void {
     if (!documents) return;
-    
+
     documents.forEach((doc, i) => {
       this.db.add(doc, { id: ids[i], ...(metadatas ? metadatas[i] : {}) });
     });
-    
+
     this.db.save();
     logger.debug(`Updated vector database with ${documents.length} documents`);
   }
@@ -44,15 +46,15 @@ export class VectorDB {
   async query(query: string, count: number): Promise<any> {
     logger.debug(`Querying vector database: ${query.substring(0, 50)}...`);
     const results = await this.db.search(query, count);
-    
+
     const response = {
       ids: [results.map((r: any) => r.metadata.id)],
       documents: [results.map((r: any) => r.text)],
       metadatas: [results.map((r: any) => r.metadata)],
       distances: [results.map((r: any) => r.distance)],
-      included: []
+      included: [],
     };
-    
+
     logger.debug(`Found ${results.length} results for query`);
     return response;
   }
@@ -60,14 +62,14 @@ export class VectorDB {
   async get(ids: string[]): Promise<any> {
     const all = this.db['metadatas'] || [];
     const found = all.filter((m: any) => ids.includes(m.id));
-    
+
     const response = {
       ids,
       documents: found.map((m: any) => m.text),
       metadatas: found,
-      included: []
+      included: [],
     };
-    
+
     logger.debug(`Retrieved ${found.length} documents by ID`);
     return response;
   }

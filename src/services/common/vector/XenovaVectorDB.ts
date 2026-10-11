@@ -47,10 +47,14 @@ export class MemoryVectorDB {
       // @ts-ignore - Disable node backend and image processing to avoid native module issues
       env.allowLocalModels = false;
       env.backends.onnx.wasm.numThreads = 1;
-      env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/';
+      env.backends.onnx.wasm.wasmPaths =
+        'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/';
       // @ts-ignore - Disable image processing to avoid sharp dependency
       env.useFS = false;
-      this.embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+      this.embedder = await pipeline(
+        'feature-extraction',
+        'Xenova/all-MiniLM-L6-v2',
+      );
       this.isEmbedderReady = true;
       logger.info('Vector embedder initialized successfully');
     } catch (error) {
@@ -65,7 +69,10 @@ export class MemoryVectorDB {
       return this.getEmbedding(text);
     }
     try {
-      const output = await this.embedder(text, { pooling: 'mean', normalize: true });
+      const output = await this.embedder(text, {
+        pooling: 'mean',
+        normalize: true,
+      });
       return Array.from(output.data);
     } catch (error) {
       logger.error('Error generating embedding:', { error, text });
@@ -73,7 +80,10 @@ export class MemoryVectorDB {
     }
   }
 
-  public async add(text: string, metadata: Omit<Metadata, 'text'> = { id: uuidv4() }) {
+  public async add(
+    text: string,
+    metadata: Omit<Metadata, 'text'> = { id: uuidv4() },
+  ) {
     const embedding = await this.getEmbedding(text);
     this.documents.push(text);
     this.metadatas.push({ id: uuidv4(), ...metadata, text });
@@ -82,7 +92,7 @@ export class MemoryVectorDB {
 
   public async search(query: string, k: number = 5): Promise<SearchResult[]> {
     if (this.documents.length === 0) return [];
-    
+
     const queryEmbedding = await this.getEmbedding(query);
     const results: SearchResult[] = [];
 
@@ -91,29 +101,27 @@ export class MemoryVectorDB {
       results.push({
         text: this.documents[i],
         metadata: this.metadatas[i],
-        distance: dist
+        distance: dist,
       });
     }
 
     // Sort by distance (higher is better for cosine similarity)
-    return results
-      .sort((a, b) => b.distance - a.distance)
-      .slice(0, k);
+    return results.sort((a, b) => b.distance - a.distance).slice(0, k);
   }
 
   private cosineSimilarity(a: number[], b: number[]): number {
     if (a.length !== b.length) return 0;
-    
+
     let dotProduct = 0;
     let normA = 0;
     let normB = 0;
-    
+
     for (let i = 0; i < a.length; i++) {
       dotProduct += a[i] * b[i];
       normA += a[i] * a[i];
       normB += b[i] * b[i];
     }
-    
+
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
   }
 

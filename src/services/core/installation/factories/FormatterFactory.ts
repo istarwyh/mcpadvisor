@@ -18,10 +18,12 @@ export class FormatterFactory {
    * @param context - Installation guide context
    * @returns Best matching formatter
    */
-  public static getBestFormatter(context: InstallationGuideContext): IInstallationGuideFormatter {
+  public static getBestFormatter(
+    context: InstallationGuideContext,
+  ): IInstallationGuideFormatter {
     // Find all formatters that can handle the context
-    const capableFormatters = this.formatters.filter(formatter => 
-      formatter.canHandle(context)
+    const capableFormatters = this.formatters.filter(formatter =>
+      formatter.canHandle(context),
     );
 
     // Sort by priority (highest first)
@@ -43,7 +45,9 @@ export class FormatterFactory {
    * Register a new formatter
    * @param formatter - Formatter to register
    */
-  public static registerFormatter(formatter: IInstallationGuideFormatter): void {
+  public static registerFormatter(
+    formatter: IInstallationGuideFormatter,
+  ): void {
     this.formatters.push(formatter);
   }
 }

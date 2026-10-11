@@ -1,4 +1,7 @@
-import { Resource, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
+import {
+  Resource,
+  ReadResourceResult,
+} from '@modelcontextprotocol/sdk/types.js';
 import { BaseResourceHandler } from './BaseResourceHandler.js';
 import fs from 'fs/promises';
 import path from 'path';
@@ -12,8 +15,11 @@ import logger from '../../../../utils/logger.js';
 export class LogResourceHandler extends BaseResourceHandler {
   private logDirectories: string[];
   private supportedExtensions: string[] = ['.log', '.txt'];
-  private resourceCache: { resources: Resource[]; lastUpdate: number } | null = null;
-  private readonly CACHE_TTL_MS = parseInt(process.env.RESOURCE_CACHE_TTL || '30000'); // 30 seconds default
+  private resourceCache: { resources: Resource[]; lastUpdate: number } | null =
+    null;
+  private readonly CACHE_TTL_MS = parseInt(
+    process.env.RESOURCE_CACHE_TTL || '30000',
+  ); // 30 seconds default
 
   constructor() {
     super();
@@ -21,7 +27,7 @@ export class LogResourceHandler extends BaseResourceHandler {
     logger.info('LogResourceHandler initialized', 'LogResourceHandler', {
       directories: this.logDirectories,
       extensions: this.supportedExtensions,
-      cacheTtl: this.CACHE_TTL_MS
+      cacheTtl: this.CACHE_TTL_MS,
     });
   }
 
@@ -30,21 +36,27 @@ export class LogResourceHandler extends BaseResourceHandler {
    */
   private getLogDirectories(): string[] {
     const logDir = process.env.LOG_DIR || process.env.LOGS_DIR;
-    
+
     if (!logDir) {
       // Default log directories
       const defaultDirs = [
         path.join(process.cwd(), 'logs'),
         '/var/log',
-        '/tmp'
+        '/tmp',
       ];
-      logger.info('No LOG_DIR configured, using defaults', 'LogResourceHandler', { defaultDirs });
+      logger.info(
+        'No LOG_DIR configured, using defaults',
+        'LogResourceHandler',
+        { defaultDirs },
+      );
       return defaultDirs;
     }
 
     // Support multiple directories separated by colon
     const directories = logDir.split(':').filter(Boolean);
-    logger.info('Using configured log directories', 'LogResourceHandler', { directories });
+    logger.info('Using configured log directories', 'LogResourceHandler', {
+      directories,
+    });
     return directories;
   }
 
@@ -53,22 +65,32 @@ export class LogResourceHandler extends BaseResourceHandler {
    */
   async listResources(): Promise<Resource[]> {
     // Check if we have a valid cache
-    if (this.resourceCache && (Date.now() - this.resourceCache.lastUpdate) < this.CACHE_TTL_MS) {
+    if (
+      this.resourceCache &&
+      Date.now() - this.resourceCache.lastUpdate < this.CACHE_TTL_MS
+    ) {
       logger.debug('Returning cached resources', 'LogResourceHandler', {
-        count: this.resourceCache.resources.length
+        count: this.resourceCache.resources.length,
       });
       return this.resourceCache.resources;
     }
 
     // Cache is invalid or doesn't exist, scan directories
-    logger.debug('Cache expired or invalid, scanning directories', 'LogResourceHandler');
+    logger.debug(
+      'Cache expired or invalid, scanning directories',
+      'LogResourceHandler',
+    );
     const resources: Resource[] = [];
 
     for (const directory of this.logDirectories) {
       try {
         await this.addResourcesFromDirectory(directory, resources);
       } catch (error) {
-        logger.warn(`Failed to read log directory: ${directory}`, 'LogResourceHandler', { error });
+        logger.warn(
+          `Failed to read log directory: ${directory}`,
+          'LogResourceHandler',
+          { error },
+        );
         // Continue with other directories
       }
     }
@@ -76,37 +98,51 @@ export class LogResourceHandler extends BaseResourceHandler {
     // Update cache
     this.resourceCache = {
       resources,
-      lastUpdate: Date.now()
+      lastUpdate: Date.now(),
     };
 
-    logger.info(`Found ${resources.length} log resources`, 'LogResourceHandler');
+    logger.info(
+      `Found ${resources.length} log resources`,
+      'LogResourceHandler',
+    );
     return resources;
   }
 
   /**
    * Add resources from a specific directory
    */
-  private async addResourcesFromDirectory(directory: string, resources: Resource[]): Promise<void> {
+  private async addResourcesFromDirectory(
+    directory: string,
+    resources: Resource[],
+  ): Promise<void> {
     try {
       const files = await fs.readdir(directory);
-      
+
       for (const file of files) {
         const filePath = path.join(directory, file);
-        
+
         try {
           const stat = await fs.stat(filePath);
-          
+
           if (stat.isFile() && this.isSupportedFile(file)) {
             const resource = this.createResourceFromFile(directory, file);
             resources.push(resource);
           }
         } catch (error) {
-          logger.debug(`Failed to stat file: ${filePath}`, 'LogResourceHandler', { error });
+          logger.debug(
+            `Failed to stat file: ${filePath}`,
+            'LogResourceHandler',
+            { error },
+          );
           // Continue with other files
         }
       }
     } catch (error) {
-      logger.warn(`Cannot access directory: ${directory}`, 'LogResourceHandler', { error });
+      logger.warn(
+        `Cannot access directory: ${directory}`,
+        'LogResourceHandler',
+        { error },
+      );
       throw error; // Re-throw to be caught by caller
     }
   }
@@ -122,15 +158,18 @@ export class LogResourceHandler extends BaseResourceHandler {
   /**
    * Create a Resource object from a file
    */
-  private createResourceFromFile(directory: string, filename: string): Resource {
+  private createResourceFromFile(
+    directory: string,
+    filename: string,
+  ): Resource {
     const filePath = path.join(directory, filename);
     const uri = this.createFileUri(filePath);
-    
+
     return {
       uri,
       name: `Log: ${filename}`,
       description: `Log file from ${directory}`,
-      mimeType: 'text/plain'
+      mimeType: 'text/plain',
     };
   }
 
@@ -151,7 +190,7 @@ export class LogResourceHandler extends BaseResourceHandler {
 
     // Validate and parse URI
     const filePath = this.parseFileUri(uri);
-    
+
     // Security check - ensure file is within allowed directories
     await this.validateFilePath(filePath);
 
@@ -159,15 +198,17 @@ export class LogResourceHandler extends BaseResourceHandler {
       // Check file size before reading
       const stat = await fs.stat(filePath);
       const maxSize = parseInt(process.env.MAX_LOG_SIZE || '10485760'); // 10MB default
-      
+
       if (stat.size > maxSize) {
-        throw new Error(`File too large: ${stat.size} bytes exceeds limit of ${maxSize} bytes`);
+        throw new Error(
+          `File too large: ${stat.size} bytes exceeds limit of ${maxSize} bytes`,
+        );
       }
 
       const content = await fs.readFile(filePath, 'utf-8');
-      
+
       logger.info(`Successfully read resource: ${uri}`, 'LogResourceHandler', {
-        size: content.length
+        size: content.length,
       });
 
       return {
@@ -175,24 +216,41 @@ export class LogResourceHandler extends BaseResourceHandler {
           {
             uri,
             mimeType: 'text/plain',
-            text: content
-          }
-        ]
+            text: content,
+          },
+        ],
       };
     } catch (error) {
       const errorCode = (error as any).code;
       const errorMessage = (error as Error).message;
-      
-      if (errorCode === 'ENOENT' || errorMessage.includes('ENOENT') || errorMessage.includes('no such file')) {
+
+      if (
+        errorCode === 'ENOENT' ||
+        errorMessage.includes('ENOENT') ||
+        errorMessage.includes('no such file')
+      ) {
         const notFoundError = new Error('File not found');
-        logger.error('File not found', 'LogResourceHandler', { error: notFoundError, uri });
+        logger.error('File not found', 'LogResourceHandler', {
+          error: notFoundError,
+          uri,
+        });
         throw notFoundError;
-      } else if (errorCode === 'EACCES' || errorMessage.includes('EACCES') || errorMessage.includes('permission denied')) {
+      } else if (
+        errorCode === 'EACCES' ||
+        errorMessage.includes('EACCES') ||
+        errorMessage.includes('permission denied')
+      ) {
         const permissionError = new Error('Permission denied');
-        logger.error('Permission denied', 'LogResourceHandler', { error: permissionError, uri });
+        logger.error('Permission denied', 'LogResourceHandler', {
+          error: permissionError,
+          uri,
+        });
         throw permissionError;
       } else {
-        logger.error('Failed to read file', 'LogResourceHandler', { error, uri });
+        logger.error('Failed to read file', 'LogResourceHandler', {
+          error,
+          uri,
+        });
         throw error;
       }
     }
@@ -218,22 +276,26 @@ export class LogResourceHandler extends BaseResourceHandler {
     try {
       // Resolve the real path to handle symlinks and normalize the path
       const realPath = await fs.realpath(filePath);
-      
+
       // Check if the real path is within any of the allowed log directories
       const isInAllowedDirectory = await Promise.all(
-        this.logDirectories.map(async (dir) => {
+        this.logDirectories.map(async dir => {
           try {
             const realDir = await fs.realpath(dir);
-            return realPath.startsWith(realDir + path.sep) || realPath === realDir;
+            return (
+              realPath.startsWith(realDir + path.sep) || realPath === realDir
+            );
           } catch {
             // If directory doesn't exist or can't be resolved, it's not allowed
             return false;
           }
-        })
+        }),
       ).then(results => results.some(Boolean));
 
       if (!isInAllowedDirectory) {
-        throw new Error(`Invalid file path: ${filePath} is not within allowed log directories`);
+        throw new Error(
+          `Invalid file path: ${filePath} is not within allowed log directories`,
+        );
       }
     } catch (error) {
       if ((error as any).code === 'ENOENT') {
@@ -250,7 +312,7 @@ export class LogResourceHandler extends BaseResourceHandler {
     try {
       const filePath = this.parseFileUri(uri);
       await this.validateFilePath(filePath);
-      
+
       const filename = path.basename(filePath);
       return this.isSupportedFile(filename);
     } catch {
