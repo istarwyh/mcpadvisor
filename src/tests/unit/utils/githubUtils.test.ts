@@ -1,5 +1,8 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { parseGitHubUrl, fetchGitHubReadme } from '../../../utils/githubUtils.js';
+import {
+  parseGitHubUrl,
+  fetchGitHubReadme,
+} from '../../../utils/githubUtils.js';
 
 // 注意：logger 已在 setup.ts 中被模拟
 
@@ -55,7 +58,7 @@ describe('GitHub Utils', () => {
       const content = await fetchGitHubReadme(url);
 
       console.log(`GitHub README 获取结果：${content ? '成功' : '失败'}`);
-      
+
       if (content) {
         expect(typeof content).toBe('string');
         // Basic validation that it looks like markdown content

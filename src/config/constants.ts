@@ -2,7 +2,8 @@
  * Application constants
  */
 
-export const COMPASS_API_BASE = process.env.COMPASS_API_BASE || 'https://registry.mcphub.io';
+export const COMPASS_API_BASE =
+  process.env.COMPASS_API_BASE || 'https://registry.mcphub.io';
 export const SERVER_NAME = 'mcpadvisor';
 export const SERVER_VERSION = '1.0.0';
 

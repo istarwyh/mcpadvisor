@@ -1,4 +1,7 @@
-import type { SearchProvider, MCPServerResponse } from '../../../types/index.js';
+import type {
+  SearchProvider,
+  MCPServerResponse,
+} from '../../../types/index.js';
 import type { SearchParams } from '../../../types/search.js';
 import { NacosClient } from '../../providers/nacos/NacosClient.js';
 import { VectorDB } from '../../common/vector/VectorDB.js';
@@ -25,7 +28,7 @@ export class NacosMcpProvider implements SearchProvider {
    */
   constructor(
     config: NacosMcpProviderConfig & { authToken?: string },
-    private readonly testMode: boolean = false
+    private readonly testMode: boolean = false,
   ) {
     // Initialize config with defaults
     this.config = {
@@ -38,9 +41,9 @@ export class NacosMcpProvider implements SearchProvider {
       serverAddr: config.serverAddr,
       username: config.username,
       password: config.password,
-      authToken: config.authToken || ''
+      authToken: config.authToken || '',
     };
-    
+
     // Initialize NacosClient with required config
     this.nacosClient = new NacosClient({
       serverAddr: this.config.serverAddr,
@@ -48,7 +51,7 @@ export class NacosMcpProvider implements SearchProvider {
       password: this.config.password,
       mcpHost: this.config.mcpHost,
       mcpPort: this.config.mcpPort,
-      authToken: this.config.authToken
+      authToken: this.config.authToken,
     });
   }
 
@@ -80,8 +83,12 @@ export class NacosMcpProvider implements SearchProvider {
       this._isInitialized = true;
     } catch (error) {
       this._initializationPromise = null;
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`Failed to initialize NacosMcpProvider: ${errorMessage}`, error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      logger.error(
+        `Failed to initialize NacosMcpProvider: ${errorMessage}`,
+        error,
+      );
       throw new Error(`Failed to initialize NacosMcpProvider: ${errorMessage}`);
     }
   }
@@ -97,25 +104,29 @@ export class NacosMcpProvider implements SearchProvider {
 
     try {
       logger.info('Initializing NacosMcpProvider...');
-      
+
       // Initialize Nacos client
       await this.nacosClient.init();
-      
+
       // Initialize vector database
       this.vectorDB = new VectorDB();
       await this.vectorDB.start();
       await this.vectorDB.isReady();
-      
-      logger.info(`VectorDB is ready, collectionId: ${this.vectorDB._collectionId}`);
-      
+
+      logger.info(
+        `VectorDB is ready, collectionId: ${this.vectorDB._collectionId}`,
+      );
+
       // Initialize MCP Manager
       this.mcpManager = new McpManager(this.nacosClient, this.vectorDB, 5000);
-      
+
       // Start syncing services
       await this.mcpManager.startSync();
-      
+
       this._isInitialized = true;
-      logger.info('NacosMcpProvider initialized successfully with vector search capabilities');
+      logger.info(
+        'NacosMcpProvider initialized successfully with vector search capabilities',
+      );
     } catch (error) {
       this._isInitialized = false;
       logger.error('Failed to initialize NacosMcpProvider:', error);
@@ -134,15 +145,16 @@ export class NacosMcpProvider implements SearchProvider {
     if (this._isClosing) {
       throw new Error('NacosMcpProvider is closing or has been closed');
     }
-    
+
     try {
       await this.ensureInitialized();
     } catch (error) {
       logger.error('Failed to initialize NacosMcpProvider:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       throw new Error(`Failed to initialize NacosMcpProvider: ${errorMessage}`);
     }
-    
+
     if (!this.mcpManager || !this.vectorDB) {
       const error = new Error('NacosMcpProvider is not properly initialized');
       logger.error(error.message);
@@ -150,7 +162,7 @@ export class NacosMcpProvider implements SearchProvider {
     }
 
     const { taskDescription, keywords = [] } = params;
-    
+
     try {
       if (this.config.debug) {
         logger.debug('Searching Nacos MCP servers', {
@@ -164,13 +176,15 @@ export class NacosMcpProvider implements SearchProvider {
       }
 
       // Ensure we have at least one keyword
-      const searchKeywords = keywords.length > 0 
-        ? keywords 
-        : this.extractKeywords(taskDescription);
+      const searchKeywords =
+        keywords.length > 0 ? keywords : this.extractKeywords(taskDescription);
 
       // Search for MCP servers
-      const results = await this.searchNacosMcpServers(taskDescription, searchKeywords);
-      
+      const results = await this.searchNacosMcpServers(
+        taskDescription,
+        searchKeywords,
+      );
+
       if (this.config.debug) {
         logger.debug(`Found ${results.length} MCP servers`, {
           taskDescription,
@@ -197,7 +211,7 @@ export class NacosMcpProvider implements SearchProvider {
    */
   private async searchNacosMcpServers(
     query: string,
-    keywords: string[]
+    keywords: string[],
   ): Promise<MCPServerResponse[]> {
     if (!this.mcpManager || !this.vectorDB) {
       throw new Error('NacosMcpProvider is not properly initialized');
@@ -205,26 +219,33 @@ export class NacosMcpProvider implements SearchProvider {
 
     try {
       // Use the vector database for semantic search
-      const vectorResults = await this.mcpManager.search(query, this.config.limit || 10);
-      
+      const vectorResults = await this.mcpManager.search(
+        query,
+        this.config.limit || 10,
+      );
+
       // Also try keyword search as fallback/supplement
       const keywordResults = await this.keywordFallbackSearch(keywords);
-      
+
       // Combine results, prioritizing vector search results
       const allResults = [...(vectorResults || []), ...keywordResults];
-      
+
       if (allResults.length === 0) {
         logger.warn('No results from both vector and keyword search');
         return [];
       }
-      
+
       // Convert vector results to MCPServerResponse format
       const formattedVectorResults = (vectorResults || []).map((item: any) => {
         const original = item.metadata?.original || item;
-        const description = original.agentConfig?.metadata?.description || original.description || 'Test server description';
-        const categories = original.agentConfig?.categories || original.categories || ['test'];
+        const description =
+          original.agentConfig?.metadata?.description ||
+          original.description ||
+          'Test server description';
+        const categories = original.agentConfig?.categories ||
+          original.categories || ['test'];
         const tags = original.tags || ['test'];
-        
+
         return {
           id: original.id || original.name,
           title: original.title || original.name,
@@ -238,15 +259,20 @@ export class NacosMcpProvider implements SearchProvider {
           metadata: {
             ...original,
             provider: 'nacos',
-            lastUpdated: original.lastUpdated || new Date().toISOString()
-          }
+            lastUpdated: original.lastUpdated || new Date().toISOString(),
+          },
         };
       });
-      
+
       // Return vector results if available, otherwise keyword results
-      return formattedVectorResults.length > 0 ? formattedVectorResults : keywordResults;
+      return formattedVectorResults.length > 0
+        ? formattedVectorResults
+        : keywordResults;
     } catch (error) {
-      logger.warn('Vector search failed, falling back to keyword search', error);
+      logger.warn(
+        'Vector search failed, falling back to keyword search',
+        error,
+      );
       logger.error('Error searching Nacos MCP servers:', error);
       // Fallback to basic search if vector search fails
       try {
@@ -263,34 +289,38 @@ export class NacosMcpProvider implements SearchProvider {
    * @param keywords Search keywords
    * @returns Array of MCP server responses
    */
-  private async keywordFallbackSearch(keywords: string[]): Promise<MCPServerResponse[]> {
+  private async keywordFallbackSearch(
+    keywords: string[],
+  ): Promise<MCPServerResponse[]> {
     if (!this.nacosClient) {
       throw new Error('Nacos client not available for fallback search');
     }
-    
+
     try {
       // Use the first keyword for Nacos search
       const keyword = keywords.length > 0 ? keywords[0] : 'test';
       const services = await this.nacosClient.searchMcpByKeyword(keyword);
-      
+
       return services.map((service: any) => {
         const serviceDict = service.toDict ? service.toDict() : service;
         // Try multiple ways to get the description to match test expectations
-        const description = service.metadata?.description ||
-                          serviceDict.agentConfig?.metadata?.description || 
-                          serviceDict.description || 
-                          'Test server description';
-        
+        const description =
+          service.metadata?.description ||
+          serviceDict.agentConfig?.metadata?.description ||
+          serviceDict.description ||
+          'Test server description';
+
         return {
           id: serviceDict.name || service.name,
           title: serviceDict.name || service.name,
           description,
-          categories: serviceDict.agentConfig?.categories || service.metadata?.categories || ['test'],
+          categories: serviceDict.agentConfig?.categories ||
+            service.metadata?.categories || ['test'],
           tags: service.metadata?.tags || ['test'],
           score: 0.8,
           similarity: 0.8,
           sourceUrl: `nacos://${serviceDict.name || service.name}`,
-          installations: {}
+          installations: {},
         };
       });
     } catch (error) {
@@ -321,39 +351,39 @@ export class NacosMcpProvider implements SearchProvider {
     if (this._isClosing) {
       return;
     }
-    
+
     this._isClosing = true;
     this._isInitialized = false;
     this._initializationPromise = null;
-    
+
     const closePromises: Promise<void>[] = [];
-    
+
     if (this.mcpManager) {
       closePromises.push(
         this.mcpManager.stopSync().catch(error => {
           logger.warn('Error stopping MCP manager sync:', error);
-        })
+        }),
       );
     }
-    
+
     if (this.nacosClient) {
       closePromises.push(
         this.nacosClient.close().catch(error => {
           logger.warn('Error closing Nacos client:', error);
-        })
+        }),
       );
     }
-    
+
     if (this.vectorDB && typeof (this.vectorDB as any).close === 'function') {
       closePromises.push(
         (this.vectorDB as any).close().catch((error: any) => {
           logger.warn('Error closing VectorDB:', error);
-        })
+        }),
       );
     }
-    
+
     await Promise.all(closePromises);
-    
+
     if (this.config.debug) {
       logger.debug('NacosMcpProvider closed successfully');
     }

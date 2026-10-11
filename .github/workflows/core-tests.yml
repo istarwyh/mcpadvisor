@@ -6,6 +6,9 @@ on:
         'src/**',
         'package.json',
         'pnpm-lock.yaml',
+        'eslint.config.js',
+        'tests/**',
+        'scripts/**',
         '.github/workflows/core-tests.yml',
       ]
   push:
@@ -15,6 +18,9 @@ on:
         'src/**',
         'package.json',
         'pnpm-lock.yaml',
+        'eslint.config.js',
+        'tests/**',
+        'scripts/**',
         '.github/workflows/core-tests.yml',
       ]
 jobs:
@@ -30,6 +36,7 @@ jobs:
           version: 8.15.9
           run_install: false
       - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm run check
       - run: pnpm run build
       - run: pnpm exec tsc --noEmit -p tsconfig.test.json
       - run: pnpm test

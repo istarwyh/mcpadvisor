@@ -2,7 +2,10 @@ import { MCPServerResponse } from '../../../types/index.js';
 
 // 类型守卫，确保对象具有正确格式的 tags 属性
 function hasValidTags(result: any): result is { tags: string[] } {
-  return Array.isArray(result.tags) && result.tags.every((tag: any) => typeof tag === 'string');
+  return (
+    Array.isArray(result.tags) &&
+    result.tags.every((tag: any) => typeof tag === 'string')
+  );
 }
 
 // 类型守卫，检查对象是否具有 score 属性
@@ -20,33 +23,33 @@ export function containsServerNames(
   if (!results || !Array.isArray(results) || results.length === 0) {
     return { contains: false, missing: [...serverNames], found: [] };
   }
-  
+
   const foundServers: string[] = [];
   const missingServers: string[] = [];
-  
+
   // 检查每个需要验证的服务器名称
   for (const serverName of serverNames) {
     const found = results.some(result => {
       // 使用类型断言来处理可能的属性
       const serverInfo = result as any;
       return (
-        serverInfo.id === serverName || 
+        serverInfo.id === serverName ||
         serverInfo.name === serverName ||
         serverInfo.display_name === serverName
       );
     });
-    
+
     if (found) {
       foundServers.push(serverName);
     } else {
       missingServers.push(serverName);
     }
   }
-  
+
   return {
     contains: missingServers.length === 0,
     missing: missingServers,
-    found: foundServers
+    found: foundServers,
   };
 }
 
@@ -62,13 +65,13 @@ export function containsKeywords(
   }
 
   const lowerKeywords = keywords.map(k => k.toLowerCase());
-  
+
   const matchedItems = results.filter(result => {
     if (!result) return false;
-    
+
     const title = result.title?.toLowerCase() || '';
     const description = result.description?.toLowerCase() || '';
-    
+
     // 处理 tags 属性，确保是字符串数组
     let tags: string[] = [];
     if (hasValidTags(result)) {
@@ -115,8 +118,14 @@ export function createSearchTest(
   fallbackPath: string,
 ) {
   const testFn = async () => {
-    const { query, options, textWeight, expectedKeywords, expectedServerNames } = testCase;
-    
+    const {
+      query,
+      options,
+      textWeight,
+      expectedKeywords,
+      expectedServerNames,
+    } = testCase;
+
     try {
       // 执行搜索
       const results = await searchFn(query, options, fallbackPath, textWeight);
@@ -124,60 +133,68 @@ export function createSearchTest(
       // 基础断言
       expect(results).toBeDefined();
       expect(Array.isArray(results)).toBe(true);
-      
+
       // 记录测试信息
       console.log(`[${testCase.name}] 搜索结果数量: ${results.length}`);
-      
+
       // 如果有结果，进行验证
       if (results.length > 0) {
         // 输出服务器列表，便于调试
-        console.log(`[${testCase.name}] 返回的服务器:`, 
+        console.log(
+          `[${testCase.name}] 返回的服务器:`,
           results.map((item: any) => ({
             id: item.id,
             name: item.name || '',
             display_name: item.display_name || '',
-          }))
+          })),
         );
-        
+
         // 验证关键词
         if (expectedKeywords && expectedKeywords.length > 0) {
-          const { contains, matchedItems } = containsKeywords(results, expectedKeywords);
-          
+          const { contains, matchedItems } = containsKeywords(
+            results,
+            expectedKeywords,
+          );
+
           // 输出匹配到的项目信息，便于调试
           if (matchedItems.length > 0) {
-            console.log(`[${testCase.name}] 匹配关键词的项目:`, 
+            console.log(
+              `[${testCase.name}] 匹配关键词的项目:`,
               matchedItems.map(item => {
                 const itemInfo: any = {
                   title: item.title,
                   tags: item.tags,
                 };
-                
+
                 // 安全地添加 score 属性（如果存在）
                 if (hasScore(item)) {
                   itemInfo.score = item.score;
                 }
-                
+
                 return itemInfo;
-              })
+              }),
             );
           }
-          
+
           // 断言关键词匹配
           const keywordMessage = `应该包含关键词 ${expectedKeywords.join(', ')}`;
           expect(contains).toBe(true);
         }
-        
+
         // 验证特定服务器名称
         if (expectedServerNames && expectedServerNames.length > 0) {
-          const { contains, missing, found } = containsServerNames(results, expectedServerNames);
-          
+          const { contains, missing, found } = containsServerNames(
+            results,
+            expectedServerNames,
+          );
+
           // 输出验证结果，便于调试
-          console.log(`[${testCase.name}] 验证服务器名称:`, { 
+          console.log(`[${testCase.name}] 验证服务器名称:`, {
             expected: expectedServerNames,
             found,
-            missing
+            missing,
           });
-          
+
           // 断言服务器名称匹配
           const serverMessage = `应该包含服务器 ${expectedServerNames.join(', ')} 但缺失 ${missing.join(', ')}`;
           expect(contains).toBe(true);
