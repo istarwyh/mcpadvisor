@@ -1,10 +1,15 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import fs from 'fs';
+import path from 'node:path';
 
 const mocks = vi.hoisted(() => ({
   searchService: vi.fn(),
   start: vi.fn(),
   exit: vi.fn(),
+  spawn: vi.fn(),
+  unref: vi.fn(),
 }));
+vi.mock('child_process', () => ({ spawn: mocks.spawn }));
 vi.mock('../../../../services/searchService.js', () => ({
   SearchService: class {
     constructor(providers: unknown[]) {
@@ -37,6 +42,7 @@ vi.mock('../../../../services/core/server/index.js', () => ({
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mocks.spawn.mockReturnValue({ unref: mocks.unref });
   vi.resetModules();
   vi.stubEnv('MEILISEARCH_INSTANCE', 'cloud');
   vi.stubEnv('NACOS_SERVER_ADDR', '');
@@ -107,3 +113,48 @@ it('treats an absent opt-in as disabled and rejects unsupported values', async (
     );
   }
 });
+
+it.each(['primary', 'fallback', 'absent'])(
+  'ESM 启动时正确处理 %s 本地 Meilisearch 脚本',
+  async available => {
+    vi.stubEnv('MEILISEARCH_INSTANCE', 'local');
+    const primary = path.resolve(
+      process.cwd(),
+      'scripts',
+      'meilisearch',
+      'meilisearch.bootstrap.mjs',
+    );
+    const fallback = path.resolve(
+      process.cwd(),
+      'scripts',
+      'bootstrap-meilisearch.mjs',
+    );
+    vi.spyOn(fs, 'existsSync').mockImplementation(candidate => {
+      if (available === 'fallback' && candidate === primary)
+        throw new Error('Fixture path is inaccessible');
+      return (
+        candidate === (available === 'primary' ? primary : fallback) &&
+        available !== 'absent'
+      );
+    });
+
+    await import('../../../../index.js');
+    await vi.waitFor(() => expect(mocks.start).toHaveBeenCalledTimes(1));
+    expect(mocks.exit).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
+    if (available === 'absent') {
+      expect(mocks.spawn).not.toHaveBeenCalled();
+    } else {
+      expect(mocks.spawn).toHaveBeenCalledTimes(1);
+      const [command, args, options] = mocks.spawn.mock.calls[0];
+      expect(command).toBe(process.execPath);
+      expect(args).toEqual([
+        '--no-deprecation',
+        available === 'primary' ? primary : fallback,
+      ]);
+      expect(options.stdio).toBe('ignore');
+      expect(options.detached).toBe(true);
+      expect(mocks.unref).toHaveBeenCalledTimes(1);
+    }
+  },
+);

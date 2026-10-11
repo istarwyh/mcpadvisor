@@ -16,10 +16,13 @@ let TEST_CONFIG: MeilisearchInstanceConfig;
 describe('Local Meilisearch Provider Integration', () => {
   let controller: LocalMeilisearchController;
   let isMeilisearchAvailable = false;
-  
+
   beforeAll(async () => {
     // 若未提供测试用 key，则尝试从 ~/.meilisearch/env 加载
-    if (!process.env.TEST_MEILISEARCH_KEY && !process.env.MEILISEARCH_MASTER_KEY) {
+    if (
+      !process.env.TEST_MEILISEARCH_KEY &&
+      !process.env.MEILISEARCH_MASTER_KEY
+    ) {
       try {
         const envPath = path.join(os.homedir(), '.meilisearch', 'env');
         if (fs.existsSync(envPath)) {
@@ -36,23 +39,28 @@ describe('Local Meilisearch Provider Integration', () => {
             }
           }
         }
-      } catch {}
+      } catch {
+        // Optional local credentials are unavailable; use the test configuration.
+      }
     }
 
     // 构建测试配置并创建控制器实例
     TEST_CONFIG = {
       type: 'local',
       host: process.env.TEST_MEILISEARCH_HOST || 'http://localhost:7700',
-      masterKey: process.env.TEST_MEILISEARCH_KEY || process.env.MEILISEARCH_MASTER_KEY || 'developmentKey123',
+      masterKey:
+        process.env.TEST_MEILISEARCH_KEY ||
+        process.env.MEILISEARCH_MASTER_KEY ||
+        'developmentKey123',
       indexName: 'mcp_servers_test',
     };
 
     controller = new LocalMeilisearchController(TEST_CONFIG);
-    
+
     // 检查 Meilisearch 是否可用
     try {
       const isHealthy = await controller.healthCheck();
-      
+
       if (isHealthy) {
         isMeilisearchAvailable = true;
 
@@ -66,32 +74,35 @@ describe('Local Meilisearch Provider Integration', () => {
             {
               id: 'test-file-manager',
               title: 'File Manager MCP',
-              description: 'A comprehensive file management system for organizing and manipulating files',
+              description:
+                'A comprehensive file management system for organizing and manipulating files',
               github_url: 'https://github.com/test/file-manager-mcp',
               categories: 'file,management,system',
               tags: 'files,organize,manage',
-              installations: { npm: 'npm install file-manager-mcp' }
+              installations: { npm: 'npm install file-manager-mcp' },
             },
             {
               id: 'test-data-processor',
               title: 'Data Processor MCP',
-              description: 'Advanced data processing and analysis tools for various data formats',
+              description:
+                'Advanced data processing and analysis tools for various data formats',
               github_url: 'https://github.com/test/data-processor-mcp',
               categories: 'data,processing,analysis',
               tags: 'data,process,analyze',
-              installations: { npm: 'npm install data-processor-mcp' }
+              installations: { npm: 'npm install data-processor-mcp' },
             },
             {
               id: 'test-social-media',
               title: 'Social Media Analyzer',
-              description: 'Analyze social media content and trends across multiple platforms',
+              description:
+                'Analyze social media content and trends across multiple platforms',
               github_url: 'https://github.com/test/social-media-analyzer',
               categories: 'social,media,analysis',
               tags: 'social,media,trends',
-              installations: { npm: 'npm install social-media-analyzer' }
-            }
+              installations: { npm: 'npm install social-media-analyzer' },
+            },
           ];
-          
+
           await controller.addDocuments(testDocuments);
 
           // 等待索引完成
@@ -99,8 +110,14 @@ describe('Local Meilisearch Provider Integration', () => {
         } catch (error: any) {
           const msg = (error?.message || '').toLowerCase();
           // 如果是鉴权问题，则跳过后续集成测试
-          if (msg.includes('api key is invalid') || msg.includes('unauthorized') || msg.includes('invalid api key')) {
-            console.warn('Meilisearch auth failed in setup, skipping integration tests');
+          if (
+            msg.includes('api key is invalid') ||
+            msg.includes('unauthorized') ||
+            msg.includes('invalid api key')
+          ) {
+            console.warn(
+              'Meilisearch auth failed in setup, skipping integration tests',
+            );
             isMeilisearchAvailable = false;
             return;
           }
@@ -112,48 +129,49 @@ describe('Local Meilisearch Provider Integration', () => {
       isMeilisearchAvailable = false;
     }
   }, 60000);
-  
+
   afterAll(async () => {
     // 清理测试数据（可选）
     // 在实际测试环境中，可能需要删除测试索引
   });
-  
+
   it('should perform basic search with local controller', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const results = await controller.search('file management');
-    
+
     expect(results).toBeDefined();
     expect(results.hits).toBeInstanceOf(Array);
     expect(results.hits.length).toBeGreaterThan(0);
-    
+
     // 验证搜索结果包含相关内容
-    const hasFileManager = results.hits.some((hit: any) => 
-      hit.title?.toLowerCase().includes('file') || 
-      hit.description?.toLowerCase().includes('file')
+    const hasFileManager = results.hits.some(
+      (hit: any) =>
+        hit.title?.toLowerCase().includes('file') ||
+        hit.description?.toLowerCase().includes('file'),
     );
     expect(hasFileManager).toBe(true);
   });
-  
+
   it('should pass health check for local instance', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const isHealthy = await controller.healthCheck();
     expect(isHealthy).toBe(true);
   });
-  
+
   it('should handle document addition for local instance', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const testDoc = {
       id: 'test-new-doc',
       title: 'Test Document',
@@ -161,20 +179,20 @@ describe('Local Meilisearch Provider Integration', () => {
       github_url: 'https://github.com/test/test-doc',
       categories: 'test',
       tags: 'test,document',
-      installations: {}
+      installations: {},
     };
-    
+
     const task = await controller.addDocuments([testDoc]);
     expect(task).toBeDefined();
     expect(task.taskUid).toBeDefined();
   });
-  
+
   it('should retrieve index information', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     if ('getIndexInfo' in controller) {
       const info = await (controller as any).getIndexInfo();
       expect(info).toBeDefined();
@@ -184,57 +202,57 @@ describe('Local Meilisearch Provider Integration', () => {
       console.log('getIndexInfo method not available, skipping test');
     }
   });
-  
+
   it('should handle search with different options', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const results = await controller.search('data processing', {
       limit: 5,
-      attributesToRetrieve: ['title', 'description']
+      attributesToRetrieve: ['title', 'description'],
     });
-    
+
     expect(results).toBeDefined();
     expect(results.hits).toBeInstanceOf(Array);
     expect(results.hits.length).toBeLessThanOrEqual(5);
   });
-  
+
   it('should return empty results for non-existent queries', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const results = await controller.search('nonexistentqueryterm12345');
-    
+
     expect(results).toBeDefined();
     expect(results.hits).toBeInstanceOf(Array);
     expect(results.hits.length).toBe(0);
   });
-  
+
   it('should handle Chinese search queries', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const results = await controller.search('社交媒体分析');
-    
+
     expect(results).toBeDefined();
     expect(results.hits).toBeInstanceOf(Array);
     // 可能没有完全匹配的结果，但应该不报错
   });
-  
+
   it('should handle empty search queries gracefully', async () => {
     if (!isMeilisearchAvailable) {
       console.log('Skipping test: Meilisearch not available');
       return;
     }
-    
+
     const results = await controller.search('');
-    
+
     expect(results).toBeDefined();
     expect(results.hits).toBeInstanceOf(Array);
   });

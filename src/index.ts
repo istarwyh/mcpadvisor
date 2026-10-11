@@ -3,7 +3,11 @@
 import { createOptionalClineProvider } from './config/cline.js';
 import { SearchService } from './services/searchService.js';
 import { CompassSearchProvider } from './services/core/search/CompassSearchProvider.js';
-import { ServerService, TransportType, TransportConfig } from './services/core/server/index.js';
+import {
+  ServerService,
+  TransportType,
+  TransportConfig,
+} from './services/core/server/index.js';
 import logger from './utils/logger.js';
 import path from 'path';
 import { spawn } from 'child_process';
@@ -33,8 +37,7 @@ async function main() {
     );
     const host =
       getParamValue('host') || process.env.SERVER_HOST || 'localhost';
-    const messagePath =
-      getParamValue('messagePath') || '/messages';
+    const messagePath = getParamValue('messagePath') || '/messages';
     const endpoint =
       getParamValue('endpoint') || process.env.ENDPOINT || '/rest';
 
@@ -59,7 +62,7 @@ async function main() {
     const searchProviders: SearchProvider[] = [
       new MeilisearchSearchProvider(),
       new CompassSearchProvider(),
-      new GetMcpSearchProvider()
+      new GetMcpSearchProvider(),
     ];
 
     if (clineProvider) searchProviders.push(clineProvider);
@@ -73,10 +76,12 @@ async function main() {
       try {
         // Ensure required environment variables are defined
         const mcpHost = process.env.MCP_HOST || 'localhost';
-        const mcpPort = process.env.MCP_PORT ? parseInt(process.env.MCP_PORT, 10) : 3000;
+        const mcpPort = process.env.MCP_PORT
+          ? parseInt(process.env.MCP_PORT, 10)
+          : 3000;
         const authToken = process.env.AUTH_TOKEN || '';
         const debug = process.env.NACOS_DEBUG === 'true';
-        
+
         const nacosProvider = new NacosMcpProvider({
           serverAddr: nacosServerAddr,
           username: nacosUsername,
@@ -84,51 +89,64 @@ async function main() {
           mcpHost,
           mcpPort,
           authToken,
-          debug
+          debug,
         });
-        
+
         // Initialize the provider asynchronously
         await nacosProvider.init();
-        
+
         searchProviders.push(nacosProvider);
         logger.info('Nacos MCP provider initialized successfully');
       } catch (error) {
         logger.error(
           `Failed to initialize Nacos MCP provider: ${error instanceof Error ? error.message : String(error)}`,
-          { error }
+          { error },
         );
       }
     } else {
       logger.warn(
-        'Nacos MCP provider not initialized: Missing required environment variables (NACOS_SERVER_ADDR, NACOS_USERNAME, NACOS_PASSWORD)'
+        'Nacos MCP provider not initialized: Missing required environment variables (NACOS_SERVER_ADDR, NACOS_USERNAME, NACOS_PASSWORD)',
       );
     }
-    
-    const searchService = new SearchService(searchProviders, {}, createOptionalProfessionalReranker());
+
+    const searchService = new SearchService(
+      searchProviders,
+      {},
+      createOptionalProfessionalReranker(),
+    );
 
     // Best-effort async bootstrap for local Meilisearch
     try {
       if ((process.env.MEILISEARCH_INSTANCE || 'cloud') === 'local') {
         // Try multiple potential script locations
         const possiblePaths = [
-          path.resolve(process.cwd(), 'scripts', 'meilisearch', 'meilisearch.bootstrap.mjs'),
+          path.resolve(
+            process.cwd(),
+            'scripts',
+            'meilisearch',
+            'meilisearch.bootstrap.mjs',
+          ),
           path.resolve(process.cwd(), 'scripts', 'bootstrap-meilisearch.mjs'),
         ];
 
         const scriptPath = possiblePaths.find(p => {
           try {
-            return require('fs').existsSync(p);
+            return fs.existsSync(p);
           } catch {
             return false;
           }
         });
 
         if (scriptPath) {
-          const child = spawn(process.execPath, ['--no-deprecation', scriptPath], {
-            env: { ...process.env },
-            stdio: 'ignore',
-            detached: true,
-          });
+          const child = spawn(
+            process.execPath,
+            ['--no-deprecation', scriptPath],
+            {
+              env: { ...process.env },
+              stdio: 'ignore',
+              detached: true,
+            },
+          );
           child.unref();
           logger.info('Triggered async Meilisearch bootstrap');
         } else {
@@ -151,7 +169,9 @@ async function main() {
     const serverService = new ServerService(searchService);
     await serverService.start(transportType, transportConfig);
 
-    logger.info(`MCP Advisor server started with ${transportType} transport,endpoint:${endpoint}`);
+    logger.info(
+      `MCP Advisor server started with ${transportType} transport,endpoint:${endpoint}`,
+    );
   } catch (error) {
     logger.error(
       `Fatal error in main(): ${error instanceof Error ? error.message : String(error)}`,
@@ -189,7 +209,8 @@ async function ensureLocalMeilisearch(): Promise<void> {
     // Just enforce local instance mode for provider alignment
     process.env.MEILISEARCH_INSTANCE = 'local';
     process.env.MEILISEARCH_LOCAL_HOST = host;
-    if (!process.env.MEILISEARCH_INDEX_NAME) process.env.MEILISEARCH_INDEX_NAME = indexName;
+    if (!process.env.MEILISEARCH_INDEX_NAME)
+      process.env.MEILISEARCH_INDEX_NAME = indexName;
     logger.info('Detected running local Meilisearch; using it');
     return;
   }
@@ -197,7 +218,11 @@ async function ensureLocalMeilisearch(): Promise<void> {
   // Try to start a local Meilisearch instance
   try {
     fs.mkdirSync(baseDir, { recursive: true });
-  } catch {}
+  } catch {
+    logger.warn(
+      'Could not create local Meilisearch directory; trying the existing path',
+    );
+  }
 
   const candidates = [
     process.env.MEILISEARCH_BIN,
@@ -214,14 +239,18 @@ async function ensureLocalMeilisearch(): Promise<void> {
         } else {
           return c; // let spawn resolve from PATH
         }
-      } catch {}
+      } catch {
+        // Skip inaccessible binary candidates and try the next location.
+      }
     }
     return null;
   };
 
   const bin = pickExisting();
   if (!bin) {
-    logger.warn('Meilisearch binary not found in PATH or ~/.meilisearch/bin; skip auto-start');
+    logger.warn(
+      'Meilisearch binary not found in PATH or ~/.meilisearch/bin; skip auto-start',
+    );
     return;
   }
 
@@ -245,7 +274,9 @@ async function ensureLocalMeilisearch(): Promise<void> {
   }
 
   if (!(await healthy())) {
-    logger.warn('Meilisearch did not become healthy in 60s; continuing without local instance');
+    logger.warn(
+      'Meilisearch did not become healthy in 60s; continuing without local instance',
+    );
     return;
   }
 
