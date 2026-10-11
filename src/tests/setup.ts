@@ -7,10 +7,10 @@ import { vi, beforeEach, afterEach } from 'vitest';
 
 // 在测试环境中禁用原生模块以避免 onnxruntime-node 绑定问题
 vi.mock('@xenova/transformers', () => ({
-  pipeline: vi.fn(() => 
+  pipeline: vi.fn(() =>
     Promise.resolve((text: string) => ({
-      data: new Array(384).fill(0).map(() => Math.random())
-    }))
+      data: new Array(384).fill(0).map(() => Math.random()),
+    })),
   ),
   env: {
     allowLocalModels: false,
@@ -21,11 +21,12 @@ vi.mock('@xenova/transformers', () => ({
       onnx: {
         wasm: {
           numThreads: 1,
-          wasmPaths: 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/'
-        }
-      }
-    }
-  }
+          wasmPaths:
+            'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/',
+        },
+      },
+    },
+  },
 }));
 
 // 在集成测试中，我们需要真实的网络请求，所以不模拟 fetch
@@ -62,7 +63,7 @@ afterEach(() => {
 // 注意：这个兼容层只是临时的，最终应该完全迁移到 Vitest API
 const setupJestCompat = () => {
   console.log('Jest 兼容层已加载，请尽快将测试文件迁移到 Vitest 原生 API');
-  
+
   return {
     fn: vi.fn,
     mock: vi.mock,

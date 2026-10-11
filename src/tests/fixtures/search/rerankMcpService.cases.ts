@@ -8,7 +8,7 @@ export type RerankTestCase = [
   /* title */ string,
   /* provider results */ ProviderResult[],
   /* options */ Record<string, any>,
-  /* expected titles */ string[]
+  /* expected titles */ string[],
 ];
 
 export const caseTable: RerankTestCase[] = [

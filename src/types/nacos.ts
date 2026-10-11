@@ -1,29 +1,28 @@
-
 /**
  * Represents a MCP server registered in Nacos
  */
 export interface NacosMcpServer {
   /** Server name */
   name: string;
-  
+
   /** Server description */
   description: string;
-  
+
   /** Server agent configuration */
   agentConfig: Record<string, any>;
-  
+
   /** Optional MCP configuration detail */
   mcpConfigDetail?: NacosMcpServerConfigImpl | null;
-  
+
   /** Get server name */
   getName?(): string;
-  
+
   /** Get server description */
   getDescription?(): string;
-  
+
   /** Get agent configuration */
   getAgentConfig?(): Record<string, any>;
-  
+
   /** Convert to dictionary */
   toDict?(): Record<string, any>;
 }
@@ -44,44 +43,44 @@ export interface NacosMcpProviderConfig {
    * Nacos server address (e.g., 'http://localhost:8848')
    */
   serverAddr: string;
-  
+
   /**
    * Nacos username
    */
   username: string;
-  
+
   /**
    * Nacos password
    */
   password: string;
-  
+
   /**
    * MCP server host
    */
   mcpHost?: string;
-  
+
   /**
    * MCP server port
    */
   mcpPort?: number;
-  
+
   /**
    * Authentication token (required)
    */
   authToken: string;
-  
+
   /**
    * Minimum similarity threshold for search results (0-1)
    * @default 0.3
    */
   minSimilarity?: number;
-  
+
   /**
    * Maximum number of results to return
    * @default 10
    */
   limit?: number;
-  
+
   /**
    * Enable debug logging
    * @default false
@@ -99,7 +98,7 @@ export interface INacosClient {
    * @returns Array of matching MCP servers
    */
   searchMcpByKeyword(keyword: string): Promise<NacosMcpServer[]>;
-  
+
   /**
    * Get MCP servers by task description
    * @param description Task description
@@ -107,12 +106,12 @@ export interface INacosClient {
    * @returns Array of matching MCP servers
    */
   getMcpServer(description: string, limit: number): Promise<NacosMcpServer[]>;
-  
+
   /**
    * Initialize the client
    */
   init(): Promise<void>;
-  
+
   /**
    * Close the client and release resources
    */
@@ -128,14 +127,16 @@ export class NacosClient implements INacosClient {
   private vectorDB: any;
   private isInitialized = false;
 
-  constructor(private readonly config: {
-    serverAddr: string;
-    username: string;
-    password: string;
-    mcpHost?: string;
-    mcpPort?: number;
-    authToken?: string;
-  }) {}
+  constructor(
+    private readonly config: {
+      serverAddr: string;
+      username: string;
+      password: string;
+      mcpHost?: string;
+      mcpPort?: number;
+      authToken?: string;
+    },
+  ) {}
 
   async searchMcpByKeyword(keyword: string): Promise<NacosMcpServer[]> {
     if (!this.isInitialized) {
@@ -145,7 +146,10 @@ export class NacosClient implements INacosClient {
     return [];
   }
 
-  async getMcpServer(description: string, limit: number): Promise<NacosMcpServer[]> {
+  async getMcpServer(
+    description: string,
+    limit: number,
+  ): Promise<NacosMcpServer[]> {
     if (!this.isInitialized) {
       throw new Error('NacosClient is not initialized');
     }

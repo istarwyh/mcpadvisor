@@ -24,14 +24,11 @@ export interface MCPServerResponse {
    * 可以是字符串数组或逗号分隔的字符串
    */
   tags?: string[] | string;
-
 }
-
 
 export interface SearchProvider {
   search(params: SearchParams): Promise<MCPServerResponse[]>;
 }
-
 
 /**
  * Search options for configuring search behavior

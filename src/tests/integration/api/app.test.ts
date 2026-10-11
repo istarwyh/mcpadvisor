@@ -48,7 +48,9 @@ describe('MCP Compass Application', () => {
     const searchProvider = new CompassSearchProvider();
 
     // Perform a search
-    const results = await searchProvider.search({ taskDescription: 'test query' });
+    const results = await searchProvider.search({
+      taskDescription: 'test query',
+    });
 
     // Verify the results
     expect(results).toEqual(mockResponse);
@@ -73,7 +75,9 @@ describe('MCP Compass Application', () => {
     const searchProvider = new CompassSearchProvider();
 
     // Expect the search to throw an error
-    await expect(searchProvider.search({ taskDescription: 'test query' })).rejects.toThrow();
+    await expect(
+      searchProvider.search({ taskDescription: 'test query' }),
+    ).rejects.toThrow();
     expect(logger.error).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenCalledWith(
       'https://registry.mcphub.io/recommend?description=test%20query',
@@ -83,61 +87,68 @@ describe('MCP Compass Application', () => {
   test('SearchService can handle multiple providers', async () => {
     // Create mock providers
     const mockProvider1 = {
-      search: vi.fn().mockImplementation((params: { taskDescription: string }) => {
-        return Promise.resolve([
-          {
-            title: 'Provider 1 MCP Server',
-            description: 'A test MCP server from provider 1',
-            github_url: 'https://github.com/test/mcp-server-1',
-            similarity: 0.9,
-          },
-          {
-            title: 'Provider 1 Extra Server 1',
-            description: 'An extra test MCP server from provider 1',
-            github_url: 'https://github.com/test/mcp-server-extra-1',
-            similarity: 0.7,
-          },
-          {
-            title: 'Provider 1 Extra Server 2',
-            description: 'Another extra test MCP server from provider 1',
-            github_url: 'https://github.com/test/mcp-server-extra-2',
-            similarity: 0.5,
-          },
-        ]);
-      }),
+      search: vi
+        .fn()
+        .mockImplementation((params: { taskDescription: string }) => {
+          return Promise.resolve([
+            {
+              title: 'Provider 1 MCP Server',
+              description: 'A test MCP server from provider 1',
+              github_url: 'https://github.com/test/mcp-server-1',
+              similarity: 0.9,
+            },
+            {
+              title: 'Provider 1 Extra Server 1',
+              description: 'An extra test MCP server from provider 1',
+              github_url: 'https://github.com/test/mcp-server-extra-1',
+              similarity: 0.7,
+            },
+            {
+              title: 'Provider 1 Extra Server 2',
+              description: 'Another extra test MCP server from provider 1',
+              github_url: 'https://github.com/test/mcp-server-extra-2',
+              similarity: 0.5,
+            },
+          ]);
+        }),
     };
 
     const mockProvider2 = {
-      search: vi.fn().mockImplementation((params: { taskDescription: string }) => {
-        return Promise.resolve([
-          {
-            title: 'Provider 2 MCP Server',
-            description: 'A test MCP server from provider 2',
-            github_url: 'https://github.com/test/mcp-server-2',
-            similarity: 0.95,
-          },
-          {
-            title: 'Provider 2 Extra Server',
-            description: 'An extra test MCP server from provider 2',
-            github_url: 'https://github.com/test/mcp-server-extra-3',
-            similarity: 0.6,
-          },
-        ]);
-      }),
+      search: vi
+        .fn()
+        .mockImplementation((params: { taskDescription: string }) => {
+          return Promise.resolve([
+            {
+              title: 'Provider 2 MCP Server',
+              description: 'A test MCP server from provider 2',
+              github_url: 'https://github.com/test/mcp-server-2',
+              similarity: 0.95,
+            },
+            {
+              title: 'Provider 2 Extra Server',
+              description: 'An extra test MCP server from provider 2',
+              github_url: 'https://github.com/test/mcp-server-extra-3',
+              similarity: 0.6,
+            },
+          ]);
+        }),
     };
 
     // Create search service with multiple providers and limit option
     const searchService = new SearchService([mockProvider1, mockProvider2]);
 
     // Perform a search with limit option to ensure we only get top 2 results
-    const results = await searchService.search({ taskDescription: 'test query' }, { limit: 2 });
+    const results = await searchService.search(
+      { taskDescription: 'test query' },
+      { limit: 2 },
+    );
 
     // Verify that both providers were called with SearchParams
     expect(mockProvider1.search).toHaveBeenCalledWith({
-      taskDescription: 'test query'
+      taskDescription: 'test query',
     });
     expect(mockProvider2.search).toHaveBeenCalledWith({
-      taskDescription: 'test query'
+      taskDescription: 'test query',
     });
 
     // Verify results are merged, sorted by similarity, and limited to 2
@@ -145,7 +156,7 @@ describe('MCP Compass Application', () => {
     expect(results[0].title).toBe('Provider 2 MCP Server'); // Higher similarity should be first
     expect(results[1].title).toBe('Provider 1 MCP Server');
   });
-  
+
   test('SearchService merges and sorts results correctly', async () => {
     // Create mock providers with overlapping results
     const mockProvider1 = {
@@ -190,7 +201,9 @@ describe('MCP Compass Application', () => {
     const searchService = new SearchService([mockProvider1, mockProvider2]);
 
     // Perform a search with SearchParams
-    const results = await searchService.search({ taskDescription: 'test query' });
+    const results = await searchService.search({
+      taskDescription: 'test query',
+    });
 
     // Check sorting order by similarity
     expect(results[0].title).toBe('Common Server');

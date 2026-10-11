@@ -1,4 +1,7 @@
-import { Resource, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
+import {
+  Resource,
+  ReadResourceResult,
+} from '@modelcontextprotocol/sdk/types.js';
 
 /**
  * Abstract base class for MCP resource handlers
