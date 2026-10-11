@@ -4,11 +4,21 @@ import type { NacosClient } from '../../../services/providers/nacos/NacosClient.
 import type { VectorDB } from '../../../services/common/vector/VectorDB.js';
 import logger from '../../../utils/logger.js';
 
+// Node's imported timer bindings are separate from Vitest's fake globals.
+// Keep the production node:timers API and route this test boundary to the clock.
+vi.mock('node:timers', () => ({
+  setInterval: (...args: Parameters<typeof globalThis.setInterval>) =>
+    globalThis.setInterval(...args),
+  clearInterval: (...args: Parameters<typeof globalThis.clearInterval>) =>
+    globalThis.clearInterval(...args),
+}));
+
 beforeEach(() => {
   vi.useFakeTimers();
 });
 
 afterEach(() => {
+  vi.clearAllTimers();
   vi.useRealTimers();
 });
 

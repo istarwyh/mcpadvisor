@@ -3,6 +3,7 @@
  * 提供基础的健康检查和状态监控功能
  */
 
+import { setInterval } from 'node:timers';
 import {
   MeilisearchConfigManager,
   MeilisearchInstanceConfig,
@@ -231,6 +232,6 @@ export class MeilisearchMonitor {
     await monitor();
 
     // 设置定期监控
-    globalThis.setInterval(monitor, intervalMs);
+    setInterval(monitor, intervalMs);
   }
 }

@@ -40,7 +40,7 @@ describe('Local Meilisearch Provider Integration', () => {
           }
         }
       } catch {
-        // Optional local env files must not block explicitly configured tests.
+        // Optional local credentials are unavailable; use the test configuration.
       }
     }
 

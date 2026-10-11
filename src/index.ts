@@ -224,7 +224,9 @@ async function ensureLocalMeilisearch(): Promise<void> {
   try {
     fs.mkdirSync(baseDir, { recursive: true });
   } catch {
-    // Directory creation is best effort; the spawn/health checks handle failure.
+    logger.warn(
+      'Could not create local Meilisearch directory; trying the existing path',
+    );
   }
 
   const candidates = [
@@ -243,7 +245,7 @@ async function ensureLocalMeilisearch(): Promise<void> {
           return c; // let spawn resolve from PATH
         }
       } catch {
-        // An unreadable candidate should not prevent trying the next binary.
+        // Skip inaccessible binary candidates and try the next location.
       }
     }
     return null;

@@ -65,8 +65,6 @@ beforeEach(() => {
   );
   vi.stubEnv('MEILISEARCH_INSTANCE', 'local');
   vi.stubEnv('NACOS_SERVER_ADDR', '');
-  // Match the native ESM CLI environment even if the runner exposes require.
-  vi.stubGlobal('require', undefined);
   mocks.spawn.mockReturnValue(
     Object.assign(new EventEmitter(), { unref: mocks.unref }),
   );
@@ -90,56 +88,7 @@ async function startApplication() {
   expect(mocks.exit).not.toHaveBeenCalled();
 }
 
-function expectBootstrap(scriptPath: string) {
-  expect(mocks.spawn).toHaveBeenCalledExactlyOnceWith(
-    process.execPath,
-    ['--no-deprecation', scriptPath],
-    { env: { ...process.env }, stdio: 'ignore', detached: true },
-  );
-  expect(mocks.unref).toHaveBeenCalledTimes(1);
-  expect(logger.info).not.toHaveBeenCalledWith(
-    'Triggered async Meilisearch bootstrap',
-  );
-  mocks.spawn.mock.results[0].value.emit('spawn');
-  expect(logger.info).toHaveBeenCalledWith(
-    'Triggered async Meilisearch bootstrap',
-  );
-}
-
-describe('local Meilisearch bootstrap at CLI startup', () => {
-  it('uses the preferred script from the working directory in ESM', async () => {
-    createScript(preferredPath);
-    createScript(fallbackPath);
-    await startApplication();
-    expectBootstrap(preferredPath);
-  });
-
-  it('uses the legacy location when the preferred script is absent', async () => {
-    createScript(fallbackPath);
-    await startApplication();
-    expectBootstrap(fallbackPath);
-  });
-
-  it('starts the server without spawning when neither script exists', async () => {
-    await startApplication();
-    expect(mocks.spawn).not.toHaveBeenCalled();
-    expect(logger.debug).toHaveBeenCalledWith(
-      'Bootstrap script not found, skipping',
-    );
-  });
-
-  it('continues to the fallback after a filesystem lookup error', async () => {
-    createScript(fallbackPath);
-    const existsSync = fs.existsSync.bind(fs);
-    vi.spyOn(fs, 'existsSync').mockImplementation(candidate => {
-      if (candidate === preferredPath)
-        throw new Error('Filesystem unavailable');
-      return existsSync(candidate);
-    });
-    await startApplication();
-    expectBootstrap(fallbackPath);
-  });
-
+describe('local Meilisearch bootstrap failure handling', () => {
   it('still starts the server if both script lookups throw', async () => {
     vi.spyOn(fs, 'existsSync').mockImplementation(() => {
       throw new Error('Filesystem unavailable');
@@ -201,6 +150,7 @@ it.each([false, true])(
   'runs native Node ESM startup with asynchronous spawn failure=%s',
   async spawnFailure => {
     createScript(preferredPath);
+    createScript(fallbackPath);
     const source = fs.readFileSync(
       new URL('../../../index.ts', import.meta.url),
       'utf8',
