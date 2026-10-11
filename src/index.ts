@@ -147,8 +147,13 @@ async function main() {
               detached: true,
             },
           );
+          child.once('error', error => {
+            logger.warn('Failed to start Meilisearch bootstrap', { error });
+          });
+          child.once('spawn', () => {
+            logger.info('Triggered async Meilisearch bootstrap');
+          });
           child.unref();
-          logger.info('Triggered async Meilisearch bootstrap');
         } else {
           logger.debug('Bootstrap script not found, skipping');
         }

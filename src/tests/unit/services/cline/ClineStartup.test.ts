@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import fs from 'fs';
+import { EventEmitter } from 'node:events';
+import logger from '../../../../utils/logger.js';
 import path from 'node:path';
 
 const mocks = vi.hoisted(() => ({
@@ -42,7 +44,9 @@ vi.mock('../../../../services/core/server/index.js', () => ({
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.spawn.mockReturnValue({ unref: mocks.unref });
+  mocks.spawn.mockReturnValue(
+    Object.assign(new EventEmitter(), { unref: mocks.unref }),
+  );
   vi.resetModules();
   vi.stubEnv('MEILISEARCH_INSTANCE', 'cloud');
   vi.stubEnv('NACOS_SERVER_ADDR', '');
@@ -155,6 +159,16 @@ it.each(['primary', 'fallback', 'absent'])(
       expect(options.stdio).toBe('ignore');
       expect(options.detached).toBe(true);
       expect(mocks.unref).toHaveBeenCalledTimes(1);
+      const child = mocks.spawn.mock.results[0].value;
+      expect(child.listenerCount('error')).toBe(1);
+      expect(child.listenerCount('spawn')).toBe(1);
+      expect(logger.info).not.toHaveBeenCalledWith(
+        'Triggered async Meilisearch bootstrap',
+      );
+      child.emit('spawn');
+      expect(logger.info).toHaveBeenCalledWith(
+        'Triggered async Meilisearch bootstrap',
+      );
     }
   },
 );
