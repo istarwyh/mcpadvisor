@@ -20,9 +20,9 @@ function dependencies(text) {
   let category;
   for (const line of text.split('\ndependencies:\n')[1].split('\n')) {
     if (line === '```') break;
-    const heading = line.match(/^  (\w+):$/);
+    const heading = line.match(/^ {2}(\w+):$/);
     if (heading) category = heading[1];
-    const item = line.match(/^    - ([\w.-]+)$/);
+    const item = line.match(/^ {4}- ([\w.-]+)$/);
     if (item) result.push(`${category}/${item[1]}`);
   }
   return result;
@@ -34,7 +34,7 @@ function commandBlock(text) {
 
 function commands(text) {
   return [
-    ...commandBlock(text).matchAll(/^  (?:- )?([\w-]+)(?: [^:]*)?:/gm),
+    ...commandBlock(text).matchAll(/^ {2}(?:- )?([\w-]+)(?: [^:]*)?:/gm),
   ].map(match => match[1]);
 }
 
@@ -79,10 +79,10 @@ test('team agents and workflow dependencies resolve', () => {
   for (const name of list(`${core}/agent-teams`)) {
     const text = read(`${core}/agent-teams/${name}`);
     const agentsBlock = text.split('agents:\n')[1].split('workflows:')[0];
-    for (const match of agentsBlock.matchAll(/^  - ([\w-]+)$/gm)) {
+    for (const match of agentsBlock.matchAll(/^ {2}- ([\w-]+)$/gm)) {
       assert.ok(agents.includes(`${match[1]}.md`), `${name}: ${match[1]}`);
     }
-    for (const match of text.matchAll(/^  - ([\w-]+\.yaml)$/gm)) {
+    for (const match of text.matchAll(/^ {2}- ([\w-]+\.yaml)$/gm)) {
       assert.ok(
         existsSync(join(root, core, 'workflows', match[1])),
         `${name}: ${match[1]}`,
@@ -94,7 +94,7 @@ test('team agents and workflow dependencies resolve', () => {
 test('manifest paths are unique, nonempty, and have current content hashes', () => {
   const seen = new Set();
   for (const match of read(`${core}/install-manifest.yaml`).matchAll(
-    /  - path: (.+)\n    hash: ([0-9a-f]+)/g,
+    / {2}- path: (.+)\n {4}hash: ([0-9a-f]+)/g,
   )) {
     const [, path, hash] = match;
     assert.ok(!seen.has(path), `duplicate ${path}`);
