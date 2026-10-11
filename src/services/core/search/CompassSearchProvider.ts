@@ -23,7 +23,13 @@ export class CompassSearchProvider implements SearchProvider {
    * @returns Promise with array of MCP server responses
    */
   async search(params: SearchParams): Promise<MCPServerResponse[]> {
-    const query = [params.taskDescription, ...(params.keywords || []), ...(params.capabilities || [])].join(' ').trim();
+    const query = [
+      params.taskDescription,
+      ...(params.keywords || []),
+      ...(params.capabilities || []),
+    ]
+      .join(' ')
+      .trim();
     try {
       logger.info(`Searching for MCP servers with query: ${query}`);
       const requestUrl = `${this.apiBase}/recommend?description=${encodeURIComponent(query)}`;

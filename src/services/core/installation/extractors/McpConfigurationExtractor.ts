@@ -1,11 +1,16 @@
 import { IInstallationSectionExtractor } from '../interfaces/IInstallationSectionExtractor.js';
-import { InstallationSection, InstallationContentType } from '../types/InstallationGuideTypes.js';
+import {
+  InstallationSection,
+  InstallationContentType,
+} from '../types/InstallationGuideTypes.js';
 
 /**
  * MCP configuration extractor
  * Specialized in extracting MCP server configuration sections from README content
  */
-export class McpConfigurationExtractor implements IInstallationSectionExtractor {
+export class McpConfigurationExtractor
+  implements IInstallationSectionExtractor
+{
   private readonly mcpKeywords = [
     'mcp',
     'mcpservers',
@@ -17,7 +22,7 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
     '配置文件',
     '一键启动',
     '30秒完成配置',
-    '接入'
+    '接入',
   ];
 
   /**
@@ -25,11 +30,17 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    * @param readmeContent - README content to extract from
    * @returns Installation section data or null if not found
    */
-  public extractInstallationSection(readmeContent: string): InstallationSection | null {
-    console.log('README 内容前 500 个字符:', readmeContent.substring(0, 500));
+  public extractInstallationSection(
+    readmeContent: string,
+  ): InstallationSection | null {
+    console.log(
+      'First 500 characters of the README:',
+      readmeContent.substring(0, 500),
+    );
 
     // Try to find MCP configuration sections by headings
-    const mcpConfigSection = this.extractMcpConfigSectionByHeadings(readmeContent);
+    const mcpConfigSection =
+      this.extractMcpConfigSectionByHeadings(readmeContent);
     if (mcpConfigSection) {
       return {
         content: mcpConfigSection,
@@ -75,24 +86,30 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    * @param readmeContent - README content
    * @returns MCP configuration section or null
    */
-  private extractMcpConfigSectionByHeadings(readmeContent: string): string | null {
+  private extractMcpConfigSectionByHeadings(
+    readmeContent: string,
+  ): string | null {
     const headings = this.extractHeadings(readmeContent);
-    console.log('找到的所有标题:', headings);
+    console.log('All discovered headings:', headings);
 
     // Find headings that contain MCP-related keywords
-    const mcpHeadings = headings.filter(heading => 
-      this.mcpKeywords.some(keyword => 
-        heading.toLowerCase().includes(keyword.toLowerCase())
-      )
+    const mcpHeadings = headings.filter(heading =>
+      this.mcpKeywords.some(keyword =>
+        heading.toLowerCase().includes(keyword.toLowerCase()),
+      ),
     );
 
-    console.log('找到 MCP 配置相关标题:', mcpHeadings.join(', '));
+    console.log('Found MCP configuration headings:', mcpHeadings.join(', '));
 
     if (mcpHeadings.length > 0) {
       // Use the first MCP-related heading
       const targetHeading = mcpHeadings[0];
       const headingIndex = readmeContent.indexOf(targetHeading);
-      return this.extractSectionContent(readmeContent, targetHeading, headingIndex);
+      return this.extractSectionContent(
+        readmeContent,
+        targetHeading,
+        headingIndex,
+      );
     }
 
     return null;
@@ -105,14 +122,20 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    */
   private extractJsonConfigParagraphs(readmeContent: string): string | null {
     const jsonBlocks = this.extractJsonBlocks(readmeContent);
-    
+
     for (const block of jsonBlocks) {
       if (this.containsMcpConfiguration(block)) {
         // Find the paragraph containing this JSON block
         const blockIndex = readmeContent.indexOf(block);
-        const paragraphStart = this.findParagraphStart(readmeContent, blockIndex);
-        const paragraphEnd = this.findParagraphEnd(readmeContent, blockIndex + block.length);
-        
+        const paragraphStart = this.findParagraphStart(
+          readmeContent,
+          blockIndex,
+        );
+        const paragraphEnd = this.findParagraphEnd(
+          readmeContent,
+          blockIndex + block.length,
+        );
+
         return readmeContent.substring(paragraphStart, paragraphEnd).trim();
       }
     }
@@ -127,7 +150,7 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    */
   private containsMcpConfiguration(content: string): boolean {
     const lowerContent = content.toLowerCase();
-    
+
     // Check for MCP-specific indicators
     const mcpIndicators = [
       '"mcpservers"',
@@ -135,11 +158,15 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
       'claude_desktop_config',
       'model context protocol',
       '"command"',
-      '"args"'
+      '"args"',
     ];
 
-    return mcpIndicators.some(indicator => lowerContent.includes(indicator)) ||
-           this.mcpKeywords.some(keyword => lowerContent.includes(keyword.toLowerCase()));
+    return (
+      mcpIndicators.some(indicator => lowerContent.includes(indicator)) ||
+      this.mcpKeywords.some(keyword =>
+        lowerContent.includes(keyword.toLowerCase()),
+      )
+    );
   }
 
   /**
@@ -148,9 +175,11 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    * @returns True if contains JSON config
    */
   private containsJsonConfig(content: string): boolean {
-    return content.includes('"mcpServers"') || 
-           content.includes('"command"') || 
-           content.includes('"args"');
+    return (
+      content.includes('"mcpServers"') ||
+      content.includes('"command"') ||
+      content.includes('"args"')
+    );
   }
 
   /**
@@ -160,8 +189,8 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    */
   private findMcpKeywords(content: string): string[] {
     const lowerContent = content.toLowerCase();
-    return this.mcpKeywords.filter(keyword => 
-      lowerContent.includes(keyword.toLowerCase())
+    return this.mcpKeywords.filter(keyword =>
+      lowerContent.includes(keyword.toLowerCase()),
     );
   }
 
@@ -206,19 +235,23 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
    * @param headingIndex - Index of the heading
    * @returns Section content
    */
-  private extractSectionContent(content: string, heading: string, headingIndex: number): string {
+  private extractSectionContent(
+    content: string,
+    heading: string,
+    headingIndex: number,
+  ): string {
     const headingLevel = (heading.match(/^#+/) || [''])[0].length;
     const afterHeading = content.substring(headingIndex + heading.length);
-    
+
     // Find the next heading of the same or higher level
     const nextHeadingRegex = new RegExp(`^#{1,${headingLevel}}\\s+`, 'm');
     const nextHeadingMatch = afterHeading.match(nextHeadingRegex);
-    
+
     if (nextHeadingMatch) {
       const nextHeadingIndex = afterHeading.indexOf(nextHeadingMatch[0]);
       return (heading + afterHeading.substring(0, nextHeadingIndex)).trim();
     }
-    
+
     // If no next heading found, take the rest of the content
     return (heading + afterHeading).trim();
   }
@@ -234,12 +267,15 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
     while (start > 0 && content[start - 1] !== '\n') {
       start--;
     }
-    
+
     // Go back to find the actual paragraph start (after double newline)
-    while (start > 1 && !(content[start - 2] === '\n' && content[start - 1] === '\n')) {
+    while (
+      start > 1 &&
+      !(content[start - 2] === '\n' && content[start - 1] === '\n')
+    ) {
       start--;
     }
-    
+
     return start;
   }
 
@@ -252,7 +288,7 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
   private findParagraphEnd(content: string, index: number): number {
     let end = index;
     let newlineCount = 0;
-    
+
     while (end < content.length) {
       if (content[end] === '\n') {
         newlineCount++;
@@ -264,7 +300,7 @@ export class McpConfigurationExtractor implements IInstallationSectionExtractor 
       }
       end++;
     }
-    
+
     return end;
   }
 }

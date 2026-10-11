@@ -29,9 +29,9 @@ describe('MeilisearchSearchProvider', () => {
   // 测试查询
   const testQueries = [
     { taskDescription: 'web scraping' },
-    { taskDescription: 'firecrawl' }
+    { taskDescription: 'firecrawl' },
   ];
-  
+
   // 兼容旧测试的辅助函数
   const createSearchParams = (query: string | { taskDescription: string }) => {
     if (typeof query === 'string') {

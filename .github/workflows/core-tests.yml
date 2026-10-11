@@ -1,0 +1,42 @@
+name: Core search tests
+on:
+  pull_request:
+    paths:
+      [
+        'src/**',
+        'package.json',
+        'pnpm-lock.yaml',
+        'eslint.config.js',
+        'tests/**',
+        'scripts/**',
+        '.github/workflows/core-tests.yml',
+      ]
+  push:
+    branches: [main]
+    paths:
+      [
+        'src/**',
+        'package.json',
+        'pnpm-lock.yaml',
+        'eslint.config.js',
+        'tests/**',
+        'scripts/**',
+        '.github/workflows/core-tests.yml',
+      ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.9
+          run_install: false
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm run check
+      - run: pnpm run build
+      - run: pnpm exec tsc --noEmit -p tsconfig.test.json
+      - run: pnpm test

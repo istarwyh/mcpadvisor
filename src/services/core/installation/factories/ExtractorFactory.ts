@@ -17,10 +17,12 @@ export class ExtractorFactory {
    * @param readmeContent - README content to analyze
    * @returns Best matching extractor
    */
-  public static getBestExtractor(readmeContent: string): IInstallationSectionExtractor {
+  public static getBestExtractor(
+    readmeContent: string,
+  ): IInstallationSectionExtractor {
     // Find all extractors that can handle the content
-    const capableExtractors = this.extractors.filter(extractor => 
-      extractor.canHandle(readmeContent)
+    const capableExtractors = this.extractors.filter(extractor =>
+      extractor.canHandle(readmeContent),
     );
 
     // Sort by priority (highest first)
@@ -42,7 +44,9 @@ export class ExtractorFactory {
    * Register a new extractor
    * @param extractor - Extractor to register
    */
-  public static registerExtractor(extractor: IInstallationSectionExtractor): void {
+  public static registerExtractor(
+    extractor: IInstallationSectionExtractor,
+  ): void {
     this.extractors.push(extractor);
   }
 }

@@ -60,12 +60,12 @@ describe('InstallationGuideService', () => {
       expect(guide).toContain(repo.url);
 
       // 验证指南格式
-      expect(guide).toContain('安装');
-      
+      expect(guide).toContain('Installation');
+
       // 验证指南包含有用的安装信息（而不是具体的中文文本）
       // 应该包含以下任一类型的安装相关内容：
-      const hasInstallationContent = 
-        guide.includes('克隆仓库') ||  // 中文fallback scenario
+      const hasInstallationContent =
+        guide.includes('克隆仓库') || // 中文fallback scenario
         guide.includes('git clone') || // 英文git命令
         guide.includes('npm install') || // npm安装命令
         guide.includes('Installation') || // 英文安装标题
@@ -73,7 +73,7 @@ describe('InstallationGuideService', () => {
         guide.includes('Getting Started') || // 开始使用
         guide.includes('配置') || // 中文配置
         guide.includes('Config'); // 英文配置
-      
+
       expect(hasInstallationContent).toBe(true);
 
       console.log(`Test for ${repo.name} completed successfully.\n`);

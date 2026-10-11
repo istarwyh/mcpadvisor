@@ -1,0 +1,47 @@
+[
+  {
+    "mcpId": "github.com/postmanlabs/postman-mcp-server",
+    "githubUrl": "https://github.com/postmanlabs/postman-mcp-server",
+    "name": "Postman API Tools",
+    "description": "Enables AI assistants to manage Postman workspaces, collections, environments, and API testing through natural language interactions, with support for code generation and API automation workflows.",
+    "category": "developer-tools",
+    "tags": [
+      "api-management",
+      "testing",
+      "code-generation",
+      "collaboration",
+      "documentation"
+    ],
+    "requiresApiKey": false
+  },
+  {
+    "mcpId": "github.com/launchdarkly/mcp-server",
+    "githubUrl": "https://github.com/launchdarkly/mcp-server",
+    "name": "LaunchDarkly",
+    "description": "Manage feature flags and AI configurations through LaunchDarkly's platform, enabling controlled rollouts, A/B testing, and feature targeting across environments.",
+    "category": "developer-tools",
+    "tags": [
+      "feature-flags",
+      "continuous-delivery",
+      "ai-config",
+      "targeting",
+      "rollouts"
+    ],
+    "requiresApiKey": false
+  },
+  {
+    "mcpId": "github.com/awslabs/mcp/tree/main/src/aws-iac-mcp-server",
+    "githubUrl": "https://github.com/awslabs/mcp/tree/main/src/aws-iac-mcp-server",
+    "name": "AWS Infrastructure",
+    "description": "Tools for creating and troubleshooting AWS infrastructure as code, including CloudFormation template validation, compliance checking, deployment troubleshooting, and CDK documentation search with best practices.",
+    "category": "cloud-platforms",
+    "tags": [
+      "aws",
+      "infrastructure-as-code",
+      "cloudformation",
+      "cdk",
+      "deployment"
+    ],
+    "requiresApiKey": false
+  }
+]

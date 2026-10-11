@@ -45,7 +45,13 @@ export class GetMcpSearchProvider implements SearchProvider {
    * 搜索 MCP 服务器
    */
   async search(params: SearchParams): Promise<MCPServerResponse[]> {
-    const query = [params.taskDescription, ...(params.keywords || []), ...(params.capabilities || [])].join(' ').trim();
+    const query = [
+      params.taskDescription,
+      ...(params.keywords || []),
+      ...(params.capabilities || []),
+    ]
+      .join(' ')
+      .trim();
     try {
       logger.info(`Searching for MCP servers with query: ${query}`);
 

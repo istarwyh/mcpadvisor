@@ -1,12 +1,13 @@
-import { 
-  SearchProvider, 
-  MCPServerResponse, 
-  SearchOptions
+import {
+  SearchProvider,
+  MCPServerResponse,
+  SearchOptions,
 } from '../types/index.js';
 import { RerankMcpServer } from './core/search/RerankMcpService.js';
 import type { SearchParams } from '../types/search.js';
 import { OfflineSearchProvider } from './core/search/OfflineSearchProvider.js';
 import logger from '../utils/logger.js';
+import type { ProfessionalReranker } from './core/search/ProfessionalReranker.js';
 
 /**
  * 提供者优先级配置
@@ -68,7 +69,11 @@ export class SearchService {
    * @param providers - Array of search providers to use
    * @param offlineConfig - 离线模式配置，默认启用
    */
-  constructor(providers: SearchProvider[] = [], offlineConfig: Partial<OfflineConfig> = {}) {
+  constructor(
+    providers: SearchProvider[] = [],
+    offlineConfig: Partial<OfflineConfig> = {},
+    private readonly professionalReranker?: ProfessionalReranker,
+  ) {
     this.providers = providers;
     this.reranker = new RerankMcpServer(PROVIDER_PRIORITIES);
 
@@ -149,16 +154,17 @@ export class SearchService {
    * @param params - Structured search parameters
    * @param options - Optional search configuration
    */
-  async search(params: SearchParams, options?: SearchOptions): Promise<MCPServerResponse[]>;
+  async search(
+    params: SearchParams,
+    options?: SearchOptions,
+  ): Promise<MCPServerResponse[]>;
   async search(
     arg: string | SearchParams,
     options?: SearchOptions,
   ): Promise<MCPServerResponse[]> {
     // 解析参数
     const params: SearchParams =
-      typeof arg === 'string'
-        ? { taskDescription: arg }
-        : arg;
+      typeof arg === 'string' ? { taskDescription: arg } : arg;
 
     if (this.providers.length === 0 && !this.offlineProvider) {
       logger.warn('No search providers available');
@@ -188,7 +194,47 @@ export class SearchService {
 
       const namedProviderResults = await Promise.all(providerPromises);
       this.logProviderResults(namedProviderResults);
-      return this.reranker.reRank(namedProviderResults, mergedOptions);
+      const fallback = this.reranker.reRank(
+        namedProviderResults,
+        mergedOptions,
+      );
+      if (
+        !this.professionalReranker ||
+        mergedOptions.limit === undefined ||
+        mergedOptions.limit <= 0 ||
+        mergedOptions.limit > 50 ||
+        (mergedOptions.sortBy && mergedOptions.sortBy !== 'score')
+      )
+        return fallback;
+      const candidates = this.reranker.reRank(namedProviderResults, {
+        ...mergedOptions,
+        limit: 50,
+      });
+      if (candidates.length < 2) return fallback;
+      try {
+        const query = [
+          params.taskDescription,
+          ...(params.keywords || []),
+          ...(params.capabilities || []),
+        ]
+          .join(' ')
+          .trim();
+        if (!query) return fallback;
+        const ranked = await this.professionalReranker.rerank(
+          query,
+          candidates,
+        );
+        const ordered =
+          mergedOptions.sortOrder === 'asc' ? [...ranked].reverse() : ranked;
+        return mergedOptions.limit && mergedOptions.limit > 0
+          ? ordered.slice(0, mergedOptions.limit)
+          : ordered;
+      } catch {
+        logger.warn(
+          'Professional reranking failed; using existing search ranking',
+        );
+        return fallback;
+      }
     } catch (error) {
       logger.error(
         `Error in search service: ${error instanceof Error ? error.message : String(error)}`,
@@ -202,7 +248,10 @@ export class SearchService {
    * @param allProviders - Array of all providers to search
    * @param params - Search parameters
    */
-  private searchAllProviders(allProviders: SearchProvider[], params: SearchParams) {
+  private searchAllProviders(
+    allProviders: SearchProvider[],
+    params: SearchParams,
+  ) {
     return allProviders.map((provider, index) => {
       const providerName = provider.constructor.name;
       logger.info(
@@ -212,7 +261,7 @@ export class SearchService {
           providerName,
           providerIndex: index,
           params,
-        }
+        },
       );
 
       return provider
@@ -229,7 +278,7 @@ export class SearchService {
                 similarity: r.similarity,
                 github_url: r.sourceUrl,
               })),
-            }
+            },
           );
 
           // Log full results at debug level
@@ -240,7 +289,7 @@ export class SearchService {
               {
                 providerName,
                 results,
-              }
+              },
             );
           }
 
@@ -250,14 +299,15 @@ export class SearchService {
           };
         })
         .catch(error => {
-          const errorMessage = error instanceof Error ? error.message : String(error);
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
           logger.error(
             `Provider ${providerName} search failed: ${errorMessage}`,
             'Provider',
             {
               providerName,
               error: errorMessage,
-            }
+            },
           );
           return {
             providerName,
@@ -267,7 +317,12 @@ export class SearchService {
     });
   }
 
-  private logProviderResults(namedProviderResults: ({ providerName: string; results: MCPServerResponse[]; } | { providerName: string; results: MCPServerResponse[]; })[]) {
+  private logProviderResults(
+    namedProviderResults: (
+      | { providerName: string; results: MCPServerResponse[] }
+      | { providerName: string; results: MCPServerResponse[] }
+    )[],
+  ) {
     namedProviderResults.forEach(({ providerName, results }) => {
       logger.info(
         `Provider ${providerName} found ${results.length} results`,
@@ -275,7 +330,7 @@ export class SearchService {
         {
           providerName,
           resultCount: results.length,
-        }
+        },
       );
     });
   }

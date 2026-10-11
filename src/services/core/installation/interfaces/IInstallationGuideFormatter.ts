@@ -1,4 +1,7 @@
-import { InstallationGuideContext, GuideGenerationResult } from '../types/InstallationGuideTypes.js';
+import {
+  InstallationGuideContext,
+  GuideGenerationResult,
+} from '../types/InstallationGuideTypes.js';
 
 /**
  * Interface for formatting installation guides

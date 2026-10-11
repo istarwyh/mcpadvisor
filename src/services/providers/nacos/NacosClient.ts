@@ -27,12 +27,12 @@ export class NacosClient implements INacosClient {
       mcpHost?: string;
       mcpPort?: number;
       authToken?: string;
-    }
+    },
   ) {
     this.httpClient = new NacosHttpClient(
       config.serverAddr,
       config.username,
-      config.password
+      config.password,
     );
   }
 
@@ -56,10 +56,13 @@ export class NacosClient implements INacosClient {
       // Load initial services
       await this.loadServices();
 
-      logger.info('Successfully connected to Nacos server and initialized vector database');
+      logger.info(
+        'Successfully connected to Nacos server and initialized vector database',
+      );
       this.isInitialized = true;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       logger.error(`Failed to initialize NacosClient: ${errorMessage}`);
       throw error;
     }
@@ -83,7 +86,7 @@ export class NacosClient implements INacosClient {
   /**
    * Get all services from Nacos
    */
-  async getAllServices(): Promise<Array<{name: string; groupName: string}>> {
+  async getAllServices(): Promise<Array<{ name: string; groupName: string }>> {
     if (!this.isInitialized) {
       throw new Error('NacosClient is not initialized');
     }
@@ -97,7 +100,10 @@ export class NacosClient implements INacosClient {
    * @returns Service details including metadata
    * @throws {Error} If the client is not initialized or service details cannot be fetched
    */
-  async getServiceDetail(serviceName: string, groupName: string = 'DEFAULT_GROUP'): Promise<{
+  async getServiceDetail(
+    serviceName: string,
+    groupName: string = 'DEFAULT_GROUP',
+  ): Promise<{
     name: string;
     groupName: string;
     metadata: Record<string, any>;
@@ -145,11 +151,15 @@ export class NacosClient implements INacosClient {
       const searchTerm = keyword.toLowerCase();
 
       for (const service of services) {
-        const serviceText = `${service.name} ${service.groupName}`.toLowerCase();
-        
+        const serviceText =
+          `${service.name} ${service.groupName}`.toLowerCase();
+
         if (serviceText.includes(searchTerm)) {
-          const detail = await this.getServiceDetail(service.name, service.groupName);
-          
+          const detail = await this.getServiceDetail(
+            service.name,
+            service.groupName,
+          );
+
           results.push({
             name: service.name,
             description: detail.metadata?.description || '',
@@ -157,7 +167,7 @@ export class NacosClient implements INacosClient {
               name: service.name,
               description: detail.metadata?.description,
               tags: detail.metadata?.tags || [],
-              ...detail.metadata
+              ...detail.metadata,
             },
             mcpConfigDetail: null,
             getName: () => service.name,
@@ -166,7 +176,7 @@ export class NacosClient implements INacosClient {
               name: service.name,
               description: detail.metadata?.description,
               tags: detail.metadata?.tags || [],
-              ...detail.metadata
+              ...detail.metadata,
             }),
             toDict: () => ({
               name: service.name,
@@ -175,23 +185,29 @@ export class NacosClient implements INacosClient {
                 name: service.name,
                 description: detail.metadata?.description,
                 tags: detail.metadata?.tags || [],
-                ...detail.metadata
+                ...detail.metadata,
               },
-              mcpConfigDetail: null
-            })
+              mcpConfigDetail: null,
+            }),
           });
         }
       }
 
       return results;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`Error searching MCP servers by keyword '${keyword}': ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      logger.error(
+        `Error searching MCP servers by keyword '${keyword}': ${errorMessage}`,
+      );
       throw error;
     }
   }
 
-  async getMcpServer(description: string, limit: number = 10): Promise<NacosMcpServer[]> {
+  async getMcpServer(
+    description: string,
+    limit: number = 10,
+  ): Promise<NacosMcpServer[]> {
     if (!this.isInitialized) {
       throw new Error('NacosClient is not initialized. Call init() first.');
     }
@@ -199,19 +215,24 @@ export class NacosClient implements INacosClient {
     try {
       const services = await this.getAllServices();
       const results: NacosMcpServer[] = [];
-      
+
       for (let i = 0; i < Math.min(limit, services.length); i++) {
         const service = services[i];
-        const detail = await this.getServiceDetail(service.name, service.groupName);
-        
+        const detail = await this.getServiceDetail(
+          service.name,
+          service.groupName,
+        );
+
         results.push({
           name: service.name,
-          description: detail.metadata?.description || `Service ${service.name} in group ${service.groupName}`,
+          description:
+            detail.metadata?.description ||
+            `Service ${service.name} in group ${service.groupName}`,
           agentConfig: {
             name: service.name,
             description: detail.metadata?.description,
             tags: detail.metadata?.tags || [],
-            ...detail.metadata
+            ...detail.metadata,
           },
           mcpConfigDetail: null,
           getName: () => service.name,
@@ -220,7 +241,7 @@ export class NacosClient implements INacosClient {
             name: service.name,
             description: detail.metadata?.description,
             tags: detail.metadata?.tags || [],
-            ...detail.metadata
+            ...detail.metadata,
           }),
           toDict: () => ({
             name: service.name,
@@ -229,17 +250,20 @@ export class NacosClient implements INacosClient {
               name: service.name,
               description: detail.metadata?.description,
               tags: detail.metadata?.tags || [],
-              ...detail.metadata
+              ...detail.metadata,
             },
-            mcpConfigDetail: null
-          })
+            mcpConfigDetail: null,
+          }),
         });
       }
 
       return results;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`Error getting MCP server '${description}': ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      logger.error(
+        `Error getting MCP server '${description}': ${errorMessage}`,
+      );
       throw error;
     }
   }

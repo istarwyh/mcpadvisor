@@ -52,10 +52,10 @@ export class NacosHttpClient {
       baseURL: `http://${this.nacosAddr}`,
       headers: {
         'Content-Type': 'application/json',
-        'charset': 'utf-8',
-        'userName': this.userName,
-        'password': this.passwd
-      }
+        charset: 'utf-8',
+        userName: this.userName,
+        password: this.passwd,
+      },
     });
   }
 
@@ -71,7 +71,8 @@ export class NacosHttpClient {
       const response = await this.client.get<T>(url, config);
       return response;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       logger.error(`GET request to ${url} failed: ${errorMessage}`);
       throw new Error(`Failed to fetch from Nacos: ${errorMessage}`);
     }
@@ -84,7 +85,10 @@ export class NacosHttpClient {
    * @returns Service details including metadata
    * @throws {Error} If the service is not found or there's an error fetching details
    */
-  async getServiceDetail(serviceName: string, groupName: string = 'DEFAULT_GROUP') {
+  async getServiceDetail(
+    serviceName: string,
+    groupName: string = 'DEFAULT_GROUP',
+  ) {
     try {
       // First try to get the service using the MCP API if available
       try {
@@ -96,12 +100,14 @@ export class NacosHttpClient {
             metadata: {
               ...mcpServer.agentConfig,
               description: mcpServer.description,
-              lastUpdated: new Date().toISOString()
-            }
+              lastUpdated: new Date().toISOString(),
+            },
           };
         }
       } catch (error) {
-        logger.debug(`Failed to fetch MCP server details for ${serviceName}: ${error}`);
+        logger.debug(
+          `Failed to fetch MCP server details for ${serviceName}: ${error}`,
+        );
         // Continue with regular service API if MCP API fails
       }
 
@@ -112,12 +118,14 @@ export class NacosHttpClient {
           groupName,
           namespaceId: 'public',
           clusterName: 'DEFAULT',
-          healthyOnly: false
-        }
+          healthyOnly: false,
+        },
       });
 
       if (!response.data) {
-        throw new Error(`Service ${serviceName} not found in group ${groupName}`);
+        throw new Error(
+          `Service ${serviceName} not found in group ${groupName}`,
+        );
       }
 
       return {
@@ -125,19 +133,24 @@ export class NacosHttpClient {
         groupName,
         metadata: {
           ...response.data,
-          lastUpdated: new Date().toISOString()
-        }
+          lastUpdated: new Date().toISOString(),
+        },
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`Failed to get service details for ${serviceName}: ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      logger.error(
+        `Failed to get service details for ${serviceName}: ${errorMessage}`,
+      );
       throw new Error(`Failed to get service details: ${errorMessage}`);
     }
   }
 
   async isReady(): Promise<boolean> {
     try {
-      const response = await this.client.get<{ data: unknown }>('/nacos/v3/admin/ai/mcp/list');
+      const response = await this.client.get<{ data: unknown }>(
+        '/nacos/v3/admin/ai/mcp/list',
+      );
       return response.status === 200;
     } catch (error) {
       logger.warn(`Nacos health check failed: ${error}`);
@@ -157,7 +170,7 @@ export class NacosHttpClient {
       interface McpServerResponse {
         data: NacosMcpServerConfig;
       }
-      
+
       const response = await this.client.get<McpServerResponse>(url);
       if (response.status === 200) {
         const data = response.data.data;
@@ -169,10 +182,10 @@ export class NacosHttpClient {
           getAgentConfig: () => ({}),
           toDict: () => ({
             ...data,
-            description: data.description || ''
-          })
+            description: data.description || '',
+          }),
         };
-        
+
         // Add getName and getDescription methods if not present
         if (!server.getName) {
           server.getName = () => data.name;
@@ -185,10 +198,12 @@ export class NacosHttpClient {
           const endpoint = data.backendEndpoints[0];
           const httpSchema = endpoint.port === 443 ? 'https' : 'http';
           let url = `${httpSchema}://${endpoint.address}:${endpoint.port}`;
-          
+
           if (data.remoteServerConfig?.exportPath) {
-            const exportPath = data.remoteServerConfig.exportPath.startsWith('/') 
-              ? data.remoteServerConfig.exportPath 
+            const exportPath = data.remoteServerConfig.exportPath.startsWith(
+              '/',
+            )
+              ? data.remoteServerConfig.exportPath
               : `/${data.remoteServerConfig.exportPath}`;
             url += exportPath;
           }
@@ -199,9 +214,9 @@ export class NacosHttpClient {
               [server.name]: {
                 name: server.name,
                 description: server.description,
-                url
-              }
-            }
+                url,
+              },
+            },
           };
         }
         return server;
@@ -218,17 +233,19 @@ export class NacosHttpClient {
       const pageSize = 100;
       const pageNo = 1;
       const url = `/nacos/v3/admin/ai/mcp/list?pageNo=${pageNo}&pageSize=${pageSize}`;
-      
+
       interface McpListResponse {
         data: {
           pageItems: Array<{ name: string; enabled: boolean }>;
         };
       }
-      
+
       const response = await this.client.get<McpListResponse>(url);
-      
+
       if (response.status !== 200) {
-        logger.warn(`Failed to get mcp server list, status: ${response.status}`);
+        logger.warn(
+          `Failed to get mcp server list, status: ${response.status}`,
+        );
         return [];
       }
 
@@ -250,14 +267,16 @@ export class NacosHttpClient {
   async updateMcpTools(mcpName: string, tools: Tool[]): Promise<boolean> {
     try {
       const url = `/nacos/v3/admin/ai/mcp?mcpName=${mcpName}`;
-      const response = await this.client.get<{ data: NacosMcpServerConfig }>(url);
+      const response = await this.client.get<{ data: NacosMcpServerConfig }>(
+        url,
+      );
 
       if (response.status === 200) {
         const data = response.data.data;
         const toolList = tools.map(tool => ({
           name: tool.name,
           description: tool.description,
-          inputSchema: tool.inputSchema
+          inputSchema: tool.inputSchema,
         }));
 
         const endpointSpecification: Record<string, any> = {};
@@ -268,7 +287,7 @@ export class NacosHttpClient {
 
         const toolSpecification = {
           ...(data.toolSpec || {}),
-          tools: toolList
+          tools: toolList,
         };
 
         const serverSpecification = { ...data };
@@ -277,18 +296,28 @@ export class NacosHttpClient {
 
         const params = new URLSearchParams();
         params.append('mcpName', mcpName);
-        params.append('serverSpecification', JSON.stringify(serverSpecification));
-        params.append('endpointSpecification', JSON.stringify(endpointSpecification));
+        params.append(
+          'serverSpecification',
+          JSON.stringify(serverSpecification),
+        );
+        params.append(
+          'endpointSpecification',
+          JSON.stringify(endpointSpecification),
+        );
         params.append('toolSpecification', JSON.stringify(toolSpecification));
 
         logger.info(`Updating mcp tools for ${mcpName}`);
 
-        const updateResponse = await this.client.put('/nacos/v3/admin/ai/mcp', params, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            // Other headers like userName and password are already configured in the client
-          }
-        });
+        const updateResponse = await this.client.put(
+          '/nacos/v3/admin/ai/mcp',
+          params,
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              // Other headers like userName and password are already configured in the client
+            },
+          },
+        );
 
         return updateResponse.status === 200;
       }
