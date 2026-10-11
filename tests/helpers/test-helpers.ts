@@ -47,7 +47,11 @@ export class EnvironmentManager {
 
 // Smart waiting functions
 export class SmartWaiter {
-  constructor(private page: Page) {}
+  private page: Page;
+
+  constructor(page: Page) {
+    this.page = page;
+  }
 
   async waitForConnection(timeout = TEST_CONFIG.timeout) {
     await this.page.waitForFunction(() => {
@@ -83,7 +87,13 @@ export class SmartWaiter {
 
 // MCP connection and setup utilities
 export class MCPConnectionManager {
-  constructor(private page: Page, private waiter: SmartWaiter) {}
+  private page: Page;
+  private waiter: SmartWaiter;
+
+  constructor(page: Page, waiter: SmartWaiter) {
+    this.page = page;
+    this.waiter = waiter;
+  }
 
   async connectToMCP(retries = 3) {
     const maskedToken = TEST_CONFIG.authToken ? `${TEST_CONFIG.authToken.substring(0, 4)}****` : 'undefined';
@@ -153,7 +163,13 @@ export class MCPConnectionManager {
 
 // Search operations utilities
 export class SearchOperations {
-  constructor(private page: Page, private waiter: SmartWaiter) {}
+  private page: Page;
+  private waiter: SmartWaiter;
+
+  constructor(page: Page, waiter: SmartWaiter) {
+    this.page = page;
+    this.waiter = waiter;
+  }
 
   get currentPage(): Page {
     return this.page;
@@ -233,7 +249,11 @@ export class SearchOperations {
 
 // Screenshot utilities
 export class ScreenshotManager {
-  constructor(private page: Page) {}
+  private page: Page;
+
+  constructor(page: Page) {
+    this.page = page;
+  }
 
   async takeScreenshot(filename: string, options?: { fullPage?: boolean }) {
     await this.page.screenshot({ 
@@ -297,12 +317,22 @@ export class TestValidator {
 
 // Configuration test utilities
 export class ConfigurationTester {
+  private envManager: EnvironmentManager;
+  private searchOps: SearchOperations;
+  private validator: typeof TestValidator;
+  private screenshotManager: ScreenshotManager;
+
   constructor(
-    private envManager: EnvironmentManager,
-    private searchOps: SearchOperations,
-    private validator: typeof TestValidator,
-    private screenshotManager: ScreenshotManager
-  ) {}
+    envManager: EnvironmentManager,
+    searchOps: SearchOperations,
+    validator: typeof TestValidator,
+    screenshotManager: ScreenshotManager
+  ) {
+    this.envManager = envManager;
+    this.searchOps = searchOps;
+    this.validator = validator;
+    this.screenshotManager = screenshotManager;
+  }
 
   async testConfiguration(configName: string, config: Record<string, string>) {
     console.log(`🧪 测试配置: ${configName}`);
@@ -355,6 +385,8 @@ export class ConfigurationTester {
   }
 
   async recoverFromFailure(failureType: string, waiter: SmartWaiter, context?: any) {
+    // Reserved for caller-specific recovery data; keep the public helper signature.
+    void context;
     console.log(`🔧 开始故障恢复: ${failureType}`);
     
     try {
@@ -419,7 +451,7 @@ export class ConfigurationTester {
       
       console.log(`✅ 错误处理测试完成: ${errorName}`);
       
-    } catch (error: any) {
+    } catch {
       // For error handling tests, we expect some failures
       console.log(`✅ 错误处理测试完成: ${errorName} (捕获到预期错误)`);
       

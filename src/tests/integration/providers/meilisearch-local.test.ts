@@ -36,7 +36,9 @@ describe('Local Meilisearch Provider Integration', () => {
             }
           }
         }
-      } catch {}
+      } catch {
+        // Optional local env files must not block explicitly configured tests.
+      }
     }
 
     // 构建测试配置并创建控制器实例

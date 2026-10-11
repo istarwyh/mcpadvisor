@@ -5,7 +5,7 @@ import logger from '../../../utils/logger.js';
 export class McpManager {
   private nacosClient: NacosClient;
   private vectorDB: VectorDB;
-  private syncInterval: NodeJS.Timeout | null = null;
+  private syncInterval: ReturnType<typeof globalThis.setInterval> | null = null;
   private syncIntervalMs: number;
 
   constructor(nacosClient: NacosClient, vectorDB: VectorDB, syncIntervalMs: number = 5000) {
@@ -20,7 +20,7 @@ export class McpManager {
     await this.syncNacosServices();
     
     // Set up periodic sync
-    this.syncInterval = setInterval(() => {
+    this.syncInterval = globalThis.setInterval(() => {
       this.syncNacosServices().catch(err => {
         logger.error('Error during periodic sync:', err);
       });
@@ -29,7 +29,7 @@ export class McpManager {
 
   async stopSync() {
     if (this.syncInterval) {
-      clearInterval(this.syncInterval);
+      globalThis.clearInterval(this.syncInterval);
       this.syncInterval = null;
       logger.info('Stopped MCP sync service');
     }

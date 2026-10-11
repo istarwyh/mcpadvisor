@@ -32,6 +32,8 @@ async function checkServiceHealth(url: string, timeout = 5000): Promise<{ health
 }
 
 async function globalSetup(config: FullConfig) {
+  // Keep the Playwright lifecycle callback signature; no config is needed here.
+  void config;
   console.log('🔧 开始全局测试设置...');
   
   // Create test results directory

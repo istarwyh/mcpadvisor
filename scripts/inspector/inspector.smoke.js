@@ -70,18 +70,6 @@ const CONFIG = {
 };
 
 /**
- * 等待元素出现并返回
- */
-async function waitForElement(page, selector, timeout = CONFIG.timeout) {
-  try {
-    return await page.waitForSelector(selector, { timeout });
-  } catch (error) {
-    console.error(`❌ 元素未找到: ${selector}`);
-    throw error;
-  }
-}
-
-/**
  * 填写JSON参数到输入框
  */
 async function fillJsonInput(page, params) {
@@ -105,7 +93,7 @@ async function fillJsonInput(page, params) {
         console.log(`📝 找到输入元素: ${selector}`);
         break;
       }
-    } catch (e) {
+    } catch {
       // 继续尝试下一个选择器
     }
   }
@@ -155,7 +143,7 @@ async function executeTool(page, toolName, params, testName) {
           console.log(`✅ 工具已选择: ${toolName}`);
           break;
         }
-      } catch (e) {
+      } catch {
         // 继续尝试
       }
     }
@@ -166,7 +154,7 @@ async function executeTool(page, toolName, params, testName) {
         await page.selectOption('select', toolName);
         toolSelected = true;
         console.log(`✅ 工具已选择 (下拉): ${toolName}`);
-      } catch (e) {
+      } catch {
         // 忽略
       }
     }
@@ -206,7 +194,7 @@ async function executeTool(page, toolName, params, testName) {
           console.log(`✅ 执行按钮已点击`);
           break;
         }
-      } catch (e) {
+      } catch {
         // 继续尝试
       }
     }
@@ -242,7 +230,7 @@ async function executeTool(page, toolName, params, testName) {
             break;
           }
         }
-      } catch (e) {
+      } catch {
         // 继续尝试
       }
     }

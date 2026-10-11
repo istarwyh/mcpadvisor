@@ -215,6 +215,6 @@ export class MeilisearchMonitor {
     await monitor();
     
     // 设置定期监控
-    setInterval(monitor, intervalMs);
+    globalThis.setInterval(monitor, intervalMs);
   }
 }

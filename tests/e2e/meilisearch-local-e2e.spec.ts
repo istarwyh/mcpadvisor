@@ -51,7 +51,7 @@ test.describe('MCPAdvisor 本地 Meilisearch 功能测试', () => {
     }
   });
   
-  test('本地 Meilisearch 搜索功能验证', async ({ page }) => {
+  test('本地 Meilisearch 搜索功能验证', async () => {
     // Perform search with smart waiting
     await searchOps.performSearch('本地文件管理和数据处理工具');
     
@@ -90,7 +90,7 @@ test.describe('MCPAdvisor 本地 Meilisearch 功能测试', () => {
     await screenshotManager.takeScreenshot('meilisearch-fallback-test.png');
   });
   
-  test('性能对比测试：本地 vs 云端', async ({ page }) => {
+  test('性能对比测试：本地 vs 云端', async () => {
     const testCases = [
       { 
         instance: 'local', 
@@ -185,7 +185,7 @@ test.describe('MCPAdvisor 本地 Meilisearch 功能测试', () => {
     }
   });
   
-  test('数据一致性验证测试', async ({ page }) => {
+  test('数据一致性验证测试', async () => {
     // 测试本地和云端搜索结果的一致性
     const testQuery = '数据处理和分析工具';
     const results: Record<string, string[]> = {};

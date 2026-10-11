@@ -117,7 +117,7 @@ async function main() {
 
         const scriptPath = possiblePaths.find(p => {
           try {
-            return require('fs').existsSync(p);
+            return fs.existsSync(p);
           } catch {
             return false;
           }
@@ -197,7 +197,9 @@ async function ensureLocalMeilisearch(): Promise<void> {
   // Try to start a local Meilisearch instance
   try {
     fs.mkdirSync(baseDir, { recursive: true });
-  } catch {}
+  } catch {
+    // Directory creation is best effort; the spawn/health checks handle failure.
+  }
 
   const candidates = [
     process.env.MEILISEARCH_BIN,
@@ -214,7 +216,9 @@ async function ensureLocalMeilisearch(): Promise<void> {
         } else {
           return c; // let spawn resolve from PATH
         }
-      } catch {}
+      } catch {
+        // An unreadable candidate should not prevent trying the next binary.
+      }
     }
     return null;
   };

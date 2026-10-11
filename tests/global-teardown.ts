@@ -1,6 +1,8 @@
 import { FullConfig } from '@playwright/test';
 
 async function globalTeardown(config: FullConfig) {
+  // Keep the Playwright lifecycle callback signature; no config is needed here.
+  void config;
   console.log('\n🧹 开始全局测试清理...');
   
   // Clean up any temporary files or test artifacts
@@ -25,7 +27,7 @@ async function globalTeardown(config: FullConfig) {
           console.log(`📁 测试结果保存在: ${resultDir}`);
         }
       }
-    } catch (error) {
+    } catch {
       // Directory doesn't exist or other error, skip reporting
     }
     
