@@ -4,6 +4,7 @@ import os from 'os';
 import path from 'path';
 import logger from '../../../utils/logger.js';
 import ts from 'typescript';
+import { EventEmitter } from 'node:events';
 
 const mocks = vi.hoisted(() => ({
   start: vi.fn(),
@@ -66,7 +67,9 @@ beforeEach(() => {
   vi.stubEnv('NACOS_SERVER_ADDR', '');
   // Match the native ESM CLI environment even if the runner exposes require.
   vi.stubGlobal('require', undefined);
-  mocks.spawn.mockReturnValue({ unref: mocks.unref });
+  mocks.spawn.mockReturnValue(
+    Object.assign(new EventEmitter(), { unref: mocks.unref }),
+  );
 });
 
 afterEach(() => {
@@ -94,6 +97,13 @@ function expectBootstrap(scriptPath: string) {
     { env: { ...process.env }, stdio: 'ignore', detached: true },
   );
   expect(mocks.unref).toHaveBeenCalledTimes(1);
+  expect(logger.info).not.toHaveBeenCalledWith(
+    'Triggered async Meilisearch bootstrap',
+  );
+  mocks.spawn.mock.results[0].value.emit('spawn');
+  expect(logger.info).toHaveBeenCalledWith(
+    'Triggered async Meilisearch bootstrap',
+  );
 }
 
 describe('local Meilisearch bootstrap at CLI startup', () => {
@@ -149,6 +159,33 @@ describe('local Meilisearch bootstrap at CLI startup', () => {
     expect(logger.warn).toHaveBeenCalledWith('Skip Meilisearch bootstrap');
   });
 
+  it('handles a real asynchronous child-process startup error without stopping the server', async () => {
+    createScript(preferredPath);
+    const { spawn } =
+      await vi.importActual<typeof import('child_process')>('child_process');
+    let startupError: Promise<Error>;
+    mocks.spawn.mockImplementation((command, args, options) => {
+      // Node emits ENOENT asynchronously for an invalid cwd, outside try/catch.
+      const child = spawn(command, args, {
+        ...options,
+        cwd: path.join(directory, 'missing-working-directory'),
+      });
+      startupError = new Promise(resolve => child.once('error', resolve));
+      return child;
+    });
+    await startApplication();
+    const error = await startupError!;
+    expect(error).toHaveProperty('code', 'ENOENT');
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to start Meilisearch bootstrap',
+      { error },
+    );
+    expect(logger.info).not.toHaveBeenCalledWith(
+      'Triggered async Meilisearch bootstrap',
+    );
+    expect(mocks.exit).not.toHaveBeenCalled();
+  });
+
   it('does not spawn a local bootstrap in cloud mode', async () => {
     vi.stubEnv('MEILISEARCH_INSTANCE', 'cloud');
     createScript(preferredPath);
@@ -160,21 +197,24 @@ describe('local Meilisearch bootstrap at CLI startup', () => {
 // Vitest can supply CommonJS require even for this ESM entrypoint. Execute the
 // actual transpiled module in Node too, with only service/process boundaries
 // stubbed by a loader, so this catches ESM-only startup failures.
-it('finds and spawns the bootstrap in a native Node ESM process', async () => {
-  createScript(preferredPath);
-  const source = fs.readFileSync(
-    new URL('../../../index.ts', import.meta.url),
-    'utf8',
-  );
-  const compiled = ts.transpileModule(source, {
-    compilerOptions: {
-      module: ts.ModuleKind.ES2022,
-      target: ts.ScriptTarget.ES2022,
-    },
-  }).outputText;
-  const entryPath = path.join(directory, 'entry.mjs');
-  fs.writeFileSync(entryPath, compiled);
-  const serviceStubs = `
+it.each([false, true])(
+  'runs native Node ESM startup with asynchronous spawn failure=%s',
+  async spawnFailure => {
+    createScript(preferredPath);
+    const source = fs.readFileSync(
+      new URL('../../../index.ts', import.meta.url),
+      'utf8',
+    );
+    const compiled = ts.transpileModule(source, {
+      compilerOptions: {
+        module: ts.ModuleKind.ES2022,
+        target: ts.ScriptTarget.ES2022,
+      },
+    }).outputText;
+    const entryPath = path.join(directory, 'entry.mjs');
+    fs.writeFileSync(entryPath, compiled);
+    const serviceStubs = `
+    import { spawn as realSpawn } from 'node:child_process';
     const spawns = [];
     export const createOptionalClineProvider = () => undefined;
     export const createOptionalProfessionalReranker = () => undefined;
@@ -187,18 +227,41 @@ it('finds and spawns the bootstrap in a native Node ESM process', async () => {
     export const TransportType = { STDIO: 'stdio', SSE: 'sse', REST: 'rest' };
     export function spawn(command, args, options) {
       spawns.push({ command, args, stdio: options.stdio, detached: options.detached });
-      return { unref() {} };
+      if (process.env.MCPADVISOR_TEST_SPAWN_ERROR === 'true') {
+        return realSpawn(command, args, {
+          ...options, cwd: process.cwd() + '/missing-working-directory'
+        });
+      }
+      return {
+        once(event, callback) {
+          if (event === 'spawn') queueMicrotask(callback);
+          return this;
+        },
+        unref() {}
+      };
     }
     export class ServerService {
       async start() { console.log(JSON.stringify({ spawns })); }
     }
-    export default { info() {}, warn() {}, error() {}, debug() {} };
+    export default {
+      info(message) {
+        if (message === 'Triggered async Meilisearch bootstrap') {
+          console.log(JSON.stringify({ bootstrapSpawned: true }));
+        }
+      },
+      warn(message, detail) {
+        if (message === 'Failed to start Meilisearch bootstrap') {
+          console.log(JSON.stringify({ bootstrapError: detail.error.code }));
+        }
+      },
+      error() {}, debug() {}
+    };
   `;
-  const stubUrl = `data:text/javascript,${encodeURIComponent(serviceStubs)}`;
-  const loaderPath = path.join(directory, 'loader.mjs');
-  fs.writeFileSync(
-    loaderPath,
-    `
+    const stubUrl = `data:text/javascript,${encodeURIComponent(serviceStubs)}`;
+    const loaderPath = path.join(directory, 'loader.mjs');
+    fs.writeFileSync(
+      loaderPath,
+      `
     export async function resolve(specifier, context, nextResolve) {
       if (specifier.startsWith('./') || specifier === '@chatmcp/sdk/utils/index.js'
           || specifier === 'child_process') {
@@ -207,25 +270,41 @@ it('finds and spawns the bootstrap in a native Node ESM process', async () => {
       return nextResolve(specifier, context);
     }
   `,
-  );
-  const { execFileSync } =
-    await vi.importActual<typeof import('child_process')>('child_process');
-  const output = execFileSync(
-    process.execPath,
-    ['--loader', loaderPath, entryPath],
-    {
-      cwd: directory,
-      env: { ...process.env },
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    },
-  );
-  expect(JSON.parse(output).spawns).toEqual([
-    {
-      command: process.execPath,
-      args: ['--no-deprecation', preferredPath],
-      stdio: 'ignore',
-      detached: true,
-    },
-  ]);
-});
+    );
+    const { execFileSync } =
+      await vi.importActual<typeof import('child_process')>('child_process');
+    const output = execFileSync(
+      process.execPath,
+      ['--loader', loaderPath, entryPath],
+      {
+        cwd: directory,
+        env: {
+          ...process.env,
+          MCPADVISOR_TEST_SPAWN_ERROR: String(spawnFailure),
+        },
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+        timeout: 10000,
+      },
+    );
+    const events = output
+      .trim()
+      .split('\n')
+      .map(line => JSON.parse(line));
+    expect(events.find(event => event.spawns).spawns).toEqual([
+      {
+        command: process.execPath,
+        args: ['--no-deprecation', preferredPath],
+        stdio: 'ignore',
+        detached: true,
+      },
+    ]);
+    if (spawnFailure) {
+      expect(events).toContainEqual({ bootstrapError: 'ENOENT' });
+      expect(events).not.toContainEqual({ bootstrapSpawned: true });
+    } else {
+      expect(events).toContainEqual({ bootstrapSpawned: true });
+      expect(events.some(event => event.bootstrapError)).toBe(false);
+    }
+  },
+);
