@@ -1,0 +1,9 @@
+{
+  "label": "illustrative",
+  "queries": [
+    { "id": "files", "query": "local filesystem" },
+    { "id": "sql", "query": "postgres database" },
+    { "id": "web", "query": "browser screenshots" },
+    { "id": "empty", "query": "illustrative unavailable capability" }
+  ]
+}
