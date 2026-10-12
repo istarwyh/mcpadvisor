@@ -1,0 +1,6 @@
+{
+  "files": ["filesystem"],
+  "sql": ["postgresql"],
+  "web": ["puppeteer"],
+  "empty": []
+}

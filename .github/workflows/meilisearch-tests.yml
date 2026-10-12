@@ -11,6 +11,7 @@ on:
     paths:
       - 'src/services/providers/meilisearch/**'
       - 'src/config/meilisearch.ts'
+      - 'src/evaluation/**'
       - 'src/tests/**/*meilisearch*.test.ts'
       - 'src/services/core/search/MeilisearchSearchProvider.ts'
       - 'tests/e2e/meilisearch-*'
@@ -21,6 +22,7 @@ on:
     paths:
       - 'src/services/providers/meilisearch/**'
       - 'src/config/meilisearch.ts'
+      - 'src/evaluation/**'
       - 'src/tests/**/*meilisearch*.test.ts'
       - 'src/services/core/search/MeilisearchSearchProvider.ts'
       - 'tests/e2e/meilisearch-*'
@@ -106,7 +108,7 @@ jobs:
           timeout 180 bash -c 'until curl -f http://localhost:7700/health; do sleep 2; done'
 
       - name: Run Meilisearch integration tests
-        run: pnpm exec vitest run src/tests/integration/providers/meilisearch-fulltext.test.ts src/tests/integration/providers/meilisearch-evaluation.test.ts
+        run: pnpm exec vitest run src/tests/integration/providers/meilisearch-fulltext.test.ts src/tests/integration/providers/meilisearch-evaluation.test.ts src/tests/integration/providers/meilisearch-judgment-pool.test.ts
         timeout-minutes: 10
         env:
           MEILI_FULLTEXT_TEST_HOST: http://localhost:7700

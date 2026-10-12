@@ -1,0 +1,68 @@
+{
+  "label": "illustrative",
+  "poolDepth": 10,
+  "catalogSha256": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+  "note": "Unjudged pool: null is not grade 0. Independently assign grades 0–3 before evaluation. This is not business acceptance evidence.",
+  "queries": [
+    {
+      "id": "files",
+      "query": "local filesystem",
+      "candidateIds": [
+        "filesystem"
+      ],
+      "relevance": {
+        "filesystem": null
+      }
+    },
+    {
+      "id": "sql",
+      "query": "postgres database",
+      "candidateIds": [
+        "postgresql"
+      ],
+      "relevance": {
+        "postgresql": null
+      }
+    },
+    {
+      "id": "web",
+      "query": "browser screenshots",
+      "candidateIds": [
+        "playwright",
+        "puppeteer"
+      ],
+      "relevance": {
+        "playwright": null,
+        "puppeteer": null
+      }
+    },
+    {
+      "id": "empty",
+      "query": "illustrative unavailable capability",
+      "candidateIds": [],
+      "relevance": {}
+    }
+  ],
+  "documents": [
+    {
+      "id": "filesystem",
+      "name": "Filesystem",
+      "description": "Secure file operations with configurable access controls"
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright",
+      "description": "This MCP Server will help you run browser automation and webscraping using Playwright"
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "description": "Read-only database access with schema inspection"
+    },
+    {
+      "id": "puppeteer",
+      "name": "Puppeteer Browser Automation",
+      "description": "Browser automation and web scraping"
+    }
+  ]
+}
