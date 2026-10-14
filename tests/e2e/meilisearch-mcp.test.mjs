@@ -125,3 +125,47 @@ test(
     assert.ok((await client.listTools()).tools.length > 0);
   },
 );
+
+test(
+  'constraint regression queries survive actual MCP tool calls and service ranking',
+  { timeout: 15000 },
+  async () => {
+    const { client } = await connect();
+    for (const taskDescription of [
+      'I need a database except for Postgres',
+      'any database other than Postgres',
+      '我需要数据库工具，不要使用 Postgres',
+      'I need a NeverKnown-specific MCP server for database queries',
+    ]) {
+      const result = await client.callTool({
+        name: 'recommend-mcp-servers',
+        arguments: { taskDescription },
+      });
+      assert.equal(result.isError, false);
+      assert.ok(
+        result.content.some(
+          item =>
+            item.type === 'text' &&
+            item.text.includes('No matching MCP servers found') &&
+            !item.text.includes('Title:'),
+        ),
+      );
+    }
+    for (const taskDescription of [
+      'I need a task-specific MCP server for local files',
+      'I need a project-specific MCP server for local files',
+    ]) {
+      const result = await client.callTool({
+        name: 'recommend-mcp-servers',
+        arguments: { taskDescription },
+      });
+      assert.equal(result.isError, false);
+      assert.ok(
+        result.content.some(
+          item =>
+            item.type === 'text' && item.text.includes('Title: Filesystem'),
+        ),
+      );
+    }
+  },
+);

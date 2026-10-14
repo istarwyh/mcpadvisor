@@ -15,6 +15,10 @@ import {
 } from './engine-capture-lifecycle.mjs';
 import http from 'node:http';
 import path from 'node:path';
+import {
+  captureProvenance,
+  assertStableCaptureSource,
+} from './capture-provenance.mjs';
 
 const hash = value =>
   createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -52,6 +56,7 @@ const catalog = JSON.parse(catalogBytes);
 const protocol = JSON.parse(protocolBytes);
 const byteHash = value => createHash('sha256').update(value).digest('hex');
 const mode = protocol.mode || 'field-priority';
+const sourceProvenance = await captureProvenance();
 if (
   !['field-priority', 'query-preparation'].includes(mode) ||
   protocol.k !== 10 ||
@@ -308,6 +313,7 @@ try {
 } finally {
   await cleanupTrackedIndexes(attempts, request, wait, record);
 }
+assertStableCaptureSource(sourceProvenance, await captureProvenance());
 await save('manifest.json', {
   label: 'illustrative',
   complete: true,
@@ -332,7 +338,9 @@ await save('manifest.json', {
   settings,
   executionPath:
     'Actual isolated Meilisearch HTTP with mirrored application schema/settings. Query-preparation mode executes actual planner source through Node type erasure; application modules/full suite are not executed.',
-  sourceCommit: 'e674eb197f5cbcce8d3f25bb7ea6b3e2eb3f5bc0',
+  sourceCommit: sourceProvenance.commit,
+  sourceProvenance,
+  sourceProvenanceHash: hash(sourceProvenance),
 });
 console.log(
   'Captured actual engine-only rankings and blind pool; temporary indexes removed.',

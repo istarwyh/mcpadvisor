@@ -266,3 +266,79 @@ test('report evidence rejects altered queries, rankings, corpus and protocol', a
     ),
   );
 });
+
+test('report binds checkout provenance, dirty marker and captured source hashes', async () => {
+  const { verifyExperimentEvidence } = await loadEvaluation();
+  const directory = new URL(
+    '../../evaluation/agent-tasks-20261014/',
+    import.meta.url,
+  );
+  const json = async name =>
+    JSON.parse(await readFile(new URL(name, directory), 'utf8'));
+  const [q, m, a, b, p] = await Promise.all([
+    json('queries.json'),
+    json('query-fix-run/manifest.json'),
+    json('query-fix-run/baseline.json'),
+    json('query-fix-run/candidate.json'),
+    json('query-fix-protocol.json'),
+  ]);
+  const c = JSON.parse(
+    await readFile(
+      new URL('../../data/mcp_server_list.json', import.meta.url),
+      'utf8',
+    ),
+  );
+  assert.equal(
+    verifyExperimentEvidence(q, a, b, c, m, p).sourceProvenanceStatus,
+    'legacy-unverified',
+  );
+  const source = {
+    version: 1,
+    commit: 'a'.repeat(40),
+    dirty: true,
+    sourceFilesSha256: {
+      'scripts/evaluation/capture-agent-task-engine.mjs': m.captureScriptSha256,
+      'scripts/evaluation/capture-provenance.mjs': 'b'.repeat(64),
+      'scripts/evaluation/engine-capture-lifecycle.mjs': 'c'.repeat(64),
+      'src/services/core/search/meilisearchQuery.ts': m.queryPlannerSha256,
+    },
+  };
+  const current = {
+    ...m,
+    sourceCommit: source.commit,
+    sourceProvenance: source,
+    sourceProvenanceHash: contentHash(source),
+  };
+  assert.deepEqual(
+    verifyExperimentEvidence(q, a, b, c, current, p).sourceProvenance,
+    source,
+  );
+  for (const patch of [
+    { sourceCommit: 'e'.repeat(40) },
+    { sourceProvenanceHash: 'wrong' },
+    { sourceProvenance: null },
+    { sourceProvenance: { ...source, dirty: 'true' } },
+    { sourceProvenance: { ...source, commit: 'wrong' } },
+    { sourceProvenance: { ...source, sourceFilesSha256: {} } },
+  ])
+    assert.throws(() =>
+      verifyExperimentEvidence(q, a, b, c, { ...current, ...patch }, p),
+    );
+  const wrong = clone(source);
+  wrong.sourceFilesSha256['scripts/evaluation/capture-agent-task-engine.mjs'] =
+    'e'.repeat(64);
+  assert.throws(() =>
+    verifyExperimentEvidence(
+      q,
+      a,
+      b,
+      c,
+      {
+        ...current,
+        sourceProvenance: wrong,
+        sourceProvenanceHash: contentHash(wrong),
+      },
+      p,
+    ),
+  );
+});

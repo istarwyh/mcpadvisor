@@ -291,6 +291,50 @@ export function verifyExperimentEvidence(
   for (const [key, value] of Object.entries(expected))
     if (manifest[key] !== value)
       throw new Error(`Capture evidence mismatch: ${key}`);
+  // Historical manifests predate source provenance. Preserve replay, but never
+  // present their old sourceCommit field as verified checkout evidence.
+  const source = manifest.sourceProvenance as
+    | Record<string, unknown>
+    | undefined;
+  if (Object.hasOwn(manifest, 'sourceProvenance')) {
+    if (!source || typeof source !== 'object' || Array.isArray(source))
+      throw new Error('Invalid capture source provenance');
+    const files = source.sourceFilesSha256 as
+      | Record<string, unknown>
+      | undefined;
+    if (
+      source.version !== 1 ||
+      typeof source.commit !== 'string' ||
+      !/^[a-f0-9]{40,64}$/.test(source.commit) ||
+      typeof source.dirty !== 'boolean' ||
+      manifest.sourceCommit !== source.commit ||
+      manifest.sourceProvenanceHash !== contentHash(source) ||
+      !files ||
+      typeof files !== 'object' ||
+      Array.isArray(files) ||
+      [
+        'scripts/evaluation/capture-agent-task-engine.mjs',
+        'scripts/evaluation/capture-provenance.mjs',
+        'scripts/evaluation/engine-capture-lifecycle.mjs',
+        'src/services/core/search/meilisearchQuery.ts',
+      ].some(name => !Object.hasOwn(files, name)) ||
+      Object.entries(files).some(
+        ([name, digest]) =>
+          name.startsWith('/') ||
+          name.split('/').includes('..') ||
+          typeof digest !== 'string' ||
+          !/^[a-f0-9]{64}$/.test(digest),
+      ) ||
+      files['scripts/evaluation/capture-agent-task-engine.mjs'] !==
+        manifest.captureScriptSha256 ||
+      (manifest.mode === 'query-preparation' &&
+        files['src/services/core/search/meilisearchQuery.ts'] !==
+          manifest.queryPlannerSha256)
+    )
+      throw new Error('Invalid capture source provenance');
+  } else if (manifest.sourceProvenanceHash !== undefined) {
+    throw new Error('Missing capture source provenance');
+  }
   const plan = protocol as Record<string, unknown> | null;
   if (
     !plan ||
@@ -337,5 +381,9 @@ export function verifyExperimentEvidence(
     ...expected,
     manifestHash: contentHash(manifest),
     queryPlannerSha256: manifest.queryPlannerSha256 || null,
+    sourceProvenance: source || null,
+    sourceProvenanceStatus: source
+      ? 'checkout-and-source-hashes-recorded'
+      : 'legacy-unverified',
   };
 }

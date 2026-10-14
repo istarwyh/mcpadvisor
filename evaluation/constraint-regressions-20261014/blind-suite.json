@@ -1,0 +1,177 @@
+{
+  "suiteId": "mcpadvisor-constraints-blind-20261014",
+  "schemaVersion": 1,
+  "frozenAtUtc": "2026-10-14T20:07:00Z",
+  "baselineCommit": "d5ec5356d509617baaffbda8eaf77d077963dca7",
+  "scope": "Independent bounded regression probes for product exclusion polarity and non-product -specific adjectives after PR 33, plus small preservation and exploratory probes. This is not a broad semantic retrieval benchmark.",
+  "independence": {
+    "readBeforeFreeze": ["CLAUDE.md", "CONTRIBUTING.md", "data/mcp_server_list.json", "src/types/search.ts"],
+    "notReadBeforeFreeze": ["planner implementation", "existing evaluation judgments or holdouts", "candidate implementation"],
+    "queriesAreIndependentlyAuthored": true
+  },
+  "evaluationProtocol": {
+    "provider": "Meilisearch",
+    "catalog": "data/mcp_server_list.json at baselineCommit",
+    "topK": 5,
+    "sameIndexSettingsForBothCaptures": true,
+    "sameQueryInputsForBothCaptures": true,
+    "requireActualMeiliExecution": true,
+    "noFallbackResultAttribution": true,
+    "forbiddenProducts": "No matching excluded-product identity is allowed anywhere in the returned Meili provider results. Empty output satisfies exclusion-only checks but is not evidence of useful retrieval.",
+    "positiveRetention": "A core named-product target must appear within the top five provider results; no claim is made about exact rank.",
+    "genericPairCheck": "Compare each variant with its control on the same candidate. The variant must preserve a relevant result when the control has one, and relevant-at-5 must not decrease. Report baseline and candidate counts, including controls; do not hide a weak control behind a passing relative comparison.",
+    "unknownSpecific": "An unrecognized explicit specific-product request must abstain rather than return unrelated known-product results.",
+    "exploratoryNearSpelling": "Either abstention or the intended known product is acceptable as exploratory behavior; unrelated products are recorded as unsafe drift. This probe alone does not require typo correction and is not a release gate.",
+    "requiredCaptureProvenance": ["capture timestamp", "exact source commit", "clean/dirty status and dirty patch digest if applicable", "catalog sha256", "suite sha256", "capture command", "provider identity", "Meilisearch version", "index settings or settings digest", "raw returned IDs and scores if supplied", "all warning/error/fallback indications"],
+    "noRetuningOnBlindResults": true,
+    "releaseGate": "Pass core gates and preservation smoke checks or explicitly disclose unaddressed limits. Any revision made after unblinding is reported as a tuned revision, not as the original frozen candidate."
+  },
+  "cases": [
+    {
+      "id": "bc01",
+      "category": "english_exclusion",
+      "status": "core",
+      "language": "en",
+      "query": "Find messaging tools, except for Slack.",
+      "expected": {"forbiddenProductIds": ["slack"], "mayAbstain": true},
+      "rationale": "The product in an except-for phrase is excluded, never an affirmative product anchor."
+    },
+    {
+      "id": "bc02",
+      "category": "english_exclusion",
+      "status": "core",
+      "language": "en",
+      "query": "Find issue tracking tools other than Linear.",
+      "expected": {"forbiddenProductIds": ["linear"], "mayAbstain": true},
+      "rationale": "The product in an other-than phrase is excluded, never an affirmative product anchor."
+    },
+    {
+      "id": "bc03",
+      "category": "english_exclusion",
+      "status": "core",
+      "language": "en",
+      "query": "Find a GitLab integration for project management, except for GitHub.",
+      "expected": {"forbiddenProductIds": ["github", "github-actions"], "requiredAnyProductIdsAt5": ["gitlab"]},
+      "rationale": "A trailing exclusion must not override a separate positive known-product requirement."
+    },
+    {
+      "id": "bc04",
+      "category": "english_exclusion",
+      "status": "core",
+      "language": "en",
+      "query": "Find a Discord bot for reading messages, other than Slack.",
+      "expected": {"forbiddenProductIds": ["slack"], "requiredAnyProductIdsAt5": ["discord"]},
+      "rationale": "Preserve the positive product while rejecting the other-than product."
+    },
+    {
+      "id": "bc05",
+      "category": "chinese_exclusion",
+      "status": "preservation_smoke",
+      "language": "zh",
+      "query": "帮我找聊天消息工具，排除 Slack。",
+      "expected": {"forbiddenProductIds": ["slack"], "mayAbstain": true},
+      "rationale": "Preserve simple Chinese exclusion behavior; no broad Chinese semantic claim."
+    },
+    {
+      "id": "bc06",
+      "category": "chinese_exclusion",
+      "status": "preservation_smoke",
+      "language": "zh",
+      "query": "找 Discord 的消息读取工具，不要 Slack。",
+      "expected": {"forbiddenProductIds": ["slack"], "requiredAnyProductIdsAt5": ["discord"]},
+      "rationale": "A straightforward Chinese negative must not displace a positive known product."
+    },
+    {
+      "id": "bc07",
+      "category": "generic_specific_control",
+      "status": "core",
+      "language": "en",
+      "query": "Find tools for database schema inspection.",
+      "expected": {"relevantProductIds": ["mysql", "postgresql"], "requiredAnyProductIdsAt5": ["mysql", "postgresql"]},
+      "rationale": "Catalog-grounded control for the task-specific adjective pair."
+    },
+    {
+      "id": "bc08",
+      "category": "generic_specific_variant",
+      "status": "core",
+      "language": "en",
+      "query": "Find task-specific tools for database schema inspection.",
+      "pairedControl": "bc07",
+      "expected": {"relevantProductIds": ["mysql", "postgresql"], "relevantAt5NotLessThanControl": true, "mustPreserveControlNonemptyRelevance": true, "mustNotInferProducts": ["task"]},
+      "rationale": "Task-specific is an ordinary adjective, not a named product."
+    },
+    {
+      "id": "bc09",
+      "category": "generic_specific_control",
+      "status": "core",
+      "language": "en",
+      "query": "Find tools for issue tracking.",
+      "expected": {"relevantProductIds": ["linear", "atlassian"], "requiredAnyProductIdsAt5": ["linear", "atlassian"]},
+      "rationale": "Catalog-grounded control for the project-specific adjective pair."
+    },
+    {
+      "id": "bc10",
+      "category": "generic_specific_variant",
+      "status": "core",
+      "language": "en",
+      "query": "Find project-specific tools for issue tracking.",
+      "pairedControl": "bc09",
+      "expected": {"relevantProductIds": ["linear", "atlassian"], "relevantAt5NotLessThanControl": true, "mustPreserveControlNonemptyRelevance": true, "mustNotInferProducts": ["project"]},
+      "rationale": "Project-specific is an ordinary adjective, not a named product."
+    },
+    {
+      "id": "bc11",
+      "category": "unknown_specific",
+      "status": "core",
+      "language": "en",
+      "query": "Find Nebulora-specific tools for document search.",
+      "expected": {"mustAbstain": true, "unknownProduct": "Nebulora"},
+      "rationale": "Removing adjective false positives must not remove the unknown explicit-product guard."
+    },
+    {
+      "id": "bc12",
+      "category": "unknown_specific",
+      "status": "core",
+      "language": "zh-en",
+      "query": "需要 Quorvix-specific 文档搜索工具。",
+      "expected": {"mustAbstain": true, "unknownProduct": "Quorvix"},
+      "rationale": "Mixed-language surrounding text must not turn an unknown explicit product into unrelated generic results."
+    },
+    {
+      "id": "bc13",
+      "category": "near_spelling_specific",
+      "status": "exploratory",
+      "language": "en",
+      "query": "Find Slak-specific tools for channel messaging.",
+      "expected": {"allowedOutcomes": ["abstain", "slack-only"], "unrelatedProductIdsAreDrift": true},
+      "rationale": "Near spelling is not a typo-correction requirement. It only explores whether the bounded guard falls through to unrelated results."
+    },
+    {
+      "id": "bc14",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "language": "en",
+      "query": "Find Notion-specific tools to search pages.",
+      "expected": {"requiredAnyProductIdsAt5": ["notion"]},
+      "rationale": "Known product-specific intent survives narrower generic-adjective handling."
+    },
+    {
+      "id": "bc15",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "language": "en",
+      "query": "Find Linear-specific issue tracking tools.",
+      "expected": {"requiredAnyProductIdsAt5": ["linear"]},
+      "rationale": "A second exact known product-specific request retains its target."
+    },
+    {
+      "id": "bc16",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "language": "zh",
+      "query": "查找 Slack 聊天消息工具。",
+      "expected": {"requiredAnyProductIdsAt5": ["slack"]},
+      "rationale": "Positive Chinese product mention remains usable; only a smoke probe."
+    }
+  ]
+}
