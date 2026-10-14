@@ -9,6 +9,7 @@ on:
         'eslint.config.js',
         'tests/**',
         'scripts/**',
+        'evaluation/**',
         '.github/workflows/core-tests.yml',
       ]
   push:
@@ -21,6 +22,7 @@ on:
         'eslint.config.js',
         'tests/**',
         'scripts/**',
+        'evaluation/**',
         '.github/workflows/core-tests.yml',
       ]
 jobs:
@@ -39,4 +41,5 @@ jobs:
       - run: pnpm run check
       - run: pnpm run build
       - run: pnpm exec tsc --noEmit -p tsconfig.test.json
+      - run: node --test scripts/evaluation/*.test.mjs
       - run: pnpm test

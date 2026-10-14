@@ -1,0 +1,154 @@
+{
+  "label": "illustrative",
+  "complete": true,
+  "generatedAt": "2026-10-14T07:27:47.934Z",
+  "nodeVersion": "v22.23.1",
+  "meilisearchVersion": "1.15.2",
+  "catalogCount": 212,
+  "catalogHash": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+  "queryHash": "bd8909c18041e4997f72c7d5464ea320adddfb83c98c8ae87461a4d87f5f3036",
+  "catalogByteHash": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+  "queryByteHash": "e5223a0ebffe7a74a893c00c7a24ef79ac1e438f96c038ca73ae628cd21294bd",
+  "protocolHash": "88c7e4a4d6a6bd3edd4a8389ce6b2ecdd160329743c79d82a0eec5c7e4fb00af",
+  "protocolByteHash": "37559d6a7e49d87e76f471185038d338b2b98a5eb4fd9bc6007a359278119e87",
+  "baselineHash": "bf2a6525d5921eed53fc005fe32e7859ac16d3d2184173f46493f04c90b80cdc",
+  "candidateHash": "2218c4f7fc675624e1094c28279b5bd000c49a018cb09898f3a8df62ad289ad8",
+  "settingsHash": "a99ed5f36e101318d023d2ca2725f354e22314e0a3c77ff090ecaca3c736d236",
+  "cleanupHash": "604409a91372d5636a4e554b3e93c253f5dc56d25b4f2f2a4e8457ce3fb47380",
+  "queryPlannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+  "captureScriptSha256": "096d436df26a83839a4c7a74a2e4716c750b114f97c3fe163d6f7b2750d7a9bd",
+  "k": 10,
+  "mode": "query-preparation",
+  "settings": {
+    "baseline": {
+      "displayedAttributes": [
+        "id",
+        "catalog_id",
+        "title",
+        "description",
+        "github_url",
+        "categories",
+        "tags",
+        "installations"
+      ],
+      "searchableAttributes": [
+        "title",
+        "description",
+        "categories",
+        "tags"
+      ],
+      "filterableAttributes": [
+        "categories",
+        "tags"
+      ],
+      "sortableAttributes": [
+        "title"
+      ],
+      "rankingRules": [
+        "words",
+        "typo",
+        "proximity",
+        "attribute",
+        "sort",
+        "exactness"
+      ],
+      "stopWords": [],
+      "nonSeparatorTokens": [],
+      "separatorTokens": [],
+      "dictionary": [],
+      "synonyms": {},
+      "distinctAttribute": null,
+      "proximityPrecision": "byWord",
+      "typoTolerance": {
+        "enabled": true,
+        "minWordSizeForTypos": {
+          "oneTypo": 5,
+          "twoTypos": 9
+        },
+        "disableOnWords": [],
+        "disableOnAttributes": [],
+        "disableOnNumbers": false
+      },
+      "faceting": {
+        "maxValuesPerFacet": 100,
+        "sortFacetValuesBy": {
+          "*": "alpha"
+        }
+      },
+      "pagination": {
+        "maxTotalHits": 1000
+      },
+      "embedders": {},
+      "searchCutoffMs": null,
+      "localizedAttributes": null,
+      "facetSearch": true,
+      "prefixSearch": "indexingTime"
+    },
+    "candidate": {
+      "displayedAttributes": [
+        "id",
+        "catalog_id",
+        "title",
+        "description",
+        "github_url",
+        "categories",
+        "tags",
+        "installations"
+      ],
+      "searchableAttributes": [
+        "title",
+        "description",
+        "categories",
+        "tags"
+      ],
+      "filterableAttributes": [
+        "categories",
+        "tags"
+      ],
+      "sortableAttributes": [
+        "title"
+      ],
+      "rankingRules": [
+        "words",
+        "typo",
+        "proximity",
+        "attribute",
+        "sort",
+        "exactness"
+      ],
+      "stopWords": [],
+      "nonSeparatorTokens": [],
+      "separatorTokens": [],
+      "dictionary": [],
+      "synonyms": {},
+      "distinctAttribute": null,
+      "proximityPrecision": "byWord",
+      "typoTolerance": {
+        "enabled": true,
+        "minWordSizeForTypos": {
+          "oneTypo": 5,
+          "twoTypos": 9
+        },
+        "disableOnWords": [],
+        "disableOnAttributes": [],
+        "disableOnNumbers": false
+      },
+      "faceting": {
+        "maxValuesPerFacet": 100,
+        "sortFacetValuesBy": {
+          "*": "alpha"
+        }
+      },
+      "pagination": {
+        "maxTotalHits": 1000
+      },
+      "embedders": {},
+      "searchCutoffMs": null,
+      "localizedAttributes": null,
+      "facetSearch": true,
+      "prefixSearch": "indexingTime"
+    }
+  },
+  "executionPath": "Actual isolated Meilisearch HTTP with mirrored application schema/settings. Query-preparation mode executes actual planner source through Node type erasure; application modules/full suite are not executed.",
+  "sourceCommit": "e674eb197f5cbcce8d3f25bb7ea6b3e2eb3f5bc0"
+}

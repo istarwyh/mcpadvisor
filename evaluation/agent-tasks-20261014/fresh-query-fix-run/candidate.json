@@ -1,0 +1,41 @@
+{
+  "FV-D01-en": [
+    "time"
+  ],
+  "FV-D01-zh": [
+    "prometheus",
+    "n8n",
+    "fastn-ai-unified-api-mcp-server",
+    "ergo-blockchain-mcp",
+    "sentry"
+  ],
+  "FV-D02-en": [
+    "postman"
+  ],
+  "FV-D02-zh": [
+    "postman"
+  ],
+  "FV-D03-en": [
+    "figma"
+  ],
+  "FV-D03-zh": [
+    "figma"
+  ],
+  "FV-U01-en": [
+    "home-assistant"
+  ],
+  "FV-U01-zh": [
+    "promptx",
+    "rednote-mcp"
+  ],
+  "FV-U02-en": [
+    "virtual-location-google-street-view-etc"
+  ],
+  "FV-U02-zh": [
+    "promptx"
+  ],
+  "FV-U03-en": [
+    "devrev"
+  ],
+  "FV-U03-zh": []
+}

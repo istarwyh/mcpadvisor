@@ -1,0 +1,57 @@
+{
+  "label": "illustrative",
+  "status": "unscored engine-only negative result",
+  "notMeasured": [
+    "independently judged nDCG/Recall/Precision",
+    "end-to-end MCPAdvisor output",
+    "user satisfaction",
+    "production gains"
+  ],
+  "queryCount": 24,
+  "corpusCount": 212,
+  "k": 10,
+  "identicalRankingQueryCount": 24,
+  "baselineEmptyCount": 23,
+  "candidateEmptyCount": 23,
+  "nonemptyQueryIds": [
+    "D03-en"
+  ],
+  "descriptionHanCharacterCount": 4,
+  "slices": {
+    "development": {
+      "count": 16,
+      "baselineEmpty": 15,
+      "candidateEmpty": 15
+    },
+    "holdout": {
+      "count": 8,
+      "baselineEmpty": 8,
+      "candidateEmpty": 8
+    }
+  },
+  "decision": "Do not promote the field-priority candidate: it changed no recorded ranking. This conclusion needs no relevance labels; recommendation quality itself remains unscored.",
+  "assessmentStatus": "Independent AI assessor read catalog and verified some public capability pages, but failed with model-capacity errors before complete judgments; no independent label dataset exists.",
+  "validation": {
+    "engine": "Meilisearch 1.15.2 actual local HTTP runs",
+    "node": "22.23.1",
+    "disposableIndexesAfterRun": 0,
+    "builtInNodeRegressionTests": {
+      "passed": 9,
+      "failed": 0
+    },
+    "applicationBuild": "not run; dependencies incomplete",
+    "applicationTypecheck": "not run; dependencies incomplete",
+    "applicationAggregateChecks": "not run; dependencies incomplete"
+  },
+  "sha256Bytes": {
+    "evaluation/agent-tasks-20261014/queries.json": "e5223a0ebffe7a74a893c00c7a24ef79ac1e438f96c038ca73ae628cd21294bd",
+    "evaluation/agent-tasks-20261014/rubric.md": "917ce8fc98a28812bbced22ee547c9b5a0378f73a96a8672b990c4a27bc0912f",
+    "evaluation/agent-tasks-20261014/protocol.json": "e356fb4f5f3af46301b62d9d1bb2d95aa893981dbe88e4fee46e884798fdca93",
+    "data/mcp_server_list.json": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "evaluation/agent-tasks-20261014/engine-run/baseline.json": "7f97a0fc6908921312142025ee8dfe083513c33b144791c52f7c5fe79c52dff1",
+    "evaluation/agent-tasks-20261014/engine-run/candidate.json": "7f97a0fc6908921312142025ee8dfe083513c33b144791c52f7c5fe79c52dff1",
+    "evaluation/agent-tasks-20261014/engine-run/manifest.json": "a0369ebdcb331c0479ce5e982118b76e679862ac542fc47a7970e83c4efb9d94",
+    "evaluation/agent-tasks-20261014/engine-run/unjudged-pool.json": "e02597b3e75cf3099257949a57b27ec1d5caf7d34f58578162e9766edd093c68"
+  },
+  "digestNote": "Manifest/pool content hashes use SHA-256(JSON.stringify(parsed JSON)); the byte hashes here and in rubric preserve formatting and therefore differ."
+}

@@ -1,0 +1,250 @@
+{
+  "label": "illustrative",
+  "provenance": {
+    "type": "AI-authored and AI-assessed public illustrative fixtures; not human judgments, user logs or production labels",
+    "assessment": "Primary maintainer documentation and the existing public catalog; expected relevant IDs are not exhaustive",
+    "independence": "Only data/mcp_server_list.json and existing evaluation/agent-tasks-20261014/queries.json were read from task data; no implementation, candidate configuration, ranking, experiment output or retrieval call was inspected",
+    "freeze_time_utc": "2026-10-14T07:04:50Z",
+    "catalog_sha256": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "catalog_items": 212,
+    "existing_queries_sha256": "e5223a0ebffe7a74a893c00c7a24ef79ac1e438f96c038ca73ae628cd21294bd",
+    "grading": {
+      "3": "Directly supports required task and stated preference using documented tools, subject to ordinary setup and compatible account/service",
+      "2": "Documented useful support for the core task, with an explicitly stated limitation on a preference"
+    },
+    "unjudged": "Absent IDs are unjudged, not established irrelevant",
+    "negative_scope": "no-known-relevant is limited to the frozen catalog and stated dedicated-integration constraints"
+  },
+  "queries": [
+    {
+      "id": "FV-D01-en",
+      "query": "My agent needs to discover metric names and run PromQL queries for both the current value and a time range. Which MCP server can connect to our monitoring endpoint?",
+      "family": "monitoring_promql_timeseries",
+      "audience": "developer",
+      "language": "en",
+      "answerability": "answerable",
+      "relevance": {
+        "prometheus": 3
+      },
+      "rationale": "Direct fit: the maintainer documents metric discovery plus instant and range PromQL tools.",
+      "evidence": [
+        {
+          "url": "https://github.com/pab1it0/prometheus-mcp-server",
+          "reason": "Available Tools documents list_metrics, execute_query and execute_range_query."
+        }
+      ]
+    },
+    {
+      "id": "FV-D01-zh",
+      "query": "我的 Agent 需要查看有哪些监控指标，再用 PromQL 查询当前值和一段时间内的数据。什么 MCP 服务能连接我们的监控系统？",
+      "family": "monitoring_promql_timeseries",
+      "audience": "developer",
+      "language": "zh",
+      "answerability": "answerable",
+      "relevance": {
+        "prometheus": 3
+      },
+      "rationale": "Direct fit: the maintainer documents metric discovery plus instant and range PromQL tools.",
+      "evidence": [
+        {
+          "url": "https://github.com/pab1it0/prometheus-mcp-server",
+          "reason": "Available Tools documents list_metrics, execute_query and execute_range_query."
+        }
+      ]
+    },
+    {
+      "id": "FV-D02-en",
+      "query": "Which MCP tool can run my Postman collection with an environment file and tell my coding agent which API tests failed?",
+      "family": "postman_collection_test_execution",
+      "audience": "developer",
+      "language": "en",
+      "answerability": "answerable",
+      "relevance": {
+        "postman": 3
+      },
+      "rationale": "Direct fit: collection execution accepts an environment file and reports test failures.",
+      "evidence": [
+        {
+          "url": "https://github.com/shannonlal/mcp-postman",
+          "reason": "Features and run-collection document Newman execution, environment files and detailed failure results."
+        }
+      ]
+    },
+    {
+      "id": "FV-D02-zh",
+      "query": "哪个 MCP 工具能用指定的环境文件运行我的 Postman 集合，并告诉代码 Agent 哪些接口测试失败了？",
+      "family": "postman_collection_test_execution",
+      "audience": "developer",
+      "language": "zh",
+      "answerability": "answerable",
+      "relevance": {
+        "postman": 3
+      },
+      "rationale": "Direct fit: collection execution accepts an environment file and reports test failures.",
+      "evidence": [
+        {
+          "url": "https://github.com/shannonlal/mcp-postman",
+          "reason": "Features and run-collection document Newman execution, environment files and detailed failure results."
+        }
+      ]
+    },
+    {
+      "id": "FV-D03-en",
+      "query": "I have a Figma frame link. What MCP integration can give my coding agent the layout and styling data so it can implement the screen?",
+      "family": "figma_layout_context_for_coding",
+      "audience": "developer",
+      "language": "en",
+      "answerability": "answerable",
+      "relevance": {
+        "figma": 3
+      },
+      "rationale": "Direct fit: frame links provide simplified design metadata intended for coding-agent implementation.",
+      "evidence": [
+        {
+          "url": "https://github.com/GLips/Figma-Context-MCP",
+          "reason": "How it works describes frame links and extracting relevant layout and styling information."
+        }
+      ]
+    },
+    {
+      "id": "FV-D03-zh",
+      "query": "我有一个 Figma 画框链接，想让代码 Agent 读取布局和样式数据来实现这个界面，应该接哪个 MCP？",
+      "family": "figma_layout_context_for_coding",
+      "audience": "developer",
+      "language": "zh",
+      "answerability": "answerable",
+      "relevance": {
+        "figma": 3
+      },
+      "rationale": "Direct fit: frame links provide simplified design metadata intended for coding-agent implementation.",
+      "evidence": [
+        {
+          "url": "https://github.com/GLips/Figma-Context-MCP",
+          "reason": "How it works describes frame links and extracting relevant layout and styling information."
+        }
+      ]
+    },
+    {
+      "id": "FV-U01-en",
+      "query": "I want my assistant to check which smart-home lights are on and switch them off through my home automation hub. What MCP connection supports that?",
+      "family": "smart_home_light_state_control",
+      "audience": "user",
+      "language": "en",
+      "answerability": "answerable",
+      "relevance": {
+        "home-assistant": 3
+      },
+      "rationale": "Direct fit when the hub is Home Assistant: entity-state reads and on/off actions cover the request. Hub compatibility must be checked before setup.",
+      "evidence": [
+        {
+          "url": "https://github.com/voska/hass-mcp",
+          "reason": "Available Tools documents get_entity, list_entities and entity_action for checking states and switching devices."
+        }
+      ]
+    },
+    {
+      "id": "FV-U01-zh",
+      "query": "我想让助手通过家里的智能家居中枢查看哪些灯还亮着，并把它们关掉。什么 MCP 连接能做到？",
+      "family": "smart_home_light_state_control",
+      "audience": "user",
+      "language": "zh",
+      "answerability": "answerable",
+      "relevance": {
+        "home-assistant": 3
+      },
+      "rationale": "Direct fit when the hub is Home Assistant: entity-state reads and on/off actions cover the request. Hub compatibility must be checked before setup.",
+      "evidence": [
+        {
+          "url": "https://github.com/voska/hass-mcp",
+          "reason": "Available Tools documents get_entity, list_entities and entity_action for checking states and switching devices."
+        }
+      ]
+    },
+    {
+      "id": "FV-U02-en",
+      "query": "I want to turn a written dialogue into an audio file, preferably with a different voice for each speaker. Which MCP tool could help?",
+      "family": "script_to_spoken_audio",
+      "audience": "user",
+      "language": "en",
+      "answerability": "answerable",
+      "relevance": {
+        "elevenlabs": 3,
+        "huggingface-spaces": 2
+      },
+      "rationale": "ElevenLabs directly supports multi-voice scripts and audio retrieval. Hugging Face Spaces supports the core text-to-speech/file task, but the reviewed documentation does not establish the optional multi-speaker workflow.",
+      "evidence": [
+        {
+          "url": "https://github.com/mamertofabian/elevenlabs-mcp-server",
+          "reason": "Available Tools includes generate_audio_script with multiple voices and get_audio_file."
+        },
+        {
+          "url": "https://github.com/evalstate/mcp-hfspace",
+          "reason": "Text-to-Speech example documents audio-file output; README notes this project has been superseded."
+        }
+      ]
+    },
+    {
+      "id": "FV-U02-zh",
+      "query": "我想把一段对话稿做成音频文件，最好每个角色用不同的声音。有什么 MCP 工具能帮忙？",
+      "family": "script_to_spoken_audio",
+      "audience": "user",
+      "language": "zh",
+      "answerability": "answerable",
+      "relevance": {
+        "elevenlabs": 3,
+        "huggingface-spaces": 2
+      },
+      "rationale": "ElevenLabs directly supports multi-voice scripts and audio retrieval. Hugging Face Spaces supports the core text-to-speech/file task, but the reviewed documentation does not establish the optional multi-speaker workflow.",
+      "evidence": [
+        {
+          "url": "https://github.com/mamertofabian/elevenlabs-mcp-server",
+          "reason": "Available Tools includes generate_audio_script with multiple voices and get_audio_file."
+        },
+        {
+          "url": "https://github.com/evalstate/mcp-hfspace",
+          "reason": "Text-to-Speech example documents audio-file output; README notes this project has been superseded."
+        }
+      ]
+    },
+    {
+      "id": "FV-U03-en",
+      "query": "Is there a dedicated Strava MCP server here that lists my recent rides and reads their GPS tracks? I need built-in tools, without browser automation, shell commands or a generic API adapter.",
+      "family": "dedicated_strava_activity_tracks",
+      "audience": "user",
+      "language": "en",
+      "answerability": "no-known-relevant",
+      "relevance": {},
+      "rationale": "No known relevant entry in the frozen 212-item catalog: no Strava integration is described. The requested operations exist in the Strava API, but generic execution and API bridges are explicitly excluded. This is a catalog-bounded assessment, not proof that no such server exists elsewhere.",
+      "evidence": [
+        {
+          "url": "https://developers.strava.com/docs/reference/",
+          "reason": "Primary service documentation establishes athlete-activity listing and activity streams, not an MCP catalog match."
+        },
+        {
+          "url": "https://github.com/fastn-ai/fastn-mcp",
+          "reason": "A broad integration gateway, excluded by the dedicated-server requirement; no positive grade inferred from broad coverage."
+        }
+      ]
+    },
+    {
+      "id": "FV-U03-zh",
+      "query": "这个目录里有专门对接 Strava 的 MCP 服务，能列出我最近的骑行记录并读取 GPS 轨迹吗？需要现成工具，不用浏览器自动化、命令行或通用 API 适配器。",
+      "family": "dedicated_strava_activity_tracks",
+      "audience": "user",
+      "language": "zh",
+      "answerability": "no-known-relevant",
+      "relevance": {},
+      "rationale": "No known relevant entry in the frozen 212-item catalog: no Strava integration is described. The requested operations exist in the Strava API, but generic execution and API bridges are explicitly excluded. This is a catalog-bounded assessment, not proof that no such server exists elsewhere.",
+      "evidence": [
+        {
+          "url": "https://developers.strava.com/docs/reference/",
+          "reason": "Primary service documentation establishes athlete-activity listing and activity streams, not an MCP catalog match."
+        },
+        {
+          "url": "https://github.com/fastn-ai/fastn-mcp",
+          "reason": "A broad integration gateway, excluded by the dedicated-server requirement; no positive grade inferred from broad coverage."
+        }
+      ]
+    }
+  ]
+}

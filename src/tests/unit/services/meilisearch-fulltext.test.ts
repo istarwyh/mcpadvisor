@@ -63,9 +63,10 @@ describe('Meilisearch full-text catalog ingestion', () => {
     expect(indexDocuments.mock.invocationCallOrder[0]).toBeLessThan(
       search.mock.invocationCallOrder[0],
     );
-    expect(search).toHaveBeenCalledWith('files storage', {
+    expect(search).toHaveBeenCalledWith('storage files', {
       limit: 10,
       showRankingScore: true,
+      matchingStrategy: 'last',
     });
     expect(results[0]).toMatchObject({
       similarity: 0.95,

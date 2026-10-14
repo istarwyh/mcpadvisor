@@ -1,0 +1,90 @@
+{
+  "D01-en": [
+    "postgresql",
+    "dbhub"
+  ],
+  "D01-zh": [
+    "postgresql",
+    "dbhub"
+  ],
+  "D02-en": [
+    "cloudinary"
+  ],
+  "D02-zh": [
+    "rednote-mcp"
+  ],
+  "D03-en": [
+    "openapi",
+    "openapi-anyapi",
+    "openapi-schema",
+    "naver",
+    "openai-websearch-mcp",
+    "any-chat-completions"
+  ],
+  "D03-zh": [
+    "openapi",
+    "openapi-anyapi",
+    "openapi-schema",
+    "naver",
+    "openai-websearch-mcp",
+    "any-chat-completions"
+  ],
+  "D04-en": [],
+  "D04-zh": [],
+  "D05-en": [
+    "docker",
+    "code-sandbox-mcp",
+    "home-assistant",
+    "aws-resources-operations",
+    "gmail-headless",
+    "glean"
+  ],
+  "D05-zh": [
+    "docker",
+    "code-sandbox-mcp",
+    "home-assistant",
+    "aws-resources-operations",
+    "gmail-headless",
+    "glean"
+  ],
+  "D06-en": [
+    "stripe"
+  ],
+  "D06-zh": [
+    "context7"
+  ],
+  "U01-en": [
+    "ableton-live"
+  ],
+  "U01-zh": [
+    "rednote-mcp"
+  ],
+  "U02-en": [
+    "google-calendar"
+  ],
+  "U02-zh": [
+    "google-calendar"
+  ],
+  "U03-en": [
+    "youtube",
+    "cfbd-api",
+    "fantasy-pl"
+  ],
+  "U03-zh": [
+    "rijksmuseum"
+  ],
+  "U04-en": [
+    "excel"
+  ],
+  "U04-zh": [
+    "excel"
+  ],
+  "U05-en": [
+    "ns-travel-information"
+  ],
+  "U05-zh": [
+    "travel-planner"
+  ],
+  "U06-en": [],
+  "U06-zh": []
+}

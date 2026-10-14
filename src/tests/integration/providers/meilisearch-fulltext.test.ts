@@ -108,6 +108,47 @@ describe.skipIf(!host)(
       ).toBe(3);
     });
 
+    it('retrieves long and Chinese tasks without losing named or explicit terms', async () => {
+      const provider = new MeilisearchSearchProvider(
+        { fetchData: async () => catalog },
+        undefined,
+        new LocalMeilisearchController({
+          type: 'local',
+          host: host!,
+          masterKey: key,
+          indexName,
+          autoIndex: true,
+        }),
+      );
+      const long =
+        'I would like a suitable way to help my assistant work with an existing Postgres database';
+      expect((await provider.search({ taskDescription: long }))[0].id).toBe(
+        'postgres',
+      );
+      expect(
+        (await provider.search({ taskDescription: '请帮我读取本地文件' })).some(
+          row => row.id === 'filesystem',
+        ),
+      ).toBe(true);
+      expect(
+        (
+          await provider.search({
+            taskDescription: 'I need a useful tool for a lengthy description',
+            keywords: ['Postgres'],
+          })
+        )[0].id,
+      ).toBe('postgres');
+      expect(
+        await provider.search({
+          taskDescription:
+            'I need a NeverKnown-specific MCP server for database queries',
+        }),
+      ).toEqual([]);
+      expect(
+        await provider.search({ taskDescription: '请帮我寻找独角兽传送门' }),
+      ).toEqual([]);
+    });
+
     it('does not create or write an index without explicit opt-in', async () => {
       const untouched = `${indexName}_disabled`;
       const controller = new LocalMeilisearchController({
