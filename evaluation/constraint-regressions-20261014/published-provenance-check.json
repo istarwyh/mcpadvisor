@@ -1,0 +1,246 @@
+{
+  "queries": {
+    "label": "illustrative",
+    "queries": [
+      {
+        "id": "exclude",
+        "query": "I need a database except for PostgreSQL"
+      },
+      {
+        "id": "generic",
+        "query": "I need a task-specific MCP server for local files"
+      }
+    ]
+  },
+  "protocol": {
+    "mode": "query-preparation",
+    "k": 10,
+    "meilisearchVersion": "1.15.2",
+    "baselineSearchableAttributes": [
+      "title",
+      "description",
+      "categories",
+      "tags"
+    ],
+    "candidateSearchableAttributes": [
+      "title",
+      "description",
+      "categories",
+      "tags"
+    ],
+    "queryByteHash": "41fe7c209cf2f4db9d7f26cf88c0c5072adf07f68a1ddade933a43e88b0be3f0",
+    "catalogByteHash": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "queryPlannerSha256": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef"
+  },
+  "baseline": {
+    "exclude": [],
+    "generic": []
+  },
+  "candidate": {
+    "exclude": [
+      "postgresql",
+      "dbhub"
+    ],
+    "generic": [
+      "minima",
+      "basic-memory",
+      "gmail-headless",
+      "everything-search",
+      "xmind",
+      "google-drive",
+      "filesystem",
+      "llm-context",
+      "figma",
+      "github"
+    ]
+  },
+  "manifest": {
+    "label": "illustrative",
+    "complete": true,
+    "generatedAt": "2026-10-14T20:36:01.464Z",
+    "nodeVersion": "v24.19.0",
+    "meilisearchVersion": "1.15.2",
+    "catalogCount": 212,
+    "catalogHash": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+    "queryHash": "e3d5e57271889a5f70e4e3344ff6ba551601e7d1bbc42d25db1165c16a1e9ce5",
+    "catalogByteHash": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "queryByteHash": "41fe7c209cf2f4db9d7f26cf88c0c5072adf07f68a1ddade933a43e88b0be3f0",
+    "protocolHash": "08a8020067e9d2b5244fe181a231e4e7cc0864562f340d4c901b2c54a5238835",
+    "protocolByteHash": "f601c101aec587c24cc0e69c6dc7caf26214ec021a7be6dba1520497f72fc71b",
+    "baselineHash": "a2983106f910a35c9cd4805109643d98cf8717bf30c728b5c5066856ab421462",
+    "candidateHash": "b5781bb5ebe0281585ed73d8037e9a2329bdd4adbd09a683b9158c19a2ae4032",
+    "settingsHash": "a99ed5f36e101318d023d2ca2725f354e22314e0a3c77ff090ecaca3c736d236",
+    "cleanupHash": "0314101ec01dac8c04191f9827bfae9484012a0e338c98a72d832c46e9c7274e",
+    "queryPlannerSha256": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef",
+    "captureScriptSha256": "71cea37823b9de804c4280c27a75d60c1caa140ed4e982cb147aac11b9246333",
+    "k": 10,
+    "mode": "query-preparation",
+    "settings": {
+      "baseline": {
+        "displayedAttributes": [
+          "id",
+          "catalog_id",
+          "title",
+          "description",
+          "github_url",
+          "categories",
+          "tags",
+          "installations"
+        ],
+        "searchableAttributes": [
+          "title",
+          "description",
+          "categories",
+          "tags"
+        ],
+        "filterableAttributes": [
+          "categories",
+          "tags"
+        ],
+        "sortableAttributes": [
+          "title"
+        ],
+        "rankingRules": [
+          "words",
+          "typo",
+          "proximity",
+          "attribute",
+          "sort",
+          "exactness"
+        ],
+        "stopWords": [],
+        "nonSeparatorTokens": [],
+        "separatorTokens": [],
+        "dictionary": [],
+        "synonyms": {},
+        "distinctAttribute": null,
+        "proximityPrecision": "byWord",
+        "typoTolerance": {
+          "enabled": true,
+          "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+          },
+          "disableOnWords": [],
+          "disableOnAttributes": [],
+          "disableOnNumbers": false
+        },
+        "faceting": {
+          "maxValuesPerFacet": 100,
+          "sortFacetValuesBy": {
+            "*": "alpha"
+          }
+        },
+        "pagination": {
+          "maxTotalHits": 1000
+        },
+        "embedders": {},
+        "searchCutoffMs": null,
+        "localizedAttributes": null,
+        "facetSearch": true,
+        "prefixSearch": "indexingTime"
+      },
+      "candidate": {
+        "displayedAttributes": [
+          "id",
+          "catalog_id",
+          "title",
+          "description",
+          "github_url",
+          "categories",
+          "tags",
+          "installations"
+        ],
+        "searchableAttributes": [
+          "title",
+          "description",
+          "categories",
+          "tags"
+        ],
+        "filterableAttributes": [
+          "categories",
+          "tags"
+        ],
+        "sortableAttributes": [
+          "title"
+        ],
+        "rankingRules": [
+          "words",
+          "typo",
+          "proximity",
+          "attribute",
+          "sort",
+          "exactness"
+        ],
+        "stopWords": [],
+        "nonSeparatorTokens": [],
+        "separatorTokens": [],
+        "dictionary": [],
+        "synonyms": {},
+        "distinctAttribute": null,
+        "proximityPrecision": "byWord",
+        "typoTolerance": {
+          "enabled": true,
+          "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+          },
+          "disableOnWords": [],
+          "disableOnAttributes": [],
+          "disableOnNumbers": false
+        },
+        "faceting": {
+          "maxValuesPerFacet": 100,
+          "sortFacetValuesBy": {
+            "*": "alpha"
+          }
+        },
+        "pagination": {
+          "maxTotalHits": 1000
+        },
+        "embedders": {},
+        "searchCutoffMs": null,
+        "localizedAttributes": null,
+        "facetSearch": true,
+        "prefixSearch": "indexingTime"
+      }
+    },
+    "executionPath": "Actual isolated Meilisearch HTTP with mirrored application schema/settings. Query-preparation mode executes actual planner source through Node type erasure; application modules/full suite are not executed.",
+    "sourceCommit": "2041c53be0a29c93f939530f35b8f75a482ac68c",
+    "sourceProvenance": {
+      "version": 1,
+      "commit": "2041c53be0a29c93f939530f35b8f75a482ac68c",
+      "dirty": false,
+      "sourceFilesSha256": {
+        "scripts/evaluation/capture-agent-task-engine.mjs": "71cea37823b9de804c4280c27a75d60c1caa140ed4e982cb147aac11b9246333",
+        "scripts/evaluation/capture-provenance.mjs": "669c5bd7e040a11ee823bfa5bb11364e61ed752e39eee75bc42c8cbf741be037",
+        "scripts/evaluation/engine-capture-lifecycle.mjs": "f036b40a10a66a9dbea086b571b9109802265e05cec08fd7819973587dbb0ff4",
+        "src/services/core/search/meilisearchQuery.ts": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef"
+      }
+    },
+    "sourceProvenanceHash": "710461d89ac9bb268df64ce019098a1f2150903f3d6e06077cfcc444265130ac"
+  },
+  "evidence": {
+    "queryHash": "e3d5e57271889a5f70e4e3344ff6ba551601e7d1bbc42d25db1165c16a1e9ce5",
+    "catalogHash": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+    "baselineHash": "a2983106f910a35c9cd4805109643d98cf8717bf30c728b5c5066856ab421462",
+    "candidateHash": "b5781bb5ebe0281585ed73d8037e9a2329bdd4adbd09a683b9158c19a2ae4032",
+    "protocolHash": "08a8020067e9d2b5244fe181a231e4e7cc0864562f340d4c901b2c54a5238835",
+    "settingsHash": "a99ed5f36e101318d023d2ca2725f354e22314e0a3c77ff090ecaca3c736d236",
+    "manifestHash": "f602356f95b0219322232ee94860fa14a7411b8f3f5d9f6a8eeb1a6ad007f3e5",
+    "queryPlannerSha256": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef",
+    "sourceProvenance": {
+      "version": 1,
+      "commit": "2041c53be0a29c93f939530f35b8f75a482ac68c",
+      "dirty": false,
+      "sourceFilesSha256": {
+        "scripts/evaluation/capture-agent-task-engine.mjs": "71cea37823b9de804c4280c27a75d60c1caa140ed4e982cb147aac11b9246333",
+        "scripts/evaluation/capture-provenance.mjs": "669c5bd7e040a11ee823bfa5bb11364e61ed752e39eee75bc42c8cbf741be037",
+        "scripts/evaluation/engine-capture-lifecycle.mjs": "f036b40a10a66a9dbea086b571b9109802265e05cec08fd7819973587dbb0ff4",
+        "src/services/core/search/meilisearchQuery.ts": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef"
+      }
+    },
+    "sourceProvenanceStatus": "checkout-and-source-hashes-recorded"
+  },
+  "assertions": "Actual sourceCommit equals published checkout HEAD; clean worktree; evidence validation passed"
+}

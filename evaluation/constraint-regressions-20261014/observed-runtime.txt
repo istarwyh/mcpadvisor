@@ -1,0 +1,335 @@
+Platform node has already been set. Overwriting the platform with node.
+[DEBUG] Loading fallback data from: BASELINE_CHECKOUT/data/mcp_server_list.json
+[DEBUG] Loading fallback data from: BASELINE_CHECKOUT/data/mcp_server_list.json
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'messaging', 'tools,', 'except', 'for', 'slack.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',     'issue',
+  'tracking', 'tools',
+  'other',    'than',
+  'linear.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',        'gitlab',
+  'integration', 'for',
+  'project',     'management,',
+  'except',      'for',
+  'github.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',    'discord',
+  'bot',     'for',
+  'reading', 'messages,',
+  'other',   'than',
+  'slack.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ '帮我找聊天消息工具，排除', 'slack。' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'discord', '的消息读取工具，不要', 'slack。' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'tools', 'for', 'database', 'schema', 'inspection.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',
+  'task-specific',
+  'tools',
+  'for',
+  'database',
+  'schema',
+  'inspection.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'tools', 'for', 'issue', 'tracking.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'project-specific', 'tools', 'for', 'issue', 'tracking.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'nebulora-specific', 'tools', 'for', 'document', 'search.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ '需要', 'quorvix-specific', '文档搜索工具。' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'slak-specific', 'tools', 'for', 'channel', 'messaging.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'notion-specific', 'tools', 'to', 'search', 'pages.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'linear-specific', 'issue', 'tracking', 'tools.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ '查找', 'slack', '聊天消息工具。' ]
+[DEBUG] Loading fallback data from: CANDIDATE_CHECKOUT/data/mcp_server_list.json
+[DEBUG] Loading fallback data from: CANDIDATE_CHECKOUT/data/mcp_server_list.json
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'messaging', 'tools,', 'except', 'for', 'slack.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',     'issue',
+  'tracking', 'tools',
+  'other',    'than',
+  'linear.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',        'gitlab',
+  'integration', 'for',
+  'project',     'management,',
+  'except',      'for',
+  'github.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',    'discord',
+  'bot',     'for',
+  'reading', 'messages,',
+  'other',   'than',
+  'slack.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ '帮我找聊天消息工具，排除', 'slack。' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'discord', '的消息读取工具，不要', 'slack。' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'tools', 'for', 'database', 'schema', 'inspection.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [
+  'find',
+  'task-specific',
+  'tools',
+  'for',
+  'database',
+  'schema',
+  'inspection.'
+]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'tools', 'for', 'issue', 'tracking.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'project-specific', 'tools', 'for', 'issue', 'tracking.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'nebulora-specific', 'tools', 'for', 'document', 'search.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ '需要', 'quorvix-specific', '文档搜索工具。' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'slak-specific', 'tools', 'for', 'channel', 'messaging.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'notion-specific', 'tools', 'to', 'search', 'pages.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'find', 'linear-specific', 'issue', 'tracking', 'tools.' ]
+[DEBUG] Text search - loaded 424 servers
+[DEBUG] Text search - found 4 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ '查找', 'slack', '聊天消息工具。' ]

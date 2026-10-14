@@ -93,3 +93,63 @@ The standalone `scripts/evaluation/capture-agent-task-engine.mjs` remains an
 engine-only experiment, whose original baseline is the raw query. Its provenance
 fix is tested independently; do not confuse its baseline with this previous-planner
 application comparison.
+
+## Observed safety-subset replay
+
+`observed-capture.json` is the actual freshly built published checkout;
+`observed-report.json` independently scores the same 16 **already seen** cases.
+Of 15 non-exploratory cases, provider passes 11→12, isolated service 9→10,
+and default service 9→10. The original broad gate remains **not passed**.
+
+- The task-specific database-schema case (bc08) improves useful results at five
+  from 0→2 in all three layers.
+- The withdrawn mixed-positive/negative regressions (bc03/bc04) restore baseline
+  Meili behavior; no binary case flips from pass to fail in this replay.
+- This is **not zero degradation**: the project-specific issue-tracking case
+  (bc10) retains two relevant direct-provider results, but loses Atlassian after
+  service ranking/filtering, so isolated/default relevant@5 falls 2→1. Its paired
+  control also has one relevant service result, so the pair gate alone hides
+  that baseline-relative loss. The raw scores and case report keep it visible.
+- English exclusion failures remain in both baseline and candidate. Default
+  offline aggregation still returns unrelated results for unknown-specific
+  products and can reintroduce excluded products. Mixed-constraint positives can
+  still be lost by service ranking. These require separate follow-up work.
+- Both runs used SimpleEmbeddingProvider, and the observed duplicate offline
+  initialization remains unchanged. No broad quality or production-uplift claim.
+
+## Published-source provenance
+
+The final source snapshot is [2041c53](https://github.com/istarwyh/mcpadvisor/commit/2041c53be0a29c93f939530f35b8f75a482ac68c).
+Its tree `e6fb0d633eb9a72f24e7efd200b466e75068a2ad` is exactly identical to local
+verification commit `029ea5482d4fe7eb97b420ec08982a326acda507`. Publication used
+GitHub's commit API because the shell had no push credential; no credentials or
+permissions were expanded. The actual published checkout was then freshly rebuilt
+and captured again, including source/build stability checks. All 16 per-case
+outputs at all three layers matched the local safety-subset capture exactly.
+
+For the retained initial negative experiment, local capture commit
+`a45aef420527fd117d39b4d28c1adec694c7ddb9` has tree
+`639087ccbdaf80713b95a6df71b2b07aff8a0d98`, identical to published
+[98e720a](https://github.com/istarwyh/mcpadvisor/commit/98e720a94c5dd5474d858d60a9c7fb512acf9c9d).
+The raw historical capture metadata is preserved rather than rewritten to a
+revision it did not execute.
+
+`published-provenance-check.json` also verifies the standalone engine capture's
+actual published HEAD and clean start state. All temporary indexes were removed;
+the disposable engine returned an empty index list afterward.
+
+## Local checks on the safety subset
+
+See `validation-summary.json` for commands, exact counts and earlier failed attempts.
+Production build, test-project types and `pnpm run check` pass (0 lint errors,
+161 existing warnings). Full Vitest with two workers: 252 pass / 11 skip / 20 todo.
+Evaluation/provenance plus shell regression tests: 35 pass. Actual Meilisearch
+integration: 13 pass. Actual MCP stdio fixture: 4 pass, with two records and offline
+disabled. These checks do not imply that the default offline aggregate obeys all
+constraints.
+
+The legacy repository `pnpm run test:e2e` script cannot launch `mcp-inspector` in
+this environment and ran no UI tests. It exits 0 after that startup failure; we
+explicitly treat the stage as blocked, not passed. An earlier unconstrained full
+suite had two offline-test timeouts; baseline isolated tests and later bounded
+reruns passed without modifying offline production code.

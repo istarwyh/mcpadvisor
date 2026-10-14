@@ -235,10 +235,11 @@
       "The capture has no typed internal product-constraint trace; mustNotInferProducts is recorded as unverified internally. Retrieval pair outcomes and prepared-query lexical evidence are still available.",
       "This review independently scores the provided capture; it did not rerun Meilisearch or inspect the candidate implementation."
     ],
-    "preservedRawPath": "/workspace/scratch/b10cf8cc5589/mcpadvisor-constraints-blind-capture-initial-20261014.json",
-    "preservedLogPath": "/workspace/scratch/b10cf8cc5589/mcpadvisor-constraints-blind-capture-initial-20261014.log",
+    "preservedRawPath": "initial-capture.json",
+    "preservedLogPath": "initial-runtime.txt",
     "logPathNote": "Runtime log paths are normalized for portability; logSha256 refers to the original capture log.",
-    "baselineDirtyExplanation": "Only an untracked node_modules symlink; tracked diff empty and source hash matches baseline commit."
+    "baselineDirtyExplanation": "Only an untracked node_modules symlink; tracked diff empty and source hash matches baseline commit.",
+    "normalizedLogSha256": "9cf5e9221f8e879d3ced56fcda440515c2ad82a6e660eb7d735bfce1c425ab1e"
   },
   "scoringMethod": {
     "topK": 5,

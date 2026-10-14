@@ -1,0 +1,2385 @@
+{
+  "label": "illustrative",
+  "generatedAt": "2026-10-14T20:34:18.421Z",
+  "validationStatus": "Observed-suite replay of the safety subset after rejection of the initial blind candidate; not fresh independent validation",
+  "captureScriptSha256": "74dfe6a22ce0a0f9d06168067063e1472b1c634f9db94140886fbac0e132319e",
+  "command": "MEILI_FULLTEXT_TEST_HOST=http://127.0.0.1:17714 node evaluation/constraint-regressions-20261014/capture.mjs BASELINE_CHECKOUT CANDIDATE_CHECKOUT evaluation/constraint-regressions-20261014/blind-suite.json NEW_OUTPUT",
+  "suiteSha256": "38aebde39de98272aa67215811b00afb8b794204cb944d42ac6bade47e09e81a",
+  "catalogSha256": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+  "catalogCount": 212,
+  "version": {
+    "commitSha": "unknown",
+    "commitDate": "unknown",
+    "pkgVersion": "1.15.2"
+  },
+  "limitations": [
+    "Independent authored regression probes, not production traffic or human relevance labels.",
+    "Provider results are real Meilisearch; service-isolated runs use actual SearchService with offline disabled.",
+    "Default aggregation includes actual offline fallback; it is separately reported and never attributed to Meili.",
+    "Other online providers and optional professional reranking are not configured or exercised.",
+    "Embedding model may fall back through the unmodified application behavior; stderr is captured separately."
+  ],
+  "runs": {
+    "baseline": {
+      "freshBuild": {
+        "command": "node node_modules/typescript/bin/tsc",
+        "compilerVersion": "5.8.3"
+      },
+      "sourceSnapshot": {
+        "commit": "d5ec5356d509617baaffbda8eaf77d077963dca7",
+        "worktreeStatus": "?? node_modules",
+        "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "files": {
+          "package.json": "b13ab0446e5d88245b0fcb1a0778b8a0564dcd604993d2a263af02a1e0757040",
+          "pnpm-lock.yaml": "acbcfcb48738edc29f9bf92bfe9f447bdef84ae0a106c30f19fdee0bdb959e3c",
+          "src/config/cline.ts": "f6dbb13617428ede60561ee1b28ffe14d49544a4f25ee2555a72addf868cb562",
+          "src/config/configLoader.ts": "065c881c728fc2d86e22e5a65266f15fdb774625a0cfb079e09f05563f4336c9",
+          "src/config/constants.ts": "11dbbaf4442983c488f888b1f5e4fe58e1bb7229089988844d140d6b0daa889d",
+          "src/config/meilisearch.ts": "c0ee62bd92105d95778ad2fe0645dbd4071a51645f357cf4d8d1b65dc5f80eea",
+          "src/evaluation/agentTaskExperiment.ts": "409ae76123bad08d7f2a62499bf6977182e888a20c5a294c9d09fbb38f42723e",
+          "src/evaluation/evaluateSearch.ts": "4ac0c091f15b699d14e5ec751e0eff7b9c020bf5cdf7a48cf822af9a9685b5bb",
+          "src/evaluation/judgmentPool.ts": "56d50f8c153e0d099b2c0cdbfb61cf11ca8fc59ba8d3a35e051e1ef6b80c50ce",
+          "src/evaluation/prepareJudgments.ts": "7a763e00258acd9c0aba1473965fd20d123b85f6f87292fd4206c5fa7ed77e80",
+          "src/evaluation/searchQuality.ts": "ee268497fb6db3d2fb38e31a1478732e9d4bfc13148b74ca5584ba4ccf45db10",
+          "src/examples/fetchGitHubReadmeExample.ts": "c2d23e6fc49d21b7068d9374f7b4ce215760869653a707476aff82b7220c0ada",
+          "src/index.ts": "ebfee15d035c5dc4dc17dbb2bedd3931a169e1342185816bbc42b3d577d1020c",
+          "src/services/common/api/getMcpResourceFetcher.ts": "5d5ee4bc860bad52321ca980595485ad76104d79dba4787f9a4c9e2c2818d6e2",
+          "src/services/common/cache/memoryCache.ts": "ee97b3876d1cfd88db69bf19b1e737b07d015c25130174b582e9d1b7838a2d32",
+          "src/services/common/vector/VectorDB.ts": "e0514296a46464427ef03a4c9f316176d99b0838a14813d958f3b6f6114d49da",
+          "src/services/common/vector/XenovaVectorDB.ts": "6b5fe05a9278b5b248cae8935e63a38c2c6848d4f43f1704f7c92e21455c3301",
+          "src/services/core/installation/configurationGuideService.ts": "5970668109e22bca86fa477ea5e04d89e4c8cd0f5445c2ca16f16b2b7cea3a07",
+          "src/services/core/installation/extractors/GitHubReadmeExtractor.ts": "927176e16759d446b84c0c79bba8223054ba6d48102dbf8bbae5ca3630f2e817",
+          "src/services/core/installation/extractors/McpConfigurationExtractor.ts": "52cb2ef066f0c249b5ef117b3319cf2b69de2834add94459a39dbe0c5ed67fd3",
+          "src/services/core/installation/extractors/TraditionalInstallationExtractor.ts": "870983f9170f03f8b28bc3c2386dfdeb0f1712ce690c18052b75e68264b73b4e",
+          "src/services/core/installation/factories/ExtractorFactory.ts": "a7582d94cd9c9e7957ec6e5c94df5fc8c1c08c5b80ecf26d97bc63e941fd42b2",
+          "src/services/core/installation/factories/FormatterFactory.ts": "e766819b71ad9402a009c6d7da28b3526c55ec85e6989fc25615f2ff093a5575",
+          "src/services/core/installation/formatters/McpGuideFormatter.ts": "7864602d9e159d90a0cb985bc0e13be3c228b545589251e68bacd80666a479aa",
+          "src/services/core/installation/formatters/TraditionalGuideFormatter.ts": "09bd8c5e6136aed5bccf0f6b1b21c3c0c70697a4cca204087969d1617aca21a1",
+          "src/services/core/installation/installationGuideService.ts": "e30c49a715f8861e29ffaa412513797238b632ab263cf54f88cc0e7fc7ec2a58",
+          "src/services/core/installation/interfaces/IInstallationGuideFormatter.ts": "ca3bea7bf9a209e417588fad8917ca25fa54d3195d6971cbeb805bc804d29a6d",
+          "src/services/core/installation/interfaces/IInstallationSectionExtractor.ts": "af2ea3cea1e9f64eb1efa0e31c39ee2c6f3ad59eebfbec56737b36c0e4cfb7de",
+          "src/services/core/installation/interfaces/IReadmeContentExtractor.ts": "bdb26cb235cc1f9d2248133cb071711cda4e3c4483356c9f70c3305903c3eb4c",
+          "src/services/core/installation/types/InstallationGuideTypes.ts": "f803fff2e22b5e03eb7b034b4fb921d5c0abd7fc207218187a90c50d1107f4cb",
+          "src/services/core/search/ClineSearchProvider.ts": "ef072eff22f654895fd1f3ec808d7472d409b0822ee24b240c5938c42f4a73f7",
+          "src/services/core/search/CompassSearchProvider.ts": "e2dffa70c031ace04345e6c6ed856c0f1fb70a6a318a57bc4c0228424a906f69",
+          "src/services/core/search/GetMcpSearchProvider.ts": "07eaed7370780b2259e25bf976aa586de1d62d4a5f037cbe64dc8bd8b44db7c2",
+          "src/services/core/search/MeilisearchSearchProvider.ts": "6031ef9484f3f8dfc6639005cef438b491adf6d0e370c72d50e88e70a3254103",
+          "src/services/core/search/NacosMcpProvider.ts": "b1ed6aa3abcead9523947956d016ee1a0d6bd02f5fe0d703b36113d934c469eb",
+          "src/services/core/search/OfflineSearchProvider.ts": "5689f559bb6a197cce38c93bd0a3dbec1241054849c5adbcc3790b70d7d26e61",
+          "src/services/core/search/ProfessionalReranker.ts": "443e95eb8ef9a4fe98b40acc192c5e1998bdb06edc8771060662e6b39e79f163",
+          "src/services/core/search/RerankMcpProcessorFactory.ts": "eef8998f5adcb86d427db0d072ce4e4bc396b17bc8eafc92abeb1e12fa7f5191",
+          "src/services/core/search/RerankMcpService.ts": "008c04dfde66e3e9e8f5a936d729dca595d4d3f466e0a5dd526058a3cb9fd175",
+          "src/services/core/search/SearchMcpFactory.ts": "de624f9bde11473b2eebf656d2c04204bdbf9123bf9bc58f7f787018493b5882",
+          "src/services/core/search/VectorSearchManager.ts": "9305fcffa3299ed80f32a59258f1cdfa034ce52e36412b265f08ac4ca9688d8f",
+          "src/services/core/search/meilisearchQuery.ts": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+          "src/services/core/server/ServerService.ts": "9c4ad513198573f1ecd1727fb8542e6df701d0760e6b6daf3602ba36a165a003",
+          "src/services/core/server/endpoints/SourcesEndpoint.ts": "da6387dc627d0ba3a8d861dd4f78ac0beca87e5396c7d83023dcb51e7bb70bc1",
+          "src/services/core/server/handlers/RequestHandlerFactory.ts": "e3c8350bbbb5f3e8a7da7a148a141293a452dd3ce92a16851cd31972a88ea861",
+          "src/services/core/server/index.ts": "58bad84dd29b1d275ea8f3fe4a42ab9746d7b49171343aece043b1db896497f3",
+          "src/services/core/server/resources/BaseResourceHandler.ts": "914480ceb7669258a3ddd2d6210e3bf14179ee9665fce2e3ff639d8743670264",
+          "src/services/core/server/resources/LogResourceHandler.ts": "43b89de5c121ec3f36277b131440969c921270ec9e215100b2ee7c2a466404c5",
+          "src/services/core/server/tools/BaseToolHandler.ts": "04478e6dd9ae5f7150a204573d4f48fcb332ef93dccd03889bff8cbac162f2ad",
+          "src/services/core/server/tools/InstallMcpServerToolHandler.ts": "a8cefaa5c75b1457cf5ac55c3039589de0827b703eff8e4e08ea17b741c842ca",
+          "src/services/core/server/tools/RecommendMcpServerToolHandler.ts": "3f1878a28036be26cfe9083132722196e45a0bad2aa831e8bdb1845a635b3b97",
+          "src/services/core/server/transports/ExpressServer.ts": "3bc4333b114494d329f8a998b4ec3e5e7d595e7210fcb39e345ce63c5d2e0ad6",
+          "src/services/core/server/types.ts": "26617bd60c678c222d0b3af3863eb5a6e71e1b168ca335b66ceb0fc4fd8f2ad5",
+          "src/services/interfaces/cache.ts": "33900e19c3edb0c040854962b8f7a8c3e6e8eef4e7714d0d0ec23bab76d9f777",
+          "src/services/interfaces/vectorDBClient.ts": "3c88cade42ef5812726a799f1d4538b42590148e11ff88c3b937f5839454bb83",
+          "src/services/interfaces/vectorSearchEngine.ts": "738d4dcfeccdf630c48377b060b9a902d80ade74acdcde426c429443126dbfb0",
+          "src/services/interfaces/vectorSearchEngines.ts": "3d22d819357c06196d080444595aed71872742df7472dd8289ca4f2f872b0de3",
+          "src/services/loadService.ts": "07987d3590f3fd74c32af98561ce25957da2e15bb305d3af67d3c92ed46800bd",
+          "src/services/providers/meilisearch/controller.ts": "7f0106026733499d94339bb73d45477fc35d9a6c60465b5d37872491ed833265",
+          "src/services/providers/meilisearch/localController.ts": "354fc283a83430099e5eb62dc3f35d6c7eb76010b975c3d4f8fd09d310a78153",
+          "src/services/providers/meilisearch/vectorEngine.ts": "b304aee15c87b21f4f10f6e74066ee3217ae78b6a049d805dd0aa31c5b3d1034",
+          "src/services/providers/nacos/NacosClient.ts": "43c818df3197cb1b9c13b5885ca63d010f74f18f5ab9bce192d32f61e2c4f4e9",
+          "src/services/providers/nacos/NacosHttpClient.ts": "01dc35e9f8058818692c77f306ba8dfab20fbf56a8aa21abcaa4b3dfcb037235",
+          "src/services/providers/nacos/NacosMcpManager.ts": "23bc68777ec192e4c93d42c78e02dc9b9536111f27c42ea9d21fb935a4b09d23",
+          "src/services/providers/oceanbase/controller.ts": "eda67f188adf4eb3dca1db66f47fc695453f899a1c156d526be92e309bbbe6c4",
+          "src/services/providers/oceanbase/dataUpdateManager.ts": "65065572ad572c0cc578e6c82768a9cb95778ae0df03a768a73cbccb8468976b",
+          "src/services/providers/oceanbase/vectorEngine.ts": "bda04b51e14eb692be35d0e0de04a7bdc20c6cde55da9e97ef8696d13374b686",
+          "src/services/providers/offline/enhancedMemoryVectorEngine.ts": "7c17f4f2c686b2b37b4a0b9f9072dda44613976b845eea912690b103c8210f09",
+          "src/services/providers/offline/offlineDataLoader.ts": "14126d285e2b8f11229e1bb6946840ce3ae10055daf5ef3ba4f57228aa79ecf4",
+          "src/services/providers/offline/vectorEngine.ts": "9cb20c82d0f8139481b7e78310fcb28e8aab6438d4ede9c9208c2b5dea9df930",
+          "src/services/providers/offline/writableVectorEngine.ts": "84471c06da915af1719a69ec8616be8c9a6939453c85a89ca7d62f98afcfa57e",
+          "src/services/searchService.ts": "c039e9352c9e1d0e58002c9886b3dcfbf73161f49d3508ee17baeb8b87ada2a0",
+          "src/services/vectorEngineFactory.ts": "caeb00d4d670abb941d9a5bb2c6c6458271c4b74c0ebb1c90d5a37c7bdb59771",
+          "src/tests/__snapshots__/vitest-example.test.ts.snap": "20db9b89cac8354912889fe0d0895a1f1ec37e4b614552389e2908e889dfca16",
+          "src/tests/fixtures/cline/marketplace.json": "089f54d2bb9cb5b9912142e58f4cc5291165871c79e8c8767cce6aacb42a51d9",
+          "src/tests/fixtures/search/cases/edgeCases.ts": "812509c161d5d70fae276ea939b3bc977cb03f90078a56e24009b47465213e69",
+          "src/tests/fixtures/search/cases/github.ts": "8cfa1951b22eaf76bad0d6ef96fec01b8b48213e66c89d8931ff5e1ae8556879",
+          "src/tests/fixtures/search/cases/index.ts": "b4f5e04591fc018ac555af80d3fb0d32e207d380a5f52aac00f6c33ebb020e39",
+          "src/tests/fixtures/search/cases/prompx.ts": "d720877d313188942101c91721591ef74683c8f6166d4b98ac2d1744b7ec9ce6",
+          "src/tests/fixtures/search/cases/redbook.ts": "768cc8241d23cc034d28a8ad50bb2caa3095c0633ffa1f21e583fc5071035f28",
+          "src/tests/fixtures/search/rerankMcpService.cases.ts": "fa80a5f935403b2f777713251eafe7573a9d2f74be14524f4434f2077b297058",
+          "src/tests/fixtures/search/testUtils.ts": "76956b307745f5faf6ff67773ee4e90c3b76057ec86e6eeaa4e24ab62dbe83df",
+          "src/tests/fixtures/search/types.ts": "b007cf387c9c68913d198f8ee4e63257c79de1b6723ddc0508e8431967e5fa26",
+          "src/tests/integration/api/app.test.ts": "41f92b7922f379e7f5f471dafe1309e13277b2306e1cadf8ac64a1b4132fff0f",
+          "src/tests/integration/api/endpoints.test.ts": "5e30aece1bf37383fd30ce4c1c2d09c2a305f21f5fd066eb52e26eeddaf9e4b2",
+          "src/tests/integration/providers/meilisearch-evaluation.test.ts": "07db3d5b8521fb5dca4325742c18472e64a9579293f8c516a9102a0248899c9c",
+          "src/tests/integration/providers/meilisearch-fulltext.test.ts": "8a04dc8f8eeb9d5d0182b8adefe61af2ae96f159fc88155f2351e159911801c1",
+          "src/tests/integration/providers/meilisearch-judgment-pool.test.ts": "a824bb465c1ef3f61792ce837f16b5fe9ea43408350ccb124de40850a6a82577",
+          "src/tests/integration/providers/meilisearch-local.test.ts": "bec37ddc8d1f3fabefed680c853e96921cc6d8109f25648d31f4c4c3e1040c58",
+          "src/tests/integration/providers/meilisearch-search-provider.test.ts": "93810fcf9740f8969006327657d86caed86be137d0a7916e86af1fb4f0e9899b",
+          "src/tests/integration/providers/meilisearch-vector-engine.test.ts": "18826cea509806a1caa866cbd9c933024d4b7dff5a5e7aecf13c1ca8ac9f6efa",
+          "src/tests/integration/providers/nacos/NacosMcpProvider.test.ts": "b5feee6286b2e3b26a9f4a0c92dc52a4cac50a8030d1b6c738325a96e07f6005",
+          "src/tests/integration/providers/oceanbaseTest.test.ts": "328bf97980cab0873da786a96daf21bcea0171f12d1b6a27581f0309ac60deff",
+          "src/tests/integration/verify-offline-data.ts": "1800e47d50a54c657bfda05a7900cd1d80f41769f41713beb617892d5280aa4d",
+          "src/tests/setup.ts": "e812ad5a7db75625ee23c03a79ca4dc2bba0427642c98cca44abe8d90813930e",
+          "src/tests/unit/config/meilisearch-config.test.ts": "38099c7af27cc0509f17f230110cf43f7bb1211b8c3e09cc7c97d72e84d5168c",
+          "src/tests/unit/evaluation/judgment-pool.test.ts": "75b543257d18995cbc09862a5ba9cfa1ec848737e92d3a1d87657fd8aedc0b6b",
+          "src/tests/unit/examples/__snapshots__/vitest-example.test.ts.snap": "20db9b89cac8354912889fe0d0895a1f1ec37e4b614552389e2908e889dfca16",
+          "src/tests/unit/examples/vitest-example.test.ts": "66470cb312d9e9be5df26c25e1db7d3b0f6199cd0845380c0e94cf15fb941b8b",
+          "src/tests/unit/services/cline/ClineSearchFactory.test.ts": "224163e985bc840362c1b1a6d481a0e20ca6444906ba396826c34ddfa31b2b9c",
+          "src/tests/unit/services/cline/ClineSearchProvider.test.ts": "0463f6813dba249f83e8850cad05aa0ba31fd81212379749d81f5d715553a838",
+          "src/tests/unit/services/cline/ClineStartup.test.ts": "66c8554b3974f786f01ad08aad7a5c4df672a85af3ab6d76e8583b9a4a873ce9",
+          "src/tests/unit/services/english-guidance.test.ts": "6551344a35314e8a409fd45751476bb207e9d07049f74b7d59b8b101c13ed21a",
+          "src/tests/unit/services/installationGuideService.promptx.test.ts": "11803931376985fc34156e3a66faeef52a6168538650bef498240d949e0a78a9",
+          "src/tests/unit/services/installationGuideService.test.ts": "6df30a511c0af63b0e76205ad225e6e57295b28fa5039b4b021846a281b3a8e2",
+          "src/tests/unit/services/installationGuideServiceSingle.test.ts": "cf16380c195d3a6784cdd666b29c023b0b5d3abf6aa0e7a45d48167db39d631f",
+          "src/tests/unit/services/meilisearch-bootstrap.test.ts": "ee8da38d5f4abc6f7b520841979b4147cd2c09447b70007eb8e9ac6c0914d0f1",
+          "src/tests/unit/services/meilisearch-factory-cache.test.ts": "8284a15aca805f1b3fb75a74fcb4d4baed94a8ce640f95fbedee7959a48b64b5",
+          "src/tests/unit/services/meilisearch-failover.test.ts": "8f14e6470a3d65d8e3cbe0dc99e294248401067dd81b82ae81b343e5a4e3d73a",
+          "src/tests/unit/services/meilisearch-fulltext.test.ts": "77f4ca75dbe8f1ec90ac23e8e71eaa85fd14aefd892a3319d0a894eb16a20380",
+          "src/tests/unit/services/meilisearch-query.test.ts": "62bd2c2eb452a1d2bd7f8b3d944d3137b74661c1e047d6221f040d8e6154bcf9",
+          "src/tests/unit/services/nacos-sync-timer.test.ts": "72e5205ebab86c6095100366a02cd7c2f6104da7500672d6c12853415d47bd15",
+          "src/tests/unit/services/offline/offlineDataLoader.test.ts": "f464489e14a09ee8440578615efe4acca6c11d0373110111b2ead8051094026b",
+          "src/tests/unit/services/offline/offlineSearch.test.ts": "c2f13994f60cf043bbe55143d77349431a21777b6c9a66af3c4d68870e3d8fa8",
+          "src/tests/unit/services/professional-rerank.test.ts": "feaaf67b9fad0d9f180e52d8bdc001178f365abf9db2dc9fcfdddd25b92850fb",
+          "src/tests/unit/services/search-quality.test.ts": "62b62ebf8dd4a10a216d62706218620c748fd84fbc6c84d106817402e657b20e",
+          "src/tests/unit/services/search/rerankMcpService.test.ts": "225877a22e335587531ac9a21f1625ce10c689419972f80dd13d6792cd3d98c7",
+          "src/tests/unit/services/searchService.test.ts": "cd3047cb15c94c7f1710e2f2b638e17477b78f591fbed01dfad112bef6185324",
+          "src/tests/unit/services/server/LogResourceHandler.test.ts": "b317a0343fcbea1937571e8bac8cc5f7c02a4915df72100fd5d636b4209ed3e8",
+          "src/tests/unit/services/vector-search-engine.test.ts": "8ceb74402cd60fbc0454c3112745270da62b717377495ef5480545af46b96e54",
+          "src/tests/unit/utils/embedding.test.ts": "8b7bddb3725b8ca3223411dfef5a9088e98e7fff4b66387f2f52bf6b53d70d53",
+          "src/tests/unit/utils/githubUtils.test.ts": "a61151f8c29f2f4c042ed1d115dfbe42c261082e0a7cf63d7352bcab7cebcadb",
+          "src/tests/unit/utils/vectorUtils.test.ts": "1c1625e4356ab29cdd30f07fae7f99f2b9359a24bea38f77cfc5d17da01db44f",
+          "src/types/global.d.ts": "ecb85f60209bf1818fd96f6b3057b3c3b27d1bb9004583df20a81c34d28d09b7",
+          "src/types/index.ts": "81482d3dda5764216dbfd5f2605b434ba0c032dab1fbeda21bafba7659ca83ed",
+          "src/types/nacos.ts": "7d581834b2ff4052d47de15921566363aa3e7c7645c7e8896ea86b2d30f0f493",
+          "src/types/search.ts": "ed760de8e4b839fd75fbeab93a9c51776a19922ba4c6f39ba7735d6cedf4fd1c",
+          "src/utils/ListUtils.ts": "959b479dbf0dceebe5c34cfbb3659dee05eacb5f88e6fe27d373187c933ee6a1",
+          "src/utils/embedding.ts": "ae725cd525721e3caed0417d7d18ee086e3e368699843d928481809eb9a5f06a",
+          "src/utils/formatter.ts": "2fdbdf4ea7e343c243496d3527973c56d116ba98bbf47c9337d129075bfa9df9",
+          "src/utils/githubUtils.ts": "3c1760baaf3daf8cf672002215a0746bd3d5eda329ddd3c6f9be60a58fb51b88",
+          "src/utils/logger.ts": "aea9a2702e34304d6a6df57c42aa091c659b80bffd1c006477f450c9dffdb8a0",
+          "src/utils/meilisearch-monitor.ts": "2f268876d2d1bb561ff1252490585458851b78d2c1abbc880adcd0d626de80f4",
+          "src/utils/pathUtils.ts": "1e1a73913790fcc706035771d9cdd2cb683ee5e090e0fda86144415867b7ebaf",
+          "src/utils/vectorUtils.ts": "8ac5bf085858a41717c9d0de677be28cf2be25fab17187d18ca20d590a57111d",
+          "tsconfig.json": "4fde0014ff525edbf947b06ec930b5ae733d97d1e62676347a2d039d40071f94"
+        }
+      },
+      "sourceSnapshotSha256": "da0325580e412890236bb5f062c7517681d1b9d53234c97792ca0e2b22c9749f",
+      "buildFilesSha256": {
+        "build/config/cline.js": "fd348cf0fbe7917fa3f9fa71293dcf547921d6073d1fe1a9012067fe9ea6f12c",
+        "build/config/configLoader.js": "fd444cf9cc507e0ae1919b86f30ee5e4b90414d616ebcaa6ca39261759ed24cc",
+        "build/config/constants.js": "d210cf1dd50e85e027b0b1075bf17f8da4e4ebbd35651f1abb50d09782d07c9f",
+        "build/config/meilisearch.js": "8a62b91a7fbff62e0ef57fceb382b49aca38ecfe8bff1a33ade9ed0342ab7767",
+        "build/evaluation/agentTaskExperiment.js": "52919217633c92283730db5d4978fa7bd7ba125811295473b913bb77ecdf1df7",
+        "build/evaluation/evaluateSearch.js": "bd42f4d8481032e0393edbc42aed9b461a796cf1c8277e677dd10d35bdecdced",
+        "build/evaluation/judgmentPool.js": "2509add64d79feeac024e3f1e75d5b4a3a70dde06cb535ba9b6cc8c7e919e3c5",
+        "build/evaluation/prepareJudgments.js": "510c2578dfe1fd6669b6c840830d9379458c271c2cb51b4c038b432352d0171b",
+        "build/evaluation/searchQuality.js": "c371e94e88e25cb1f891a04cdd88aecfaa00909bb4947044a30f352afa4d1d35",
+        "build/examples/fetchGitHubReadmeExample.js": "e6c79f4daef58d03fcb5b2e49d950f9bde9938e8449879388e38e0f07ace89a8",
+        "build/index.js": "f9cc30bc519e2bfef0573a95b732cf2172034e1e84858ee75e4e75e528d12464",
+        "build/services/common/api/getMcpResourceFetcher.js": "373f082c9d343885f326ebd6c11640ec7b095081425e31ad3bd4efca095ad5a1",
+        "build/services/common/cache/memoryCache.js": "7e28a8c3c0cbe524109b68e8034bf4c34efb152d2ebf59a6f5211572eada407d",
+        "build/services/common/vector/VectorDB.js": "4084c6708546143ed73ed06398b55fa19d65c0c79cdf8c6567db8d424f1abe2f",
+        "build/services/common/vector/XenovaVectorDB.js": "7a60850bb9bfa86aabdd4baf7107d13f532b65c16b86589f96c17d8a59158ec7",
+        "build/services/core/installation/configurationGuideService.js": "8d11c461f489720f86f06c02e61f33fe277f8d21ee2361fcee1f5e650ce6bac9",
+        "build/services/core/installation/extractors/GitHubReadmeExtractor.js": "7e3f652e0d630dbc874eefb72001b8926f7a154cacd0cfa214308138bf46f613",
+        "build/services/core/installation/extractors/McpConfigurationExtractor.js": "19baed074a20ec9eddd5cc74e199e5297bb9a2b41bb3aefccdeaec5936ccb6dd",
+        "build/services/core/installation/extractors/TraditionalInstallationExtractor.js": "e3fedd17d58b14ab4e638b3229f0b415aefa100ac8183e8039ba7e6149225852",
+        "build/services/core/installation/factories/ExtractorFactory.js": "b78fbe209881ae90d674572afa04cb73c9ecf6af1e1aed92758841c37048841f",
+        "build/services/core/installation/factories/FormatterFactory.js": "eca27c513221b62c7f247d7abd917cbd623b458bcca471e7b1d2e93c957a5e56",
+        "build/services/core/installation/formatters/McpGuideFormatter.js": "476b4cf48c7d8a565c5213b7965acc159eaa7c2b55ff81dd59ab55d5772b7f34",
+        "build/services/core/installation/formatters/TraditionalGuideFormatter.js": "a04d27ec8b390797a9745c417209ba337232b4f069064122cbb0dc1652c508ba",
+        "build/services/core/installation/installationGuideService.js": "5cf2bd89754e63b38e2ef1bf176462bd70e6587cfee66884ec66519fabef5a6b",
+        "build/services/core/installation/interfaces/IInstallationGuideFormatter.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/core/installation/interfaces/IInstallationSectionExtractor.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/core/installation/interfaces/IReadmeContentExtractor.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/core/installation/types/InstallationGuideTypes.js": "87b3faad13809209c81480fe3b2b8b9f330facaa2a914eb609d9f9d80dd48f29",
+        "build/services/core/search/ClineSearchProvider.js": "d327241e041ed742a1fe9d435276adfffb169890eefa4d9b5c0353fb38743430",
+        "build/services/core/search/CompassSearchProvider.js": "8163a2a1333877b5cf8efb6c7daeef32f4e4d566c3e32b0661f7821bd76885bb",
+        "build/services/core/search/GetMcpSearchProvider.js": "ab4986056b4b4dca2ec91b734ea636d74095b36d9bad732367ebbb098106dd7d",
+        "build/services/core/search/MeilisearchSearchProvider.js": "bbc20f6dc10ef6065f51b2cd8a09ddfd250e7e42ab7129c9a2978d0671473f44",
+        "build/services/core/search/NacosMcpProvider.js": "e5957d724b5a78e01cc9fb03e2648472b0147f867495aa2e295aa6e1504b1042",
+        "build/services/core/search/OfflineSearchProvider.js": "7b7f14deede4336fe04a6f8737bdb3b38e5da80a9d06c1c17723f6134b6acfc2",
+        "build/services/core/search/ProfessionalReranker.js": "50c97da62fb5342bc51b0db340b5dfa4a2308a1d9a9a6494c883f6f8d126b253",
+        "build/services/core/search/RerankMcpProcessorFactory.js": "20c89484feceaffcf75c86fb95ef0f2352fb18322c1b172fef4513706bef3b60",
+        "build/services/core/search/RerankMcpService.js": "22ecf4cdbba4ddda85c550502fb7edebeace5f15dd4bb438f6c89eaea1067b79",
+        "build/services/core/search/SearchMcpFactory.js": "51599d5e0b62ac0c00f351ed00815b6b283ef5f7d4c4b1cc6ff528db83431ef4",
+        "build/services/core/search/VectorSearchManager.js": "e291e5f9e9c9fef88809df47bceefb518f70d3e3d772d324cac11e7b9a7054f5",
+        "build/services/core/search/meilisearchQuery.js": "dc7f3389fb5486273368727649c96be5b8f27cd736dfe87d073ca0e6b09679fa",
+        "build/services/core/server/ServerService.js": "d615eaf43007682ca7d38bf503be672e2b463c94f346d853697aab41bb8f3bee",
+        "build/services/core/server/endpoints/SourcesEndpoint.js": "70eb455b45b9b4f58749fae469dd7b1e8d80a1b18020c4f69ca1923748f24e9d",
+        "build/services/core/server/handlers/RequestHandlerFactory.js": "69d67aa8e8a9af268a38829579397f918becaa7f7be0a6256ea1dd9a15e1e2ca",
+        "build/services/core/server/index.js": "caf6579bb465ebd00a19c097a64e533306352a3765b8fbddb68484979dbe0692",
+        "build/services/core/server/resources/BaseResourceHandler.js": "99a32f9764e3f27079afaca34698a8a46c410fbff5239339d18dc771287e4731",
+        "build/services/core/server/resources/LogResourceHandler.js": "9a8773149771c0d05161e80171a7db317228059fe8825e8db7f4f5e601764393",
+        "build/services/core/server/tools/BaseToolHandler.js": "e325d74eff67c30ff671c47330fb3b121822015156d2d651a7bf83cdc60f86d2",
+        "build/services/core/server/tools/InstallMcpServerToolHandler.js": "49bd971c324fc217dda15f51c13ac6b84f3b17b2342eb2ccf55fffa1071fe8fd",
+        "build/services/core/server/tools/RecommendMcpServerToolHandler.js": "f2b7cce63f61ec3c3bce2e4f7b2e58ea2a422dd159291e3288856f3631719509",
+        "build/services/core/server/transports/ExpressServer.js": "56555dd2927fbbdb8d3cab5421fdc71df2102403858e9e9d89aa38d93492fda7",
+        "build/services/core/server/types.js": "95ce4b5c999a2befe18e50af5277505788caece9ca3668504814c387f09b4dd1",
+        "build/services/interfaces/cache.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/interfaces/vectorDBClient.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/interfaces/vectorSearchEngine.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/interfaces/vectorSearchEngines.js": "3bca7ddb0752fde052fd0b66820e281fdadbc9c61a0db2b4f375c0d356366a25",
+        "build/services/loadService.js": "c3dd72decb80d3a733b34ab954fa6f4d4defd653ad9832568c8502b8b96625ee",
+        "build/services/providers/meilisearch/controller.js": "34421d6e80447f8f6e987d1ef3efb7014d8f738dd45c564c7c550f382e2b5d7a",
+        "build/services/providers/meilisearch/localController.js": "314a9ea9f6c889ec2f2f6ce0b04e806c4c8f990a68f6ad94a8e080d050e0a942",
+        "build/services/providers/meilisearch/vectorEngine.js": "238f6e768c05632c37b7d44f11ad33b0b0932b96a92d186710bcd7a8e014aaa4",
+        "build/services/providers/nacos/NacosClient.js": "4bd0094743cd2167cb28593d97354413996c136c9fd8857ad5831bd07b491016",
+        "build/services/providers/nacos/NacosHttpClient.js": "9b0d96c471f65a17bb22f765586f6bc22c3189fb608d3540cad0104314d92275",
+        "build/services/providers/nacos/NacosMcpManager.js": "95c9b32b769ade65756b4efb3f108340883f7125006bcf3f9b32f218e75f448f",
+        "build/services/providers/oceanbase/controller.js": "0ac06cc18d03d88ce256af229ed05622e75fc31fd85fe9a1557b327106b5b289",
+        "build/services/providers/oceanbase/dataUpdateManager.js": "26e284cb7163a2b40ed91e911cc0f0f38fc7f078abbfaf6f9b129b5d3bd886eb",
+        "build/services/providers/oceanbase/vectorEngine.js": "d275a0de14d62a85dd0d01e26eda2c03a16ed663a408362e9c5e140b5747673f",
+        "build/services/providers/offline/enhancedMemoryVectorEngine.js": "31f81527dc063b62b32860703aa74cdb71aee5969b90391b7d6c9955f5852245",
+        "build/services/providers/offline/offlineDataLoader.js": "7d1f2a0c987ca5819dda17cfe1c9d0fa5c9c07a6dcd8769d7024b4d19700f227",
+        "build/services/providers/offline/vectorEngine.js": "c92a0199b8a864ace0c06477a3291cab3956f5b0880997671b618648e940d142",
+        "build/services/providers/offline/writableVectorEngine.js": "7d7c0add4a8b98b676d7676a639d6bd3b0d273e6624b9c2120e324c00c98e5a1",
+        "build/services/searchService.js": "74773ec352c9db291fb85986b839ea7fd9d718d847be0dd4117c1d85ff8f0cdb",
+        "build/services/vectorEngineFactory.js": "40aab72f94303c832cf5ee1024c7d533eb6f8382f791deeac838fc5e6c84114b",
+        "build/types/index.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/types/nacos.js": "eba190c4bfcfef1c6c270e1e758ffe7500c7f89dd93c16a136b1889edf141735",
+        "build/types/search.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/utils/ListUtils.js": "d7b0bf65d13ad8cfd034dbc564d187b27c35a8dc01a9b158ec241aa457ba88db",
+        "build/utils/embedding.js": "cc580e2656a2258884541233c55d798b5a1b4b4d2e97c01e0ad5a31c49af895b",
+        "build/utils/formatter.js": "f66071fb62f670fb76389bd623c0d6e455c7298bab7ba05ff0490dc135805307",
+        "build/utils/githubUtils.js": "9013bb113bd47e14ce4d8d3766b5d3da189322082e06f96b002af65d69021eae",
+        "build/utils/logger.js": "54df431676066e74f3c05be82c475d6bfea526c9e1db6ef0cf86a3dfe5304fa5",
+        "build/utils/meilisearch-monitor.js": "fda958dec9683938447420e09aba49f44d316b833581aa0a115d652149323320",
+        "build/utils/pathUtils.js": "f5daf4083701816fd126480fcd2a3d20fb9f03e98a01a50b84c8007c4565ccbd",
+        "build/utils/vectorUtils.js": "ad4179f5e63712ed74aced04f7061d6cac3e632372febc3f2f843645822d7763"
+      },
+      "buildSnapshotSha256": "b2314f3dde3d679c137f9715cb97c0d0d16b0759d08d745fb290f66dd1f3b5a7",
+      "sourceCommit": "d5ec5356d509617baaffbda8eaf77d077963dca7",
+      "dirty": true,
+      "worktreeStatus": "?? node_modules",
+      "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "plannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+      "provider": "MeilisearchSearchProvider + LocalMeilisearchController",
+      "settings": {
+        "displayedAttributes": [
+          "id",
+          "catalog_id",
+          "title",
+          "description",
+          "github_url",
+          "categories",
+          "tags",
+          "installations"
+        ],
+        "searchableAttributes": [
+          "title",
+          "description",
+          "categories",
+          "tags"
+        ],
+        "filterableAttributes": [
+          "categories",
+          "tags"
+        ],
+        "sortableAttributes": [
+          "title"
+        ],
+        "rankingRules": [
+          "words",
+          "typo",
+          "proximity",
+          "attribute",
+          "sort",
+          "exactness"
+        ],
+        "stopWords": [],
+        "nonSeparatorTokens": [],
+        "separatorTokens": [],
+        "dictionary": [],
+        "synonyms": {},
+        "distinctAttribute": null,
+        "proximityPrecision": "byWord",
+        "typoTolerance": {
+          "enabled": true,
+          "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+          },
+          "disableOnWords": [],
+          "disableOnAttributes": [],
+          "disableOnNumbers": false
+        },
+        "faceting": {
+          "maxValuesPerFacet": 100,
+          "sortFacetValuesBy": {
+            "*": "alpha"
+          }
+        },
+        "pagination": {
+          "maxTotalHits": 1000
+        },
+        "embedders": {},
+        "searchCutoffMs": null,
+        "localizedAttributes": null,
+        "facetSearch": true,
+        "prefixSearch": "indexingTime"
+      },
+      "stats": {
+        "numberOfDocuments": 212,
+        "rawDocumentDbSize": 172032,
+        "avgDocumentSize": 803,
+        "isIndexing": false,
+        "numberOfEmbeddings": 0,
+        "numberOfEmbeddedDocuments": 0,
+        "fieldDistribution": {
+          "catalog_id": 212,
+          "categories": 212,
+          "description": 212,
+          "github_url": 212,
+          "id": 212,
+          "installations": 212,
+          "tags": 212,
+          "title": 212
+        }
+      },
+      "rows": [
+        {
+          "id": "bc01",
+          "query": "Find messaging tools, except for Slack.",
+          "prepared": {
+            "query": "slack messaging",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678,
+              "score": 8.110969387755102
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678,
+              "score": 8.110969387755102
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5249999999999999,
+              "score": 0.5249999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.49874999999999997,
+              "score": 0.49874999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc02",
+          "query": "Find issue tracking tools other than Linear.",
+          "prepared": {
+            "query": "linear issue tracking other",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563,
+              "score": 6.458986175115207
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563,
+              "score": 6.458986175115207
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc03",
+          "query": "Find a GitLab integration for project management, except for GitHub.",
+          "prepared": {
+            "query": "gitlab github project management",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "gitlab",
+              "title": "GitLab",
+              "similarity": 0.25
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "claudepost",
+              "title": "Claude Post Email Management",
+              "similarity": 0.5273333333333332,
+              "score": 0.5273333333333332,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4847499999999999,
+              "score": 0.4847499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "unity-integration-advanced",
+              "title": "Unity Integration",
+              "similarity": 0.4835833333333332,
+              "score": 0.4835833333333332,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc04",
+          "query": "Find a Discord bot for reading messages, other than Slack.",
+          "prepared": {
+            "query": "discord slack other bot messages reading",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.16666666666666666
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5133333333333333,
+              "score": 0.5133333333333333,
+              "source": "offline"
+            },
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5119333333333334,
+              "score": 0.5119333333333334,
+              "source": "offline"
+            },
+            {
+              "id": "mac-messages-mcp",
+              "title": "Mac Messages",
+              "similarity": 0.49723333333333325,
+              "score": 0.49723333333333325,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc05",
+          "query": "帮我找聊天消息工具，排除 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc06",
+          "query": "找 Discord 的消息读取工具，不要 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc07",
+          "query": "Find tools for database schema inspection.",
+          "prepared": {
+            "query": "inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "llm-context",
+              "title": "LLM Context",
+              "similarity": 0.015572390572390573
+            }
+          ],
+          "isolated": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436,
+              "score": 8.637327188940093
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786,
+              "score": 8.629861751152074
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436,
+              "score": 8.637327188940093
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786,
+              "score": 8.629861751152074
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "graphql-schema",
+              "title": "GraphQL Schema Model Context Protocol",
+              "similarity": 0.5249999999999999,
+              "score": 0.5249999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc08",
+          "query": "Find task-specific tools for database schema inspection.",
+          "prepared": {
+            "query": "task inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "ntfy-mcp",
+              "title": "Your Friendly Task Completion Notifier",
+              "similarity": 0.24242424242424243
+            },
+            {
+              "id": "google-tasks",
+              "title": "Google Tasks",
+              "similarity": 0.17424242424242425
+            },
+            {
+              "id": "todoist",
+              "title": "Todoist",
+              "similarity": 0.1553030303030303
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-tasks",
+              "title": "Google Tasks",
+              "similarity": 0.5162499999999999,
+              "score": 0.5162499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "graphql-schema",
+              "title": "GraphQL Schema Model Context Protocol",
+              "similarity": 0.5162499999999999,
+              "score": 0.5162499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "dbhub",
+              "title": "DBHub - Universal Database Gateway",
+              "similarity": 0.4873749999999999,
+              "score": 0.4873749999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc09",
+          "query": "Find tools for issue tracking.",
+          "prepared": {
+            "query": "issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "sentry",
+              "title": "Sentry",
+              "similarity": 0.17140151515151514
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.14867424242424243
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904,
+              "score": 8.656462585034014
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904,
+              "score": 8.656462585034014
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.50785,
+              "score": 0.50785,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.4675999999999999,
+              "score": 0.4675999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc10",
+          "query": "Find project-specific tools for issue tracking.",
+          "prepared": {
+            "query": "project issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9555427547363031
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.4616822037456958
+            },
+            {
+              "id": "xcodebuild",
+              "title": "Xcode Build",
+              "similarity": 0.2777777777777778
+            },
+            {
+              "id": "gitlab",
+              "title": "GitLab",
+              "similarity": 0.273989898989899
+            },
+            {
+              "id": "drupal",
+              "title": "Drupal Server",
+              "similarity": 0.273989898989899
+            },
+            {
+              "id": "godot",
+              "title": "Godot",
+              "similarity": 0.273989898989899
+            },
+            {
+              "id": "qgis",
+              "title": "QGIS Model Context Protocol Integration",
+              "similarity": 0.26641414141414144
+            },
+            {
+              "id": "unity-integration-advanced",
+              "title": "Unity Integration",
+              "similarity": 0.26262626262626265
+            },
+            {
+              "id": "reaper",
+              "title": "Reaper",
+              "similarity": 0.10669191919191919
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9555427547363031,
+              "score": 8.599884792626728
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.4616822037456958,
+              "score": 4.155139833711262
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9555427547363031,
+              "score": 8.599884792626728
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.4616822037456958,
+              "score": 4.155139833711262
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.44599999999999995,
+              "score": 0.44599999999999995,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc11",
+          "query": "Find Nebulora-specific tools for document search.",
+          "prepared": {
+            "query": "nebulora document search",
+            "matchingStrategy": "last"
+          },
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5379999999999999,
+              "score": 0.5379999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "tavily-search",
+              "title": "Tavily Search",
+              "similarity": 0.5289999999999999,
+              "score": 0.5289999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "langflow-doc-qa-server",
+              "title": "Langflow Document Q&A",
+              "similarity": 0.5289999999999999,
+              "score": 0.5289999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc12",
+          "query": "需要 Quorvix-specific 文档搜索工具。",
+          "prepared": {
+            "query": "quorvix 搜索 documentation search",
+            "matchingStrategy": "last"
+          },
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc13",
+          "query": "Find Slak-specific tools for channel messaging.",
+          "prepared": {
+            "query": "slak channel messaging",
+            "matchingStrategy": "last"
+          },
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.48899999999999993,
+              "score": 0.48899999999999993,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4737499999999999,
+              "score": 0.4737499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.4182499999999999,
+              "score": 0.4182499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc14",
+          "query": "Find Notion-specific tools to search pages.",
+          "prepared": {
+            "query": "notion pages search",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            }
+          ],
+          "isolated": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641,
+              "score": 8.33168202764977
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641,
+              "score": 8.33168202764977
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-custom-search",
+              "title": "Google Custom Search",
+              "similarity": 0.5559999999999999,
+              "score": 0.5559999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5469999999999999,
+              "score": 0.5469999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc15",
+          "query": "Find Linear-specific issue tracking tools.",
+          "prepared": {
+            "query": "linear issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085,
+              "score": 8.611981566820276
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085,
+              "score": 8.611981566820276
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.40599999999999986,
+              "score": 0.40599999999999986,
+              "source": "offline"
+            },
+            {
+              "id": "whale-tracker-mcp",
+              "title": "Whale Tracker",
+              "similarity": 0.40249999999999997,
+              "score": 0.40249999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc16",
+          "query": "查找 Slack 聊天消息工具。",
+          "prepared": {
+            "query": "slack messages",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5,
+              "score": 4.5
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5,
+              "score": 4.5
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        }
+      ]
+    },
+    "candidate": {
+      "freshBuild": {
+        "command": "node node_modules/typescript/bin/tsc",
+        "compilerVersion": "5.8.3"
+      },
+      "sourceSnapshot": {
+        "commit": "2041c53be0a29c93f939530f35b8f75a482ac68c",
+        "worktreeStatus": "",
+        "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "files": {
+          "package.json": "b13ab0446e5d88245b0fcb1a0778b8a0564dcd604993d2a263af02a1e0757040",
+          "pnpm-lock.yaml": "acbcfcb48738edc29f9bf92bfe9f447bdef84ae0a106c30f19fdee0bdb959e3c",
+          "src/config/cline.ts": "f6dbb13617428ede60561ee1b28ffe14d49544a4f25ee2555a72addf868cb562",
+          "src/config/configLoader.ts": "065c881c728fc2d86e22e5a65266f15fdb774625a0cfb079e09f05563f4336c9",
+          "src/config/constants.ts": "11dbbaf4442983c488f888b1f5e4fe58e1bb7229089988844d140d6b0daa889d",
+          "src/config/meilisearch.ts": "c0ee62bd92105d95778ad2fe0645dbd4071a51645f357cf4d8d1b65dc5f80eea",
+          "src/evaluation/agentTaskExperiment.ts": "79b77b3627564a1177c8357930cc88093eba101659f0ea83eedd180d8a2f4c6d",
+          "src/evaluation/evaluateSearch.ts": "4ac0c091f15b699d14e5ec751e0eff7b9c020bf5cdf7a48cf822af9a9685b5bb",
+          "src/evaluation/judgmentPool.ts": "56d50f8c153e0d099b2c0cdbfb61cf11ca8fc59ba8d3a35e051e1ef6b80c50ce",
+          "src/evaluation/prepareJudgments.ts": "7a763e00258acd9c0aba1473965fd20d123b85f6f87292fd4206c5fa7ed77e80",
+          "src/evaluation/searchQuality.ts": "ee268497fb6db3d2fb38e31a1478732e9d4bfc13148b74ca5584ba4ccf45db10",
+          "src/examples/fetchGitHubReadmeExample.ts": "c2d23e6fc49d21b7068d9374f7b4ce215760869653a707476aff82b7220c0ada",
+          "src/index.ts": "ebfee15d035c5dc4dc17dbb2bedd3931a169e1342185816bbc42b3d577d1020c",
+          "src/services/common/api/getMcpResourceFetcher.ts": "5d5ee4bc860bad52321ca980595485ad76104d79dba4787f9a4c9e2c2818d6e2",
+          "src/services/common/cache/memoryCache.ts": "ee97b3876d1cfd88db69bf19b1e737b07d015c25130174b582e9d1b7838a2d32",
+          "src/services/common/vector/VectorDB.ts": "e0514296a46464427ef03a4c9f316176d99b0838a14813d958f3b6f6114d49da",
+          "src/services/common/vector/XenovaVectorDB.ts": "6b5fe05a9278b5b248cae8935e63a38c2c6848d4f43f1704f7c92e21455c3301",
+          "src/services/core/installation/configurationGuideService.ts": "5970668109e22bca86fa477ea5e04d89e4c8cd0f5445c2ca16f16b2b7cea3a07",
+          "src/services/core/installation/extractors/GitHubReadmeExtractor.ts": "927176e16759d446b84c0c79bba8223054ba6d48102dbf8bbae5ca3630f2e817",
+          "src/services/core/installation/extractors/McpConfigurationExtractor.ts": "52cb2ef066f0c249b5ef117b3319cf2b69de2834add94459a39dbe0c5ed67fd3",
+          "src/services/core/installation/extractors/TraditionalInstallationExtractor.ts": "870983f9170f03f8b28bc3c2386dfdeb0f1712ce690c18052b75e68264b73b4e",
+          "src/services/core/installation/factories/ExtractorFactory.ts": "a7582d94cd9c9e7957ec6e5c94df5fc8c1c08c5b80ecf26d97bc63e941fd42b2",
+          "src/services/core/installation/factories/FormatterFactory.ts": "e766819b71ad9402a009c6d7da28b3526c55ec85e6989fc25615f2ff093a5575",
+          "src/services/core/installation/formatters/McpGuideFormatter.ts": "7864602d9e159d90a0cb985bc0e13be3c228b545589251e68bacd80666a479aa",
+          "src/services/core/installation/formatters/TraditionalGuideFormatter.ts": "09bd8c5e6136aed5bccf0f6b1b21c3c0c70697a4cca204087969d1617aca21a1",
+          "src/services/core/installation/installationGuideService.ts": "e30c49a715f8861e29ffaa412513797238b632ab263cf54f88cc0e7fc7ec2a58",
+          "src/services/core/installation/interfaces/IInstallationGuideFormatter.ts": "ca3bea7bf9a209e417588fad8917ca25fa54d3195d6971cbeb805bc804d29a6d",
+          "src/services/core/installation/interfaces/IInstallationSectionExtractor.ts": "af2ea3cea1e9f64eb1efa0e31c39ee2c6f3ad59eebfbec56737b36c0e4cfb7de",
+          "src/services/core/installation/interfaces/IReadmeContentExtractor.ts": "bdb26cb235cc1f9d2248133cb071711cda4e3c4483356c9f70c3305903c3eb4c",
+          "src/services/core/installation/types/InstallationGuideTypes.ts": "f803fff2e22b5e03eb7b034b4fb921d5c0abd7fc207218187a90c50d1107f4cb",
+          "src/services/core/search/ClineSearchProvider.ts": "ef072eff22f654895fd1f3ec808d7472d409b0822ee24b240c5938c42f4a73f7",
+          "src/services/core/search/CompassSearchProvider.ts": "e2dffa70c031ace04345e6c6ed856c0f1fb70a6a318a57bc4c0228424a906f69",
+          "src/services/core/search/GetMcpSearchProvider.ts": "07eaed7370780b2259e25bf976aa586de1d62d4a5f037cbe64dc8bd8b44db7c2",
+          "src/services/core/search/MeilisearchSearchProvider.ts": "6031ef9484f3f8dfc6639005cef438b491adf6d0e370c72d50e88e70a3254103",
+          "src/services/core/search/NacosMcpProvider.ts": "b1ed6aa3abcead9523947956d016ee1a0d6bd02f5fe0d703b36113d934c469eb",
+          "src/services/core/search/OfflineSearchProvider.ts": "5689f559bb6a197cce38c93bd0a3dbec1241054849c5adbcc3790b70d7d26e61",
+          "src/services/core/search/ProfessionalReranker.ts": "443e95eb8ef9a4fe98b40acc192c5e1998bdb06edc8771060662e6b39e79f163",
+          "src/services/core/search/RerankMcpProcessorFactory.ts": "eef8998f5adcb86d427db0d072ce4e4bc396b17bc8eafc92abeb1e12fa7f5191",
+          "src/services/core/search/RerankMcpService.ts": "008c04dfde66e3e9e8f5a936d729dca595d4d3f466e0a5dd526058a3cb9fd175",
+          "src/services/core/search/SearchMcpFactory.ts": "de624f9bde11473b2eebf656d2c04204bdbf9123bf9bc58f7f787018493b5882",
+          "src/services/core/search/VectorSearchManager.ts": "9305fcffa3299ed80f32a59258f1cdfa034ce52e36412b265f08ac4ca9688d8f",
+          "src/services/core/search/meilisearchQuery.ts": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef",
+          "src/services/core/server/ServerService.ts": "9c4ad513198573f1ecd1727fb8542e6df701d0760e6b6daf3602ba36a165a003",
+          "src/services/core/server/endpoints/SourcesEndpoint.ts": "da6387dc627d0ba3a8d861dd4f78ac0beca87e5396c7d83023dcb51e7bb70bc1",
+          "src/services/core/server/handlers/RequestHandlerFactory.ts": "e3c8350bbbb5f3e8a7da7a148a141293a452dd3ce92a16851cd31972a88ea861",
+          "src/services/core/server/index.ts": "58bad84dd29b1d275ea8f3fe4a42ab9746d7b49171343aece043b1db896497f3",
+          "src/services/core/server/resources/BaseResourceHandler.ts": "914480ceb7669258a3ddd2d6210e3bf14179ee9665fce2e3ff639d8743670264",
+          "src/services/core/server/resources/LogResourceHandler.ts": "43b89de5c121ec3f36277b131440969c921270ec9e215100b2ee7c2a466404c5",
+          "src/services/core/server/tools/BaseToolHandler.ts": "04478e6dd9ae5f7150a204573d4f48fcb332ef93dccd03889bff8cbac162f2ad",
+          "src/services/core/server/tools/InstallMcpServerToolHandler.ts": "a8cefaa5c75b1457cf5ac55c3039589de0827b703eff8e4e08ea17b741c842ca",
+          "src/services/core/server/tools/RecommendMcpServerToolHandler.ts": "3f1878a28036be26cfe9083132722196e45a0bad2aa831e8bdb1845a635b3b97",
+          "src/services/core/server/transports/ExpressServer.ts": "3bc4333b114494d329f8a998b4ec3e5e7d595e7210fcb39e345ce63c5d2e0ad6",
+          "src/services/core/server/types.ts": "26617bd60c678c222d0b3af3863eb5a6e71e1b168ca335b66ceb0fc4fd8f2ad5",
+          "src/services/interfaces/cache.ts": "33900e19c3edb0c040854962b8f7a8c3e6e8eef4e7714d0d0ec23bab76d9f777",
+          "src/services/interfaces/vectorDBClient.ts": "3c88cade42ef5812726a799f1d4538b42590148e11ff88c3b937f5839454bb83",
+          "src/services/interfaces/vectorSearchEngine.ts": "738d4dcfeccdf630c48377b060b9a902d80ade74acdcde426c429443126dbfb0",
+          "src/services/interfaces/vectorSearchEngines.ts": "3d22d819357c06196d080444595aed71872742df7472dd8289ca4f2f872b0de3",
+          "src/services/loadService.ts": "07987d3590f3fd74c32af98561ce25957da2e15bb305d3af67d3c92ed46800bd",
+          "src/services/providers/meilisearch/controller.ts": "7f0106026733499d94339bb73d45477fc35d9a6c60465b5d37872491ed833265",
+          "src/services/providers/meilisearch/localController.ts": "354fc283a83430099e5eb62dc3f35d6c7eb76010b975c3d4f8fd09d310a78153",
+          "src/services/providers/meilisearch/vectorEngine.ts": "b304aee15c87b21f4f10f6e74066ee3217ae78b6a049d805dd0aa31c5b3d1034",
+          "src/services/providers/nacos/NacosClient.ts": "43c818df3197cb1b9c13b5885ca63d010f74f18f5ab9bce192d32f61e2c4f4e9",
+          "src/services/providers/nacos/NacosHttpClient.ts": "01dc35e9f8058818692c77f306ba8dfab20fbf56a8aa21abcaa4b3dfcb037235",
+          "src/services/providers/nacos/NacosMcpManager.ts": "23bc68777ec192e4c93d42c78e02dc9b9536111f27c42ea9d21fb935a4b09d23",
+          "src/services/providers/oceanbase/controller.ts": "eda67f188adf4eb3dca1db66f47fc695453f899a1c156d526be92e309bbbe6c4",
+          "src/services/providers/oceanbase/dataUpdateManager.ts": "65065572ad572c0cc578e6c82768a9cb95778ae0df03a768a73cbccb8468976b",
+          "src/services/providers/oceanbase/vectorEngine.ts": "bda04b51e14eb692be35d0e0de04a7bdc20c6cde55da9e97ef8696d13374b686",
+          "src/services/providers/offline/enhancedMemoryVectorEngine.ts": "7c17f4f2c686b2b37b4a0b9f9072dda44613976b845eea912690b103c8210f09",
+          "src/services/providers/offline/offlineDataLoader.ts": "14126d285e2b8f11229e1bb6946840ce3ae10055daf5ef3ba4f57228aa79ecf4",
+          "src/services/providers/offline/vectorEngine.ts": "9cb20c82d0f8139481b7e78310fcb28e8aab6438d4ede9c9208c2b5dea9df930",
+          "src/services/providers/offline/writableVectorEngine.ts": "84471c06da915af1719a69ec8616be8c9a6939453c85a89ca7d62f98afcfa57e",
+          "src/services/searchService.ts": "c039e9352c9e1d0e58002c9886b3dcfbf73161f49d3508ee17baeb8b87ada2a0",
+          "src/services/vectorEngineFactory.ts": "caeb00d4d670abb941d9a5bb2c6c6458271c4b74c0ebb1c90d5a37c7bdb59771",
+          "src/tests/__snapshots__/vitest-example.test.ts.snap": "20db9b89cac8354912889fe0d0895a1f1ec37e4b614552389e2908e889dfca16",
+          "src/tests/fixtures/cline/marketplace.json": "089f54d2bb9cb5b9912142e58f4cc5291165871c79e8c8767cce6aacb42a51d9",
+          "src/tests/fixtures/search/cases/edgeCases.ts": "812509c161d5d70fae276ea939b3bc977cb03f90078a56e24009b47465213e69",
+          "src/tests/fixtures/search/cases/github.ts": "8cfa1951b22eaf76bad0d6ef96fec01b8b48213e66c89d8931ff5e1ae8556879",
+          "src/tests/fixtures/search/cases/index.ts": "b4f5e04591fc018ac555af80d3fb0d32e207d380a5f52aac00f6c33ebb020e39",
+          "src/tests/fixtures/search/cases/prompx.ts": "d720877d313188942101c91721591ef74683c8f6166d4b98ac2d1744b7ec9ce6",
+          "src/tests/fixtures/search/cases/redbook.ts": "768cc8241d23cc034d28a8ad50bb2caa3095c0633ffa1f21e583fc5071035f28",
+          "src/tests/fixtures/search/rerankMcpService.cases.ts": "fa80a5f935403b2f777713251eafe7573a9d2f74be14524f4434f2077b297058",
+          "src/tests/fixtures/search/testUtils.ts": "76956b307745f5faf6ff67773ee4e90c3b76057ec86e6eeaa4e24ab62dbe83df",
+          "src/tests/fixtures/search/types.ts": "b007cf387c9c68913d198f8ee4e63257c79de1b6723ddc0508e8431967e5fa26",
+          "src/tests/integration/api/app.test.ts": "41f92b7922f379e7f5f471dafe1309e13277b2306e1cadf8ac64a1b4132fff0f",
+          "src/tests/integration/api/endpoints.test.ts": "5e30aece1bf37383fd30ce4c1c2d09c2a305f21f5fd066eb52e26eeddaf9e4b2",
+          "src/tests/integration/providers/meilisearch-evaluation.test.ts": "07db3d5b8521fb5dca4325742c18472e64a9579293f8c516a9102a0248899c9c",
+          "src/tests/integration/providers/meilisearch-fulltext.test.ts": "57a786bf217520b674f45ecaa74d0fdc4fe145b7267f1e2bd19938dc22707d6a",
+          "src/tests/integration/providers/meilisearch-judgment-pool.test.ts": "a824bb465c1ef3f61792ce837f16b5fe9ea43408350ccb124de40850a6a82577",
+          "src/tests/integration/providers/meilisearch-local.test.ts": "bec37ddc8d1f3fabefed680c853e96921cc6d8109f25648d31f4c4c3e1040c58",
+          "src/tests/integration/providers/meilisearch-search-provider.test.ts": "93810fcf9740f8969006327657d86caed86be137d0a7916e86af1fb4f0e9899b",
+          "src/tests/integration/providers/meilisearch-vector-engine.test.ts": "18826cea509806a1caa866cbd9c933024d4b7dff5a5e7aecf13c1ca8ac9f6efa",
+          "src/tests/integration/providers/nacos/NacosMcpProvider.test.ts": "b5feee6286b2e3b26a9f4a0c92dc52a4cac50a8030d1b6c738325a96e07f6005",
+          "src/tests/integration/providers/oceanbaseTest.test.ts": "328bf97980cab0873da786a96daf21bcea0171f12d1b6a27581f0309ac60deff",
+          "src/tests/integration/verify-offline-data.ts": "1800e47d50a54c657bfda05a7900cd1d80f41769f41713beb617892d5280aa4d",
+          "src/tests/setup.ts": "e812ad5a7db75625ee23c03a79ca4dc2bba0427642c98cca44abe8d90813930e",
+          "src/tests/unit/config/meilisearch-config.test.ts": "38099c7af27cc0509f17f230110cf43f7bb1211b8c3e09cc7c97d72e84d5168c",
+          "src/tests/unit/evaluation/judgment-pool.test.ts": "75b543257d18995cbc09862a5ba9cfa1ec848737e92d3a1d87657fd8aedc0b6b",
+          "src/tests/unit/examples/__snapshots__/vitest-example.test.ts.snap": "20db9b89cac8354912889fe0d0895a1f1ec37e4b614552389e2908e889dfca16",
+          "src/tests/unit/examples/vitest-example.test.ts": "66470cb312d9e9be5df26c25e1db7d3b0f6199cd0845380c0e94cf15fb941b8b",
+          "src/tests/unit/services/cline/ClineSearchFactory.test.ts": "224163e985bc840362c1b1a6d481a0e20ca6444906ba396826c34ddfa31b2b9c",
+          "src/tests/unit/services/cline/ClineSearchProvider.test.ts": "0463f6813dba249f83e8850cad05aa0ba31fd81212379749d81f5d715553a838",
+          "src/tests/unit/services/cline/ClineStartup.test.ts": "66c8554b3974f786f01ad08aad7a5c4df672a85af3ab6d76e8583b9a4a873ce9",
+          "src/tests/unit/services/english-guidance.test.ts": "6551344a35314e8a409fd45751476bb207e9d07049f74b7d59b8b101c13ed21a",
+          "src/tests/unit/services/installationGuideService.promptx.test.ts": "11803931376985fc34156e3a66faeef52a6168538650bef498240d949e0a78a9",
+          "src/tests/unit/services/installationGuideService.test.ts": "6df30a511c0af63b0e76205ad225e6e57295b28fa5039b4b021846a281b3a8e2",
+          "src/tests/unit/services/installationGuideServiceSingle.test.ts": "cf16380c195d3a6784cdd666b29c023b0b5d3abf6aa0e7a45d48167db39d631f",
+          "src/tests/unit/services/meilisearch-bootstrap.test.ts": "ee8da38d5f4abc6f7b520841979b4147cd2c09447b70007eb8e9ac6c0914d0f1",
+          "src/tests/unit/services/meilisearch-factory-cache.test.ts": "8284a15aca805f1b3fb75a74fcb4d4baed94a8ce640f95fbedee7959a48b64b5",
+          "src/tests/unit/services/meilisearch-failover.test.ts": "8f14e6470a3d65d8e3cbe0dc99e294248401067dd81b82ae81b343e5a4e3d73a",
+          "src/tests/unit/services/meilisearch-fulltext.test.ts": "77f4ca75dbe8f1ec90ac23e8e71eaa85fd14aefd892a3319d0a894eb16a20380",
+          "src/tests/unit/services/meilisearch-query.test.ts": "91a992ca3219de761cf843c4f51cbda45e9b3bda9d70d1acc050a3c00faec56e",
+          "src/tests/unit/services/nacos-sync-timer.test.ts": "72e5205ebab86c6095100366a02cd7c2f6104da7500672d6c12853415d47bd15",
+          "src/tests/unit/services/offline/offlineDataLoader.test.ts": "f464489e14a09ee8440578615efe4acca6c11d0373110111b2ead8051094026b",
+          "src/tests/unit/services/offline/offlineSearch.test.ts": "c2f13994f60cf043bbe55143d77349431a21777b6c9a66af3c4d68870e3d8fa8",
+          "src/tests/unit/services/professional-rerank.test.ts": "feaaf67b9fad0d9f180e52d8bdc001178f365abf9db2dc9fcfdddd25b92850fb",
+          "src/tests/unit/services/search-quality.test.ts": "62b62ebf8dd4a10a216d62706218620c748fd84fbc6c84d106817402e657b20e",
+          "src/tests/unit/services/search/rerankMcpService.test.ts": "225877a22e335587531ac9a21f1625ce10c689419972f80dd13d6792cd3d98c7",
+          "src/tests/unit/services/searchService.test.ts": "cd3047cb15c94c7f1710e2f2b638e17477b78f591fbed01dfad112bef6185324",
+          "src/tests/unit/services/server/LogResourceHandler.test.ts": "b317a0343fcbea1937571e8bac8cc5f7c02a4915df72100fd5d636b4209ed3e8",
+          "src/tests/unit/services/vector-search-engine.test.ts": "8ceb74402cd60fbc0454c3112745270da62b717377495ef5480545af46b96e54",
+          "src/tests/unit/utils/embedding.test.ts": "8b7bddb3725b8ca3223411dfef5a9088e98e7fff4b66387f2f52bf6b53d70d53",
+          "src/tests/unit/utils/githubUtils.test.ts": "a61151f8c29f2f4c042ed1d115dfbe42c261082e0a7cf63d7352bcab7cebcadb",
+          "src/tests/unit/utils/vectorUtils.test.ts": "1c1625e4356ab29cdd30f07fae7f99f2b9359a24bea38f77cfc5d17da01db44f",
+          "src/types/global.d.ts": "ecb85f60209bf1818fd96f6b3057b3c3b27d1bb9004583df20a81c34d28d09b7",
+          "src/types/index.ts": "81482d3dda5764216dbfd5f2605b434ba0c032dab1fbeda21bafba7659ca83ed",
+          "src/types/nacos.ts": "7d581834b2ff4052d47de15921566363aa3e7c7645c7e8896ea86b2d30f0f493",
+          "src/types/search.ts": "ed760de8e4b839fd75fbeab93a9c51776a19922ba4c6f39ba7735d6cedf4fd1c",
+          "src/utils/ListUtils.ts": "959b479dbf0dceebe5c34cfbb3659dee05eacb5f88e6fe27d373187c933ee6a1",
+          "src/utils/embedding.ts": "ae725cd525721e3caed0417d7d18ee086e3e368699843d928481809eb9a5f06a",
+          "src/utils/formatter.ts": "2fdbdf4ea7e343c243496d3527973c56d116ba98bbf47c9337d129075bfa9df9",
+          "src/utils/githubUtils.ts": "3c1760baaf3daf8cf672002215a0746bd3d5eda329ddd3c6f9be60a58fb51b88",
+          "src/utils/logger.ts": "aea9a2702e34304d6a6df57c42aa091c659b80bffd1c006477f450c9dffdb8a0",
+          "src/utils/meilisearch-monitor.ts": "2f268876d2d1bb561ff1252490585458851b78d2c1abbc880adcd0d626de80f4",
+          "src/utils/pathUtils.ts": "1e1a73913790fcc706035771d9cdd2cb683ee5e090e0fda86144415867b7ebaf",
+          "src/utils/vectorUtils.ts": "8ac5bf085858a41717c9d0de677be28cf2be25fab17187d18ca20d590a57111d",
+          "tsconfig.json": "4fde0014ff525edbf947b06ec930b5ae733d97d1e62676347a2d039d40071f94"
+        }
+      },
+      "sourceSnapshotSha256": "bf8b0a8a4b5276f6da43b3e16e42f3eb84f9c7fd01f1bd8b4c7275eb2b670b4d",
+      "buildFilesSha256": {
+        "build/config/cline.js": "fd348cf0fbe7917fa3f9fa71293dcf547921d6073d1fe1a9012067fe9ea6f12c",
+        "build/config/configLoader.js": "fd444cf9cc507e0ae1919b86f30ee5e4b90414d616ebcaa6ca39261759ed24cc",
+        "build/config/constants.js": "d210cf1dd50e85e027b0b1075bf17f8da4e4ebbd35651f1abb50d09782d07c9f",
+        "build/config/meilisearch.js": "8a62b91a7fbff62e0ef57fceb382b49aca38ecfe8bff1a33ade9ed0342ab7767",
+        "build/evaluation/agentTaskExperiment.js": "47ee41230ba42475a109fbaeadeca1c096a5e2a025f8af1ba8a1e710305ecb66",
+        "build/evaluation/evaluateSearch.js": "bd42f4d8481032e0393edbc42aed9b461a796cf1c8277e677dd10d35bdecdced",
+        "build/evaluation/judgmentPool.js": "2509add64d79feeac024e3f1e75d5b4a3a70dde06cb535ba9b6cc8c7e919e3c5",
+        "build/evaluation/prepareJudgments.js": "510c2578dfe1fd6669b6c840830d9379458c271c2cb51b4c038b432352d0171b",
+        "build/evaluation/searchQuality.js": "c371e94e88e25cb1f891a04cdd88aecfaa00909bb4947044a30f352afa4d1d35",
+        "build/examples/fetchGitHubReadmeExample.js": "e6c79f4daef58d03fcb5b2e49d950f9bde9938e8449879388e38e0f07ace89a8",
+        "build/index.js": "f9cc30bc519e2bfef0573a95b732cf2172034e1e84858ee75e4e75e528d12464",
+        "build/services/common/api/getMcpResourceFetcher.js": "373f082c9d343885f326ebd6c11640ec7b095081425e31ad3bd4efca095ad5a1",
+        "build/services/common/cache/memoryCache.js": "7e28a8c3c0cbe524109b68e8034bf4c34efb152d2ebf59a6f5211572eada407d",
+        "build/services/common/vector/VectorDB.js": "4084c6708546143ed73ed06398b55fa19d65c0c79cdf8c6567db8d424f1abe2f",
+        "build/services/common/vector/XenovaVectorDB.js": "7a60850bb9bfa86aabdd4baf7107d13f532b65c16b86589f96c17d8a59158ec7",
+        "build/services/core/installation/configurationGuideService.js": "8d11c461f489720f86f06c02e61f33fe277f8d21ee2361fcee1f5e650ce6bac9",
+        "build/services/core/installation/extractors/GitHubReadmeExtractor.js": "7e3f652e0d630dbc874eefb72001b8926f7a154cacd0cfa214308138bf46f613",
+        "build/services/core/installation/extractors/McpConfigurationExtractor.js": "19baed074a20ec9eddd5cc74e199e5297bb9a2b41bb3aefccdeaec5936ccb6dd",
+        "build/services/core/installation/extractors/TraditionalInstallationExtractor.js": "e3fedd17d58b14ab4e638b3229f0b415aefa100ac8183e8039ba7e6149225852",
+        "build/services/core/installation/factories/ExtractorFactory.js": "b78fbe209881ae90d674572afa04cb73c9ecf6af1e1aed92758841c37048841f",
+        "build/services/core/installation/factories/FormatterFactory.js": "eca27c513221b62c7f247d7abd917cbd623b458bcca471e7b1d2e93c957a5e56",
+        "build/services/core/installation/formatters/McpGuideFormatter.js": "476b4cf48c7d8a565c5213b7965acc159eaa7c2b55ff81dd59ab55d5772b7f34",
+        "build/services/core/installation/formatters/TraditionalGuideFormatter.js": "a04d27ec8b390797a9745c417209ba337232b4f069064122cbb0dc1652c508ba",
+        "build/services/core/installation/installationGuideService.js": "5cf2bd89754e63b38e2ef1bf176462bd70e6587cfee66884ec66519fabef5a6b",
+        "build/services/core/installation/interfaces/IInstallationGuideFormatter.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/core/installation/interfaces/IInstallationSectionExtractor.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/core/installation/interfaces/IReadmeContentExtractor.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/core/installation/types/InstallationGuideTypes.js": "87b3faad13809209c81480fe3b2b8b9f330facaa2a914eb609d9f9d80dd48f29",
+        "build/services/core/search/ClineSearchProvider.js": "d327241e041ed742a1fe9d435276adfffb169890eefa4d9b5c0353fb38743430",
+        "build/services/core/search/CompassSearchProvider.js": "8163a2a1333877b5cf8efb6c7daeef32f4e4d566c3e32b0661f7821bd76885bb",
+        "build/services/core/search/GetMcpSearchProvider.js": "ab4986056b4b4dca2ec91b734ea636d74095b36d9bad732367ebbb098106dd7d",
+        "build/services/core/search/MeilisearchSearchProvider.js": "bbc20f6dc10ef6065f51b2cd8a09ddfd250e7e42ab7129c9a2978d0671473f44",
+        "build/services/core/search/NacosMcpProvider.js": "e5957d724b5a78e01cc9fb03e2648472b0147f867495aa2e295aa6e1504b1042",
+        "build/services/core/search/OfflineSearchProvider.js": "7b7f14deede4336fe04a6f8737bdb3b38e5da80a9d06c1c17723f6134b6acfc2",
+        "build/services/core/search/ProfessionalReranker.js": "50c97da62fb5342bc51b0db340b5dfa4a2308a1d9a9a6494c883f6f8d126b253",
+        "build/services/core/search/RerankMcpProcessorFactory.js": "20c89484feceaffcf75c86fb95ef0f2352fb18322c1b172fef4513706bef3b60",
+        "build/services/core/search/RerankMcpService.js": "22ecf4cdbba4ddda85c550502fb7edebeace5f15dd4bb438f6c89eaea1067b79",
+        "build/services/core/search/SearchMcpFactory.js": "51599d5e0b62ac0c00f351ed00815b6b283ef5f7d4c4b1cc6ff528db83431ef4",
+        "build/services/core/search/VectorSearchManager.js": "e291e5f9e9c9fef88809df47bceefb518f70d3e3d772d324cac11e7b9a7054f5",
+        "build/services/core/search/meilisearchQuery.js": "db8d835d1387655b4f0bf2e68fd4addd3892b41deedb94a1bb1eeb162dd2ed54",
+        "build/services/core/server/ServerService.js": "d615eaf43007682ca7d38bf503be672e2b463c94f346d853697aab41bb8f3bee",
+        "build/services/core/server/endpoints/SourcesEndpoint.js": "70eb455b45b9b4f58749fae469dd7b1e8d80a1b18020c4f69ca1923748f24e9d",
+        "build/services/core/server/handlers/RequestHandlerFactory.js": "69d67aa8e8a9af268a38829579397f918becaa7f7be0a6256ea1dd9a15e1e2ca",
+        "build/services/core/server/index.js": "caf6579bb465ebd00a19c097a64e533306352a3765b8fbddb68484979dbe0692",
+        "build/services/core/server/resources/BaseResourceHandler.js": "99a32f9764e3f27079afaca34698a8a46c410fbff5239339d18dc771287e4731",
+        "build/services/core/server/resources/LogResourceHandler.js": "9a8773149771c0d05161e80171a7db317228059fe8825e8db7f4f5e601764393",
+        "build/services/core/server/tools/BaseToolHandler.js": "e325d74eff67c30ff671c47330fb3b121822015156d2d651a7bf83cdc60f86d2",
+        "build/services/core/server/tools/InstallMcpServerToolHandler.js": "49bd971c324fc217dda15f51c13ac6b84f3b17b2342eb2ccf55fffa1071fe8fd",
+        "build/services/core/server/tools/RecommendMcpServerToolHandler.js": "f2b7cce63f61ec3c3bce2e4f7b2e58ea2a422dd159291e3288856f3631719509",
+        "build/services/core/server/transports/ExpressServer.js": "56555dd2927fbbdb8d3cab5421fdc71df2102403858e9e9d89aa38d93492fda7",
+        "build/services/core/server/types.js": "95ce4b5c999a2befe18e50af5277505788caece9ca3668504814c387f09b4dd1",
+        "build/services/interfaces/cache.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/interfaces/vectorDBClient.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/interfaces/vectorSearchEngine.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/services/interfaces/vectorSearchEngines.js": "3bca7ddb0752fde052fd0b66820e281fdadbc9c61a0db2b4f375c0d356366a25",
+        "build/services/loadService.js": "c3dd72decb80d3a733b34ab954fa6f4d4defd653ad9832568c8502b8b96625ee",
+        "build/services/providers/meilisearch/controller.js": "34421d6e80447f8f6e987d1ef3efb7014d8f738dd45c564c7c550f382e2b5d7a",
+        "build/services/providers/meilisearch/localController.js": "314a9ea9f6c889ec2f2f6ce0b04e806c4c8f990a68f6ad94a8e080d050e0a942",
+        "build/services/providers/meilisearch/vectorEngine.js": "238f6e768c05632c37b7d44f11ad33b0b0932b96a92d186710bcd7a8e014aaa4",
+        "build/services/providers/nacos/NacosClient.js": "4bd0094743cd2167cb28593d97354413996c136c9fd8857ad5831bd07b491016",
+        "build/services/providers/nacos/NacosHttpClient.js": "9b0d96c471f65a17bb22f765586f6bc22c3189fb608d3540cad0104314d92275",
+        "build/services/providers/nacos/NacosMcpManager.js": "95c9b32b769ade65756b4efb3f108340883f7125006bcf3f9b32f218e75f448f",
+        "build/services/providers/oceanbase/controller.js": "0ac06cc18d03d88ce256af229ed05622e75fc31fd85fe9a1557b327106b5b289",
+        "build/services/providers/oceanbase/dataUpdateManager.js": "26e284cb7163a2b40ed91e911cc0f0f38fc7f078abbfaf6f9b129b5d3bd886eb",
+        "build/services/providers/oceanbase/vectorEngine.js": "d275a0de14d62a85dd0d01e26eda2c03a16ed663a408362e9c5e140b5747673f",
+        "build/services/providers/offline/enhancedMemoryVectorEngine.js": "31f81527dc063b62b32860703aa74cdb71aee5969b90391b7d6c9955f5852245",
+        "build/services/providers/offline/offlineDataLoader.js": "7d1f2a0c987ca5819dda17cfe1c9d0fa5c9c07a6dcd8769d7024b4d19700f227",
+        "build/services/providers/offline/vectorEngine.js": "c92a0199b8a864ace0c06477a3291cab3956f5b0880997671b618648e940d142",
+        "build/services/providers/offline/writableVectorEngine.js": "7d7c0add4a8b98b676d7676a639d6bd3b0d273e6624b9c2120e324c00c98e5a1",
+        "build/services/searchService.js": "74773ec352c9db291fb85986b839ea7fd9d718d847be0dd4117c1d85ff8f0cdb",
+        "build/services/vectorEngineFactory.js": "40aab72f94303c832cf5ee1024c7d533eb6f8382f791deeac838fc5e6c84114b",
+        "build/types/index.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/types/nacos.js": "eba190c4bfcfef1c6c270e1e758ffe7500c7f89dd93c16a136b1889edf141735",
+        "build/types/search.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "build/utils/ListUtils.js": "d7b0bf65d13ad8cfd034dbc564d187b27c35a8dc01a9b158ec241aa457ba88db",
+        "build/utils/embedding.js": "cc580e2656a2258884541233c55d798b5a1b4b4d2e97c01e0ad5a31c49af895b",
+        "build/utils/formatter.js": "f66071fb62f670fb76389bd623c0d6e455c7298bab7ba05ff0490dc135805307",
+        "build/utils/githubUtils.js": "9013bb113bd47e14ce4d8d3766b5d3da189322082e06f96b002af65d69021eae",
+        "build/utils/logger.js": "54df431676066e74f3c05be82c475d6bfea526c9e1db6ef0cf86a3dfe5304fa5",
+        "build/utils/meilisearch-monitor.js": "fda958dec9683938447420e09aba49f44d316b833581aa0a115d652149323320",
+        "build/utils/pathUtils.js": "f5daf4083701816fd126480fcd2a3d20fb9f03e98a01a50b84c8007c4565ccbd",
+        "build/utils/vectorUtils.js": "ad4179f5e63712ed74aced04f7061d6cac3e632372febc3f2f843645822d7763"
+      },
+      "buildSnapshotSha256": "c4e6aa0890a750a52b2de696e364f0b4da1b315c95364400d0762cde8f6d0fb1",
+      "sourceCommit": "2041c53be0a29c93f939530f35b8f75a482ac68c",
+      "dirty": false,
+      "worktreeStatus": "",
+      "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "plannerSha256": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef",
+      "provider": "MeilisearchSearchProvider + LocalMeilisearchController",
+      "settings": {
+        "displayedAttributes": [
+          "id",
+          "catalog_id",
+          "title",
+          "description",
+          "github_url",
+          "categories",
+          "tags",
+          "installations"
+        ],
+        "searchableAttributes": [
+          "title",
+          "description",
+          "categories",
+          "tags"
+        ],
+        "filterableAttributes": [
+          "categories",
+          "tags"
+        ],
+        "sortableAttributes": [
+          "title"
+        ],
+        "rankingRules": [
+          "words",
+          "typo",
+          "proximity",
+          "attribute",
+          "sort",
+          "exactness"
+        ],
+        "stopWords": [],
+        "nonSeparatorTokens": [],
+        "separatorTokens": [],
+        "dictionary": [],
+        "synonyms": {},
+        "distinctAttribute": null,
+        "proximityPrecision": "byWord",
+        "typoTolerance": {
+          "enabled": true,
+          "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+          },
+          "disableOnWords": [],
+          "disableOnAttributes": [],
+          "disableOnNumbers": false
+        },
+        "faceting": {
+          "maxValuesPerFacet": 100,
+          "sortFacetValuesBy": {
+            "*": "alpha"
+          }
+        },
+        "pagination": {
+          "maxTotalHits": 1000
+        },
+        "embedders": {},
+        "searchCutoffMs": null,
+        "localizedAttributes": null,
+        "facetSearch": true,
+        "prefixSearch": "indexingTime"
+      },
+      "stats": {
+        "numberOfDocuments": 212,
+        "rawDocumentDbSize": 135168,
+        "avgDocumentSize": 629,
+        "isIndexing": false,
+        "numberOfEmbeddings": 0,
+        "numberOfEmbeddedDocuments": 0,
+        "fieldDistribution": {
+          "catalog_id": 212,
+          "categories": 212,
+          "description": 212,
+          "github_url": 212,
+          "id": 212,
+          "installations": 212,
+          "tags": 212,
+          "title": 212
+        }
+      },
+      "rows": [
+        {
+          "id": "bc01",
+          "query": "Find messaging tools, except for Slack.",
+          "prepared": {
+            "query": "slack messaging",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678,
+              "score": 8.110969387755102
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678,
+              "score": 8.110969387755102
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5249999999999999,
+              "score": 0.5249999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.49874999999999997,
+              "score": 0.49874999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc02",
+          "query": "Find issue tracking tools other than Linear.",
+          "prepared": {
+            "query": "linear issue tracking other",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563,
+              "score": 6.458986175115207
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563,
+              "score": 6.458986175115207
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc03",
+          "query": "Find a GitLab integration for project management, except for GitHub.",
+          "prepared": {
+            "query": "gitlab github project management",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "gitlab",
+              "title": "GitLab",
+              "similarity": 0.25
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "claudepost",
+              "title": "Claude Post Email Management",
+              "similarity": 0.5273333333333332,
+              "score": 0.5273333333333332,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4847499999999999,
+              "score": 0.4847499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "unity-integration-advanced",
+              "title": "Unity Integration",
+              "similarity": 0.4835833333333332,
+              "score": 0.4835833333333332,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc04",
+          "query": "Find a Discord bot for reading messages, other than Slack.",
+          "prepared": {
+            "query": "discord slack other bot messages reading",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.16666666666666666
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5133333333333333,
+              "score": 0.5133333333333333,
+              "source": "offline"
+            },
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5119333333333334,
+              "score": 0.5119333333333334,
+              "source": "offline"
+            },
+            {
+              "id": "mac-messages-mcp",
+              "title": "Mac Messages",
+              "similarity": 0.49723333333333325,
+              "score": 0.49723333333333325,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc05",
+          "query": "帮我找聊天消息工具，排除 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc06",
+          "query": "找 Discord 的消息读取工具，不要 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc07",
+          "query": "Find tools for database schema inspection.",
+          "prepared": {
+            "query": "inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "llm-context",
+              "title": "LLM Context",
+              "similarity": 0.015572390572390573
+            }
+          ],
+          "isolated": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436,
+              "score": 8.637327188940093
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786,
+              "score": 8.629861751152074
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436,
+              "score": 8.637327188940093
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786,
+              "score": 8.629861751152074
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "graphql-schema",
+              "title": "GraphQL Schema Model Context Protocol",
+              "similarity": 0.5249999999999999,
+              "score": 0.5249999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc08",
+          "query": "Find task-specific tools for database schema inspection.",
+          "prepared": {
+            "query": "inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "llm-context",
+              "title": "LLM Context",
+              "similarity": 0.015572390572390573
+            }
+          ],
+          "isolated": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436,
+              "score": 8.637327188940093
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786,
+              "score": 8.629861751152074
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436,
+              "score": 8.637327188940093
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786,
+              "score": 8.629861751152074
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-tasks",
+              "title": "Google Tasks",
+              "similarity": 0.5162499999999999,
+              "score": 0.5162499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc09",
+          "query": "Find tools for issue tracking.",
+          "prepared": {
+            "query": "issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "sentry",
+              "title": "Sentry",
+              "similarity": 0.17140151515151514
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.14867424242424243
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904,
+              "score": 8.656462585034014
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904,
+              "score": 8.656462585034014
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.50785,
+              "score": 0.50785,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.4675999999999999,
+              "score": 0.4675999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc10",
+          "query": "Find project-specific tools for issue tracking.",
+          "prepared": {
+            "query": "issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "sentry",
+              "title": "Sentry",
+              "similarity": 0.17140151515151514
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.14867424242424243
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904,
+              "score": 8.656462585034014
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904,
+              "score": 8.656462585034014
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.44599999999999995,
+              "score": 0.44599999999999995,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.4427499999999999,
+              "score": 0.4427499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc11",
+          "query": "Find Nebulora-specific tools for document search.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5379999999999999,
+              "score": 0.5379999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "tavily-search",
+              "title": "Tavily Search",
+              "similarity": 0.5289999999999999,
+              "score": 0.5289999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "langflow-doc-qa-server",
+              "title": "Langflow Document Q&A",
+              "similarity": 0.5289999999999999,
+              "score": 0.5289999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc12",
+          "query": "需要 Quorvix-specific 文档搜索工具。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc13",
+          "query": "Find Slak-specific tools for channel messaging.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.48899999999999993,
+              "score": 0.48899999999999993,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4737499999999999,
+              "score": 0.4737499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.4182499999999999,
+              "score": 0.4182499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc14",
+          "query": "Find Notion-specific tools to search pages.",
+          "prepared": {
+            "query": "notion pages search",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            }
+          ],
+          "isolated": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641,
+              "score": 8.33168202764977
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641,
+              "score": 8.33168202764977
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-custom-search",
+              "title": "Google Custom Search",
+              "similarity": 0.5559999999999999,
+              "score": 0.5559999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5469999999999999,
+              "score": 0.5469999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc15",
+          "query": "Find Linear-specific issue tracking tools.",
+          "prepared": {
+            "query": "linear issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085,
+              "score": 8.611981566820276
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085,
+              "score": 8.611981566820276
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.40599999999999986,
+              "score": 0.40599999999999986,
+              "source": "offline"
+            },
+            {
+              "id": "whale-tracker-mcp",
+              "title": "Whale Tracker",
+              "similarity": 0.40249999999999997,
+              "score": 0.40249999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc16",
+          "query": "查找 Slack 聊天消息工具。",
+          "prepared": {
+            "query": "slack messages",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5,
+              "score": 4.5
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5,
+              "score": 4.5
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "score": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        }
+      ]
+    }
+  }
+}
