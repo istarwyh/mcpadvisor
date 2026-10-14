@@ -1,0 +1,218 @@
+{
+  "label": "illustrative",
+  "queryCount": 12,
+  "answerableCount": 10,
+  "baseline": {
+    "empty": 10,
+    "answerableKnownPositiveHit": 0,
+    "noKnownRelevantNonempty": 1
+  },
+  "candidate": {
+    "empty": 1,
+    "answerableKnownPositiveHit": 6,
+    "noKnownRelevantNonempty": 1
+  },
+  "rows": [
+    {
+      "id": "FV-D01-en",
+      "language": "en",
+      "audience": "developer",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": []
+      }
+    },
+    {
+      "id": "FV-D01-zh",
+      "language": "zh",
+      "audience": "developer",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 5,
+        "knownPositiveHits": [
+          "prometheus"
+        ]
+      }
+    },
+    {
+      "id": "FV-D02-en",
+      "language": "en",
+      "audience": "developer",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 2,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": [
+          "postman"
+        ]
+      }
+    },
+    {
+      "id": "FV-D02-zh",
+      "language": "zh",
+      "audience": "developer",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": [
+          "postman"
+        ]
+      }
+    },
+    {
+      "id": "FV-D03-en",
+      "language": "en",
+      "audience": "developer",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": [
+          "figma"
+        ]
+      }
+    },
+    {
+      "id": "FV-D03-zh",
+      "language": "zh",
+      "audience": "developer",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": [
+          "figma"
+        ]
+      }
+    },
+    {
+      "id": "FV-U01-en",
+      "language": "en",
+      "audience": "user",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": [
+          "home-assistant"
+        ]
+      }
+    },
+    {
+      "id": "FV-U01-zh",
+      "language": "zh",
+      "audience": "user",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 2,
+        "knownPositiveHits": []
+      }
+    },
+    {
+      "id": "FV-U02-en",
+      "language": "en",
+      "audience": "user",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": []
+      }
+    },
+    {
+      "id": "FV-U02-zh",
+      "language": "zh",
+      "audience": "user",
+      "answerability": "answerable",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": []
+      }
+    },
+    {
+      "id": "FV-U03-en",
+      "language": "en",
+      "audience": "user",
+      "answerability": "no-known-relevant",
+      "baseline": {
+        "returned": 4,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 1,
+        "knownPositiveHits": []
+      }
+    },
+    {
+      "id": "FV-U03-zh",
+      "language": "zh",
+      "audience": "user",
+      "answerability": "no-known-relevant",
+      "baseline": {
+        "returned": 0,
+        "knownPositiveHits": []
+      },
+      "candidate": {
+        "returned": 0,
+        "knownPositiveHits": []
+      }
+    }
+  ],
+  "gate": {
+    "passed": true,
+    "lostKnownPositiveQueries": [],
+    "newlyNonemptyUnsupportedQueries": []
+  },
+  "limitations": [
+    "Engine-only branch, not application aggregation or real-user quality",
+    "Agent-authored public queries and source-backed expected positives, not human labels",
+    "Expected positives are non-exhaustive: no full recall, precision or nDCG claim",
+    "Gate concerns this bounded recall repair; it does not satisfy the original ranking promotion gate"
+  ],
+  "evidence": {
+    "queryHash": "0dbbdc01b1d177b3620f1276e26eb6b6c7f6c22c9e0df968d154b90cea5fffc5",
+    "catalogHash": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+    "baselineHash": "32d71cb0c866e82fa2e4da3dae01a808cc27ea8df1b15db05b2dfb04e5cce704",
+    "candidateHash": "9c78b82d6babf5c654dcd4a60f7a4b0970ad811a15e5e52aba1ad4267b5304b5",
+    "protocolHash": "86203ab1d94448510af3908ef266c11134ababf4f85d215061239b6e20348d3c",
+    "settingsHash": "a99ed5f36e101318d023d2ca2725f354e22314e0a3c77ff090ecaca3c736d236",
+    "manifestHash": "70b4048a86295f082fd416ce94555918bc4331b0fc363320748099cc6c1c5aec",
+    "queryPlannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "label": "illustrative",
+  "purpose": "Bounded query-preparation recall bug fix, not ranking promotion or business acceptance",
+  "frozenAt": "2026-10-14T07:27:15.357Z",
+  "catalogSourceCommit": "e674eb197f5cbcce8d3f25bb7ea6b3e2eb3f5bc0",
+  "mode": "query-preparation",
+  "meilisearchVersion": "1.15.2",
+  "k": 10,
+  "baselineSearchableAttributes": [
+    "title",
+    "description",
+    "categories",
+    "tags"
+  ],
+  "candidateSearchableAttributes": [
+    "title",
+    "description",
+    "categories",
+    "tags"
+  ],
+  "queryPlannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+  "catalogByteHash": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+  "intervention": "Baseline raw taskDescription; candidate actual frozen buildMeilisearchQuery source; same corpus/index settings; no new model or service.",
+  "metrics": [
+    "empty-query count",
+    "independently documented known-positive hit at 10",
+    "per-query loss of previously retrieved known positive",
+    "nonempty results on no-known-relevant cases"
+  ],
+  "reviewGate": "Candidate must improve known-positive hit count, lose no baseline known-positive query, and add no nonempty unsupported query. Positive evidence qualifies only this bounded branch fix for further code review, not the original ranking promotion gate.",
+  "limits": [
+    "Engine branch only, not end-to-end aggregation",
+    "Public synthetic scenarios, AI-authored source-backed expected items, not human or user-log labels",
+    "Known positives are not exhaustive; report no full-corpus recall or nDCG",
+    "Original 24 scenarios including former holdout are now observed regressions",
+    "Fresh queries and source-backed annotations held out from implementation until this source hash was frozen; no tuning after opening"
+  ],
+  "queryByteHash": "1322c53b99075c051bceffa498aa5b21df76f09de37c0ab7d24883578bd1fbd2",
+  "datasetRole": "12 separately authored unseen queries; frozen before source opening"
+}

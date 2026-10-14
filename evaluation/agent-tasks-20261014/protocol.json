@@ -1,0 +1,27 @@
+{
+  "label": "illustrative",
+  "purpose": "Agent-authored public-task development experiment, not production or human-judged acceptance",
+  "frozenBeforeRetrieval": "2026-10-14T06:28:00Z",
+  "catalogSourceCommit": "e674eb197f5cbcce8d3f25bb7ea6b3e2eb3f5bc0",
+  "catalogPath": "data/mcp_server_list.json",
+  "catalogScope": "All 212 records in the repository snapshot; not the whole MCP ecosystem",
+  "meilisearchVersion": "1.15.2",
+  "k": 10,
+  "candidateCount": 1,
+  "baselineSearchableAttributes": ["title", "description", "categories", "tags"],
+  "candidateSearchableAttributes": ["title", "tags", "categories", "description"],
+  "hypothesis": "Capability tags may be more specific than prose descriptions; prioritize those attributes without changing fields, query text, default ranking rules or documents.",
+  "mechanismSource": "https://specs.meilisearch.dev/specifications/text/0123-searchable-attributes-setting-api.html",
+  "split": "16 development, 8 holdout; task-family pairs stay in one split; no retuning after holdout is evaluated",
+  "judging": "Separate AI assessor, source/rank-blinded pool, public capability references, independent catalog supplementation for zero-result queries. AI judgments are not human labels or user feedback.",
+  "promotionGate": {
+    "developmentMeanNdcgStrictlyImproves": true,
+    "holdoutMeanNdcgStrictlyImproves": true,
+    "meanKnownRelevantRecallMustNotDecreaseInEitherSplit": true,
+    "maximumCriticalPerQueryNdcgDrop": 0.1,
+    "noCriticalQueryLosesAllGrade2Or3Hits": true,
+    "noIncreaseInNonemptyResultsOnNoKnownRelevantQueries": true
+  },
+  "negativeResultPolicy": "Keep the unchanged production configuration when any gate fails. Publish reproducible negative findings without changing labels or queries to manufacture gains.",
+  "limits": ["Small purposive sample; no statistical significance claim", "AI assessment has correlated-model and incomplete-documentation risks", "Recall denominator is independently identified relevant items within this snapshot, not exhaustive real-world coverage", "No satisfaction, user-log representativeness or business-percentage targets are evaluated"]
+}

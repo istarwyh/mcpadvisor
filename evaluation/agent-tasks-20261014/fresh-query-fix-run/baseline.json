@@ -1,0 +1,22 @@
+{
+  "FV-D01-en": [],
+  "FV-D01-zh": [],
+  "FV-D02-en": [
+    "unity-integration-advanced",
+    "mem0-mcp"
+  ],
+  "FV-D02-zh": [],
+  "FV-D03-en": [],
+  "FV-D03-zh": [],
+  "FV-U01-en": [],
+  "FV-U01-zh": [],
+  "FV-U02-en": [],
+  "FV-U02-zh": [],
+  "FV-U03-en": [
+    "openai-websearch-mcp",
+    "mcp-installer",
+    "everything",
+    "redis"
+  ],
+  "FV-U03-zh": []
+}

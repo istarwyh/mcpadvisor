@@ -1,0 +1,270 @@
+{
+  "label": "illustrative",
+  "provenance": "Agent-authored public scenarios; not user logs",
+  "queries": [
+    {
+      "id": "D01-en",
+      "query": "I'm adding a reporting agent to an existing PostgreSQL database. It needs to discover tables and columns and run SELECT queries; we will supply a read-only database role. Which MCP integration fits without exporting the data first?",
+      "audience": "developer",
+      "language": "en",
+      "split": "development",
+      "family": "postgres_reporting",
+      "intent": "Inspect a PostgreSQL schema and run reporting queries using a supplied read-only role.",
+      "critical": true,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D01-zh",
+      "query": "我在给现有 PostgreSQL 数据库接一个报表 Agent，需要查看有哪些表和字段，再执行 SELECT 查询。我们会提供只读数据库账号。有什么 MCP 集成能直接做这些，不用先导出数据？",
+      "audience": "developer",
+      "language": "zh",
+      "split": "development",
+      "family": "postgres_reporting",
+      "intent": "Inspect a PostgreSQL schema and run reporting queries using a supplied read-only role.",
+      "critical": true,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D02-en",
+      "query": "My research agent gets nearly empty text from public supplier pages whose content appears after JavaScript runs. I need the actual page content in Markdown so it can compare suppliers. What MCP capability should I add? Search-result links alone won't help.",
+      "audience": "developer",
+      "language": "en",
+      "split": "development",
+      "family": "rendered_web_content",
+      "intent": "Retrieve rendered public web-page content in a form suitable for agent comparison.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D02-zh",
+      "query": "我的研究 Agent 抓供应商公开网页时，经常只拿到空壳，内容要等 JavaScript 运行后才出现。我想让它拿到 Markdown 正文来比较供应商，该加什么 MCP 能力？只有搜索结果链接不够。",
+      "audience": "developer",
+      "language": "zh",
+      "split": "development",
+      "family": "rendered_web_content",
+      "intent": "Retrieve rendered public web-page content in a form suitable for agent comparison.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D03-en",
+      "query": "A partner sent us a huge OpenAPI specification. Our coding agent should find the endpoint for an operation, then load only its parameters, request body and response schema. Which MCP toolset can do that without stuffing the entire specification into every prompt?",
+      "audience": "developer",
+      "language": "en",
+      "split": "development",
+      "family": "selective_openapi_exploration",
+      "intent": "Explore relevant operations and schemas from a large OpenAPI specification incrementally.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D03-zh",
+      "query": "合作方给了我们一份很大的 OpenAPI 规范。代码 Agent 要先找某项操作对应的接口，再按需读取参数、请求体和响应结构，而不是每次把整份规范塞进提示词。有什么合适的 MCP 工具？",
+      "audience": "developer",
+      "language": "zh",
+      "split": "development",
+      "family": "selective_openapi_exploration",
+      "intent": "Explore relevant operations and schemas from a large OpenAPI specification incrementally.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D04-en",
+      "query": "I need a Kafka-specific MCP server with built-in tools to list topics and consume messages directly from an Apache Kafka broker. Our integration policy excludes shell execution, browser automation, generic API gateways and writing a custom adapter. Is there a match in this catalog?",
+      "audience": "developer",
+      "language": "en",
+      "split": "development",
+      "family": "native_kafka_broker",
+      "intent": "Use built-in Kafka-specific tools for topic discovery and message consumption without generic execution or adapters.",
+      "critical": true,
+      "expectedAnswerability": "unsupported"
+    },
+    {
+      "id": "D04-zh",
+      "query": "我需要一个专门对接 Apache Kafka 的 MCP 服务，内置列出 topic、直接从 broker 消费消息的工具。我们的集成规范不允许借助命令行、浏览器自动化、通用 API 网关，也不能自己写适配器。这个目录里有符合条件的吗？",
+      "audience": "developer",
+      "language": "zh",
+      "split": "development",
+      "family": "native_kafka_broker",
+      "intent": "Use built-in Kafka-specific tools for topic discovery and message consumption without generic execution or adapters.",
+      "critical": true,
+      "expectedAnswerability": "unsupported"
+    },
+    {
+      "id": "D05-en",
+      "query": "I want an agent to triage a failing service on my local Docker host by listing containers, reading recent container logs and checking runtime statistics. This diagnosis should not restart or remove anything. Which MCP integration exposes the observations it needs?",
+      "audience": "developer",
+      "language": "en",
+      "split": "holdout",
+      "family": "docker_failure_observation",
+      "intent": "Observe local Docker containers, recent logs and runtime statistics for failure diagnosis.",
+      "critical": true,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D05-zh",
+      "query": "我想让 Agent 排查本机 Docker 上一个服务为什么失败：列出容器、读取最近的容器日志、查看运行统计。这次诊断不要重启或删除任何东西。哪个 MCP 集成能提供这些信息？",
+      "audience": "developer",
+      "language": "zh",
+      "split": "holdout",
+      "family": "docker_failure_observation",
+      "intent": "Observe local Docker containers, recent logs and runtime statistics for failure diagnosis.",
+      "critical": true,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D06-en",
+      "query": "My coding agent keeps mixing APIs from different library versions. I want to give it a package name and version and retrieve matching documentation snippets and code examples before it edits code. Which MCP integration is designed for that?",
+      "audience": "developer",
+      "language": "en",
+      "split": "holdout",
+      "family": "version_matched_library_docs",
+      "intent": "Retrieve source documentation and examples matched to a named library and version.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "D06-zh",
+      "query": "我的代码 Agent 老是把不同版本的库 API 混在一起。我希望告诉它包名和版本，它就先查对应版本的文档片段和代码示例，再修改代码。哪种 MCP 集成适合这个需求？",
+      "audience": "developer",
+      "language": "zh",
+      "split": "holdout",
+      "family": "version_matched_library_docs",
+      "intent": "Retrieve source documentation and examples matched to a named library and version.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U01-en",
+      "query": "I remember discussing a file-naming rule, but can't remember which of my Markdown project notes contains it. I want my assistant to search the contents and open the original notes. They live on my laptop, and I don't want to move them into a cloud notebook. What could I connect?",
+      "audience": "user",
+      "language": "en",
+      "split": "development",
+      "family": "recover_local_note_context",
+      "intent": "Find relevant content in local Markdown notes and read the original notes without mandatory cloud storage.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U01-zh",
+      "query": "我记得以前讨论过文件命名规则，但想不起来写在哪篇 Markdown 项目笔记里了。想让助手搜索正文并读到原始笔记。这些文件都在电脑上，我不想搬到云笔记服务里，可以接什么工具？",
+      "audience": "user",
+      "language": "zh",
+      "split": "development",
+      "family": "recover_local_note_context",
+      "intent": "Find relevant content in local Markdown notes and read the original notes without mandatory cloud storage.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U02-en",
+      "query": "My work and personal schedules are in two Google Calendar calendars. I want my assistant to find a free 30-minute slot next Tuesday by checking both calendars for conflicts. I'm only looking for availability now, not sending invitations. Which MCP connection would help?",
+      "audience": "user",
+      "language": "en",
+      "split": "development",
+      "family": "google_calendar_availability",
+      "intent": "Inspect two Google calendars and identify a conflict-free half-hour opening without creating invitations.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U02-zh",
+      "query": "我的工作和个人安排分别在两个 Google Calendar 日历里。想让助手同时检查两个日历，找出下周二没有冲突的半小时空档。现在只查时间，不发邀请。应该接哪个 MCP？",
+      "audience": "user",
+      "language": "zh",
+      "split": "development",
+      "family": "google_calendar_availability",
+      "intent": "Inspect two Google calendars and identify a conflict-free half-hour opening without creating invitations.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U03-en",
+      "query": "I'm preparing a short talk about boats in Dutch art. I'd like an assistant to search a museum collection, identify the artist and date for each relevant work, and get detailed artwork images I can inspect. What MCP source could support that research?",
+      "audience": "user",
+      "language": "en",
+      "split": "development",
+      "family": "museum_art_references",
+      "intent": "Discover museum artworks on a theme and obtain artist, date and detailed image information.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U03-zh",
+      "query": "我要做一个介绍荷兰绘画中船只主题的小分享。想让助手检索博物馆藏品，查出相关作品的作者和年代，并取得可以仔细看的作品图片。哪种 MCP 数据源能支持这项研究？",
+      "audience": "user",
+      "language": "zh",
+      "split": "development",
+      "family": "museum_art_references",
+      "intent": "Discover museum artworks on a theme and obtain artist, date and detailed image information.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U04-en",
+      "query": "I have a small .xlsx budget file on my laptop. I'd like my assistant to add SUM formulas, format amounts as currency and insert a spending chart in the workbook. I don't have Microsoft Excel installed. What MCP tool can work on the file directly?",
+      "audience": "user",
+      "language": "en",
+      "split": "development",
+      "family": "local_xlsx_improvement",
+      "intent": "Edit a local XLSX workbook with formulas, number formatting and an embedded chart without requiring Excel installation.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U04-zh",
+      "query": "我电脑上有个小型 .xlsx 预算表，想让助手补上 SUM 公式，把金额设成货币格式，再在工作簿里插入支出图表。我没安装 Microsoft Excel，有什么 MCP 工具能直接处理这个文件？",
+      "audience": "user",
+      "language": "zh",
+      "split": "development",
+      "family": "local_xlsx_improvement",
+      "intent": "Edit a local XLSX workbook with formulas, number formatting and an embedded chart without requiring Excel installation.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U05-en",
+      "query": "I'm taking the train from Schiphol Airport to Utrecht today. I need an assistant that can check live Dutch rail departures, platforms and disruptions before I leave, rather than give me a generic route map. Which MCP data connection fits?",
+      "audience": "user",
+      "language": "en",
+      "split": "holdout",
+      "family": "dutch_rail_disruptions",
+      "intent": "Retrieve live Dutch rail departures, platform details and disruptions for a specific journey.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U05-zh",
+      "query": "我今天要从史基浦机场坐火车去乌得勒支，想在出发前让助手查荷兰铁路实时班次、站台和运行中断信息，光给普通路线地图不够。应该接哪种 MCP 数据服务？",
+      "audience": "user",
+      "language": "zh",
+      "split": "holdout",
+      "family": "dutch_rail_disruptions",
+      "intent": "Retrieve live Dutch rail departures, platform details and disruptions for a specific journey.",
+      "critical": false,
+      "expectedAnswerability": "answerable"
+    },
+    {
+      "id": "U06-en",
+      "query": "I want a Zoom-specific MCP server that already has tools to list my cloud meeting recordings and retrieve their download links. My Zoom plan includes cloud recording. Please exclude browser automation, general-purpose API gateways and servers that need custom extensions. Is one available in this catalog?",
+      "audience": "user",
+      "language": "en",
+      "split": "holdout",
+      "family": "dedicated_zoom_recordings",
+      "intent": "Find a dedicated Zoom MCP integration with built-in cloud-recording listing and download-link tools.",
+      "critical": true,
+      "expectedAnswerability": "unsupported"
+    },
+    {
+      "id": "U06-zh",
+      "query": "我想找一个专门对接 Zoom 的 MCP 服务，现成工具就能列出我的会议云录制并获取下载链接。我的 Zoom 套餐支持云录制。不要浏览器自动化、通用 API 网关，也不要需要自己扩展的服务。这个目录里有吗？",
+      "audience": "user",
+      "language": "zh",
+      "split": "holdout",
+      "family": "dedicated_zoom_recordings",
+      "intent": "Find a dedicated Zoom MCP integration with built-in cloud-recording listing and download-link tools.",
+      "critical": true,
+      "expectedAnswerability": "unsupported"
+    }
+  ]
+}

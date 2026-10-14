@@ -1,0 +1,524 @@
+{
+  "label": "illustrative",
+  "poolDepth": 10,
+  "catalogSha256": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+  "note": "Actual engine-only multi-run pool; independently assess every null grade. No business acceptance claim.",
+  "queries": [
+    {
+      "id": "D01-en",
+      "query": "I'm adding a reporting agent to an existing PostgreSQL database. It needs to discover tables and columns and run SELECT queries; we will supply a read-only database role. Which MCP integration fits without exporting the data first?",
+      "candidateIds": [
+        "dbhub",
+        "postgresql"
+      ],
+      "relevance": {
+        "dbhub": null,
+        "postgresql": null
+      }
+    },
+    {
+      "id": "D01-zh",
+      "query": "我在给现有 PostgreSQL 数据库接一个报表 Agent，需要查看有哪些表和字段，再执行 SELECT 查询。我们会提供只读数据库账号。有什么 MCP 集成能直接做这些，不用先导出数据？",
+      "candidateIds": [
+        "postgresql",
+        "dbhub"
+      ],
+      "relevance": {
+        "postgresql": null,
+        "dbhub": null
+      }
+    },
+    {
+      "id": "D02-en",
+      "query": "My research agent gets nearly empty text from public supplier pages whose content appears after JavaScript runs. I need the actual page content in Markdown so it can compare suppliers. What MCP capability should I add? Search-result links alone won't help.",
+      "candidateIds": [
+        "cloudinary"
+      ],
+      "relevance": {
+        "cloudinary": null
+      }
+    },
+    {
+      "id": "D02-zh",
+      "query": "我的研究 Agent 抓供应商公开网页时，经常只拿到空壳，内容要等 JavaScript 运行后才出现。我想让它拿到 Markdown 正文来比较供应商，该加什么 MCP 能力？只有搜索结果链接不够。",
+      "candidateIds": [
+        "rednote-mcp"
+      ],
+      "relevance": {
+        "rednote-mcp": null
+      }
+    },
+    {
+      "id": "D03-en",
+      "query": "A partner sent us a huge OpenAPI specification. Our coding agent should find the endpoint for an operation, then load only its parameters, request body and response schema. Which MCP toolset can do that without stuffing the entire specification into every prompt?",
+      "candidateIds": [
+        "any-chat-completions",
+        "gmail",
+        "deepseek-thinker-mcp",
+        "world-bank-data-api",
+        "dify",
+        "langflow-doc-qa-server",
+        "naver",
+        "openapi-anyapi",
+        "openai-websearch-mcp",
+        "terminal-control",
+        "mcp-create",
+        "openapi",
+        "openapi-schema",
+        "servicenow",
+        "dune-analytics-mcp",
+        "mem0-mcp"
+      ],
+      "relevance": {
+        "any-chat-completions": null,
+        "gmail": null,
+        "deepseek-thinker-mcp": null,
+        "world-bank-data-api": null,
+        "dify": null,
+        "langflow-doc-qa-server": null,
+        "naver": null,
+        "openapi-anyapi": null,
+        "openai-websearch-mcp": null,
+        "terminal-control": null,
+        "mcp-create": null,
+        "openapi": null,
+        "openapi-schema": null,
+        "servicenow": null,
+        "dune-analytics-mcp": null,
+        "mem0-mcp": null
+      }
+    },
+    {
+      "id": "D03-zh",
+      "query": "合作方给了我们一份很大的 OpenAPI 规范。代码 Agent 要先找某项操作对应的接口，再按需读取参数、请求体和响应结构，而不是每次把整份规范塞进提示词。有什么合适的 MCP 工具？",
+      "candidateIds": [
+        "any-chat-completions",
+        "openai-websearch-mcp",
+        "naver",
+        "openapi-schema",
+        "openapi-anyapi",
+        "openapi"
+      ],
+      "relevance": {
+        "any-chat-completions": null,
+        "openai-websearch-mcp": null,
+        "naver": null,
+        "openapi-schema": null,
+        "openapi-anyapi": null,
+        "openapi": null
+      }
+    },
+    {
+      "id": "D04-en",
+      "query": "I need a Kafka-specific MCP server with built-in tools to list topics and consume messages directly from an Apache Kafka broker. Our integration policy excludes shell execution, browser automation, generic API gateways and writing a custom adapter. Is there a match in this catalog?",
+      "candidateIds": [],
+      "relevance": {}
+    },
+    {
+      "id": "D04-zh",
+      "query": "我需要一个专门对接 Apache Kafka 的 MCP 服务，内置列出 topic、直接从 broker 消费消息的工具。我们的集成规范不允许借助命令行、浏览器自动化、通用 API 网关，也不能自己写适配器。这个目录里有符合条件的吗？",
+      "candidateIds": [],
+      "relevance": {}
+    },
+    {
+      "id": "D05-en",
+      "query": "I want an agent to triage a failing service on my local Docker host by listing containers, reading recent container logs and checking runtime statistics. This diagnosis should not restart or remove anything. Which MCP integration exposes the observations it needs?",
+      "candidateIds": [
+        "docker",
+        "gmail-headless",
+        "aws-resources-operations",
+        "code-sandbox-mcp",
+        "home-assistant",
+        "glean"
+      ],
+      "relevance": {
+        "docker": null,
+        "gmail-headless": null,
+        "aws-resources-operations": null,
+        "code-sandbox-mcp": null,
+        "home-assistant": null,
+        "glean": null
+      }
+    },
+    {
+      "id": "D05-zh",
+      "query": "我想让 Agent 排查本机 Docker 上一个服务为什么失败：列出容器、读取最近的容器日志、查看运行统计。这次诊断不要重启或删除任何东西。哪个 MCP 集成能提供这些信息？",
+      "candidateIds": [
+        "docker",
+        "home-assistant",
+        "glean",
+        "gmail-headless",
+        "code-sandbox-mcp",
+        "aws-resources-operations"
+      ],
+      "relevance": {
+        "docker": null,
+        "home-assistant": null,
+        "glean": null,
+        "gmail-headless": null,
+        "code-sandbox-mcp": null,
+        "aws-resources-operations": null
+      }
+    },
+    {
+      "id": "D06-en",
+      "query": "My coding agent keeps mixing APIs from different library versions. I want to give it a package name and version and retrieve matching documentation snippets and code examples before it edits code. Which MCP integration is designed for that?",
+      "candidateIds": [
+        "stripe"
+      ],
+      "relevance": {
+        "stripe": null
+      }
+    },
+    {
+      "id": "D06-zh",
+      "query": "我的代码 Agent 老是把不同版本的库 API 混在一起。我希望告诉它包名和版本，它就先查对应版本的文档片段和代码示例，再修改代码。哪种 MCP 集成适合这个需求？",
+      "candidateIds": [
+        "context7"
+      ],
+      "relevance": {
+        "context7": null
+      }
+    },
+    {
+      "id": "U01-en",
+      "query": "I remember discussing a file-naming rule, but can't remember which of my Markdown project notes contains it. I want my assistant to search the contents and open the original notes. They live on my laptop, and I don't want to move them into a cloud notebook. What could I connect?",
+      "candidateIds": [
+        "ableton-live"
+      ],
+      "relevance": {
+        "ableton-live": null
+      }
+    },
+    {
+      "id": "U01-zh",
+      "query": "我记得以前讨论过文件命名规则，但想不起来写在哪篇 Markdown 项目笔记里了。想让助手搜索正文并读到原始笔记。这些文件都在电脑上，我不想搬到云笔记服务里，可以接什么工具？",
+      "candidateIds": [
+        "rednote-mcp"
+      ],
+      "relevance": {
+        "rednote-mcp": null
+      }
+    },
+    {
+      "id": "U02-en",
+      "query": "My work and personal schedules are in two Google Calendar calendars. I want my assistant to find a free 30-minute slot next Tuesday by checking both calendars for conflicts. I'm only looking for availability now, not sending invitations. Which MCP connection would help?",
+      "candidateIds": [
+        "google-calendar"
+      ],
+      "relevance": {
+        "google-calendar": null
+      }
+    },
+    {
+      "id": "U02-zh",
+      "query": "我的工作和个人安排分别在两个 Google Calendar 日历里。想让助手同时检查两个日历，找出下周二没有冲突的半小时空档。现在只查时间，不发邀请。应该接哪个 MCP？",
+      "candidateIds": [
+        "google-calendar"
+      ],
+      "relevance": {
+        "google-calendar": null
+      }
+    },
+    {
+      "id": "U03-en",
+      "query": "I'm preparing a short talk about boats in Dutch art. I'd like an assistant to search a museum collection, identify the artist and date for each relevant work, and get detailed artwork images I can inspect. What MCP source could support that research?",
+      "candidateIds": [
+        "cfbd-api",
+        "fantasy-pl",
+        "youtube"
+      ],
+      "relevance": {
+        "cfbd-api": null,
+        "fantasy-pl": null,
+        "youtube": null
+      }
+    },
+    {
+      "id": "U03-zh",
+      "query": "我要做一个介绍荷兰绘画中船只主题的小分享。想让助手检索博物馆藏品，查出相关作品的作者和年代，并取得可以仔细看的作品图片。哪种 MCP 数据源能支持这项研究？",
+      "candidateIds": [
+        "rijksmuseum"
+      ],
+      "relevance": {
+        "rijksmuseum": null
+      }
+    },
+    {
+      "id": "U04-en",
+      "query": "I have a small .xlsx budget file on my laptop. I'd like my assistant to add SUM formulas, format amounts as currency and insert a spending chart in the workbook. I don't have Microsoft Excel installed. What MCP tool can work on the file directly?",
+      "candidateIds": [
+        "excel"
+      ],
+      "relevance": {
+        "excel": null
+      }
+    },
+    {
+      "id": "U04-zh",
+      "query": "我电脑上有个小型 .xlsx 预算表，想让助手补上 SUM 公式，把金额设成货币格式，再在工作簿里插入支出图表。我没安装 Microsoft Excel，有什么 MCP 工具能直接处理这个文件？",
+      "candidateIds": [
+        "excel"
+      ],
+      "relevance": {
+        "excel": null
+      }
+    },
+    {
+      "id": "U05-en",
+      "query": "I'm taking the train from Schiphol Airport to Utrecht today. I need an assistant that can check live Dutch rail departures, platforms and disruptions before I leave, rather than give me a generic route map. Which MCP data connection fits?",
+      "candidateIds": [
+        "ns-travel-information"
+      ],
+      "relevance": {
+        "ns-travel-information": null
+      }
+    },
+    {
+      "id": "U05-zh",
+      "query": "我今天要从史基浦机场坐火车去乌得勒支，想在出发前让助手查荷兰铁路实时班次、站台和运行中断信息，光给普通路线地图不够。应该接哪种 MCP 数据服务？",
+      "candidateIds": [
+        "travel-planner"
+      ],
+      "relevance": {
+        "travel-planner": null
+      }
+    },
+    {
+      "id": "U06-en",
+      "query": "I want a Zoom-specific MCP server that already has tools to list my cloud meeting recordings and retrieve their download links. My Zoom plan includes cloud recording. Please exclude browser automation, general-purpose API gateways and servers that need custom extensions. Is one available in this catalog?",
+      "candidateIds": [],
+      "relevance": {}
+    },
+    {
+      "id": "U06-zh",
+      "query": "我想找一个专门对接 Zoom 的 MCP 服务，现成工具就能列出我的会议云录制并获取下载链接。我的 Zoom 套餐支持云录制。不要浏览器自动化、通用 API 网关，也不要需要自己扩展的服务。这个目录里有吗？",
+      "candidateIds": [],
+      "relevance": {}
+    }
+  ],
+  "documents": [
+    {
+      "id": "ableton-live",
+      "name": "Ableton Live",
+      "description": "an MCP server to control Ableton Live.",
+      "source": "https://github.com/Simon-Kansara/ableton-live-mcp-server"
+    },
+    {
+      "id": "any-chat-completions",
+      "name": "Any Chat Completions",
+      "description": "Interact with any OpenAI SDK Compatible Chat Completions API like OpenAI, Perplexity, Groq, xAI and many more.",
+      "source": "https://github.com/pyroprompts/any-chat-completions-mcp"
+    },
+    {
+      "id": "aws-resources-operations",
+      "name": "AWS Resources",
+      "description": "Run generated python code to securely query or modify any AWS resources supported by boto3.",
+      "source": "https://github.com/baryhuang/mcp-server-aws-resources-python"
+    },
+    {
+      "id": "cfbd-api",
+      "name": "College Football Data API",
+      "description": "An MCP server for the [College Football Data API](https://collegefootballdata.com/).",
+      "source": "https://github.com/lenwood/cfbd-mcp-server"
+    },
+    {
+      "id": "cloudinary",
+      "name": "Cloudinary",
+      "description": "Cloudinary Model Context Protocol Server to upload media to Cloudinary and get back the media link and details.",
+      "source": "https://github.com/felores/cloudinary-mcp-server"
+    },
+    {
+      "id": "code-sandbox-mcp",
+      "name": "Code Sandbox",
+      "description": "An MCP server to create secure code sandbox environment for executing code within Docker containers.",
+      "source": "https://github.com/Automata-Labs-team/code-sandbox-mcp"
+    },
+    {
+      "id": "context7",
+      "name": "Context7",
+      "description": "为任何提示实时提供最新、版本特定的库文档与代码示例，避免 LLM 使用过时或幻觉 API。",
+      "source": "https://github.com/upstash/context7"
+    },
+    {
+      "id": "dbhub",
+      "name": "DBHub - Universal Database Gateway",
+      "description": "Universal database MCP server connecting to MySQL, PostgreSQL, SQLite, DuckDB and etc.",
+      "source": "https://github.com/bytebase/dbhub"
+    },
+    {
+      "id": "deepseek-thinker-mcp",
+      "name": "Deepseek Thinker",
+      "description": "A MCP (Model Context Protocol) provider Deepseek reasoning content to MCP-enabled AI Clients, like Claude Desktop. Supports access to Deepseek's thought processes from the Deepseek API service or from a local Ollama server.",
+      "source": "https://github.com/ruixingshi/deepseek-thinker-mcp"
+    },
+    {
+      "id": "dify",
+      "name": "Dify",
+      "description": "A simple implementation of an MCP server for dify workflows.",
+      "source": "https://github.com/YanxingLiu/dify-mcp-server"
+    },
+    {
+      "id": "docker",
+      "name": "Docker Integration",
+      "description": "Integrate with Docker to manage containers, images, volumes, and networks.",
+      "source": "https://github.com/ckreiling/mcp-server-docker"
+    },
+    {
+      "id": "dune-analytics-mcp",
+      "name": "Dune Analytics",
+      "description": "A mcp server that bridges Dune Analytics data to AI agents.",
+      "source": "https://github.com/kukapay/dune-analytics-mcp"
+    },
+    {
+      "id": "excel",
+      "name": "Excel",
+      "description": "Excel manipulation including data reading/writing, worksheet management, formatting, charts, and pivot table.",
+      "source": "https://github.com/haris-musa/excel-mcp-server"
+    },
+    {
+      "id": "fantasy-pl",
+      "name": "Fantasy Premier League",
+      "description": "Give your coding agent direct access to up-to date Fantasy Premier League data",
+      "source": "https://github.com/rishijatia/fantasy-pl-mcp"
+    },
+    {
+      "id": "glean",
+      "name": "Glean",
+      "description": "A server that uses Glean API to search and chat.",
+      "source": "https://github.com/longyi1207/glean-mcp-server"
+    },
+    {
+      "id": "gmail",
+      "name": "Gmail AutoAuth",
+      "description": "A Model Context Protocol (MCP) server for Gmail integration in Claude Desktop with auto authentication support.",
+      "source": "https://github.com/GongRzhe/Gmail-MCP-Server"
+    },
+    {
+      "id": "gmail-headless",
+      "name": "Headless Gmail Server",
+      "description": "Remote hostable MCP server that can get and send Gmail messages without local credential or file system setup.",
+      "source": "https://github.com/baryhuang/mcp-headless-gmail"
+    },
+    {
+      "id": "google-calendar",
+      "name": "Google Calendar",
+      "description": "Google Calendar MCP Server for managing Google calendar events. Also supports searching for events by attributes like title and location.",
+      "source": "https://github.com/nspady/google-calendar-mcp"
+    },
+    {
+      "id": "home-assistant",
+      "name": "Hass",
+      "description": "Docker-ready MCP server for Home Assistant with entity management, domain summaries, automation support, and guided conversations. Includes pre-built container images for easy installation.",
+      "source": "https://github.com/voska/hass-mcp"
+    },
+    {
+      "id": "langflow-doc-qa-server",
+      "name": "Langflow Document Q&A",
+      "description": "A Model Context Protocol server for document Q&A powered by Langflow. It demonstrates core MCP concepts by providing a simple interface to query documents through a Langflow backend.",
+      "source": "https://github.com/GongRzhe/Langflow-DOC-QA-SERVER"
+    },
+    {
+      "id": "mcp-create",
+      "name": "Create Server",
+      "description": "A dynamic MCP server management service that creates, runs, and manages Model Context Protocol servers on-the-fly.",
+      "source": "https://github.com/tesla0225/mcp-create"
+    },
+    {
+      "id": "mem0-mcp",
+      "name": "Mem0 Server",
+      "description": "A Model Context Protocol server for Mem0, which helps with managing coding preferences.",
+      "source": "https://github.com/mem0ai/mem0-mcp"
+    },
+    {
+      "id": "naver",
+      "name": "Naver",
+      "description": "This MCP server provides tools to interact with various Naver services, such as searching blogs, news, books, and more.",
+      "source": "https://github.com/pfldy2850/py-mcp-naver"
+    },
+    {
+      "id": "ns-travel-information",
+      "name": "NS Travel Information",
+      "description": "Access Dutch Railways (NS) real-time train travel information and disruptions through the official NS API.",
+      "source": "https://github.com/r-huijts/ns-mcp-server"
+    },
+    {
+      "id": "openai-websearch-mcp",
+      "name": "OpenAI WebSearch",
+      "description": "This is a Python-based MCP server that provides OpenAI `web_search` build-in tool.",
+      "source": "https://github.com/ConechoAI/openai-websearch-mcp"
+    },
+    {
+      "id": "openapi",
+      "name": "OpenAPI",
+      "description": "Interact with [OpenAPI](https://www.openapis.org/) APIs.",
+      "source": "https://github.com/snaggle-ai/openapi-mcp-server"
+    },
+    {
+      "id": "openapi-anyapi",
+      "name": "Scalable OpenAPI Endpoint Discovery Tool",
+      "description": "Interact with large [OpenAPI](https://www.openapis.org/) docs using built-in semantic search for endpoints. Allows for customizing the MCP server prefix.",
+      "source": "https://github.com/baryhuang/mcp-server-any-openapi"
+    },
+    {
+      "id": "openapi-schema",
+      "name": "OpenAPI Schema Model Context Protocol",
+      "description": "Allow LLMs to explore large [OpenAPI](https://www.openapis.org/) schemas without bloating the context.",
+      "source": "https://github.com/hannesj/mcp-openapi-schema"
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "description": "Read-only database access with schema inspection",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "rednote-mcp",
+      "name": "RedNote MCP",
+      "description": "小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具",
+      "source": "https://github.com/ifuryst/rednote-mcp"
+    },
+    {
+      "id": "rijksmuseum",
+      "name": "Rijksmuseum",
+      "description": "Interface with the Rijksmuseum API to search artworks, retrieve artwork details, access image tiles, and explore user collections.",
+      "source": "https://github.com/r-huijts/rijksmuseum-mcp"
+    },
+    {
+      "id": "servicenow",
+      "name": "ServiceNow",
+      "description": "A MCP server to interact with a ServiceNow instance",
+      "source": "https://github.com/osomai/servicenow-mcp"
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe Model Context Protocol",
+      "description": "The Stripe Model Context Protocol server allows you to integrate with Stripe APIs through function calling. This protocol supports various tools to interact with different Stripe services.",
+      "source": "https://github.com/stripe/agent-toolkit"
+    },
+    {
+      "id": "terminal-control",
+      "name": "Terminal Controller",
+      "description": "A MCP server that enables secure terminal command execution, directory navigation, and file system operations through a standardized interface.",
+      "source": "https://github.com/GongRzhe/terminal-controller-mcp"
+    },
+    {
+      "id": "travel-planner",
+      "name": "Travel Planner",
+      "description": "Travel planning and itinerary management server integrating with Google Maps API for location search, place details, and route calculations.",
+      "source": "https://github.com/GongRzhe/TRAVEL-PLANNER-MCP-Server"
+    },
+    {
+      "id": "world-bank-data-api",
+      "name": "World Bank Data API",
+      "description": "A server that fetches data indicators available with the World Bank as part of their data API",
+      "source": "https://github.com/anshumax/world_bank_mcp_server"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "description": "Comprehensive YouTube API integration for video management, Shorts creation, and analytics.",
+      "source": "https://github.com/ZubeidHendricks/youtube-mcp-server"
+    }
+  ]
+}

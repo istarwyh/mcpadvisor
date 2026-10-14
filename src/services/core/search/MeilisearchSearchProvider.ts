@@ -20,6 +20,7 @@ import {
   MeilisearchClient,
 } from '../../providers/meilisearch/controller.js';
 import logger from '../../../utils/logger.js';
+import { buildMeilisearchQuery } from './meilisearchQuery.js';
 
 /**
  * 将 GetMCP API 响应转换为 Meilisearch 文档
@@ -112,10 +113,15 @@ export class MeilisearchSearchProvider implements SearchProvider {
       // 确保数据已加载
       await this.ensureDataLoaded();
 
-      // 执行 Meilisearch 搜索
-      const results = await this.client.search(query, {
+      const prepared = buildMeilisearchQuery(params, this.cache.get() || {});
+      if (!prepared) return [];
+      // Preserve important terms before Meilisearch's ten-term query limit.
+      const results = await this.client.search(prepared.query, {
         limit: 10,
         showRankingScore: true,
+        ...(prepared.matchingStrategy
+          ? { matchingStrategy: prepared.matchingStrategy }
+          : {}),
       });
       if (!Array.isArray(results?.hits)) {
         throw new Error('Meilisearch returned an invalid search response');

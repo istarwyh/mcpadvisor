@@ -14,6 +14,7 @@ on:
       - 'src/evaluation/**'
       - 'src/tests/**/*meilisearch*.test.ts'
       - 'src/services/core/search/MeilisearchSearchProvider.ts'
+      - 'src/services/core/search/meilisearchQuery.ts'
       - 'tests/e2e/meilisearch-*'
       - 'tests/e2e/fixtures/**'
       - 'scripts/e2e/e2e.meilisearch*'
@@ -25,6 +26,7 @@ on:
       - 'src/evaluation/**'
       - 'src/tests/**/*meilisearch*.test.ts'
       - 'src/services/core/search/MeilisearchSearchProvider.ts'
+      - 'src/services/core/search/meilisearchQuery.ts'
       - 'tests/e2e/meilisearch-*'
       - 'tests/e2e/fixtures/**'
       - 'scripts/e2e/e2e.meilisearch*'
@@ -62,7 +64,7 @@ jobs:
 
       - name: Run Meilisearch unit tests
         run: |
-          pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts src/tests/unit/services/meilisearch-factory-cache.test.ts
+          pnpm exec vitest run src/tests/unit/config/meilisearch-config.test.ts src/tests/unit/services/meilisearch-failover.test.ts src/tests/unit/services/meilisearch-fulltext.test.ts src/tests/unit/services/meilisearch-query.test.ts src/tests/unit/services/meilisearch-factory-cache.test.ts
           node --test scripts/e2e/e2e.meilisearch.test.mjs
         timeout-minutes: 5
 

@@ -1,0 +1,142 @@
+{
+  "label": "illustrative",
+  "generatedAt": "2026-10-14T06:35:10.654Z",
+  "nodeVersion": "v22.23.1",
+  "meilisearchVersion": "1.15.2",
+  "catalogCount": 212,
+  "catalogHash": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+  "queryHash": "bd8909c18041e4997f72c7d5464ea320adddfb83c98c8ae87461a4d87f5f3036",
+  "k": 10,
+  "settings": {
+    "baseline": {
+      "displayedAttributes": [
+        "id",
+        "catalog_id",
+        "title",
+        "description",
+        "github_url",
+        "categories",
+        "tags",
+        "installations"
+      ],
+      "searchableAttributes": [
+        "title",
+        "description",
+        "categories",
+        "tags"
+      ],
+      "filterableAttributes": [
+        "categories",
+        "tags"
+      ],
+      "sortableAttributes": [
+        "title"
+      ],
+      "rankingRules": [
+        "words",
+        "typo",
+        "proximity",
+        "attribute",
+        "sort",
+        "exactness"
+      ],
+      "stopWords": [],
+      "nonSeparatorTokens": [],
+      "separatorTokens": [],
+      "dictionary": [],
+      "synonyms": {},
+      "distinctAttribute": null,
+      "proximityPrecision": "byWord",
+      "typoTolerance": {
+        "enabled": true,
+        "minWordSizeForTypos": {
+          "oneTypo": 5,
+          "twoTypos": 9
+        },
+        "disableOnWords": [],
+        "disableOnAttributes": [],
+        "disableOnNumbers": false
+      },
+      "faceting": {
+        "maxValuesPerFacet": 100,
+        "sortFacetValuesBy": {
+          "*": "alpha"
+        }
+      },
+      "pagination": {
+        "maxTotalHits": 1000
+      },
+      "embedders": {},
+      "searchCutoffMs": null,
+      "localizedAttributes": null,
+      "facetSearch": true,
+      "prefixSearch": "indexingTime"
+    },
+    "candidate": {
+      "displayedAttributes": [
+        "id",
+        "catalog_id",
+        "title",
+        "description",
+        "github_url",
+        "categories",
+        "tags",
+        "installations"
+      ],
+      "searchableAttributes": [
+        "title",
+        "tags",
+        "categories",
+        "description"
+      ],
+      "filterableAttributes": [
+        "categories",
+        "tags"
+      ],
+      "sortableAttributes": [
+        "title"
+      ],
+      "rankingRules": [
+        "words",
+        "typo",
+        "proximity",
+        "attribute",
+        "sort",
+        "exactness"
+      ],
+      "stopWords": [],
+      "nonSeparatorTokens": [],
+      "separatorTokens": [],
+      "dictionary": [],
+      "synonyms": {},
+      "distinctAttribute": null,
+      "proximityPrecision": "byWord",
+      "typoTolerance": {
+        "enabled": true,
+        "minWordSizeForTypos": {
+          "oneTypo": 5,
+          "twoTypos": 9
+        },
+        "disableOnWords": [],
+        "disableOnAttributes": [],
+        "disableOnNumbers": false
+      },
+      "faceting": {
+        "maxValuesPerFacet": 100,
+        "sortFacetValuesBy": {
+          "*": "alpha"
+        }
+      },
+      "pagination": {
+        "maxTotalHits": 1000
+      },
+      "embedders": {},
+      "searchCutoffMs": null,
+      "localizedAttributes": null,
+      "facetSearch": true,
+      "prefixSearch": "indexingTime"
+    }
+  },
+  "executionPath": "Actual isolated Meilisearch HTTP requests with mirrored application schema/settings; application modules and full build/tests NOT executed.",
+  "sourceCommit": "e674eb197f5cbcce8d3f25bb7ea6b3e2eb3f5bc0"
+}

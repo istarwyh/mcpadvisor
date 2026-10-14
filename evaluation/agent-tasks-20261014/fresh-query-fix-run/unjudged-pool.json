@@ -1,0 +1,262 @@
+{
+  "label": "illustrative",
+  "poolDepth": 10,
+  "catalogSha256": "4de518db21a8bf2035ecd2e46657c9cfb2d75983046a388c34ef0f3b8b014254",
+  "note": "Actual engine-only multi-run pool; independently assess every null grade. No business acceptance claim.",
+  "queries": [
+    {
+      "id": "FV-D01-en",
+      "query": "My agent needs to discover metric names and run PromQL queries for both the current value and a time range. Which MCP server can connect to our monitoring endpoint?",
+      "candidateIds": [
+        "time"
+      ],
+      "relevance": {
+        "time": null
+      }
+    },
+    {
+      "id": "FV-D01-zh",
+      "query": "我的 Agent 需要查看有哪些监控指标，再用 PromQL 查询当前值和一段时间内的数据。什么 MCP 服务能连接我们的监控系统？",
+      "candidateIds": [
+        "prometheus",
+        "ergo-blockchain-mcp",
+        "fastn-ai-unified-api-mcp-server",
+        "sentry",
+        "n8n"
+      ],
+      "relevance": {
+        "prometheus": null,
+        "ergo-blockchain-mcp": null,
+        "fastn-ai-unified-api-mcp-server": null,
+        "sentry": null,
+        "n8n": null
+      }
+    },
+    {
+      "id": "FV-D02-en",
+      "query": "Which MCP tool can run my Postman collection with an environment file and tell my coding agent which API tests failed?",
+      "candidateIds": [
+        "unity-integration-advanced",
+        "postman",
+        "mem0-mcp"
+      ],
+      "relevance": {
+        "unity-integration-advanced": null,
+        "postman": null,
+        "mem0-mcp": null
+      }
+    },
+    {
+      "id": "FV-D02-zh",
+      "query": "哪个 MCP 工具能用指定的环境文件运行我的 Postman 集合，并告诉代码 Agent 哪些接口测试失败了？",
+      "candidateIds": [
+        "postman"
+      ],
+      "relevance": {
+        "postman": null
+      }
+    },
+    {
+      "id": "FV-D03-en",
+      "query": "I have a Figma frame link. What MCP integration can give my coding agent the layout and styling data so it can implement the screen?",
+      "candidateIds": [
+        "figma"
+      ],
+      "relevance": {
+        "figma": null
+      }
+    },
+    {
+      "id": "FV-D03-zh",
+      "query": "我有一个 Figma 画框链接，想让代码 Agent 读取布局和样式数据来实现这个界面，应该接哪个 MCP？",
+      "candidateIds": [
+        "figma"
+      ],
+      "relevance": {
+        "figma": null
+      }
+    },
+    {
+      "id": "FV-U01-en",
+      "query": "I want my assistant to check which smart-home lights are on and switch them off through my home automation hub. What MCP connection supports that?",
+      "candidateIds": [
+        "home-assistant"
+      ],
+      "relevance": {
+        "home-assistant": null
+      }
+    },
+    {
+      "id": "FV-U01-zh",
+      "query": "我想让助手通过家里的智能家居中枢查看哪些灯还亮着，并把它们关掉。什么 MCP 连接能做到？",
+      "candidateIds": [
+        "promptx",
+        "rednote-mcp"
+      ],
+      "relevance": {
+        "promptx": null,
+        "rednote-mcp": null
+      }
+    },
+    {
+      "id": "FV-U02-en",
+      "query": "I want to turn a written dialogue into an audio file, preferably with a different voice for each speaker. Which MCP tool could help?",
+      "candidateIds": [
+        "virtual-location-google-street-view-etc"
+      ],
+      "relevance": {
+        "virtual-location-google-street-view-etc": null
+      }
+    },
+    {
+      "id": "FV-U02-zh",
+      "query": "我想把一段对话稿做成音频文件，最好每个角色用不同的声音。有什么 MCP 工具能帮忙？",
+      "candidateIds": [
+        "promptx"
+      ],
+      "relevance": {
+        "promptx": null
+      }
+    },
+    {
+      "id": "FV-U03-en",
+      "query": "Is there a dedicated Strava MCP server here that lists my recent rides and reads their GPS tracks? I need built-in tools, without browser automation, shell commands or a generic API adapter.",
+      "candidateIds": [
+        "devrev",
+        "openai-websearch-mcp",
+        "redis",
+        "mcp-installer",
+        "everything"
+      ],
+      "relevance": {
+        "devrev": null,
+        "openai-websearch-mcp": null,
+        "redis": null,
+        "mcp-installer": null,
+        "everything": null
+      }
+    },
+    {
+      "id": "FV-U03-zh",
+      "query": "这个目录里有专门对接 Strava 的 MCP 服务，能列出我最近的骑行记录并读取 GPS 轨迹吗？需要现成工具，不用浏览器自动化、命令行或通用 API 适配器。",
+      "candidateIds": [],
+      "relevance": {}
+    }
+  ],
+  "documents": [
+    {
+      "id": "devrev",
+      "name": "DevRev",
+      "description": "An MCP server to integrate with DevRev APIs to search through your DevRev Knowledge Graph where objects can be imported from diff. sources listed [here](https://devrev.ai/docs/import#available-sources).",
+      "source": "https://github.com/kpsunil97/devrev-mcp-server"
+    },
+    {
+      "id": "ergo-blockchain-mcp",
+      "name": "Ergo Blockchain Explorer",
+      "description": "-An MCP server to integrate Ergo Blockchain Node and Explorer APIs for checking address balances, analyzing transactions, viewing transaction history, performing forensic analysis of addresses, searching for tokens, and monitoring network status.",
+      "source": "https://github.com/marctheshark3/ergo-mcp"
+    },
+    {
+      "id": "everything",
+      "name": "Everything",
+      "description": "This MCP server exercises all the features of the MCP protocol. It is a test server for builders of MCP clients.",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "fastn-ai-unified-api-mcp-server",
+      "name": "Fastn API Server",
+      "description": "A remote, dynamic MCP server with a unified API that connects to 1,000+ tools, actions, and workflows, featuring built-in authentication and monitoring.",
+      "source": "https://github.com/fastnai/mcp-fastn"
+    },
+    {
+      "id": "figma",
+      "name": "Figma",
+      "description": "Give your coding agent direct access to Figma file data, helping it one-shot design implementation.",
+      "source": "https://github.com/GLips/Figma-Context-MCP"
+    },
+    {
+      "id": "home-assistant",
+      "name": "Hass",
+      "description": "Docker-ready MCP server for Home Assistant with entity management, domain summaries, automation support, and guided conversations. Includes pre-built container images for easy installation.",
+      "source": "https://github.com/voska/hass-mcp"
+    },
+    {
+      "id": "mcp-installer",
+      "name": "Installer",
+      "description": "This server is a server that installs other MCP servers for you.",
+      "source": "https://github.com/anaisbetts/mcp-installer"
+    },
+    {
+      "id": "mem0-mcp",
+      "name": "Mem0 Server",
+      "description": "A Model Context Protocol server for Mem0, which helps with managing coding preferences.",
+      "source": "https://github.com/mem0ai/mem0-mcp"
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "description": "This MCP server provides tools and resources for AI assistants to manage n8n workflows and executions, including listing, creating, updating, and deleting workflows, as well as monitoring their execution status.",
+      "source": "https://github.com/leonardsellem/n8n-mcp-server"
+    },
+    {
+      "id": "openai-websearch-mcp",
+      "name": "OpenAI WebSearch",
+      "description": "This is a Python-based MCP server that provides OpenAI `web_search` build-in tool.",
+      "source": "https://github.com/ConechoAI/openai-websearch-mcp"
+    },
+    {
+      "id": "postman",
+      "name": "Postman",
+      "description": "MCP server for running Postman Collections locally via Newman. Allows for simple execution of Postman Server and returns the results of whether the collection passed all the tests.",
+      "source": "https://github.com/shannonlal/mcp-postman"
+    },
+    {
+      "id": "prometheus",
+      "name": "Prometheus",
+      "description": "Query and analyze Prometheus - open-source monitoring system.",
+      "source": "https://github.com/pab1it0/prometheus-mcp-server"
+    },
+    {
+      "id": "promptx",
+      "name": "PromptX",
+      "description": "AI 应用原生的专业能力增强 Prompt 管理 MCP，通过一行命令为 Claude Desktop、Cursor 等 AI 客户端提供专业角色、长期记忆和知识体系。",
+      "source": "https://github.com/Deepractice/PromptX"
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "description": "MCP server to interact with Redis Server, AWS Memory DB, etc for caching or other use-cases where in-memory and key-value based storage is appropriate",
+      "source": "https://github.com/prajwalnayak7/mcp-server-redis"
+    },
+    {
+      "id": "rednote-mcp",
+      "name": "RedNote MCP",
+      "description": "小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具",
+      "source": "https://github.com/ifuryst/rednote-mcp"
+    },
+    {
+      "id": "sentry",
+      "name": "Sentry",
+      "description": "Retrieving and analyzing issues from Sentry.io",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "time",
+      "name": "Time",
+      "description": "A Model Context Protocol server that provides time and timezone conversion capabilities. It automatically detects the system's timezone and offers tools for getting current time and converting between timezones.",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "unity-integration-advanced",
+      "name": "Unity Integration",
+      "description": "Advanced Unity3d Game Engine MCP which supports ,Execution of Any Editor Related Code Directly Inside of Unity, Fetch Logs, Get Editor State and Allow File Access of the Project making it much more useful in Script Editing or asset creation.",
+      "source": "https://github.com/quazaai/UnityMCPIntegration"
+    },
+    {
+      "id": "virtual-location-google-street-view-etc",
+      "name": "Virtual Traveling Bot",
+      "description": "Integrates Google Map, Google Street View, PixAI, Stability.ai, ComfyUI API and Bluesky to provide a virtual location simulation in LLM (written in Effect.ts)",
+      "source": "https://github.com/mfukushim/map-traveler-mcp"
+    }
+  ]
+}
