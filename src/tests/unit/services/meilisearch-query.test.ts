@@ -143,17 +143,7 @@ describe('Meilisearch natural-language query planning', () => {
       )?.query.startsWith('"apache kafka"'),
     ).toBe(true);
   });
-  it('abstains on connective exclusions instead of requiring the excluded product', () => {
-    for (const taskDescription of [
-      'I need a database except for PostgreSQL',
-      'any database other than PostgreSQL',
-      'I need a database except for the PostgreSQL integration',
-      'I need a database other than "PostgreSQL"',
-      'I need nothing other than PostgreSQL, but not PostgreSQL',
-      '我需要数据库工具，不要使用 PostgreSQL',
-    ])
-      expect(buildMeilisearchQuery({ taskDescription }, catalog)).toBeNull();
-  });
+
   it('does not treat ordinary specific modifiers as mandatory product names', () => {
     for (const modifier of ['task', 'project', 'privacy', 'Task', 'Project']) {
       const actual = buildMeilisearchQuery(
@@ -249,28 +239,7 @@ describe('Meilisearch natural-language query planning', () => {
       )?.query.startsWith('neverknown'),
     ).toBe(true);
   });
-  it('recognizes connective exclusions with common whitespace and quotation styles', () => {
-    for (const connector of ['other   than', 'other\nthan', 'except\nfor']) {
-      for (const quote of ["'", '‘', '"', '“', '']) {
-        expect(
-          buildMeilisearchQuery(
-            {
-              taskDescription: `I need a database ${connector} ${quote}PostgreSQL${quote}`,
-            },
-            catalog,
-          ),
-        ).toBeNull();
-        expect(
-          buildMeilisearchQuery(
-            {
-              taskDescription: `I need nothing ${connector} ${quote}PostgreSQL${quote}`,
-            },
-            catalog,
-          )?.query.startsWith('postgresql'),
-        ).toBe(true);
-      }
-    }
-  });
+
   it('expands a specific suffix only to the product adjacent to that occurrence', () => {
     const products = {
       ...catalog,

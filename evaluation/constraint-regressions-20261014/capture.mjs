@@ -1,9 +1,10 @@
-// Run from the candidate checkout after building both checkouts. Local engine only.
+// Rebuild both checkouts and bind source/build snapshots. Local engine only.
 // Args: baseline checkout, candidate checkout, frozen suite, NEW output file.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL, URL } from 'node:url';
@@ -31,6 +32,61 @@ const request = async (method, route, body) => {
   return result.json();
 };
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const sourceSnapshot = async root => {
+  const git = (...args) =>
+    execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+  const paths = git(
+    'ls-files',
+    '--cached',
+    '--others',
+    '--exclude-standard',
+    '-z',
+    'src',
+    'tsconfig.json',
+    'package.json',
+    'pnpm-lock.yaml',
+  )
+    .split('\0')
+    .filter(Boolean)
+    .sort();
+  return {
+    commit: git('rev-parse', 'HEAD'),
+    worktreeStatus: git('status', '--porcelain=v1', '--untracked-files=all'),
+    trackedDiffSha256: hash(git('diff', 'HEAD')),
+    files: Object.fromEntries(
+      await Promise.all(
+        paths.map(async file => [
+          file,
+          hash(await readFile(path.join(root, file))),
+        ]),
+      ),
+    ),
+  };
+};
+const buildSnapshot = async root => {
+  const walk = async relative => {
+    const files = [];
+    for (const item of await readdir(path.join(root, relative), {
+      withFileTypes: true,
+    })) {
+      const name = path.join(relative, item.name);
+      if (item.isDirectory()) files.push(...(await walk(name)));
+      else if (item.isFile()) files.push(name);
+      else throw new Error('Build snapshot must contain regular files');
+    }
+    return files;
+  };
+  const paths = (await walk('build')).sort();
+  return Object.fromEntries(
+    await Promise.all(
+      paths.map(async file => [
+        file,
+        hash(await readFile(path.join(root, file))),
+      ]),
+    ),
+  );
+};
+const captureScriptSha256 = hash(await readFile(new URL(import.meta.url)));
 const bytes = await readFile(suitePath);
 const suite = JSON.parse(bytes);
 assert.equal(
@@ -50,6 +106,9 @@ const catalog = Object.fromEntries(
 const result = {
   label: 'illustrative',
   generatedAt: new Date().toISOString(),
+  validationStatus:
+    'Observed-suite replay of the safety subset after rejection of the initial blind candidate; not fresh independent validation',
+  captureScriptSha256,
   command:
     'MEILI_FULLTEXT_TEST_HOST=http://127.0.0.1:17714 node evaluation/constraint-regressions-20261014/capture.mjs BASELINE_CHECKOUT CANDIDATE_CHECKOUT evaluation/constraint-regressions-20261014/blind-suite.json NEW_OUTPUT',
   suiteSha256: hash(bytes),
@@ -77,10 +136,23 @@ for (const [name, root] of [
   if (name === 'candidate')
     assert.equal(
       plannerHash,
-      'bd9d12389364720bdf502f2d6633dbac907995f14eb989aea8314999541177bc',
+      '5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef',
     );
   if (name === 'baseline')
     assert.equal(git('rev-parse', 'HEAD'), suite.baselineCommit);
+  const sourceBefore = await sourceSnapshot(root);
+  const require = createRequire(pathToFileURL(path.join(root, 'package.json')));
+  const compilerVersion = require('typescript/package.json').version;
+  execFileSync(process.execPath, [require.resolve('typescript/bin/tsc')], {
+    cwd: root,
+    stdio: 'pipe',
+  });
+  assert.deepEqual(
+    await sourceSnapshot(root),
+    sourceBefore,
+    'Source changed while building',
+  );
+  const buildBefore = await buildSnapshot(root);
   const load = async file =>
     import(pathToFileURL(path.join(root, `build/${file}.js`)).href);
   const { MeilisearchSearchProvider } = await load(
@@ -128,10 +200,11 @@ for (const [name, root] of [
     });
     const rows = [];
     const compact = values =>
-      values.map(({ id, title, similarity, source }) => ({
+      values.map(({ id, title, similarity, score, source }) => ({
         id,
         title,
         similarity,
+        ...(score === undefined ? {} : { score }),
         ...(source ? { source } : {}),
       }));
     for (const task of suite.cases) {
@@ -147,22 +220,18 @@ for (const [name, root] of [
       });
     }
     result.runs[name] = {
-      buildFilesSha256: Object.fromEntries(
-        await Promise.all(
-          [
-            'services/core/search/meilisearchQuery',
-            'services/core/search/MeilisearchSearchProvider',
-            'services/providers/meilisearch/localController',
-            'services/searchService',
-          ].map(async file => [
-            file,
-            hash(await readFile(path.join(root, `build/${file}.js`))),
-          ]),
-        ),
-      ),
-      sourceCommit: git('rev-parse', 'HEAD'),
-      dirty: !!git('status', '--porcelain=v1', '--untracked-files=all'),
-      trackedDiffSha256: hash(git('diff', 'HEAD')),
+      freshBuild: {
+        command: 'node node_modules/typescript/bin/tsc',
+        compilerVersion,
+      },
+      sourceSnapshot: sourceBefore,
+      sourceSnapshotSha256: hash(JSON.stringify(sourceBefore)),
+      buildFilesSha256: buildBefore,
+      buildSnapshotSha256: hash(JSON.stringify(buildBefore)),
+      sourceCommit: sourceBefore.commit,
+      dirty: !!sourceBefore.worktreeStatus,
+      worktreeStatus: sourceBefore.worktreeStatus,
+      trackedDiffSha256: sourceBefore.trackedDiffSha256,
       plannerSha256: plannerHash,
       provider: 'MeilisearchSearchProvider + LocalMeilisearchController',
       settings: await request('GET', `/indexes/${indexName}/settings`),
@@ -173,10 +242,25 @@ for (const [name, root] of [
       result.runs[name].stats.numberOfDocuments,
       Object.keys(catalog).length,
     );
+    assert.deepEqual(
+      await sourceSnapshot(root),
+      sourceBefore,
+      'Source changed during capture',
+    );
+    assert.deepEqual(
+      await buildSnapshot(root),
+      buildBefore,
+      'Build changed during capture',
+    );
   } finally {
     await waitTask(await request('DELETE', `/indexes/${indexName}`));
   }
 }
+assert.equal(
+  hash(await readFile(new URL(import.meta.url))),
+  captureScriptSha256,
+  'Capture runner changed during execution',
+);
 await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`, {
   flag: 'wx',
 });

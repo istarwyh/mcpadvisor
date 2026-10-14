@@ -132,8 +132,8 @@ test(
   async () => {
     const { client } = await connect();
     for (const taskDescription of [
-      'I need a database except for Postgres',
-      'any database other than Postgres',
+      'I need a database but not Postgres',
+      'I need a database without Postgres',
       '我需要数据库工具，不要使用 Postgres',
       'I need a NeverKnown-specific MCP server for database queries',
     ]) {

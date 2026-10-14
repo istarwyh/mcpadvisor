@@ -9,7 +9,7 @@ interface CatalogRecord {
 
 // Linguistic glue and catalog boilerplate should not consume Meili's query budget.
 const STOP_WORDS = new Set(
-  `a an and are as at be been before but by can could do does for from get give has have how i if in into is it its me my need of on or our please should so that the their them then there these they this to us use want we what when where which with would you your will except other than exclude excluding rather instead only first needs keeps gets nearly actual not no without mcp agent agents server servers service services tool tools integration integrations assistant assistants specific find looking help add connect 我 我们 你 您 的 了 在 是 有 和 与 或 要 想 需要 希望 可以 能 让 帮 帮我 请 一个 一种 什么 哪个 哪种 如何 支持 提供 服务 工具 集成 助手`.split(
+  `a an and are as at be been before but by can could do does for from get give has have how i if in into is it its me my need of on or our please should so that the their them then there these they this to us use want we what when where which with would you your will only first needs keeps gets nearly actual not no without mcp agent agents server servers service services tool tools integration integrations assistant assistants specific find looking help add connect 我 我们 你 您 的 了 在 是 有 和 与 或 要 想 需要 希望 可以 能 让 帮 帮我 请 一个 一种 什么 哪个 哪种 如何 支持 提供 服务 工具 集成 助手`.split(
     /\s+/,
   ),
 );
@@ -143,22 +143,13 @@ export function buildMeilisearchQuery(
   // This lexical provider abstains; the other providers still see the full task.
   for (const name of names) {
     const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const exclusions = new RegExp(
-      `(?:\\b(?:not|no|exclude|excluding|except(?:\\s+for)?|other\\s+than|rather\\s+than|instead\\s+of|without)\\s+(?:(?:use|using|the)\\s+)*["“'‘]?|(?:不想使用|不想用|不希望使用|不要使用|不要|不用|不使用|排除|不考虑)\\s*["“'‘]?)${escaped}(?=$|[^\\p{Script=Latin}\\p{N}])`,
-      'giu',
-    );
-    for (const match of description.matchAll(exclusions)) {
-      // "Nothing other than X" and "no database except for X" require X.
-      // Limit the exception to this occurrence so a later exclusion still wins.
-      if (
-        /^(?:other\s+than|except(?:\s+for)?)\b/iu.test(match[0]) &&
-        /\b(?:nothing|none|no(?:\s+[a-z]+){0,2})\s+$/iu.test(
-          description.slice(0, match.index),
-        )
-      )
-        continue;
+    if (
+      new RegExp(
+        `(?:\\b(?:not|no|exclude|excluding|except|rather than|instead of|without)\\s+(?:(?:use|using|the)\\s+)*|(?:不想使用|不想用|不希望使用|不要使用|不要|不用|不使用|排除|不考虑)\\s*)${escaped}(?=$|[^\\p{Script=Latin}\\p{N}])`,
+        'iu',
+      ).test(description)
+    )
       return null;
-    }
   }
   // Preserve distinctive unknown product spellings next to an integration noun.
   // Capitalization alone is not enough: sentence-initial adjectives are not names.
