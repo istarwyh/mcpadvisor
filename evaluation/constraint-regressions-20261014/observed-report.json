@@ -1,0 +1,1246 @@
+{
+  "reportId": "mcpadvisor-constraints-observed-report-20261014",
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-10-14T20:38:06.714984+00:00",
+  "validationType": "Observed-suite regression replay, not a new blind test. The 16 cases were already revealed before this revision. The initial rejected candidate report remains separate and unchanged.",
+  "scope": "Published generic-specific handling and capture provenance subset. English exclusion-word expansion was withdrawn. This report does not certify full natural-language constraint handling.",
+  "provenance": {
+    "rawArtifactName": "observed-capture.json",
+    "rawSha256": "2222194556b7c9434150af03379c40da7e3ef35e1fc765ccce770832290f1977",
+    "suiteArtifactName": "blind-suite.json",
+    "suiteSha256": "38aebde39de98272aa67215811b00afb8b794204cb944d42ac6bade47e09e81a",
+    "logArtifactName": "observed-runtime.txt",
+    "logSha256": "f968860070d618c8bb70e8e94d763106b6eb1372dc86824ff461813806824225",
+    "captureGeneratedAt": "2026-10-14T20:34:18.421Z",
+    "captureScriptSha256": "74dfe6a22ce0a0f9d06168067063e1472b1c634f9db94140886fbac0e132319e",
+    "captureValidationStatus": "Observed-suite replay of the safety subset after rejection of the initial blind candidate; not fresh independent validation",
+    "catalogSha256": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "catalogCount": 212,
+    "meilisearchVersion": {
+      "commitSha": "unknown",
+      "commitDate": "unknown",
+      "pkgVersion": "1.15.2"
+    },
+    "runs": {
+      "baseline": {
+        "sourceCommit": "d5ec5356d509617baaffbda8eaf77d077963dca7",
+        "dirty": true,
+        "worktreeStatus": "?? node_modules",
+        "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "plannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+        "freshBuild": {
+          "command": "node node_modules/typescript/bin/tsc",
+          "compilerVersion": "5.8.3"
+        },
+        "sourceSnapshotSha256": "da0325580e412890236bb5f062c7517681d1b9d53234c97792ca0e2b22c9749f",
+        "buildSnapshotSha256": "b2314f3dde3d679c137f9715cb97c0d0d16b0759d08d745fb290f66dd1f3b5a7"
+      },
+      "candidate": {
+        "sourceCommit": "2041c53be0a29c93f939530f35b8f75a482ac68c",
+        "dirty": false,
+        "worktreeStatus": "",
+        "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "plannerSha256": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef",
+        "freshBuild": {
+          "command": "node node_modules/typescript/bin/tsc",
+          "compilerVersion": "5.8.3"
+        },
+        "sourceSnapshotSha256": "bf8b0a8a4b5276f6da43b3e16e42f3eb84f9c7fd01f1bd8b4c7275eb2b670b4d",
+        "buildSnapshotSha256": "c4e6aa0890a750a52b2de696e364f0b4da1b315c95364400d0762cde8f6d0fb1"
+      }
+    },
+    "checked": {
+      "suiteHashMatchesOriginalFreeze": true,
+      "all16QueriesMatchOriginalSuite": true,
+      "candidateCommitMatchesPublishedSource": true,
+      "sameMeiliSettingsAcrossRuns": true,
+      "indexDocumentsPerRun": {
+        "baseline": 212,
+        "candidate": 212
+      }
+    },
+    "embeddingProviderCounts": {
+      "baseline": {
+        "SimpleEmbeddingProvider": 16
+      },
+      "candidate": {
+        "SimpleEmbeddingProvider": 16
+      }
+    },
+    "normalizedLogSha256": "9cf5e9221f8e879d3ced56fcda440515c2ad82a6e660eb7d735bfce1c425ab1e",
+    "logPathNote": "Checkout paths are normalized for portability; logSha256 refers to original runtime bytes and normalizedLogSha256 to the delivered file."
+  },
+  "scoring": {
+    "topK": 5,
+    "positive": "A listed required product must appear in top 5; empty output fails.",
+    "exclusion": "Check all captured returned results, not only top 5.",
+    "genericPair": "Variant relevant@5 must not decrease relative to its own same-run, same-layer control. Compare against baseline separately.",
+    "unknownSpecific": "Require empty results; unrelated offline output fails.",
+    "exploratory": "bc13 is excluded from the 15-case non-exploratory denominator.",
+    "internalCriterionLimit": "Raw capture has no typed internal product-classification trace. Case verdicts score observable retrieval requirements; mustNotInferProducts is supported only indirectly by prepared queries and pair behavior.",
+    "independentReview": "Scoring is independently computed from the supplied capture. No planner or suite modifications were made; this reviewer did not rerun Meilisearch."
+  },
+  "summary": {
+    "provider": {
+      "nonExploratory": {
+        "total": 15,
+        "baselinePassed": 11,
+        "candidatePassed": 12,
+        "candidateFailureIds": [
+          "bc01",
+          "bc02",
+          "bc06"
+        ],
+        "improvedCaseVerdicts": [
+          "bc08"
+        ],
+        "regressedCaseVerdicts": []
+      },
+      "core": {
+        "total": 10,
+        "baselinePassed": 7,
+        "candidatePassed": 8,
+        "candidateFailureIds": [
+          "bc01",
+          "bc02"
+        ]
+      },
+      "preservationSmoke": {
+        "total": 5,
+        "baselinePassed": 4,
+        "candidatePassed": 4,
+        "candidateFailureIds": [
+          "bc06"
+        ]
+      },
+      "exploratory": {
+        "total": 1,
+        "baselinePassed": 1,
+        "candidatePassed": 1,
+        "candidateFailureIds": []
+      }
+    },
+    "isolated": {
+      "nonExploratory": {
+        "total": 15,
+        "baselinePassed": 9,
+        "candidatePassed": 10,
+        "candidateFailureIds": [
+          "bc01",
+          "bc02",
+          "bc03",
+          "bc04",
+          "bc06"
+        ],
+        "improvedCaseVerdicts": [
+          "bc08"
+        ],
+        "regressedCaseVerdicts": []
+      },
+      "core": {
+        "total": 10,
+        "baselinePassed": 5,
+        "candidatePassed": 6,
+        "candidateFailureIds": [
+          "bc01",
+          "bc02",
+          "bc03",
+          "bc04"
+        ]
+      },
+      "preservationSmoke": {
+        "total": 5,
+        "baselinePassed": 4,
+        "candidatePassed": 4,
+        "candidateFailureIds": [
+          "bc06"
+        ]
+      },
+      "exploratory": {
+        "total": 1,
+        "baselinePassed": 1,
+        "candidatePassed": 1,
+        "candidateFailureIds": []
+      }
+    },
+    "aggregate": {
+      "nonExploratory": {
+        "total": 15,
+        "baselinePassed": 9,
+        "candidatePassed": 10,
+        "candidateFailureIds": [
+          "bc01",
+          "bc02",
+          "bc03",
+          "bc11",
+          "bc12"
+        ],
+        "improvedCaseVerdicts": [
+          "bc08"
+        ],
+        "regressedCaseVerdicts": []
+      },
+      "core": {
+        "total": 10,
+        "baselinePassed": 4,
+        "candidatePassed": 5,
+        "candidateFailureIds": [
+          "bc01",
+          "bc02",
+          "bc03",
+          "bc11",
+          "bc12"
+        ]
+      },
+      "preservationSmoke": {
+        "total": 5,
+        "baselinePassed": 5,
+        "candidatePassed": 5,
+        "candidateFailureIds": []
+      },
+      "exploratory": {
+        "total": 1,
+        "baselinePassed": 0,
+        "candidatePassed": 0,
+        "candidateFailureIds": [
+          "bc13"
+        ]
+      }
+    }
+  },
+  "verdict": {
+    "originalCompleteGatePassed": false,
+    "boundedGenericSpecificPairsPassed": true,
+    "standaloneKnownPositiveCasesPassed": true,
+    "zeroDegradationClaimSupported": false,
+    "explanation": "bc08 improves in all layers. No binary case verdict flips from pass to fail versus baseline, but bc10 loses one relevant result in isolated/aggregate. Existing exclusion and aggregation failures keep the original full gate failing."
+  },
+  "findings": [
+    {
+      "id": "bc08_generic_task_improvement",
+      "cases": [
+        "bc08"
+      ],
+      "detail": "Relevant@5 rises from 0 to 2 in provider, isolated, and aggregate; the database-schema control remains at 2 in all layers."
+    },
+    {
+      "id": "bc10_relevant_count_tradeoff",
+      "cases": [
+        "bc10"
+      ],
+      "detail": "Provider relevant@5 remains 2→2. Isolated and aggregate fall 2→1 (Atlassian disappears). The within-candidate control is 1 in those layers, so the frozen pair criterion passes. This is a real relevance-count loss; do not describe the revision as zero degradation."
+    },
+    {
+      "id": "exclusion_bugs_remain",
+      "cases": [
+        "bc01",
+        "bc02"
+      ],
+      "detail": "Both baseline and published candidate still return explicitly excluded Slack/Linear in provider, isolated, and aggregate. These are existing, unfixed failures after withdrawal of the exclusion-word expansion."
+    },
+    {
+      "id": "mixed_positive_constraints_remain",
+      "cases": [
+        "bc03",
+        "bc04",
+        "bc06"
+      ],
+      "detail": "Provider retains GitLab and Discord for bc03/bc04 as baseline did, reversing the rejected candidate’s new abstention regressions. Isolated still loses both positives; aggregate still loses GitLab in bc03. bc06 remains empty in provider/isolated and recovers Discord only via offline aggregation."
+    },
+    {
+      "id": "unknown_specific_offline_failure",
+      "cases": [
+        "bc11",
+        "bc12"
+      ],
+      "detail": "Provider and isolated abstain in both runs. Default aggregate still returns unrelated offline results in both runs, so end-to-end unknown-specific constraints fail."
+    },
+    {
+      "id": "near_spelling_exploration",
+      "cases": [
+        "bc13"
+      ],
+      "detail": "Provider/isolated abstain acceptably; aggregate drifts in both runs. Exploratory only, not a gate."
+    },
+    {
+      "id": "positive_smoke_preserved",
+      "cases": [
+        "bc14",
+        "bc15",
+        "bc16"
+      ],
+      "detail": "All three standalone known-product positive cases retain their target across all three layers in both versions; this does not establish overall precision."
+    }
+  ],
+  "limitations": [
+    "All 32 rows use SimpleEmbeddingProvider; other embeddings, other online providers, and optional professional reranking were not exercised.",
+    "Logs again show two 212-entry offline loads and text search over 424 entries, while each Meili index holds 212 documents. Aggregate results describe that observed capture environment, not a verified clean single-initialization deployment.",
+    "The raw capture records fresh TypeScript 5.8.3 compilation plus source/build snapshot digests; baseline worktree status is ?? node_modules, candidate is clean. Detailed manifests remain in raw rather than duplicated here.",
+    "The capture command stored in raw is a template with checkout/output placeholders, and Meilisearch own commit/date are unknown although its package version is recorded.",
+    "These small authored probes are already seen regression cases, not fresh independent validation, production traffic, broad multilingual semantics, or a global ranking-quality benchmark."
+  ],
+  "cases": [
+    {
+      "id": "bc01",
+      "query": "Find messaging tools, except for Slack.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "mayAbstain": true
+      },
+      "provider": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: slack"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: slack"
+          ]
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: slack"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: slack"
+          ]
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: slack"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: slack"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc02",
+      "query": "Find issue tracking tools other than Linear.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "linear"
+        ],
+        "mayAbstain": true
+      },
+      "provider": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: linear"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: linear"
+          ]
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: linear"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 1,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: linear"
+          ]
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 3,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: linear"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 3,
+          "relevantAt5": null,
+          "failures": [
+            "Excluded product returned: linear"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc03",
+      "query": "Find a GitLab integration for project management, except for GitHub.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "github",
+          "github-actions"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "gitlab"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: gitlab"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: gitlab"
+          ]
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: gitlab"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: gitlab"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc04",
+      "query": "Find a Discord bot for reading messages, other than Slack.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "discord"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: discord"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: discord"
+          ]
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc05",
+      "query": "帮我找聊天消息工具，排除 Slack。",
+      "category": "chinese_exclusion",
+      "status": "preservation_smoke",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "mayAbstain": true
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 2,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 2,
+          "relevantAt5": null,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc06",
+      "query": "找 Discord 的消息读取工具，不要 Slack。",
+      "category": "chinese_exclusion",
+      "status": "preservation_smoke",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "discord"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: discord"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: discord"
+          ]
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: discord"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "No required positive in top 5: discord"
+          ]
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc07",
+      "query": "Find tools for database schema inspection.",
+      "category": "generic_specific_control",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "mysql",
+          "postgresql"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "mysql",
+          "postgresql"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 2,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 2,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 2,
+          "relevantAt5": 2,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 2,
+          "relevantAt5": 2,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 2,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 2,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc08",
+      "query": "Find task-specific tools for database schema inspection.",
+      "category": "generic_specific_variant",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "mysql",
+          "postgresql"
+        ],
+        "relevantAt5NotLessThanControl": true,
+        "mustPreserveControlNonemptyRelevance": true,
+        "mustNotInferProducts": [
+          "task"
+        ]
+      },
+      "pairedControl": "bc07",
+      "provider": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 3,
+          "relevantAt5": 0,
+          "failures": [
+            "Relevant@5 below same-run control: 0 < 2",
+            "Lost all relevance despite a nonempty relevant control"
+          ],
+          "controlRelevantAt5": 2
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 2
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 0,
+          "relevantAt5": 0,
+          "failures": [
+            "Relevant@5 below same-run control: 0 < 2",
+            "Lost all relevance despite a nonempty relevant control"
+          ],
+          "controlRelevantAt5": 2
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 2,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 2
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": 0,
+          "failures": [
+            "Relevant@5 below same-run control: 0 < 2",
+            "Lost all relevance despite a nonempty relevant control"
+          ],
+          "controlRelevantAt5": 2
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 2
+        }
+      }
+    },
+    {
+      "id": "bc09",
+      "query": "Find tools for issue tracking.",
+      "category": "generic_specific_control",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "linear",
+          "atlassian"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "linear",
+          "atlassian"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 2,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 2,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc10",
+      "query": "Find project-specific tools for issue tracking.",
+      "category": "generic_specific_variant",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "linear",
+          "atlassian"
+        ],
+        "relevantAt5NotLessThanControl": true,
+        "mustPreserveControlNonemptyRelevance": true,
+        "mustNotInferProducts": [
+          "project"
+        ]
+      },
+      "pairedControl": "bc09",
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 9,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 2
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 2
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 2,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 1
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": [],
+          "controlRelevantAt5": 1
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 2,
+          "failures": [],
+          "controlRelevantAt5": 1
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": [],
+          "controlRelevantAt5": 1
+        }
+      }
+    },
+    {
+      "id": "bc11",
+      "query": "Find Nebulora-specific tools for document search.",
+      "category": "unknown_specific",
+      "status": "core",
+      "expected": {
+        "mustAbstain": true,
+        "unknownProduct": "Nebulora"
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": null,
+          "failures": [
+            "Unknown-specific request returned 5 unrelated results instead of abstaining"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": null,
+          "failures": [
+            "Unknown-specific request returned 5 unrelated results instead of abstaining"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc12",
+      "query": "需要 Quorvix-specific 文档搜索工具。",
+      "category": "unknown_specific",
+      "status": "core",
+      "expected": {
+        "mustAbstain": true,
+        "unknownProduct": "Quorvix"
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 2,
+          "relevantAt5": null,
+          "failures": [
+            "Unknown-specific request returned 2 unrelated results instead of abstaining"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 2,
+          "relevantAt5": null,
+          "failures": [
+            "Unknown-specific request returned 2 unrelated results instead of abstaining"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc13",
+      "query": "Find Slak-specific tools for channel messaging.",
+      "category": "near_spelling_specific",
+      "status": "exploratory",
+      "expected": {
+        "allowedOutcomes": [
+          "abstain",
+          "slack-only"
+        ],
+        "unrelatedProductIdsAreDrift": true
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 0,
+          "relevantAt5": null,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": null,
+          "failures": [
+            "Exploratory near-spelling drift: 5 unrelated results"
+          ]
+        },
+        "candidate": {
+          "pass": false,
+          "resultCount": 5,
+          "relevantAt5": null,
+          "failures": [
+            "Exploratory near-spelling drift: 5 unrelated results"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc14",
+      "query": "Find Notion-specific tools to search pages.",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "expected": {
+        "requiredAnyProductIdsAt5": [
+          "notion"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc15",
+      "query": "Find Linear-specific issue tracking tools.",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "expected": {
+        "requiredAnyProductIdsAt5": [
+          "linear"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 5,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "bc16",
+      "query": "查找 Slack 聊天消息工具。",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "expected": {
+        "requiredAnyProductIdsAt5": [
+          "slack"
+        ]
+      },
+      "provider": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 1,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 1,
+          "failures": []
+        },
+        "candidate": {
+          "pass": true,
+          "resultCount": 3,
+          "relevantAt5": 1,
+          "failures": []
+        }
+      }
+    }
+  ]
+}

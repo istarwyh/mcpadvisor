@@ -1,0 +1,5771 @@
+{
+  "reportId": "mcpadvisor-constraints-blind-report-20261014",
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-10-14T20:27:11.626406+00:00",
+  "provenance": {
+    "rawPath": "initial-capture.json",
+    "rawSha256": "1cc76d2924a7ec34f3d5683edd3cde920e5b6ea8ceb4a6b7be9a03d90767f472",
+    "suitePath": "blind-suite.json",
+    "suiteSha256": "38aebde39de98272aa67215811b00afb8b794204cb944d42ac6bade47e09e81a",
+    "logPath": "initial-runtime.txt",
+    "logSha256": "f968860070d618c8bb70e8e94d763106b6eb1372dc86824ff461813806824225",
+    "rawGeneratedAt": "2026-10-14T20:23:17.019Z",
+    "rawCommand": "MEILI_FULLTEXT_TEST_HOST=http://127.0.0.1:17714 node evaluation/constraint-regressions-20261014/capture.mjs BASELINE_CHECKOUT CANDIDATE_CHECKOUT evaluation/constraint-regressions-20261014/blind-suite.json NEW_OUTPUT",
+    "rawLabel": "illustrative",
+    "rawMeilisearchVersion": {
+      "commitSha": "unknown",
+      "commitDate": "unknown",
+      "pkgVersion": "1.15.2"
+    },
+    "rawCatalogSha256": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "rawCatalogCount": 212,
+    "runs": {
+      "baseline": {
+        "buildFilesSha256": {
+          "services/core/search/meilisearchQuery": "dc7f3389fb5486273368727649c96be5b8f27cd736dfe87d073ca0e6b09679fa",
+          "services/core/search/MeilisearchSearchProvider": "bbc20f6dc10ef6065f51b2cd8a09ddfd250e7e42ab7129c9a2978d0671473f44",
+          "services/providers/meilisearch/localController": "314a9ea9f6c889ec2f2f6ce0b04e806c4c8f990a68f6ad94a8e080d050e0a942",
+          "services/searchService": "74773ec352c9db291fb85986b839ea7fd9d718d847be0dd4117c1d85ff8f0cdb"
+        },
+        "sourceCommit": "d5ec5356d509617baaffbda8eaf77d077963dca7",
+        "dirty": true,
+        "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "plannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+        "provider": "MeilisearchSearchProvider + LocalMeilisearchController",
+        "settings": {
+          "displayedAttributes": [
+            "id",
+            "catalog_id",
+            "title",
+            "description",
+            "github_url",
+            "categories",
+            "tags",
+            "installations"
+          ],
+          "searchableAttributes": [
+            "title",
+            "description",
+            "categories",
+            "tags"
+          ],
+          "filterableAttributes": [
+            "categories",
+            "tags"
+          ],
+          "sortableAttributes": [
+            "title"
+          ],
+          "rankingRules": [
+            "words",
+            "typo",
+            "proximity",
+            "attribute",
+            "sort",
+            "exactness"
+          ],
+          "stopWords": [],
+          "nonSeparatorTokens": [],
+          "separatorTokens": [],
+          "dictionary": [],
+          "synonyms": {},
+          "distinctAttribute": null,
+          "proximityPrecision": "byWord",
+          "typoTolerance": {
+            "enabled": true,
+            "minWordSizeForTypos": {
+              "oneTypo": 5,
+              "twoTypos": 9
+            },
+            "disableOnWords": [],
+            "disableOnAttributes": [],
+            "disableOnNumbers": false
+          },
+          "faceting": {
+            "maxValuesPerFacet": 100,
+            "sortFacetValuesBy": {
+              "*": "alpha"
+            }
+          },
+          "pagination": {
+            "maxTotalHits": 1000
+          },
+          "embedders": {},
+          "searchCutoffMs": null,
+          "localizedAttributes": null,
+          "facetSearch": true,
+          "prefixSearch": "indexingTime"
+        },
+        "stats": {
+          "numberOfDocuments": 212,
+          "rawDocumentDbSize": 126976,
+          "avgDocumentSize": 590,
+          "isIndexing": false,
+          "numberOfEmbeddings": 0,
+          "numberOfEmbeddedDocuments": 0,
+          "fieldDistribution": {
+            "catalog_id": 212,
+            "categories": 212,
+            "description": 212,
+            "github_url": 212,
+            "id": 212,
+            "installations": 212,
+            "tags": 212,
+            "title": 212
+          }
+        }
+      },
+      "candidate": {
+        "buildFilesSha256": {
+          "services/core/search/meilisearchQuery": "caf93b1f7beb73f0e0faa0c8fa5b95a534618cf1e802b0c1c1510dd0e8c4f427",
+          "services/core/search/MeilisearchSearchProvider": "bbc20f6dc10ef6065f51b2cd8a09ddfd250e7e42ab7129c9a2978d0671473f44",
+          "services/providers/meilisearch/localController": "314a9ea9f6c889ec2f2f6ce0b04e806c4c8f990a68f6ad94a8e080d050e0a942",
+          "services/searchService": "74773ec352c9db291fb85986b839ea7fd9d718d847be0dd4117c1d85ff8f0cdb"
+        },
+        "sourceCommit": "a45aef420527fd117d39b4d28c1adec694c7ddb9",
+        "dirty": false,
+        "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "plannerSha256": "bd9d12389364720bdf502f2d6633dbac907995f14eb989aea8314999541177bc",
+        "provider": "MeilisearchSearchProvider + LocalMeilisearchController",
+        "settings": {
+          "displayedAttributes": [
+            "id",
+            "catalog_id",
+            "title",
+            "description",
+            "github_url",
+            "categories",
+            "tags",
+            "installations"
+          ],
+          "searchableAttributes": [
+            "title",
+            "description",
+            "categories",
+            "tags"
+          ],
+          "filterableAttributes": [
+            "categories",
+            "tags"
+          ],
+          "sortableAttributes": [
+            "title"
+          ],
+          "rankingRules": [
+            "words",
+            "typo",
+            "proximity",
+            "attribute",
+            "sort",
+            "exactness"
+          ],
+          "stopWords": [],
+          "nonSeparatorTokens": [],
+          "separatorTokens": [],
+          "dictionary": [],
+          "synonyms": {},
+          "distinctAttribute": null,
+          "proximityPrecision": "byWord",
+          "typoTolerance": {
+            "enabled": true,
+            "minWordSizeForTypos": {
+              "oneTypo": 5,
+              "twoTypos": 9
+            },
+            "disableOnWords": [],
+            "disableOnAttributes": [],
+            "disableOnNumbers": false
+          },
+          "faceting": {
+            "maxValuesPerFacet": 100,
+            "sortFacetValuesBy": {
+              "*": "alpha"
+            }
+          },
+          "pagination": {
+            "maxTotalHits": 1000
+          },
+          "embedders": {},
+          "searchCutoffMs": null,
+          "localizedAttributes": null,
+          "facetSearch": true,
+          "prefixSearch": "indexingTime"
+        },
+        "stats": {
+          "numberOfDocuments": 212,
+          "rawDocumentDbSize": 147456,
+          "avgDocumentSize": 687,
+          "isIndexing": false,
+          "numberOfEmbeddings": 0,
+          "numberOfEmbeddedDocuments": 0,
+          "fieldDistribution": {
+            "catalog_id": 212,
+            "categories": 212,
+            "description": 212,
+            "github_url": 212,
+            "id": 212,
+            "installations": 212,
+            "tags": 212,
+            "title": 212
+          }
+        }
+      }
+    },
+    "integrityChecks": {
+      "suiteMatchesFrozenHash": true,
+      "captureSuiteHashMatchesActualSuite": true,
+      "candidatePlannerMatchesPreUnblindingHash": true,
+      "queriesExactlyMatchFrozenSuite": true,
+      "all16CasesPresentOncePerRun": true,
+      "sameMeiliSettingsAcrossRuns": true,
+      "bothMeiliIndicesHave212Documents": true
+    },
+    "embeddingProviderCounts": {
+      "baseline": {
+        "SimpleEmbeddingProvider": 16
+      },
+      "candidate": {
+        "SimpleEmbeddingProvider": 16
+      }
+    },
+    "limitations": [
+      "The raw command is a template containing BASELINE_CHECKOUT/CANDIDATE_CHECKOUT/NEW_OUTPUT, not the exact expanded invocation.",
+      "Baseline dirty=true with an empty tracked diff hash. The capture does not inventory untracked files, so the entire baseline workspace cannot be reconstructed from this metadata alone.",
+      "Meilisearch package version is 1.15.2, but its own commitSha and commitDate are unknown.",
+      "The capture has no typed internal product-constraint trace; mustNotInferProducts is recorded as unverified internally. Retrieval pair outcomes and prepared-query lexical evidence are still available.",
+      "This review independently scores the provided capture; it did not rerun Meilisearch or inspect the candidate implementation."
+    ],
+    "preservedRawPath": "initial-capture.json",
+    "preservedLogPath": "initial-runtime.txt",
+    "logPathNote": "Runtime log paths are normalized for portability; logSha256 refers to the original capture log.",
+    "baselineDirtyExplanation": "Only an untracked node_modules symlink; tracked diff empty and source hash matches baseline commit.",
+    "normalizedLogSha256": "9cf5e9221f8e879d3ced56fcda440515c2ad82a6e660eb7d735bfce1c425ab1e"
+  },
+  "scoringMethod": {
+    "topK": 5,
+    "forbiddenProducts": "Check every captured result, not only top five.",
+    "positives": "Require at least one frozen target in first five; an empty result always fails a positive requirement.",
+    "genericPairs": "Compare relevant-at-5 against the same run and same layer control; controls also retain their own positive requirement.",
+    "unknownSpecific": "Require no returned results; candidate prepared=null is observed intentional rejection, while baseline prepared query issued but returned no hits.",
+    "exploratory": "bc13 is reported separately and excluded from gate denominators.",
+    "summaryMeaning": "Pass counts describe all observable retrieval checks. They are not a claim that unexposed internal product-classification predicates were directly instrumented.",
+    "noCandidateModification": true,
+    "noSuiteModification": true
+  },
+  "summary": {
+    "provider": {
+      "nonExploratory": {
+        "total": 15,
+        "baseline": {
+          "passed": 11,
+          "failed": 4,
+          "passingIds": [
+            "bc03",
+            "bc04",
+            "bc05",
+            "bc07",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc06",
+            "bc08"
+          ]
+        },
+        "candidate": {
+          "passed": 12,
+          "failed": 3,
+          "passingIds": [
+            "bc01",
+            "bc02",
+            "bc05",
+            "bc07",
+            "bc08",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc03",
+            "bc04",
+            "bc06"
+          ]
+        },
+        "netPassDelta": 1,
+        "improvedIds": [
+          "bc01",
+          "bc02",
+          "bc08"
+        ],
+        "regressedIds": [
+          "bc03",
+          "bc04"
+        ]
+      },
+      "core": {
+        "total": 10,
+        "baseline": {
+          "passed": 7,
+          "failed": 3,
+          "passingIds": [
+            "bc03",
+            "bc04",
+            "bc07",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc08"
+          ]
+        },
+        "candidate": {
+          "passed": 8,
+          "failed": 2,
+          "passingIds": [
+            "bc01",
+            "bc02",
+            "bc07",
+            "bc08",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12"
+          ],
+          "failingIds": [
+            "bc03",
+            "bc04"
+          ]
+        },
+        "netPassDelta": 1,
+        "improvedIds": [
+          "bc01",
+          "bc02",
+          "bc08"
+        ],
+        "regressedIds": [
+          "bc03",
+          "bc04"
+        ]
+      },
+      "preservationSmoke": {
+        "total": 5,
+        "baseline": {
+          "passed": 4,
+          "failed": 1,
+          "passingIds": [
+            "bc05",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc06"
+          ]
+        },
+        "candidate": {
+          "passed": 4,
+          "failed": 1,
+          "passingIds": [
+            "bc05",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc06"
+          ]
+        },
+        "netPassDelta": 0,
+        "improvedIds": [],
+        "regressedIds": []
+      },
+      "exploratory": {
+        "total": 1,
+        "baseline": {
+          "passed": 1,
+          "failed": 0,
+          "passingIds": [
+            "bc13"
+          ],
+          "failingIds": []
+        },
+        "candidate": {
+          "passed": 1,
+          "failed": 0,
+          "passingIds": [
+            "bc13"
+          ],
+          "failingIds": []
+        },
+        "netPassDelta": 0,
+        "improvedIds": [],
+        "regressedIds": []
+      }
+    },
+    "isolated": {
+      "nonExploratory": {
+        "total": 15,
+        "baseline": {
+          "passed": 9,
+          "failed": 6,
+          "passingIds": [
+            "bc05",
+            "bc07",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc03",
+            "bc04",
+            "bc06",
+            "bc08"
+          ]
+        },
+        "candidate": {
+          "passed": 12,
+          "failed": 3,
+          "passingIds": [
+            "bc01",
+            "bc02",
+            "bc05",
+            "bc07",
+            "bc08",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc03",
+            "bc04",
+            "bc06"
+          ]
+        },
+        "netPassDelta": 3,
+        "improvedIds": [
+          "bc01",
+          "bc02",
+          "bc08"
+        ],
+        "regressedIds": []
+      },
+      "core": {
+        "total": 10,
+        "baseline": {
+          "passed": 5,
+          "failed": 5,
+          "passingIds": [
+            "bc07",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc03",
+            "bc04",
+            "bc08"
+          ]
+        },
+        "candidate": {
+          "passed": 8,
+          "failed": 2,
+          "passingIds": [
+            "bc01",
+            "bc02",
+            "bc07",
+            "bc08",
+            "bc09",
+            "bc10",
+            "bc11",
+            "bc12"
+          ],
+          "failingIds": [
+            "bc03",
+            "bc04"
+          ]
+        },
+        "netPassDelta": 3,
+        "improvedIds": [
+          "bc01",
+          "bc02",
+          "bc08"
+        ],
+        "regressedIds": []
+      },
+      "preservationSmoke": {
+        "total": 5,
+        "baseline": {
+          "passed": 4,
+          "failed": 1,
+          "passingIds": [
+            "bc05",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc06"
+          ]
+        },
+        "candidate": {
+          "passed": 4,
+          "failed": 1,
+          "passingIds": [
+            "bc05",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc06"
+          ]
+        },
+        "netPassDelta": 0,
+        "improvedIds": [],
+        "regressedIds": []
+      },
+      "exploratory": {
+        "total": 1,
+        "baseline": {
+          "passed": 1,
+          "failed": 0,
+          "passingIds": [
+            "bc13"
+          ],
+          "failingIds": []
+        },
+        "candidate": {
+          "passed": 1,
+          "failed": 0,
+          "passingIds": [
+            "bc13"
+          ],
+          "failingIds": []
+        },
+        "netPassDelta": 0,
+        "improvedIds": [],
+        "regressedIds": []
+      }
+    },
+    "aggregate": {
+      "nonExploratory": {
+        "total": 15,
+        "baseline": {
+          "passed": 9,
+          "failed": 6,
+          "passingIds": [
+            "bc04",
+            "bc05",
+            "bc06",
+            "bc07",
+            "bc09",
+            "bc10",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc03",
+            "bc08",
+            "bc11",
+            "bc12"
+          ]
+        },
+        "candidate": {
+          "passed": 10,
+          "failed": 5,
+          "passingIds": [
+            "bc04",
+            "bc05",
+            "bc06",
+            "bc07",
+            "bc08",
+            "bc09",
+            "bc10",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc03",
+            "bc11",
+            "bc12"
+          ]
+        },
+        "netPassDelta": 1,
+        "improvedIds": [
+          "bc08"
+        ],
+        "regressedIds": []
+      },
+      "core": {
+        "total": 10,
+        "baseline": {
+          "passed": 4,
+          "failed": 6,
+          "passingIds": [
+            "bc04",
+            "bc07",
+            "bc09",
+            "bc10"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc03",
+            "bc08",
+            "bc11",
+            "bc12"
+          ]
+        },
+        "candidate": {
+          "passed": 5,
+          "failed": 5,
+          "passingIds": [
+            "bc04",
+            "bc07",
+            "bc08",
+            "bc09",
+            "bc10"
+          ],
+          "failingIds": [
+            "bc01",
+            "bc02",
+            "bc03",
+            "bc11",
+            "bc12"
+          ]
+        },
+        "netPassDelta": 1,
+        "improvedIds": [
+          "bc08"
+        ],
+        "regressedIds": []
+      },
+      "preservationSmoke": {
+        "total": 5,
+        "baseline": {
+          "passed": 5,
+          "failed": 0,
+          "passingIds": [
+            "bc05",
+            "bc06",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": []
+        },
+        "candidate": {
+          "passed": 5,
+          "failed": 0,
+          "passingIds": [
+            "bc05",
+            "bc06",
+            "bc14",
+            "bc15",
+            "bc16"
+          ],
+          "failingIds": []
+        },
+        "netPassDelta": 0,
+        "improvedIds": [],
+        "regressedIds": []
+      },
+      "exploratory": {
+        "total": 1,
+        "baseline": {
+          "passed": 0,
+          "failed": 1,
+          "passingIds": [],
+          "failingIds": [
+            "bc13"
+          ]
+        },
+        "candidate": {
+          "passed": 0,
+          "failed": 1,
+          "passingIds": [],
+          "failingIds": [
+            "bc13"
+          ]
+        },
+        "netPassDelta": 0,
+        "improvedIds": [],
+        "regressedIds": []
+      }
+    }
+  },
+  "metrics": {
+    "exclusionSafety": {
+      "provider": {
+        "baseline": {
+          "passed": 4,
+          "total": 6
+        },
+        "candidate": {
+          "passed": 6,
+          "total": 6
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "passed": 4,
+          "total": 6
+        },
+        "candidate": {
+          "passed": 6,
+          "total": 6
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "passed": 4,
+          "total": 6
+        },
+        "candidate": {
+          "passed": 4,
+          "total": 6
+        }
+      }
+    },
+    "positiveRetentionIncludingControlsAndMixedNegation": {
+      "provider": {
+        "baseline": {
+          "passed": 7,
+          "total": 8
+        },
+        "candidate": {
+          "passed": 5,
+          "total": 8
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "passed": 5,
+          "total": 8
+        },
+        "candidate": {
+          "passed": 5,
+          "total": 8
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "passed": 7,
+          "total": 8
+        },
+        "candidate": {
+          "passed": 7,
+          "total": 8
+        }
+      }
+    },
+    "standaloneKnownPositive": {
+      "provider": {
+        "baseline": {
+          "passed": 3,
+          "total": 3
+        },
+        "candidate": {
+          "passed": 3,
+          "total": 3
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "passed": 3,
+          "total": 3
+        },
+        "candidate": {
+          "passed": 3,
+          "total": 3
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "passed": 3,
+          "total": 3
+        },
+        "candidate": {
+          "passed": 3,
+          "total": 3
+        }
+      }
+    },
+    "genericSpecificPairNonDegradation": {
+      "provider": {
+        "baseline": {
+          "passed": 1,
+          "total": 2
+        },
+        "candidate": {
+          "passed": 2,
+          "total": 2
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "passed": 1,
+          "total": 2
+        },
+        "candidate": {
+          "passed": 2,
+          "total": 2
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "passed": 1,
+          "total": 2
+        },
+        "candidate": {
+          "passed": 2,
+          "total": 2
+        }
+      }
+    },
+    "unknownSpecificAbstention": {
+      "provider": {
+        "baseline": {
+          "passed": 2,
+          "total": 2
+        },
+        "candidate": {
+          "passed": 2,
+          "total": 2
+        }
+      },
+      "isolated": {
+        "baseline": {
+          "passed": 2,
+          "total": 2
+        },
+        "candidate": {
+          "passed": 2,
+          "total": 2
+        }
+      },
+      "aggregate": {
+        "baseline": {
+          "passed": 0,
+          "total": 2
+        },
+        "candidate": {
+          "passed": 0,
+          "total": 2
+        }
+      }
+    }
+  },
+  "verdict": {
+    "frozenNonExploratorySuiteFullyPassed": false,
+    "providerImprovedObservablePasses": true,
+    "providerHasNewPositiveRetentionRegressions": true,
+    "defaultAggregationMeetsProductConstraints": false,
+    "recommendation": "Describe this as a bounded Meili safety/adjective improvement with explicit mixed-positive abstention regressions and unresolved offline aggregation violations. Do not claim full frozen-suite success or end-to-end constraint enforcement.",
+    "candidateCommit": "a45aef420527fd117d39b4d28c1adec694c7ddb9",
+    "gate": "NOT_PASSED",
+    "productionPromotion": "WITHDRAWN_BY_PARENT; this first candidate will not advance as a production candidate.",
+    "subsequentRevisionPolicy": "Parent plans a generic-specific plus provenance-only subset. Any later run of these already-seen 16 probes is regression replay, not a new blind test, and must use a separate capture/report rather than overwrite this first negative report."
+  },
+  "risksAndFailures": [
+    {
+      "severity": "blocking_for_claim_of_full_frozen_suite_pass",
+      "id": "mixed_positive_exclusion_provider_regression",
+      "cases": [
+        "bc03",
+        "bc04"
+      ],
+      "layers": [
+        "provider"
+      ],
+      "detail": "Candidate abstains entirely on mixed positive/negative product requests. Baseline returned gitlab/discord respectively. Both fail frozen positive-retention requirements after the change; absence of excluded results does not make these cases pass."
+    },
+    {
+      "severity": "remaining_failure",
+      "id": "mixed_chinese_positive_exclusion_abstention",
+      "cases": [
+        "bc06"
+      ],
+      "layers": [
+        "provider",
+        "isolated"
+      ],
+      "detail": "Both versions abstain on a Chinese positive Discord / negative Slack request. This is unchanged, not a new candidate regression; default aggregate recovers Discord through offline only."
+    },
+    {
+      "severity": "out_of_scope_default_aggregation_safety_failure",
+      "id": "offline_reintroduces_explicitly_excluded_products",
+      "cases": [
+        "bc01",
+        "bc02"
+      ],
+      "layers": [
+        "aggregate"
+      ],
+      "detail": "Candidate Meili and isolated service abstain, but default aggregate returns excluded slack or linear with source=offline. Baseline aggregate also violated these exclusions. The Meili-only fix does not protect default aggregation."
+    },
+    {
+      "severity": "out_of_scope_default_aggregation_safety_failure",
+      "id": "offline_defeats_unknown_specific_abstention",
+      "cases": [
+        "bc11",
+        "bc12"
+      ],
+      "layers": [
+        "aggregate"
+      ],
+      "detail": "Both versions return unrelated offline results for unknown specific-product requests. Candidate planner null and empty Meili output do not establish end-to-end abstention."
+    },
+    {
+      "severity": "exploratory_only",
+      "id": "near_spelling_offline_drift",
+      "cases": [
+        "bc13"
+      ],
+      "layers": [
+        "aggregate"
+      ],
+      "detail": "Meili and isolated service abstain acceptably in both versions. Aggregate returns unrelated offline results in both versions; this case was exploratory before unblinding."
+    },
+    {
+      "severity": "additional_observation",
+      "id": "project_specific_secondary_relevant_hit_loss",
+      "cases": [
+        "bc10"
+      ],
+      "layers": [
+        "isolated",
+        "aggregate"
+      ],
+      "detail": "The candidate still meets the frozen within-candidate pair criterion, but relevant-at-5 decreases from 2 to 1 versus baseline in isolated/aggregate because atlassian no longer appears there. Provider relevant-at-5 remains 2. This is not counted as an additional frozen gate failure."
+    },
+    {
+      "severity": "capture_environment_limit",
+      "id": "simple_embedding_only",
+      "detail": "All 32 recorded rows use SimpleEmbeddingProvider. No Transformer-based or other embedding configuration was tested."
+    },
+    {
+      "severity": "capture_environment_limit",
+      "id": "offline_duplicate_load_observed",
+      "detail": "Logs show two loads of 212 fallback entries and text search over 424 servers in each version. The Meili indices contain 212 documents. This suggests duplicate offline initialization in the capture setup or shared runtime; cause was not investigated. Aggregate outcomes describe this observed capture and should not be overgeneralized to a clean single-initialization deployment."
+    },
+    {
+      "severity": "scope_limit",
+      "id": "not_broad_quality_benchmark",
+      "detail": "Sixteen independently authored bounded probes are not production traffic, broad semantic evaluation, or proof of overall ranking quality. Positive existence checks do not measure overall precision. Optional professional reranking and other online providers were not exercised."
+    }
+  ],
+  "cases": [
+    {
+      "id": "bc01",
+      "query": "Find messaging tools, except for Slack.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "mayAbstain": true
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "slack"
+            ],
+            "top5Ids": [
+              "slack"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.901218820861678
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messaging",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "slack"
+            ],
+            "top5Ids": [
+              "slack"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.901218820861678
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messaging",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "slack",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "top5Ids": [
+              "slack",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.901218820861678
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.5249999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.49874999999999997,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messaging",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "slack",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "slack",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5249999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.5249999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.49874999999999997,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "improved",
+        "isolated": "improved",
+        "aggregate": "unchanged_fail"
+      }
+    },
+    {
+      "id": "bc02",
+      "query": "Find issue tracking tools other than Linear.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "linear"
+        ],
+        "mayAbstain": true
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "linear"
+                ],
+                "violatingIds": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.7176651305683563
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking other",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "linear"
+                ],
+                "violatingIds": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.7176651305683563
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking other",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "linear"
+                ],
+                "violatingIds": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.7176651305683563
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking other",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "linear"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "linear"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": false,
+                "forbiddenProductIds": [
+                  "linear"
+                ],
+                "violatingIds": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "linear"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.5195,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "improved",
+        "isolated": "improved",
+        "aggregate": "unchanged_fail"
+      }
+    },
+    {
+      "id": "bc03",
+      "query": "Find a GitLab integration for project management, except for GitHub.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "github",
+          "github-actions"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "gitlab"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "github",
+                  "github-actions"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "gitlab"
+                ],
+                "found": [
+                  "gitlab"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "gitlab"
+            ],
+            "top5Ids": [
+              "gitlab"
+            ],
+            "results": [
+              {
+                "id": "gitlab",
+                "title": "GitLab",
+                "similarity": 0.25
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "gitlab github project management",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "github",
+                  "github-actions"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "gitlab"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "gitlab github project management",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "github",
+                  "github-actions"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "gitlab"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "claudepost",
+              "salesforce-mcp",
+              "unity-integration-advanced"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "claudepost",
+              "salesforce-mcp",
+              "unity-integration-advanced"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "claudepost",
+                "title": "Claude Post Email Management",
+                "similarity": 0.5273333333333332,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.4847499999999999,
+                "source": "offline"
+              },
+              {
+                "id": "unity-integration-advanced",
+                "title": "Unity Integration",
+                "similarity": 0.4835833333333332,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "gitlab github project management",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "github",
+                  "github-actions"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "gitlab"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "github",
+                  "github-actions"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "gitlab"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "github",
+                  "github-actions"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "gitlab"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "claudepost",
+              "salesforce-mcp",
+              "unity-integration-advanced"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "claudepost",
+              "salesforce-mcp",
+              "unity-integration-advanced"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "claudepost",
+                "title": "Claude Post Email Management",
+                "similarity": 0.5273333333333332,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.4847499999999999,
+                "source": "offline"
+              },
+              {
+                "id": "unity-integration-advanced",
+                "title": "Unity Integration",
+                "similarity": 0.4835833333333332,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "regressed",
+        "isolated": "unchanged_fail",
+        "aggregate": "unchanged_fail"
+      }
+    },
+    {
+      "id": "bc04",
+      "query": "Find a Discord bot for reading messages, other than Slack.",
+      "category": "english_exclusion",
+      "status": "core",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "discord"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": [
+                  "discord"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "discord"
+            ],
+            "top5Ids": [
+              "discord"
+            ],
+            "results": [
+              {
+                "id": "discord",
+                "title": "Discord",
+                "similarity": 0.16666666666666666
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "discord slack other bot messages reading",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "discord slack other bot messages reading",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": [
+                  "discord"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "discord",
+              "mac-messages-mcp"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "discord",
+              "mac-messages-mcp"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.5133333333333333,
+                "source": "offline"
+              },
+              {
+                "id": "discord",
+                "title": "Discord",
+                "similarity": 0.5119333333333334,
+                "source": "offline"
+              },
+              {
+                "id": "mac-messages-mcp",
+                "title": "Mac Messages",
+                "similarity": 0.49723333333333325,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "discord slack other bot messages reading",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": [
+                  "discord"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "discord",
+              "mac-messages-mcp"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "discord",
+              "mac-messages-mcp"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.5133333333333333,
+                "source": "offline"
+              },
+              {
+                "id": "discord",
+                "title": "Discord",
+                "similarity": 0.5119333333333334,
+                "source": "offline"
+              },
+              {
+                "id": "mac-messages-mcp",
+                "title": "Mac Messages",
+                "similarity": 0.49723333333333325,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "regressed",
+        "isolated": "unchanged_fail",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc05",
+      "query": "帮我找聊天消息工具，排除 Slack。",
+      "category": "chinese_exclusion",
+      "status": "preservation_smoke",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "mayAbstain": true
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 2,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 2,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc06",
+      "query": "找 Discord 的消息读取工具，不要 Slack。",
+      "category": "chinese_exclusion",
+      "status": "preservation_smoke",
+      "expected": {
+        "forbiddenProductIds": [
+          "slack"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "discord"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": [
+                  "discord"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "discord",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "discord",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "discord",
+                "title": "Discord",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": false,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "no_forbidden_product_in_all_returned_results",
+                "passed": true,
+                "forbiddenProductIds": [
+                  "slack"
+                ],
+                "violatingIds": []
+              },
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "discord"
+                ],
+                "found": [
+                  "discord"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "discord",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "discord",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "discord",
+                "title": "Discord",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_fail",
+        "isolated": "unchanged_fail",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc07",
+      "query": "Find tools for database schema inspection.",
+      "category": "generic_specific_control",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "mysql",
+          "postgresql"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "mysql",
+          "postgresql"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "found": [
+                  "mysql",
+                  "postgresql"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "mysql",
+              "postgresql",
+              "llm-context"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql",
+              "llm-context"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              },
+              {
+                "id": "llm-context",
+                "title": "LLM Context",
+                "similarity": 0.015572390572390573
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "found": [
+                  "mysql",
+                  "postgresql"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 2,
+            "ids": [
+              "mysql",
+              "postgresql"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "found": [
+                  "mysql",
+                  "postgresql"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "mysql",
+              "postgresql",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "graphql-schema"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "graphql-schema"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "graphql-schema",
+                "title": "GraphQL Schema Model Context Protocol",
+                "similarity": 0.5249999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "found": [
+                  "mysql",
+                  "postgresql"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "mysql",
+              "postgresql",
+              "llm-context"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql",
+              "llm-context"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              },
+              {
+                "id": "llm-context",
+                "title": "LLM Context",
+                "similarity": 0.015572390572390573
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "found": [
+                  "mysql",
+                  "postgresql"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 2,
+            "ids": [
+              "mysql",
+              "postgresql"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "found": [
+                  "mysql",
+                  "postgresql"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "mysql",
+              "postgresql",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "graphql-schema"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "graphql-schema"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "graphql-schema",
+                "title": "GraphQL Schema Model Context Protocol",
+                "similarity": 0.5249999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc08",
+      "query": "Find task-specific tools for database schema inspection.",
+      "category": "generic_specific_variant",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "mysql",
+          "postgresql"
+        ],
+        "relevantAt5NotLessThanControl": true,
+        "mustPreserveControlNonemptyRelevance": true,
+        "mustNotInferProducts": [
+          "task"
+        ]
+      },
+      "pairedControl": "bc07",
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": false,
+                "controlCaseId": "bc07",
+                "variantRelevantAt5": 0,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [],
+                "controlRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": false,
+                "controlHasRelevance": true,
+                "variantHasRelevance": false
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "task",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": true,
+                "preparedQuery": "task inspection schema database",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 3,
+            "ids": [
+              "ntfy-mcp",
+              "google-tasks",
+              "todoist"
+            ],
+            "top5Ids": [
+              "ntfy-mcp",
+              "google-tasks",
+              "todoist"
+            ],
+            "results": [
+              {
+                "id": "ntfy-mcp",
+                "title": "Your Friendly Task Completion Notifier",
+                "similarity": 0.24242424242424243
+              },
+              {
+                "id": "google-tasks",
+                "title": "Google Tasks",
+                "similarity": 0.17424242424242425
+              },
+              {
+                "id": "todoist",
+                "title": "Todoist",
+                "similarity": 0.1553030303030303
+              }
+            ],
+            "relevantAt5": 0,
+            "prepared": {
+              "query": "task inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": false,
+                "controlCaseId": "bc07",
+                "variantRelevantAt5": 0,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [],
+                "controlRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": false,
+                "controlHasRelevance": true,
+                "variantHasRelevance": false
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "task",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": true,
+                "preparedQuery": "task inspection schema database",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": 0,
+            "prepared": {
+              "query": "task inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": false,
+                "controlCaseId": "bc07",
+                "variantRelevantAt5": 0,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [],
+                "controlRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": false,
+                "controlHasRelevance": true,
+                "variantHasRelevance": false
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "task",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": true,
+                "preparedQuery": "task inspection schema database",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-tasks",
+              "graphql-schema",
+              "dbhub"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-tasks",
+              "graphql-schema",
+              "dbhub"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "google-tasks",
+                "title": "Google Tasks",
+                "similarity": 0.5162499999999999,
+                "source": "offline"
+              },
+              {
+                "id": "graphql-schema",
+                "title": "GraphQL Schema Model Context Protocol",
+                "similarity": 0.5162499999999999,
+                "source": "offline"
+              },
+              {
+                "id": "dbhub",
+                "title": "DBHub - Universal Database Gateway",
+                "similarity": 0.4873749999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 0,
+            "prepared": {
+              "query": "task inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc07",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "controlRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "task",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": false,
+                "preparedQuery": "inspection schema database",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 3,
+            "ids": [
+              "mysql",
+              "postgresql",
+              "llm-context"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql",
+              "llm-context"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              },
+              {
+                "id": "llm-context",
+                "title": "LLM Context",
+                "similarity": 0.015572390572390573
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc07",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "controlRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "task",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": false,
+                "preparedQuery": "inspection schema database",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 2,
+            "ids": [
+              "mysql",
+              "postgresql"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc07",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ],
+                "controlRelevantIds": [
+                  "mysql",
+                  "postgresql"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "task",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": false,
+                "preparedQuery": "inspection schema database",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 5,
+            "ids": [
+              "mysql",
+              "postgresql",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-tasks"
+            ],
+            "top5Ids": [
+              "mysql",
+              "postgresql",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-tasks"
+            ],
+            "results": [
+              {
+                "id": "mysql",
+                "title": "MySQL Database Integration",
+                "similarity": 0.9597030209933436
+              },
+              {
+                "id": "postgresql",
+                "title": "PostgreSQL",
+                "similarity": 0.958873527905786
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "google-tasks",
+                "title": "Google Tasks",
+                "similarity": 0.5162499999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "inspection schema database",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "improved",
+        "isolated": "improved",
+        "aggregate": "improved"
+      }
+    },
+    {
+      "id": "bc09",
+      "query": "Find tools for issue tracking.",
+      "category": "generic_specific_control",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "linear",
+          "atlassian"
+        ],
+        "requiredAnyProductIdsAt5": [
+          "linear",
+          "atlassian"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "found": [
+                  "linear",
+                  "atlassian"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "linear",
+              "sentry",
+              "atlassian"
+            ],
+            "top5Ids": [
+              "linear",
+              "sentry",
+              "atlassian"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              },
+              {
+                "id": "sentry",
+                "title": "Sentry",
+                "similarity": 0.17140151515151514
+              },
+              {
+                "id": "atlassian",
+                "title": "Atlassian",
+                "similarity": 0.14867424242424243
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              }
+            ],
+            "relevantAt5": 1,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "top5Ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.50785,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.4675999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 1,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "found": [
+                  "linear",
+                  "atlassian"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "linear",
+              "sentry",
+              "atlassian"
+            ],
+            "top5Ids": [
+              "linear",
+              "sentry",
+              "atlassian"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              },
+              {
+                "id": "sentry",
+                "title": "Sentry",
+                "similarity": 0.17140151515151514
+              },
+              {
+                "id": "atlassian",
+                "title": "Atlassian",
+                "similarity": 0.14867424242424243
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              }
+            ],
+            "relevantAt5": 1,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "top5Ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.50785,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.4675999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 1,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc10",
+      "query": "Find project-specific tools for issue tracking.",
+      "category": "generic_specific_variant",
+      "status": "core",
+      "expected": {
+        "relevantProductIds": [
+          "linear",
+          "atlassian"
+        ],
+        "relevantAt5NotLessThanControl": true,
+        "mustPreserveControlNonemptyRelevance": true,
+        "mustNotInferProducts": [
+          "project"
+        ]
+      },
+      "pairedControl": "bc09",
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc09",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "controlRelevantIds": [
+                  "linear",
+                  "atlassian"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "project",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": true,
+                "preparedQuery": "project issue tracking",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 9,
+            "ids": [
+              "linear",
+              "atlassian",
+              "xcodebuild",
+              "gitlab",
+              "drupal",
+              "godot",
+              "qgis",
+              "unity-integration-advanced",
+              "reaper"
+            ],
+            "top5Ids": [
+              "linear",
+              "atlassian",
+              "xcodebuild",
+              "gitlab",
+              "drupal"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9555427547363031
+              },
+              {
+                "id": "atlassian",
+                "title": "Atlassian",
+                "similarity": 0.4616822037456958
+              },
+              {
+                "id": "xcodebuild",
+                "title": "Xcode Build",
+                "similarity": 0.2777777777777778
+              },
+              {
+                "id": "gitlab",
+                "title": "GitLab",
+                "similarity": 0.273989898989899
+              },
+              {
+                "id": "drupal",
+                "title": "Drupal Server",
+                "similarity": 0.273989898989899
+              },
+              {
+                "id": "godot",
+                "title": "Godot",
+                "similarity": 0.273989898989899
+              },
+              {
+                "id": "qgis",
+                "title": "QGIS Model Context Protocol Integration",
+                "similarity": 0.26641414141414144
+              },
+              {
+                "id": "unity-integration-advanced",
+                "title": "Unity Integration",
+                "similarity": 0.26262626262626265
+              },
+              {
+                "id": "reaper",
+                "title": "Reaper",
+                "similarity": 0.10669191919191919
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "project issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc09",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 1,
+                "variantRelevantIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "controlRelevantIds": [
+                  "linear"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "project",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": true,
+                "preparedQuery": "project issue tracking",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 2,
+            "ids": [
+              "linear",
+              "atlassian"
+            ],
+            "top5Ids": [
+              "linear",
+              "atlassian"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9555427547363031
+              },
+              {
+                "id": "atlassian",
+                "title": "Atlassian",
+                "similarity": 0.4616822037456958
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "project issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc09",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 1,
+                "variantRelevantIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "controlRelevantIds": [
+                  "linear"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "project",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": true,
+                "preparedQuery": "project issue tracking",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 5,
+            "ids": [
+              "linear",
+              "atlassian",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp"
+            ],
+            "top5Ids": [
+              "linear",
+              "atlassian",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9555427547363031
+              },
+              {
+                "id": "atlassian",
+                "title": "Atlassian",
+                "similarity": 0.4616822037456958
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.44599999999999995,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "project issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc09",
+                "variantRelevantAt5": 2,
+                "controlRelevantAt5": 2,
+                "variantRelevantIds": [
+                  "linear",
+                  "atlassian"
+                ],
+                "controlRelevantIds": [
+                  "linear",
+                  "atlassian"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "project",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": false,
+                "preparedQuery": "issue tracking",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 3,
+            "ids": [
+              "linear",
+              "sentry",
+              "atlassian"
+            ],
+            "top5Ids": [
+              "linear",
+              "sentry",
+              "atlassian"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              },
+              {
+                "id": "sentry",
+                "title": "Sentry",
+                "similarity": 0.17140151515151514
+              },
+              {
+                "id": "atlassian",
+                "title": "Atlassian",
+                "similarity": 0.14867424242424243
+              }
+            ],
+            "relevantAt5": 2,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc09",
+                "variantRelevantAt5": 1,
+                "controlRelevantAt5": 1,
+                "variantRelevantIds": [
+                  "linear"
+                ],
+                "controlRelevantIds": [
+                  "linear"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "project",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": false,
+                "preparedQuery": "issue tracking",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              }
+            ],
+            "relevantAt5": 1,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "relevant_at5_not_less_than_same_run_control",
+                "passed": true,
+                "controlCaseId": "bc09",
+                "variantRelevantAt5": 1,
+                "controlRelevantAt5": 1,
+                "variantRelevantIds": [
+                  "linear"
+                ],
+                "controlRelevantIds": [
+                  "linear"
+                ]
+              },
+              {
+                "name": "preserve_control_nonempty_relevance",
+                "passed": true,
+                "controlHasRelevance": true,
+                "variantHasRelevance": true
+              }
+            ],
+            "internalConstraintChecks": [
+              {
+                "criterion": "must_not_infer_product",
+                "term": "project",
+                "verification": "not_directly_observable_from_capture",
+                "preparedQueryContainsExactToken": false,
+                "preparedQuery": "issue tracking",
+                "note": "Pairwise retrieval is scored above. This lexical trace is diagnostic only, not proof of internal product classification."
+              }
+            ],
+            "resultCount": 5,
+            "ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "top5Ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "salesforce-mcp",
+              "ns-travel-information"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9618291761148904
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.44599999999999995,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.4427499999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": 1,
+            "prepared": {
+              "query": "issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc11",
+      "query": "Find Nebulora-specific tools for document search.",
+      "category": "unknown_specific",
+      "status": "core",
+      "expected": {
+        "mustAbstain": true,
+        "unknownProduct": "Nebulora"
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": {
+                  "query": "nebulora document search",
+                  "matchingStrategy": "last"
+                }
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "nebulora document search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": {
+                  "query": "nebulora document search",
+                  "matchingStrategy": "last"
+                }
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "nebulora document search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": false,
+                "resultCount": 5,
+                "prepared": {
+                  "query": "nebulora document search",
+                  "matchingStrategy": "last"
+                }
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "everything-search",
+              "tavily-search",
+              "langflow-doc-qa-server"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "everything-search",
+              "tavily-search",
+              "langflow-doc-qa-server"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "everything-search",
+                "title": "Everything Search",
+                "similarity": 0.5379999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "tavily-search",
+                "title": "Tavily Search",
+                "similarity": 0.5289999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "langflow-doc-qa-server",
+                "title": "Langflow Document Q&A",
+                "similarity": 0.5289999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "nebulora document search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": null
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": null
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": false,
+                "resultCount": 5,
+                "prepared": null
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "everything-search",
+              "tavily-search",
+              "langflow-doc-qa-server"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "everything-search",
+              "tavily-search",
+              "langflow-doc-qa-server"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "everything-search",
+                "title": "Everything Search",
+                "similarity": 0.5379999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "tavily-search",
+                "title": "Tavily Search",
+                "similarity": 0.5289999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "langflow-doc-qa-server",
+                "title": "Langflow Document Q&A",
+                "similarity": 0.5289999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_fail"
+      }
+    },
+    {
+      "id": "bc12",
+      "query": "需要 Quorvix-specific 文档搜索工具。",
+      "category": "unknown_specific",
+      "status": "core",
+      "expected": {
+        "mustAbstain": true,
+        "unknownProduct": "Quorvix"
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": {
+                  "query": "quorvix 搜索 documentation search",
+                  "matchingStrategy": "last"
+                }
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "quorvix 搜索 documentation search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": {
+                  "query": "quorvix 搜索 documentation search",
+                  "matchingStrategy": "last"
+                }
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "quorvix 搜索 documentation search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": false,
+                "resultCount": 2,
+                "prepared": {
+                  "query": "quorvix 搜索 documentation search",
+                  "matchingStrategy": "last"
+                }
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 2,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "quorvix 搜索 documentation search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": null
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": true,
+                "resultCount": 0,
+                "prepared": null
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "unknown_specific_has_no_results",
+                "passed": false,
+                "resultCount": 2,
+                "prepared": null
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 2,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_fail"
+      }
+    },
+    {
+      "id": "bc13",
+      "query": "Find Slak-specific tools for channel messaging.",
+      "category": "near_spelling_specific",
+      "status": "exploratory",
+      "expected": {
+        "allowedOutcomes": [
+          "abstain",
+          "slack-only"
+        ],
+        "unrelatedProductIdsAreDrift": true
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "exploratory_abstention_or_slack_only",
+                "passed": true,
+                "unrelatedIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slak channel messaging",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "exploratory_abstention_or_slack_only",
+                "passed": true,
+                "unrelatedIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slak channel messaging",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "exploratory_abstention_or_slack_only",
+                "passed": false,
+                "unrelatedIds": [
+                  "rednote-mcp",
+                  "mcp-hotnews-server",
+                  "ns-travel-information",
+                  "salesforce-mcp",
+                  "open-strategy-partners-marketing-tools"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "ns-travel-information",
+              "salesforce-mcp",
+              "open-strategy-partners-marketing-tools"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "ns-travel-information",
+              "salesforce-mcp",
+              "open-strategy-partners-marketing-tools"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.48899999999999993,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.4737499999999999,
+                "source": "offline"
+              },
+              {
+                "id": "open-strategy-partners-marketing-tools",
+                "title": "Open Strategy Partners Marketing Tools",
+                "similarity": 0.4182499999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slak channel messaging",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "exploratory_abstention_or_slack_only",
+                "passed": true,
+                "unrelatedIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "exploratory_abstention_or_slack_only",
+                "passed": true,
+                "unrelatedIds": []
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 0,
+            "ids": [],
+            "top5Ids": [],
+            "results": [],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "fail",
+            "checks": [
+              {
+                "name": "exploratory_abstention_or_slack_only",
+                "passed": false,
+                "unrelatedIds": [
+                  "rednote-mcp",
+                  "mcp-hotnews-server",
+                  "ns-travel-information",
+                  "salesforce-mcp",
+                  "open-strategy-partners-marketing-tools"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "ns-travel-information",
+              "salesforce-mcp",
+              "open-strategy-partners-marketing-tools"
+            ],
+            "top5Ids": [
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "ns-travel-information",
+              "salesforce-mcp",
+              "open-strategy-partners-marketing-tools"
+            ],
+            "results": [
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "ns-travel-information",
+                "title": "NS Travel Information",
+                "similarity": 0.48899999999999993,
+                "source": "offline"
+              },
+              {
+                "id": "salesforce-mcp",
+                "title": "Salesforce Connector",
+                "similarity": 0.4737499999999999,
+                "source": "offline"
+              },
+              {
+                "id": "open-strategy-partners-marketing-tools",
+                "title": "Open Strategy Partners Marketing Tools",
+                "similarity": 0.4182499999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": null,
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_fail"
+      }
+    },
+    {
+      "id": "bc14",
+      "query": "Find Notion-specific tools to search pages.",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "expected": {
+        "requiredAnyProductIdsAt5": [
+          "notion"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "notion"
+                ],
+                "found": [
+                  "notion"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "notion"
+            ],
+            "top5Ids": [
+              "notion"
+            ],
+            "results": [
+              {
+                "id": "notion",
+                "title": "Notion",
+                "similarity": 0.925742447516641
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "notion pages search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "notion"
+                ],
+                "found": [
+                  "notion"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "notion"
+            ],
+            "top5Ids": [
+              "notion"
+            ],
+            "results": [
+              {
+                "id": "notion",
+                "title": "Notion",
+                "similarity": 0.925742447516641
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "notion pages search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "notion"
+                ],
+                "found": [
+                  "notion"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "notion",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-custom-search",
+              "everything-search"
+            ],
+            "top5Ids": [
+              "notion",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-custom-search",
+              "everything-search"
+            ],
+            "results": [
+              {
+                "id": "notion",
+                "title": "Notion",
+                "similarity": 0.925742447516641
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "google-custom-search",
+                "title": "Google Custom Search",
+                "similarity": 0.5559999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "everything-search",
+                "title": "Everything Search",
+                "similarity": 0.5469999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "notion pages search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "notion"
+                ],
+                "found": [
+                  "notion"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "notion"
+            ],
+            "top5Ids": [
+              "notion"
+            ],
+            "results": [
+              {
+                "id": "notion",
+                "title": "Notion",
+                "similarity": 0.925742447516641
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "notion pages search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "notion"
+                ],
+                "found": [
+                  "notion"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "notion"
+            ],
+            "top5Ids": [
+              "notion"
+            ],
+            "results": [
+              {
+                "id": "notion",
+                "title": "Notion",
+                "similarity": 0.925742447516641
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "notion pages search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "notion"
+                ],
+                "found": [
+                  "notion"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "notion",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-custom-search",
+              "everything-search"
+            ],
+            "top5Ids": [
+              "notion",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "google-custom-search",
+              "everything-search"
+            ],
+            "results": [
+              {
+                "id": "notion",
+                "title": "Notion",
+                "similarity": 0.925742447516641
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "google-custom-search",
+                "title": "Google Custom Search",
+                "similarity": 0.5559999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "everything-search",
+                "title": "Everything Search",
+                "similarity": 0.5469999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "notion pages search",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc15",
+      "query": "Find Linear-specific issue tracking tools.",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "expected": {
+        "requiredAnyProductIdsAt5": [
+          "linear"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9568868407578085
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9568868407578085
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "open-strategy-partners-marketing-tools",
+              "whale-tracker-mcp"
+            ],
+            "top5Ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "open-strategy-partners-marketing-tools",
+              "whale-tracker-mcp"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9568868407578085
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "open-strategy-partners-marketing-tools",
+                "title": "Open Strategy Partners Marketing Tools",
+                "similarity": 0.40599999999999986,
+                "source": "offline"
+              },
+              {
+                "id": "whale-tracker-mcp",
+                "title": "Whale Tracker",
+                "similarity": 0.40249999999999997,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9568868407578085
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "linear"
+            ],
+            "top5Ids": [
+              "linear"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9568868407578085
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "linear"
+                ],
+                "found": [
+                  "linear"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 5,
+            "ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "open-strategy-partners-marketing-tools",
+              "whale-tracker-mcp"
+            ],
+            "top5Ids": [
+              "linear",
+              "rednote-mcp",
+              "mcp-hotnews-server",
+              "open-strategy-partners-marketing-tools",
+              "whale-tracker-mcp"
+            ],
+            "results": [
+              {
+                "id": "linear",
+                "title": "Linear",
+                "similarity": 0.9568868407578085
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "open-strategy-partners-marketing-tools",
+                "title": "Open Strategy Partners Marketing Tools",
+                "similarity": 0.40599999999999986,
+                "source": "offline"
+              },
+              {
+                "id": "whale-tracker-mcp",
+                "title": "Whale Tracker",
+                "similarity": 0.40249999999999997,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "linear issue tracking",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    },
+    {
+      "id": "bc16",
+      "query": "查找 Slack 聊天消息工具。",
+      "category": "known_positive",
+      "status": "preservation_smoke",
+      "expected": {
+        "requiredAnyProductIdsAt5": [
+          "slack"
+        ]
+      },
+      "pairedControl": null,
+      "runs": {
+        "baseline": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "slack"
+                ],
+                "found": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "slack"
+            ],
+            "top5Ids": [
+              "slack"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messages",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "slack"
+                ],
+                "found": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "slack"
+            ],
+            "top5Ids": [
+              "slack"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messages",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "slack"
+                ],
+                "found": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "slack",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "slack",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messages",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        },
+        "candidate": {
+          "provider": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "slack"
+                ],
+                "found": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "slack"
+            ],
+            "top5Ids": [
+              "slack"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messages",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "isolated": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "slack"
+                ],
+                "found": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 1,
+            "ids": [
+              "slack"
+            ],
+            "top5Ids": [
+              "slack"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messages",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          },
+          "aggregate": {
+            "observableVerdict": "pass",
+            "checks": [
+              {
+                "name": "required_positive_product_in_top5",
+                "passed": true,
+                "requiredAnyProductIds": [
+                  "slack"
+                ],
+                "found": [
+                  "slack"
+                ]
+              }
+            ],
+            "internalConstraintChecks": [],
+            "resultCount": 3,
+            "ids": [
+              "slack",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "top5Ids": [
+              "slack",
+              "rednote-mcp",
+              "mcp-hotnews-server"
+            ],
+            "results": [
+              {
+                "id": "slack",
+                "title": "Slack",
+                "similarity": 0.5
+              },
+              {
+                "id": "rednote-mcp",
+                "title": "RedNote MCP",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              },
+              {
+                "id": "mcp-hotnews-server",
+                "title": "Mcp-Hotnews-Server",
+                "similarity": 0.5599999999999999,
+                "source": "offline"
+              }
+            ],
+            "relevantAt5": null,
+            "prepared": {
+              "query": "slack messages",
+              "matchingStrategy": "last"
+            },
+            "embeddingProvider": "SimpleEmbeddingProvider"
+          }
+        }
+      },
+      "change": {
+        "provider": "unchanged_pass",
+        "isolated": "unchanged_pass",
+        "aggregate": "unchanged_pass"
+      }
+    }
+  ],
+  "reportRole": "First frozen candidate independent blind-test scoring; preserve this report and its negative findings."
+}

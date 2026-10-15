@@ -1,0 +1,1724 @@
+{
+  "label": "illustrative",
+  "generatedAt": "2026-10-14T20:23:17.019Z",
+  "command": "MEILI_FULLTEXT_TEST_HOST=http://127.0.0.1:17714 node evaluation/constraint-regressions-20261014/capture.mjs BASELINE_CHECKOUT CANDIDATE_CHECKOUT evaluation/constraint-regressions-20261014/blind-suite.json NEW_OUTPUT",
+  "suiteSha256": "38aebde39de98272aa67215811b00afb8b794204cb944d42ac6bade47e09e81a",
+  "catalogSha256": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+  "catalogCount": 212,
+  "version": {
+    "commitSha": "unknown",
+    "commitDate": "unknown",
+    "pkgVersion": "1.15.2"
+  },
+  "limitations": [
+    "Independent authored regression probes, not production traffic or human relevance labels.",
+    "Provider results are real Meilisearch; service-isolated runs use actual SearchService with offline disabled.",
+    "Default aggregation includes actual offline fallback; it is separately reported and never attributed to Meili.",
+    "Other online providers and optional professional reranking are not configured or exercised.",
+    "Embedding model may fall back through the unmodified application behavior; stderr is captured separately."
+  ],
+  "runs": {
+    "baseline": {
+      "buildFilesSha256": {
+        "services/core/search/meilisearchQuery": "dc7f3389fb5486273368727649c96be5b8f27cd736dfe87d073ca0e6b09679fa",
+        "services/core/search/MeilisearchSearchProvider": "bbc20f6dc10ef6065f51b2cd8a09ddfd250e7e42ab7129c9a2978d0671473f44",
+        "services/providers/meilisearch/localController": "314a9ea9f6c889ec2f2f6ce0b04e806c4c8f990a68f6ad94a8e080d050e0a942",
+        "services/searchService": "74773ec352c9db291fb85986b839ea7fd9d718d847be0dd4117c1d85ff8f0cdb"
+      },
+      "sourceCommit": "d5ec5356d509617baaffbda8eaf77d077963dca7",
+      "dirty": true,
+      "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "plannerSha256": "022b39b3a494f1ae18d6061fc321d5def530df3aaafdbbcecf0fe70007cad4e8",
+      "provider": "MeilisearchSearchProvider + LocalMeilisearchController",
+      "settings": {
+        "displayedAttributes": [
+          "id",
+          "catalog_id",
+          "title",
+          "description",
+          "github_url",
+          "categories",
+          "tags",
+          "installations"
+        ],
+        "searchableAttributes": [
+          "title",
+          "description",
+          "categories",
+          "tags"
+        ],
+        "filterableAttributes": [
+          "categories",
+          "tags"
+        ],
+        "sortableAttributes": [
+          "title"
+        ],
+        "rankingRules": [
+          "words",
+          "typo",
+          "proximity",
+          "attribute",
+          "sort",
+          "exactness"
+        ],
+        "stopWords": [],
+        "nonSeparatorTokens": [],
+        "separatorTokens": [],
+        "dictionary": [],
+        "synonyms": {},
+        "distinctAttribute": null,
+        "proximityPrecision": "byWord",
+        "typoTolerance": {
+          "enabled": true,
+          "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+          },
+          "disableOnWords": [],
+          "disableOnAttributes": [],
+          "disableOnNumbers": false
+        },
+        "faceting": {
+          "maxValuesPerFacet": 100,
+          "sortFacetValuesBy": {
+            "*": "alpha"
+          }
+        },
+        "pagination": {
+          "maxTotalHits": 1000
+        },
+        "embedders": {},
+        "searchCutoffMs": null,
+        "localizedAttributes": null,
+        "facetSearch": true,
+        "prefixSearch": "indexingTime"
+      },
+      "stats": {
+        "numberOfDocuments": 212,
+        "rawDocumentDbSize": 126976,
+        "avgDocumentSize": 590,
+        "isIndexing": false,
+        "numberOfEmbeddings": 0,
+        "numberOfEmbeddedDocuments": 0,
+        "fieldDistribution": {
+          "catalog_id": 212,
+          "categories": 212,
+          "description": 212,
+          "github_url": 212,
+          "id": 212,
+          "installations": 212,
+          "tags": 212,
+          "title": 212
+        }
+      },
+      "rows": [
+        {
+          "id": "bc01",
+          "query": "Find messaging tools, except for Slack.",
+          "prepared": {
+            "query": "slack messaging",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.901218820861678
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5249999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.49874999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc02",
+          "query": "Find issue tracking tools other than Linear.",
+          "prepared": {
+            "query": "linear issue tracking other",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.7176651305683563
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc03",
+          "query": "Find a GitLab integration for project management, except for GitHub.",
+          "prepared": {
+            "query": "gitlab github project management",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "gitlab",
+              "title": "GitLab",
+              "similarity": 0.25
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "claudepost",
+              "title": "Claude Post Email Management",
+              "similarity": 0.5273333333333332,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4847499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "unity-integration-advanced",
+              "title": "Unity Integration",
+              "similarity": 0.4835833333333332,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc04",
+          "query": "Find a Discord bot for reading messages, other than Slack.",
+          "prepared": {
+            "query": "discord slack other bot messages reading",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.16666666666666666
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5133333333333333,
+              "source": "offline"
+            },
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5119333333333334,
+              "source": "offline"
+            },
+            {
+              "id": "mac-messages-mcp",
+              "title": "Mac Messages",
+              "similarity": 0.49723333333333325,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc05",
+          "query": "帮我找聊天消息工具，排除 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc06",
+          "query": "找 Discord 的消息读取工具，不要 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc07",
+          "query": "Find tools for database schema inspection.",
+          "prepared": {
+            "query": "inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "llm-context",
+              "title": "LLM Context",
+              "similarity": 0.015572390572390573
+            }
+          ],
+          "isolated": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "graphql-schema",
+              "title": "GraphQL Schema Model Context Protocol",
+              "similarity": 0.5249999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc08",
+          "query": "Find task-specific tools for database schema inspection.",
+          "prepared": {
+            "query": "task inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "ntfy-mcp",
+              "title": "Your Friendly Task Completion Notifier",
+              "similarity": 0.24242424242424243
+            },
+            {
+              "id": "google-tasks",
+              "title": "Google Tasks",
+              "similarity": 0.17424242424242425
+            },
+            {
+              "id": "todoist",
+              "title": "Todoist",
+              "similarity": 0.1553030303030303
+            }
+          ],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-tasks",
+              "title": "Google Tasks",
+              "similarity": 0.5162499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "graphql-schema",
+              "title": "GraphQL Schema Model Context Protocol",
+              "similarity": 0.5162499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "dbhub",
+              "title": "DBHub - Universal Database Gateway",
+              "similarity": 0.4873749999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc09",
+          "query": "Find tools for issue tracking.",
+          "prepared": {
+            "query": "issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "sentry",
+              "title": "Sentry",
+              "similarity": 0.17140151515151514
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.14867424242424243
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.50785,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.4675999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc10",
+          "query": "Find project-specific tools for issue tracking.",
+          "prepared": {
+            "query": "project issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9555427547363031
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.4616822037456958
+            },
+            {
+              "id": "xcodebuild",
+              "title": "Xcode Build",
+              "similarity": 0.2777777777777778
+            },
+            {
+              "id": "gitlab",
+              "title": "GitLab",
+              "similarity": 0.273989898989899
+            },
+            {
+              "id": "drupal",
+              "title": "Drupal Server",
+              "similarity": 0.273989898989899
+            },
+            {
+              "id": "godot",
+              "title": "Godot",
+              "similarity": 0.273989898989899
+            },
+            {
+              "id": "qgis",
+              "title": "QGIS Model Context Protocol Integration",
+              "similarity": 0.26641414141414144
+            },
+            {
+              "id": "unity-integration-advanced",
+              "title": "Unity Integration",
+              "similarity": 0.26262626262626265
+            },
+            {
+              "id": "reaper",
+              "title": "Reaper",
+              "similarity": 0.10669191919191919
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9555427547363031
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.4616822037456958
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9555427547363031
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.4616822037456958
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.44599999999999995,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc11",
+          "query": "Find Nebulora-specific tools for document search.",
+          "prepared": {
+            "query": "nebulora document search",
+            "matchingStrategy": "last"
+          },
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5379999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "tavily-search",
+              "title": "Tavily Search",
+              "similarity": 0.5289999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "langflow-doc-qa-server",
+              "title": "Langflow Document Q&A",
+              "similarity": 0.5289999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc12",
+          "query": "需要 Quorvix-specific 文档搜索工具。",
+          "prepared": {
+            "query": "quorvix 搜索 documentation search",
+            "matchingStrategy": "last"
+          },
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc13",
+          "query": "Find Slak-specific tools for channel messaging.",
+          "prepared": {
+            "query": "slak channel messaging",
+            "matchingStrategy": "last"
+          },
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.48899999999999993,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4737499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.4182499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc14",
+          "query": "Find Notion-specific tools to search pages.",
+          "prepared": {
+            "query": "notion pages search",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            }
+          ],
+          "isolated": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-custom-search",
+              "title": "Google Custom Search",
+              "similarity": 0.5559999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5469999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc15",
+          "query": "Find Linear-specific issue tracking tools.",
+          "prepared": {
+            "query": "linear issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.40599999999999986,
+              "source": "offline"
+            },
+            {
+              "id": "whale-tracker-mcp",
+              "title": "Whale Tracker",
+              "similarity": 0.40249999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc16",
+          "query": "查找 Slack 聊天消息工具。",
+          "prepared": {
+            "query": "slack messages",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        }
+      ]
+    },
+    "candidate": {
+      "buildFilesSha256": {
+        "services/core/search/meilisearchQuery": "caf93b1f7beb73f0e0faa0c8fa5b95a534618cf1e802b0c1c1510dd0e8c4f427",
+        "services/core/search/MeilisearchSearchProvider": "bbc20f6dc10ef6065f51b2cd8a09ddfd250e7e42ab7129c9a2978d0671473f44",
+        "services/providers/meilisearch/localController": "314a9ea9f6c889ec2f2f6ce0b04e806c4c8f990a68f6ad94a8e080d050e0a942",
+        "services/searchService": "74773ec352c9db291fb85986b839ea7fd9d718d847be0dd4117c1d85ff8f0cdb"
+      },
+      "sourceCommit": "a45aef420527fd117d39b4d28c1adec694c7ddb9",
+      "dirty": false,
+      "trackedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "plannerSha256": "bd9d12389364720bdf502f2d6633dbac907995f14eb989aea8314999541177bc",
+      "provider": "MeilisearchSearchProvider + LocalMeilisearchController",
+      "settings": {
+        "displayedAttributes": [
+          "id",
+          "catalog_id",
+          "title",
+          "description",
+          "github_url",
+          "categories",
+          "tags",
+          "installations"
+        ],
+        "searchableAttributes": [
+          "title",
+          "description",
+          "categories",
+          "tags"
+        ],
+        "filterableAttributes": [
+          "categories",
+          "tags"
+        ],
+        "sortableAttributes": [
+          "title"
+        ],
+        "rankingRules": [
+          "words",
+          "typo",
+          "proximity",
+          "attribute",
+          "sort",
+          "exactness"
+        ],
+        "stopWords": [],
+        "nonSeparatorTokens": [],
+        "separatorTokens": [],
+        "dictionary": [],
+        "synonyms": {},
+        "distinctAttribute": null,
+        "proximityPrecision": "byWord",
+        "typoTolerance": {
+          "enabled": true,
+          "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+          },
+          "disableOnWords": [],
+          "disableOnAttributes": [],
+          "disableOnNumbers": false
+        },
+        "faceting": {
+          "maxValuesPerFacet": 100,
+          "sortFacetValuesBy": {
+            "*": "alpha"
+          }
+        },
+        "pagination": {
+          "maxTotalHits": 1000
+        },
+        "embedders": {},
+        "searchCutoffMs": null,
+        "localizedAttributes": null,
+        "facetSearch": true,
+        "prefixSearch": "indexingTime"
+      },
+      "stats": {
+        "numberOfDocuments": 212,
+        "rawDocumentDbSize": 147456,
+        "avgDocumentSize": 687,
+        "isIndexing": false,
+        "numberOfEmbeddings": 0,
+        "numberOfEmbeddedDocuments": 0,
+        "fieldDistribution": {
+          "catalog_id": 212,
+          "categories": 212,
+          "description": 212,
+          "github_url": 212,
+          "id": 212,
+          "installations": 212,
+          "tags": 212,
+          "title": 212
+        }
+      },
+      "rows": [
+        {
+          "id": "bc01",
+          "query": "Find messaging tools, except for Slack.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5249999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5249999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.49874999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc02",
+          "query": "Find issue tracking tools other than Linear.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.5195,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc03",
+          "query": "Find a GitLab integration for project management, except for GitHub.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "claudepost",
+              "title": "Claude Post Email Management",
+              "similarity": 0.5273333333333332,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4847499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "unity-integration-advanced",
+              "title": "Unity Integration",
+              "similarity": 0.4835833333333332,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc04",
+          "query": "Find a Discord bot for reading messages, other than Slack.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.5133333333333333,
+              "source": "offline"
+            },
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5119333333333334,
+              "source": "offline"
+            },
+            {
+              "id": "mac-messages-mcp",
+              "title": "Mac Messages",
+              "similarity": 0.49723333333333325,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc05",
+          "query": "帮我找聊天消息工具，排除 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc06",
+          "query": "找 Discord 的消息读取工具，不要 Slack。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "discord",
+              "title": "Discord",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc07",
+          "query": "Find tools for database schema inspection.",
+          "prepared": {
+            "query": "inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "llm-context",
+              "title": "LLM Context",
+              "similarity": 0.015572390572390573
+            }
+          ],
+          "isolated": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "graphql-schema",
+              "title": "GraphQL Schema Model Context Protocol",
+              "similarity": 0.5249999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc08",
+          "query": "Find task-specific tools for database schema inspection.",
+          "prepared": {
+            "query": "inspection schema database",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "llm-context",
+              "title": "LLM Context",
+              "similarity": 0.015572390572390573
+            }
+          ],
+          "isolated": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "mysql",
+              "title": "MySQL Database Integration",
+              "similarity": 0.9597030209933436
+            },
+            {
+              "id": "postgresql",
+              "title": "PostgreSQL",
+              "similarity": 0.958873527905786
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-tasks",
+              "title": "Google Tasks",
+              "similarity": 0.5162499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc09",
+          "query": "Find tools for issue tracking.",
+          "prepared": {
+            "query": "issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "sentry",
+              "title": "Sentry",
+              "similarity": 0.17140151515151514
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.14867424242424243
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.50785,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.4675999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc10",
+          "query": "Find project-specific tools for issue tracking.",
+          "prepared": {
+            "query": "issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "sentry",
+              "title": "Sentry",
+              "similarity": 0.17140151515151514
+            },
+            {
+              "id": "atlassian",
+              "title": "Atlassian",
+              "similarity": 0.14867424242424243
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9618291761148904
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.44599999999999995,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.4427499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc11",
+          "query": "Find Nebulora-specific tools for document search.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5379999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "tavily-search",
+              "title": "Tavily Search",
+              "similarity": 0.5289999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "langflow-doc-qa-server",
+              "title": "Langflow Document Q&A",
+              "similarity": 0.5289999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc12",
+          "query": "需要 Quorvix-specific 文档搜索工具。",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc13",
+          "query": "Find Slak-specific tools for channel messaging.",
+          "prepared": null,
+          "provider": [],
+          "isolated": [],
+          "aggregate": [
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "ns-travel-information",
+              "title": "NS Travel Information",
+              "similarity": 0.48899999999999993,
+              "source": "offline"
+            },
+            {
+              "id": "salesforce-mcp",
+              "title": "Salesforce Connector",
+              "similarity": 0.4737499999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.4182499999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc14",
+          "query": "Find Notion-specific tools to search pages.",
+          "prepared": {
+            "query": "notion pages search",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            }
+          ],
+          "isolated": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "notion",
+              "title": "Notion",
+              "similarity": 0.925742447516641
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "google-custom-search",
+              "title": "Google Custom Search",
+              "similarity": 0.5559999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "everything-search",
+              "title": "Everything Search",
+              "similarity": 0.5469999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc15",
+          "query": "Find Linear-specific issue tracking tools.",
+          "prepared": {
+            "query": "linear issue tracking",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            }
+          ],
+          "isolated": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "linear",
+              "title": "Linear",
+              "similarity": 0.9568868407578085
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "open-strategy-partners-marketing-tools",
+              "title": "Open Strategy Partners Marketing Tools",
+              "similarity": 0.40599999999999986,
+              "source": "offline"
+            },
+            {
+              "id": "whale-tracker-mcp",
+              "title": "Whale Tracker",
+              "similarity": 0.40249999999999997,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        },
+        {
+          "id": "bc16",
+          "query": "查找 Slack 聊天消息工具。",
+          "prepared": {
+            "query": "slack messages",
+            "matchingStrategy": "last"
+          },
+          "provider": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            }
+          ],
+          "isolated": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            }
+          ],
+          "aggregate": [
+            {
+              "id": "slack",
+              "title": "Slack",
+              "similarity": 0.5
+            },
+            {
+              "id": "rednote-mcp",
+              "title": "RedNote MCP",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            },
+            {
+              "id": "mcp-hotnews-server",
+              "title": "Mcp-Hotnews-Server",
+              "similarity": 0.5599999999999999,
+              "source": "offline"
+            }
+          ],
+          "embeddingProvider": "SimpleEmbeddingProvider"
+        }
+      ]
+    }
+  }
+}

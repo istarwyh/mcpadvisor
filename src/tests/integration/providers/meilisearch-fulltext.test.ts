@@ -2,6 +2,7 @@ import { afterAll, describe, expect, it, vi } from 'vitest';
 import { MeiliSearch, MeiliSearchApiError } from 'meilisearch';
 import { LocalMeilisearchController } from '../../../services/providers/meilisearch/localController.js';
 import { MeilisearchSearchProvider } from '../../../services/core/search/MeilisearchSearchProvider.js';
+import { SearchService } from '../../../services/searchService.js';
 import type { GetMcpApiResponse } from '../../../services/common/api/getMcpResourceFetcher.js';
 
 const host = process.env.MEILI_FULLTEXT_TEST_HOST;
@@ -147,6 +148,45 @@ describe.skipIf(!host)(
       expect(
         await provider.search({ taskDescription: '请帮我寻找独角兽传送门' }),
       ).toEqual([]);
+    });
+
+    it('preserves exclusions and ordinary specific modifiers through the service aggregation path', async () => {
+      const provider = new MeilisearchSearchProvider(
+        { fetchData: async () => catalog },
+        undefined,
+        new LocalMeilisearchController({
+          type: 'local',
+          host: host!,
+          masterKey: key,
+          indexName,
+          autoIndex: true,
+        }),
+      );
+      // Explicitly isolate Meili: the independent offline provider does not share this planner.
+      const service = new SearchService([provider], { enabled: false });
+      for (const query of [
+        'I need a database but not Postgres',
+        'I need a database without Postgres',
+        '我需要数据库工具，不要使用 Postgres',
+        'I need a NeverKnown-specific MCP server for database queries',
+        'I need a neverknown-specific MCP server for database queries',
+      ])
+        expect(await service.search({ taskDescription: query })).toEqual([]);
+      for (const query of [
+        'I need a task-specific MCP server for local files',
+        'I need a project-specific MCP server for local files',
+        'I need a privacy-specific MCP server for local files',
+      ])
+        expect((await service.search({ taskDescription: query }))[0]?.id).toBe(
+          'filesystem',
+        );
+      expect(
+        (
+          await service.search({
+            taskDescription: 'I need a Postgres-specific database tool',
+          })
+        )[0]?.id,
+      ).toBe('postgres');
     });
 
     it('does not create or write an index without explicit opt-in', async () => {

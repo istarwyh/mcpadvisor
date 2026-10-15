@@ -1,0 +1,85 @@
+{
+  "scope": "Safety-subset code at published source commit 2041c53be0a29c93f939530f35b8f75a482ac68c, tree-identical to tested local 029ea5482d4fe7eb97b420ec08982a326acda507",
+  "sourceTree": "e6fb0d633eb9a72f24e7efd200b466e75068a2ad",
+  "plannerSha256": "5348aaed138475a9af467d0859aa57b22f5a5f46f32aa622bbe46ac70d5a43ef",
+  "versions": {
+    "node": "24.19.0",
+    "pnpm": "8.15.9",
+    "typescript": "5.8.3",
+    "meilisearch": "1.15.2"
+  },
+  "checks": [
+    {
+      "command": "pnpm install --frozen-lockfile --ignore-scripts",
+      "status": "passed",
+      "note": "Locked dependencies installed; repository Husky hooks subsequently enabled and executed on both local commits."
+    },
+    {
+      "command": "pnpm run check",
+      "status": "passed",
+      "errors": 0,
+      "warnings": 161,
+      "note": "Lint plus full src Prettier check."
+    },
+    {
+      "command": "pnpm run build",
+      "status": "passed",
+      "note": "Both source snapshots rebuilt again inside the capture runner."
+    },
+    {
+      "command": "pnpm exec tsc --noEmit -p tsconfig.test.json",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm exec vitest run --maxWorkers 2 --minWorkers 1",
+      "status": "passed",
+      "passed": 252,
+      "skipped": 11,
+      "todo": 20,
+      "filesPassed": 34,
+      "filesSkipped": 3
+    },
+    {
+      "command": "node --test scripts/evaluation/*.test.mjs scripts/e2e/e2e.meilisearch.test.mjs",
+      "status": "passed",
+      "passed": 35
+    },
+    {
+      "command": "MEILI_FULLTEXT_TEST_HOST=http://127.0.0.1:17714 pnpm exec vitest run src/tests/integration/providers/meilisearch-fulltext.test.ts src/tests/integration/providers/meilisearch-evaluation.test.ts src/tests/integration/providers/meilisearch-judgment-pool.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "note": "Actual Meilisearch 1.15.2; query constraints through provider and SearchService with offline disabled, CLI ingestion/evidence tests."
+    },
+    {
+      "command": "MEILI_FULLTEXT_TEST_HOST=http://127.0.0.1:17714 node --test tests/e2e/meilisearch-mcp.test.mjs",
+      "status": "passed",
+      "passed": 4,
+      "note": "Actual ServerService and MCP stdio transport. Two-entry fixture and offline disabled, not default aggregate coverage."
+    },
+    {
+      "command": "pnpm run test:e2e",
+      "status": "blocked",
+      "observedExitCode": 0,
+      "reason": "mcp-inspector: command not found; no Inspector UI tests ran. The legacy script exits zero through cleanup after startup failure, so exit zero is not treated as success."
+    }
+  ],
+  "earlierAttempt": {
+    "command": "pnpm test",
+    "snapshot": "initial candidate before safety-subset withdrawal",
+    "passed": 252,
+    "failed": 2,
+    "skipped": 11,
+    "todo": 20,
+    "reason": "Two existing offline-search tests exceeded their 30-second timeout. Baseline isolated tests and later bounded-worker reruns passed; no production change was made to suppress these timeouts."
+  },
+  "review": {
+    "scope": "Independent source review before initial unblinding, then review of the safety subset and capture source/build binding",
+    "finalBlockingFindings": []
+  },
+  "limitations": [
+    "No real-user relevance or satisfaction claim.",
+    "The 16-case final replay reuses observed queries; it is not an unseen holdout.",
+    "Exclusion handling and default offline false positives remain open; issue13 is not closed.",
+    "Initial failed candidate is preserved, not promoted."
+  ]
+}

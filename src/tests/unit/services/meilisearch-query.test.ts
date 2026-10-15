@@ -25,6 +25,12 @@ describe('Meilisearch natural-language query planning', () => {
     expect(
       buildMeilisearchQuery({ taskDescription: '"local files"' }, catalog),
     ).toEqual({ query: '"local files"' });
+    expect(
+      buildMeilisearchQuery(
+        { taskDescription: '"task-specific local files"' },
+        catalog,
+      ),
+    ).toEqual({ query: '"task-specific local files"' });
   });
   it('finds a named product beyond ten leading words', () => {
     const result = buildMeilisearchQuery(
@@ -135,6 +141,131 @@ describe('Meilisearch natural-language query planning', () => {
         { taskDescription: '需要专门对接 Apache Kafka 的数据库工具' },
         catalog,
       )?.query.startsWith('"apache kafka"'),
+    ).toBe(true);
+  });
+
+  it('does not treat ordinary specific modifiers as mandatory product names', () => {
+    for (const modifier of ['task', 'project', 'privacy', 'Task', 'Project']) {
+      const actual = buildMeilisearchQuery(
+        {
+          taskDescription: `I need a ${modifier}-specific MCP server for local files`,
+        },
+        catalog,
+      );
+      expect(actual?.query).toBe('local files');
+    }
+    expect(
+      buildMeilisearchQuery(
+        {
+          taskDescription: 'I need a project-specific PostgreSQL database tool',
+        },
+        catalog,
+      )?.query.startsWith('postgresql'),
+    ).toBe(true);
+  });
+  it('keeps the whole recognized name before a specific suffix', () => {
+    const multiword = {
+      ...catalog,
+      kafka: { display_name: 'Apache Kafka', description: 'Stream events' },
+    };
+    expect(
+      buildMeilisearchQuery(
+        { taskDescription: 'I need an Apache Kafka-specific MCP integration' },
+        multiword,
+      )?.query.startsWith('"apache kafka"'),
+    ).toBe(true);
+    expect(
+      buildMeilisearchQuery(
+        { taskDescription: 'I need a postgresql-specific MCP server' },
+        catalog,
+      )?.query.startsWith('postgresql'),
+    ).toBe(true);
+  });
+  it('does not weaken an ambiguous unknown specific request into unrelated results', () => {
+    expect(
+      buildMeilisearchQuery(
+        { taskDescription: 'I need a neverknown-specific database tool' },
+        catalog,
+      ),
+    ).toBeNull();
+  });
+  it('does not reintroduce a generic specific modifier through corpus vocabulary', () => {
+    const withTasks = {
+      ...catalog,
+      tasks: {
+        display_name: 'Workflow',
+        description: 'Project and task management',
+      },
+    };
+    expect(
+      buildMeilisearchQuery(
+        {
+          taskDescription: 'I need a task-specific MCP server for local files',
+        },
+        withTasks,
+      )?.query,
+    ).toBe('local files');
+  });
+  it('keeps positive-only other-than phrases positive', () => {
+    for (const taskDescription of [
+      'I need nothing other than PostgreSQL',
+      'I need no database other than PostgreSQL',
+      'I need none other than PostgreSQL',
+      'I need nothing except for PostgreSQL',
+      'I need no database except for PostgreSQL',
+    ])
+      expect(
+        buildMeilisearchQuery({ taskDescription }, catalog)?.query.startsWith(
+          'postgresql',
+        ),
+      ).toBe(true);
+  });
+  it('handles short and repeated specific qualifiers without losing the real product', () => {
+    for (const taskDescription of [
+      'task-specific local files',
+      'project-specific local files',
+      'privacy-specific local files',
+    ])
+      expect(buildMeilisearchQuery({ taskDescription }, catalog)?.query).toBe(
+        'local files',
+      );
+    expect(
+      buildMeilisearchQuery(
+        {
+          taskDescription:
+            'I need a task-specific NeverKnown-specific database tool',
+        },
+        catalog,
+      )?.query.startsWith('neverknown'),
+    ).toBe(true);
+  });
+
+  it('expands a specific suffix only to the product adjacent to that occurrence', () => {
+    const products = {
+      ...catalog,
+      github: { display_name: 'GitHub', description: 'Repository API' },
+      actions: {
+        display_name: 'GitHub Actions',
+        description: 'Deployment workflows',
+      },
+    };
+    expect(
+      buildMeilisearchQuery(
+        {
+          taskDescription:
+            'I need a GitHub-specific MCP server for repositories; deployment already uses GitHub Actions',
+        },
+        products,
+      )?.query.startsWith('github '),
+    ).toBe(true);
+    expect(
+      buildMeilisearchQuery(
+        {
+          taskDescription:
+            'I need a GitHub Actions-specific MCP server for deployment',
+        },
+        products,
+      )?.query.startsWith('"github actions"'),
     ).toBe(true);
   });
 });

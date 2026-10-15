@@ -64,6 +64,9 @@ const CAPABILITY_TERMS: ReadonlyArray<readonly [string, string]> = [
 ];
 const GENERIC_NAMES = new Set([
   ...STOP_WORDS,
+  ...'task project privacy domain context language user application environment customer role workflow vendor organization industry platform framework purpose system requirement'.split(
+    ' ',
+  ),
   ...'api ai data code search web local time memory file files database knowledge information protocol context'.split(
     ' ',
   ),
@@ -81,10 +84,10 @@ function strings(value: unknown): string[] {
     ? value.filter((item): item is string => typeof item === 'string')
     : [];
 }
-function literalMention(text: string, phrase: string): boolean {
+function literalMention(text: string, phrase: string, atEnd = false): boolean {
   const escaped = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return new RegExp(
-    `(?:^|[^\\p{Script=Latin}\\p{N}])${escaped}(?=$|[^\\p{Script=Latin}\\p{N}])`,
+    `(?:^|[^\\p{Script=Latin}\\p{N}])${escaped}${atEnd ? '$' : '(?=$|[^\\p{Script=Latin}\\p{N}])'}`,
     'iu',
   ).test(text);
 }
@@ -106,7 +109,8 @@ export function buildMeilisearchQuery(
     !explicit.length &&
     !/\p{Script=Han}/u.test(raw) &&
     (/^["“][\s\S]*["”]$/u.test(raw) ||
-      (rawWords.length <= 5 &&
+      (!/-specific\b/iu.test(raw) &&
+        rawWords.length <= 5 &&
         rawWords.every(word => !STOP_WORDS.has(word.toLowerCase()))))
   )
     return { query: raw };
@@ -161,16 +165,31 @@ export function buildMeilisearchQuery(
         !STOP_WORDS.has(word.toLowerCase()) &&
         !frequency.has(word.toLowerCase()),
     );
-  // Honor explicit product-specific requests even when that product is absent.
-  // This generic syntax guard prevents relaxing "Example-specific" into any MCP.
-  const specific =
-    description.match(/\b([a-z][\w.-]*)-specific\b/iu)?.[1] ||
-    description
-      .match(/专门(?:对接|针对|连接)\s*([a-z][a-z0-9 ._-]*[a-z0-9])/iu)?.[1]
-      ?.trim();
+  // A generic modifier (task-specific, privacy-specific, etc.) is not a product.
+  // Known names are case-insensitive; unknown names need distinctive spelling.
   const named = [...names].sort(
     (a, b) => b.split(' ').length - a.split(' ').length || b.length - a.length,
   );
+  const specificWords = [
+    ...description.matchAll(/\b([a-z][\w.-]*)-specific\b/giu),
+  ];
+  const specificProducts: string[] = [];
+  for (const match of specificWords) {
+    const word = match[1];
+    const prefix = description.slice(0, match.index + word.length);
+    const recognized = named.find(name => literalMention(prefix, name, true));
+    if (recognized) specificProducts.push(recognized);
+    else if (GENERIC_NAMES.has(word.toLowerCase())) continue;
+    else if (/[a-z][A-Z]|[0-9_]|^[A-Z]{2,}$/.test(word))
+      specificProducts.push(word);
+    // Do not weaken an ambiguous unknown qualifier into unrelated results.
+    else return null;
+  }
+  const specific =
+    specificProducts[0] ||
+    description
+      .match(/专门(?:对接|针对|连接)\s*([a-z][a-z0-9 ._-]*[a-z0-9])/iu)?.[1]
+      ?.trim();
   const product = specific || unknownProduct || named[0];
   const anchors = [...(product ? [product] : []), ...explicit];
   const translated = CAPABILITY_TERMS.filter(([source]) =>
@@ -178,7 +197,12 @@ export function buildMeilisearchQuery(
   )
     .map(([, target]) => target)
     .join(' ');
-  const normalized = tokens(`${description} ${translated}`).map(word => {
+  const lexicalDescription = description.replace(
+    /\b([a-z][\w.-]*)-specific\b/giu,
+    (phrase, word: string) =>
+      GENERIC_NAMES.has(word.toLowerCase()) ? '' : phrase,
+  );
+  const normalized = tokens(`${lexicalDescription} ${translated}`).map(word => {
     if (frequency.has(word)) return word;
     if (word.endsWith('ies') && frequency.has(`${word.slice(0, -3)}y`))
       return `${word.slice(0, -3)}y`;
