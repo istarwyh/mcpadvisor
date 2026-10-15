@@ -1,0 +1,104 @@
+{
+  "index": "offline_protocol_01e25f4a226f46679803548b260570e8",
+  "provenance": {
+    "commit": "4b1d45b2984542e8f4ead7f1032760b3f6084109",
+    "source": "2e1f19714c912d1cdb68fd428fcb75ad5098975115f830e96353a75a195f4190",
+    "build": "f080311332b0319ceb68b6220e1159d962c43f26c3ebfbbc012e628bda64d9a4",
+    "catalog": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "runner": "d10887b58e7a5d993d291ccd975819acd2e4ccb64dfa618ed4160c74bf4be86e",
+    "fixture": "9d0aee2f571cdd7abcc0d8f09666feb340f7cc3487f9bd9ae7ef3c624be1c2ff"
+  },
+  "queries": [
+    "GitHub",
+    "PostgreSQL",
+    "Slack",
+    "Filesystem"
+  ],
+  "errors": [
+    "Unexpected token 'D', \"[DEBUG] Loa\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Loa\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Inc\"... is not valid JSON",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Unexpected token ']', \"]\" is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Suc\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Unexpected token ']', \"]\" is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Unexpected token ']', \"]\" is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Unexpected token ']', \"]\" is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Expected property name or '}' in JSON at position 4 (line 1 column 5)",
+    "Unexpected token ']', \"]\" is not valid JSON",
+    "Unexpected token 'D', \"[DEBUG] Tex\"... is not valid JSON"
+  ],
+  "results": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: GitHub\nDescription: MCP Server for the GitHub API, enabling file operations, repository management, search functionality, and more.\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: GitHub Actions\nDescription: A Model Context Protocol (MCP) server for interacting with Github Actions.\nSource URL: https://github.com/ko1ynnky/github-actions-mcp-server\nScore: 896.6%\n\nServer 3:\nTitle: DeepSeek\nDescription: Model Context Protocol server integrating DeepSeek's advanced language models, in addition to [other useful API endpoints](https://github.com/DMontgomery40/deepseek-mcp-server?tab=readme-ov-file#features)\nSource URL: https://github.com/DMontgomery40/deepseek-mcp-server\nScore: 709.1%\n\nServer 4:\nTitle: Chat Desktop App\nDescription: – An Open Source Cross-platform GUI Desktop application compatible with Linux, macOS, and Windows, enabling seamless interaction with MCP servers across dynamically selectable LLMs, by **[AIQL](https://github.com/AI-QL/chat-mcp)**\nSource URL: https://github.com/AI-QL/chat-mcp\nScore: 709.1%\n\nServer 5:\nTitle: Mesh Agent\nDescription: Access specialized web3 AI agents for blockchain analysis, smart contract security, token metrics, and blockchain interactions through the [Heurist Mesh network](https://github.com/heurist-network/heurist-agent-framework/tree/main/mesh).\nSource URL: https://github.com/heurist-network/heurist-mesh-mcp-server\nScore: 709.1%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: PostgreSQL\nDescription: Read-only database access with schema inspection\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: DBHub - Universal Database Gateway\nDescription: Universal database MCP server connecting to MySQL, PostgreSQL, SQLite, DuckDB and etc.\nSource URL: https://github.com/bytebase/dbhub\nScore: 793.2%\n\nServer 3:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 4:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 5:\nTitle: Postman\nDescription: MCP server for running Postman Collections locally via Newman. Allows for simple execution of Postman Server and returns the results of whether the collection passed all the tests.\nSource URL: https://github.com/shannonlal/mcp-postman\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: Slack\nDescription: Channel management and messaging capabilities\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 3:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 4:\nTitle: Placid.app\nDescription: Generate image and video creatives using Placid.app templates\nSource URL: https://github.com/felores/placid-mcp-server\nScore: 45.5%\n\nServer 5:\nTitle: Whale Tracker\nDescription: A mcp server for tracking cryptocurrency whale transactions.\nSource URL: https://github.com/kukapay/whale-tracker-mcp\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: Filesystem\nDescription: Secure file operations with configurable access controls\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: Headless Gmail Server\nDescription: Remote hostable MCP server that can get and send Gmail messages without local credential or file system setup.\nSource URL: https://github.com/baryhuang/mcp-headless-gmail\nScore: 485.2%\n\nServer 3:\nTitle: Terminal Controller\nDescription: A MCP server that enables secure terminal command execution, directory navigation, and file system operations through a standardized interface.\nSource URL: https://github.com/GongRzhe/terminal-controller-mcp\nScore: 478.4%\n\nServer 4:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 5:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n"
+        }
+      ],
+      "isError": false
+    }
+  ],
+  "documentCount": 212,
+  "loaderCalls": 1,
+  "addEntryCalls": 212,
+  "toolErrors": 0,
+  "limitations": [
+    "Instrumentation counts actual loader/insertion calls. No runtime behavior, ranking, or model is replaced. Existing stdout diagnostics are retained and parser errors recorded. Four observed product queries, not independent holdout."
+  ],
+  "provenanceAfter": {
+    "commit": "4b1d45b2984542e8f4ead7f1032760b3f6084109",
+    "source": "2e1f19714c912d1cdb68fd428fcb75ad5098975115f830e96353a75a195f4190",
+    "build": "f080311332b0319ceb68b6220e1159d962c43f26c3ebfbbc012e628bda64d9a4",
+    "catalog": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "runner": "d10887b58e7a5d993d291ccd975819acd2e4ccb64dfa618ed4160c74bf4be86e",
+    "fixture": "9d0aee2f571cdd7abcc0d8f09666feb340f7cc3487f9bd9ae7ef3c624be1c2ff"
+  },
+  "provenanceUnchanged": true
+}

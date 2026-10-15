@@ -1,0 +1,9 @@
+Platform node has already been set. Overwriting the platform with node.
+[DEBUG] Loading fallback data from: /workspace/shared/mcpadvisor-quality-20261015/data/mcp_server_list.json
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+{"mode":"sequential","output":"/workspace/shared/offline-holdout-20261015/results/engine/candidate-sequential.json","initializations":1,"hit":1,"errors":[]}

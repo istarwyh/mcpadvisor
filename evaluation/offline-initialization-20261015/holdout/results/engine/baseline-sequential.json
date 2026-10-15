@@ -1,0 +1,542 @@
+{
+  "mode": "sequential",
+  "repo": "/workspace/shared/mcpadvisor-quality-baseline-20261015",
+  "surface": "engine",
+  "fixture_sha256": "eae6b07ef453d6e468a49be7865e5420e127daca546a2a7e28492e314089754c",
+  "started_at": "2026-10-15T20:11:41.158Z",
+  "cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": null,
+          "similarity": 0.7225870596892006
+        },
+        {
+          "id": "mac-messages-mcp",
+          "sourceUrl": "https://github.com/carterlasalle/mac_messages_mcp",
+          "title": "Mac Messages",
+          "score": null,
+          "similarity": 0.5798254716295682
+        },
+        {
+          "id": "discord",
+          "sourceUrl": "https://github.com/v-3/discordmcp",
+          "title": "Discord",
+          "score": null,
+          "similarity": 0.3429620122368672
+        },
+        {
+          "id": "youtube",
+          "sourceUrl": "https://github.com/ZubeidHendricks/youtube-mcp-server",
+          "title": "YouTube",
+          "score": null,
+          "similarity": 0.32890893881812394
+        },
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": null,
+          "similarity": 0.3262151493966353
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "query": "AWS Cost Explorer regional spending",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "aws-cost-explorer",
+          "sourceUrl": "https://github.com/aarora79/aws-cost-explorer-mcp-server",
+          "title": "AWS Cost Explorer",
+          "score": null,
+          "similarity": 0.7082349231370557
+        },
+        {
+          "id": "aws",
+          "sourceUrl": "https://github.com/rishikavikondala/mcp-server-aws",
+          "title": "AWS",
+          "score": null,
+          "similarity": 0.4497324342615839
+        },
+        {
+          "id": "data-exploration",
+          "sourceUrl": "https://github.com/reading-plus-ai/mcp-server-data-exploration",
+          "title": "Data Exploration",
+          "score": null,
+          "similarity": 0.3586485124738789
+        },
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": null,
+          "similarity": 0.33824878616198006
+        },
+        {
+          "id": "terminal-control",
+          "sourceUrl": "https://github.com/GongRzhe/terminal-controller-mcp",
+          "title": "Terminal Controller",
+          "score": null,
+          "similarity": 0.33125017587098615
+        }
+      ]
+    },
+    {
+      "case_id": "H03",
+      "query": "Redis in-memory key-value caching",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "redis",
+          "sourceUrl": "https://github.com/prajwalnayak7/mcp-server-redis",
+          "title": "Redis",
+          "score": null,
+          "similarity": 0.530995393565381
+        },
+        {
+          "id": "linear",
+          "sourceUrl": "https://github.com/jerhadf/linear-mcp-server",
+          "title": "Linear",
+          "score": null,
+          "similarity": 0.29004888445395477
+        },
+        {
+          "id": "unity-integration-advanced",
+          "sourceUrl": "https://github.com/quazaai/UnityMCPIntegration",
+          "title": "Unity Integration",
+          "score": null,
+          "similarity": 0.2823266662960058
+        },
+        {
+          "id": "dicom",
+          "sourceUrl": "https://github.com/ChristianHinge/dicom-mcp",
+          "title": "DICOM Model Context Protocol",
+          "score": null,
+          "similarity": 0.26549560294367497
+        },
+        {
+          "id": "aws-cost-explorer",
+          "sourceUrl": "https://github.com/aarora79/aws-cost-explorer-mcp-server",
+          "title": "AWS Cost Explorer",
+          "score": null,
+          "similarity": 0.26348188126120975
+        }
+      ]
+    },
+    {
+      "case_id": "H04",
+      "query": "Rijksmuseum artwork image tiles collections",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rijksmuseum",
+          "sourceUrl": "https://github.com/r-huijts/rijksmuseum-mcp",
+          "title": "Rijksmuseum",
+          "score": null,
+          "similarity": 0.7327557494220398
+        },
+        {
+          "id": "image-generation",
+          "sourceUrl": "https://github.com/GongRzhe/Image-Generation-MCP-Server",
+          "title": "Image Generation",
+          "score": null,
+          "similarity": 0.4715239974635431
+        },
+        {
+          "id": "google-maps",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Google Maps",
+          "score": null,
+          "similarity": 0.38760211147352513
+        },
+        {
+          "id": "llm-context",
+          "sourceUrl": "https://github.com/cyberchitta/llm-context.py",
+          "title": "LLM Context",
+          "score": null,
+          "similarity": 0.32957251534160426
+        },
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": null,
+          "similarity": 0.3261890879770348
+        }
+      ]
+    },
+    {
+      "case_id": "H05",
+      "query": "QGIS load layers into a project",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": null,
+          "similarity": 0.5060016385089552
+        },
+        {
+          "id": "ghost",
+          "sourceUrl": "https://github.com/MFYDev/ghost-mcp",
+          "title": "Ghost",
+          "score": null,
+          "similarity": 0.31561743315828444
+        },
+        {
+          "id": "everything",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Everything",
+          "score": null,
+          "similarity": 0.3147781885314149
+        },
+        {
+          "id": "productboard",
+          "sourceUrl": "https://github.com/kenjihikmatullah/productboard-mcp",
+          "title": "Productboard",
+          "score": null,
+          "similarity": 0.30518478377016606
+        },
+        {
+          "id": "mcp-proxy",
+          "sourceUrl": "https://github.com/sparfenyuk/mcp-proxy",
+          "title": "MCP Proxy",
+          "score": null,
+          "similarity": 0.3033286957409898
+        }
+      ]
+    },
+    {
+      "case_id": "H06",
+      "query": "Excel worksheets charts pivot tables",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "excel",
+          "sourceUrl": "https://github.com/haris-musa/excel-mcp-server",
+          "title": "Excel",
+          "score": null,
+          "similarity": 0.5305922607993441
+        },
+        {
+          "id": "quickchart",
+          "sourceUrl": "https://github.com/GongRzhe/Quickchart-MCP-Server",
+          "title": "Quickchart",
+          "score": null,
+          "similarity": 0.35800148786157787
+        },
+        {
+          "id": "bitable-mcp",
+          "sourceUrl": "https://github.com/lloydzhou/bitable-mcp",
+          "title": "Bitable",
+          "score": null,
+          "similarity": 0.35723807812445807
+        },
+        {
+          "id": "llm-context",
+          "sourceUrl": "https://github.com/cyberchitta/llm-context.py",
+          "title": "LLM Context",
+          "score": null,
+          "similarity": 0.3101296552262886
+        },
+        {
+          "id": "context7",
+          "sourceUrl": "https://github.com/upstash/context7",
+          "title": "Context7",
+          "score": null,
+          "similarity": 0.30234785739571873
+        }
+      ]
+    },
+    {
+      "case_id": "H07",
+      "query": "Pandoc convert DOCX to Markdown",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "pandoc",
+          "sourceUrl": "https://github.com/vivekVells/mcp-pandoc",
+          "title": "Pandoc Document Conversion",
+          "score": null,
+          "similarity": 0.5866678001011987
+        },
+        {
+          "id": "markdownify",
+          "sourceUrl": "https://github.com/zcaceres/mcp-markdownify-server",
+          "title": "Markdownify",
+          "score": null,
+          "similarity": 0.5706023955398591
+        },
+        {
+          "id": "basic-memory",
+          "sourceUrl": "https://github.com/basicmachines-co/basic-memory",
+          "title": "Basic Memory",
+          "score": null,
+          "similarity": 0.4202476323477492
+        },
+        {
+          "id": "mindmap",
+          "sourceUrl": "https://github.com/YuChenSSR/mindmap-mcp-server",
+          "title": "Mindmap",
+          "score": null,
+          "similarity": 0.4019714400171098
+        },
+        {
+          "id": "obsidian-markdown-notes",
+          "sourceUrl": "https://github.com/calclavia/mcp-obsidian",
+          "title": "Obsidian Markdown Notes",
+          "score": null,
+          "similarity": 0.3796303345601517
+        }
+      ]
+    },
+    {
+      "case_id": "H08",
+      "query": "Google Calendar search events by location",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "google-calendar",
+          "sourceUrl": "https://github.com/nspady/google-calendar-mcp",
+          "title": "Google Calendar",
+          "score": null,
+          "similarity": 0.8253368562590584
+        },
+        {
+          "id": "google-custom-search",
+          "sourceUrl": "https://github.com/adenot/mcp-google-search",
+          "title": "Google Custom Search",
+          "score": null,
+          "similarity": 0.6775255846034145
+        },
+        {
+          "id": "google-maps",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Google Maps",
+          "score": null,
+          "similarity": 0.6369702246178504
+        },
+        {
+          "id": "travel-planner",
+          "sourceUrl": "https://github.com/GongRzhe/TRAVEL-PLANNER-MCP-Server",
+          "title": "Travel Planner",
+          "score": null,
+          "similarity": 0.48603056966351293
+        },
+        {
+          "id": "tavily-search",
+          "sourceUrl": "https://github.com/RamXX/mcp-tavily",
+          "title": "Tavily Search",
+          "score": null,
+          "similarity": 0.478152283412183
+        }
+      ]
+    },
+    {
+      "case_id": "H09",
+      "query": "NASA APOD NEO EPIC data",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "nasa",
+          "sourceUrl": "https://github.com/ProgramComputer/NASA-MCP-server",
+          "title": "NASA",
+          "score": null,
+          "similarity": 0.6575971462798267
+        },
+        {
+          "id": "neo4j",
+          "sourceUrl": "https://github.com/da-okazaki/mcp-neo4j-server",
+          "title": "Neo4j Server",
+          "score": null,
+          "similarity": 0.5181497130788489
+        },
+        {
+          "id": "dataset-viewer",
+          "sourceUrl": "https://github.com/privetin/dataset-viewer",
+          "title": "Dataset Viewer",
+          "score": null,
+          "similarity": 0.4856845202409828
+        },
+        {
+          "id": "world-bank-data-api",
+          "sourceUrl": "https://github.com/anshumax/world_bank_mcp_server",
+          "title": "World Bank Data API",
+          "score": null,
+          "similarity": 0.4599590916216503
+        },
+        {
+          "id": "data-exploration",
+          "sourceUrl": "https://github.com/reading-plus-ai/mcp-server-data-exploration",
+          "title": "Data Exploration",
+          "score": null,
+          "similarity": 0.43649970536746885
+        }
+      ]
+    },
+    {
+      "case_id": "H10",
+      "query": "Docker manage containers images volumes networks",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "docker",
+          "sourceUrl": "https://github.com/ckreiling/mcp-server-docker",
+          "title": "Docker Integration",
+          "score": null,
+          "similarity": 0.779089240352394
+        },
+        {
+          "id": "keycloak-mcp",
+          "sourceUrl": "https://github.com/ChristophEnglisch/keycloak-model-context-protocol",
+          "title": "Keycloak Model Context Protocol",
+          "score": null,
+          "similarity": 0.4763243077430214
+        },
+        {
+          "id": "home-assistant",
+          "sourceUrl": "https://github.com/voska/hass-mcp",
+          "title": "Hass",
+          "score": null,
+          "similarity": 0.43300706771594355
+        },
+        {
+          "id": "claudepost",
+          "sourceUrl": "https://github.com/ZilongXue/claude-post",
+          "title": "Claude Post Email Management",
+          "score": null,
+          "similarity": 0.4320181642919807
+        },
+        {
+          "id": "mcp-create",
+          "sourceUrl": "https://github.com/tesla0225/mcp-create",
+          "title": "Create Server",
+          "score": null,
+          "similarity": 0.4316678716153116
+        }
+      ]
+    },
+    {
+      "case_id": "H11",
+      "query": "Home Assistant entity management automation",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "home-assistant",
+          "sourceUrl": "https://github.com/voska/hass-mcp",
+          "title": "Hass",
+          "score": null,
+          "similarity": 0.7693336344097121
+        },
+        {
+          "id": "slack",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Slack",
+          "score": null,
+          "similarity": 0.5232294870763977
+        },
+        {
+          "id": "keycloak-mcp",
+          "sourceUrl": "https://github.com/ChristophEnglisch/keycloak-model-context-protocol",
+          "title": "Keycloak Model Context Protocol",
+          "score": null,
+          "similarity": 0.5167798278073623
+        },
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": null,
+          "similarity": 0.5036825216617173
+        },
+        {
+          "id": "okta",
+          "sourceUrl": "https://github.com/kapilduraphe/okta-mcp-server",
+          "title": "Okta",
+          "score": null,
+          "similarity": 0.4895425598266693
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 5,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "ns-travel-information",
+          "sourceUrl": "https://github.com/r-huijts/ns-mcp-server",
+          "title": "NS Travel Information",
+          "score": null,
+          "similarity": 0.5608803173740043
+        },
+        {
+          "id": "google-maps",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Google Maps",
+          "score": null,
+          "similarity": 0.32370758555667195
+        },
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": null,
+          "similarity": 0.3162984357252415
+        },
+        {
+          "id": "scrapling-fetch",
+          "sourceUrl": "https://github.com/cyberchitta/scrapling-fetch-mcp",
+          "title": "Scrapling Fetch",
+          "score": null,
+          "similarity": 0.3162623406334899
+        },
+        {
+          "id": "pushover",
+          "sourceUrl": "https://github.com/ashiknesin/pushover-mcp",
+          "title": "Pushover Notifications",
+          "score": null,
+          "similarity": 0.3130951432097462
+        }
+      ]
+    }
+  ],
+  "initializations": 1,
+  "errors": [],
+  "mean_hit_at_5": 1,
+  "mean_reciprocal_rank": 1,
+  "finished_at": "2026-10-15T20:12:39.248Z"
+}

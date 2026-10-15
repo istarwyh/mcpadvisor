@@ -1,0 +1,13 @@
+# Frozen offline concurrency holdout protocol
+
+## Quality preservation
+Run the frozen 12 cases in a fresh baseline process, sequentially. Run the same cases in one fresh candidate process, sequentially. Fix offline mode, catalog bytes, embedding mode, environment, and options identically. No network/model tuning. Record ordered top-5 IDs/source URLs and numeric scores, known-positive hit@5 and reciprocal rank. Catalog ID or exact repository URL may identify a known positive. No negative judgments are assumed for unlabelled results.
+
+Require candidate ordered identity lists to equal baseline lists for every query, and score differences <= 1e-12 where finite. Require known-positive hit@5 and reciprocal rank to be no worse per query. Report absolute quality honestly: a baseline miss is not evidence the fixture is bad and must not trigger query editing. Full raw outputs are retained.
+
+## Concurrent first access
+In independent fresh modules/processes for baseline and candidate, launch all 12 different frozen queries synchronously before awaiting any, using the same offline provider/factory scope. Count actual catalog/embedding initialization invocations using a spy around the existing loader entry point, preserving the original implementation. Use a deterministic promise gate at that boundary so all first callers overlap; release after all calls have been scheduled, not after a fixed number of initializations (which would deadlock a repaired implementation).
+
+Require candidate exactly one initialization, all 12 requests settled successfully, and each output equals its sequential warmed counterpart in ordered identities and scores. Baseline duplicate initialization is the expected diagnostic, not a reason to weaken assertions. Count two subsequent warm requests and require zero additional initialization. A second independent provider/scope must still initialize itself exactly once; do not require process-global cross-instance deduplication. Where construction is factory-only, report scope isolation unsupported rather than invent an API.
+
+Timeout each cohort at 60 seconds; record failures and raw exception messages. Missing/invalid data handling and retry are not inferred from these tests and must be reported as untested unless separately verified by the implementation's unit tests. Run baseline/candidate only after candidate is fixed and supplied, once each per defined cohort. Preserve this fixture/spec unchanged; harness adaptation is allowed only to interface shape and must be documented and hashed before execution. No query or expected-ID changes after freeze.

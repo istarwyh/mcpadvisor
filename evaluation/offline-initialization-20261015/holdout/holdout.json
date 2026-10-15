@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "5c13693",
+  "catalog_sha256": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+  "selection": "Independent catalog-derived domain coverage; no candidate implementation or prior evaluation suites read. Existing offline unit tests were read only for API contracts; their imported query fixtures were not read.",
+  "options": {
+    "limit": 5,
+    "minSimilarity": 0.1,
+    "sortBy": "score",
+    "sortOrder": "desc"
+  },
+  "cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "known_positive_catalog_ids": [
+        "rabbitmq"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/kenliao94/mcp-server-rabbitmq"
+      ],
+      "evidence": {
+        "name": "rabbitmq",
+        "display_name": "RabbitMQ",
+        "description": "The MCP server that interacts with RabbitMQ to publish and consume messages."
+      }
+    },
+    {
+      "case_id": "H02",
+      "query": "AWS Cost Explorer regional spending",
+      "known_positive_catalog_ids": [
+        "aws-cost-explorer"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/aarora79/aws-cost-explorer-mcp-server"
+      ],
+      "evidence": {
+        "name": "aws-cost-explorer",
+        "display_name": "AWS Cost Explorer",
+        "description": "Optimize your AWS spend (including Amazon Bedrock spend) with this MCP server by examining spend across regions, services, instance types and foundation models ([demo video](https://www.youtube.com/watch?v=WuVOmYLRFmI&feature=youtu.be))."
+      }
+    },
+    {
+      "case_id": "H03",
+      "query": "Redis in-memory key-value caching",
+      "known_positive_catalog_ids": [
+        "redis"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/prajwalnayak7/mcp-server-redis"
+      ],
+      "evidence": {
+        "name": "redis",
+        "display_name": "Redis",
+        "description": "MCP server to interact with Redis Server, AWS Memory DB, etc for caching or other use-cases where in-memory and key-value based storage is appropriate"
+      }
+    },
+    {
+      "case_id": "H04",
+      "query": "Rijksmuseum artwork image tiles collections",
+      "known_positive_catalog_ids": [
+        "rijksmuseum"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/r-huijts/rijksmuseum-mcp"
+      ],
+      "evidence": {
+        "name": "rijksmuseum",
+        "display_name": "Rijksmuseum",
+        "description": "Interface with the Rijksmuseum API to search artworks, retrieve artwork details, access image tiles, and explore user collections."
+      }
+    },
+    {
+      "case_id": "H05",
+      "query": "QGIS load layers into a project",
+      "known_positive_catalog_ids": [
+        "qgis"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/jjsantos01/qgis_mcp"
+      ],
+      "evidence": {
+        "name": "qgis",
+        "display_name": "QGIS Model Context Protocol Integration",
+        "description": "connects QGIS to Claude AI through the MCP. This integration enables prompt-assisted project creation, layer loading, code execution, and more."
+      }
+    },
+    {
+      "case_id": "H06",
+      "query": "Excel worksheets charts pivot tables",
+      "known_positive_catalog_ids": [
+        "excel"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/haris-musa/excel-mcp-server"
+      ],
+      "evidence": {
+        "name": "excel",
+        "display_name": "Excel",
+        "description": "Excel manipulation including data reading/writing, worksheet management, formatting, charts, and pivot table."
+      }
+    },
+    {
+      "case_id": "H07",
+      "query": "Pandoc convert DOCX to Markdown",
+      "known_positive_catalog_ids": [
+        "pandoc"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/vivekVells/mcp-pandoc"
+      ],
+      "evidence": {
+        "name": "pandoc",
+        "display_name": "Pandoc Document Conversion",
+        "description": "MCP server for seamless document format conversion using Pandoc, supporting Markdown, HTML, PDF, DOCX (.docx), csv and more."
+      }
+    },
+    {
+      "case_id": "H08",
+      "query": "Google Calendar search events by location",
+      "known_positive_catalog_ids": [
+        "google-calendar"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/nspady/google-calendar-mcp"
+      ],
+      "evidence": {
+        "name": "google-calendar",
+        "display_name": "Google Calendar",
+        "description": "Google Calendar MCP Server for managing Google calendar events. Also supports searching for events by attributes like title and location."
+      }
+    },
+    {
+      "case_id": "H09",
+      "query": "NASA APOD NEO EPIC data",
+      "known_positive_catalog_ids": [
+        "nasa"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/ProgramComputer/NASA-MCP-server"
+      ],
+      "evidence": {
+        "name": "nasa",
+        "display_name": "NASA",
+        "description": "Access to a unified gateway of NASA's data sources including but not limited to APOD, NEO, EPIC, GIBS."
+      }
+    },
+    {
+      "case_id": "H10",
+      "query": "Docker manage containers images volumes networks",
+      "known_positive_catalog_ids": [
+        "docker"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/ckreiling/mcp-server-docker"
+      ],
+      "evidence": {
+        "name": "docker",
+        "display_name": "Docker Integration",
+        "description": "Integrate with Docker to manage containers, images, volumes, and networks."
+      }
+    },
+    {
+      "case_id": "H11",
+      "query": "Home Assistant entity management automation",
+      "known_positive_catalog_ids": [
+        "home-assistant"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/voska/hass-mcp"
+      ],
+      "evidence": {
+        "name": "home-assistant",
+        "display_name": "Hass",
+        "description": "Docker-ready MCP server for Home Assistant with entity management, domain summaries, automation support, and guided conversations. Includes pre-built container images for easy installation."
+      }
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "known_positive_catalog_ids": [
+        "ns-travel-information"
+      ],
+      "known_positive_source_urls": [
+        "https://github.com/r-huijts/ns-mcp-server"
+      ],
+      "evidence": {
+        "name": "ns-travel-information",
+        "display_name": "NS Travel Information",
+        "description": "Access Dutch Railways (NS) real-time train travel information and disruptions through the official NS API."
+      }
+    }
+  ]
+}

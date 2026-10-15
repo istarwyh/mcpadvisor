@@ -28,6 +28,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
   private memoryEngine: WritableInMemoryVectorEngine;
   private offlineLoader: OfflineDataLoader;
   private fallbackDataLoaded: boolean = false;
+  private fallbackLoadPromise?: Promise<void>;
   private lastFallbackLoadTime: number = 0;
   private fallbackLoadIntervalMs: number = 3600000; // 1小时
   private customFallbackPath?: string;
@@ -103,6 +104,8 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
    */
   async clear(): Promise<void> {
     try {
+      // Do not clear a partially inserted fallback batch.
+      if (this.fallbackLoadPromise) await this.fallbackLoadPromise;
       await this.memoryEngine.clear();
       this.fallbackDataLoaded = false;
       await this.ensureFallbackDataLoaded();
@@ -126,6 +129,17 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
    * 确保兜底数据已加载
    */
   private async ensureFallbackDataLoaded(): Promise<void> {
+    // Vector and text searches can reach first initialization concurrently.
+    // Share the complete load, including insertion, rather than only embeddings.
+    if (!this.fallbackLoadPromise) {
+      this.fallbackLoadPromise = this.loadFallbackData().finally(() => {
+        this.fallbackLoadPromise = undefined;
+      });
+    }
+    await this.fallbackLoadPromise;
+  }
+
+  private async loadFallbackData(): Promise<void> {
     const currentTime = Date.now();
 
     // 如果数据尚未加载或者已经过期，则重新加载

@@ -10,6 +10,7 @@ on:
   push:
     paths:
       - 'src/services/providers/meilisearch/**'
+      - 'src/services/providers/offline/**'
       - 'src/config/meilisearch.ts'
       - 'src/evaluation/**'
       - 'src/tests/**/*meilisearch*.test.ts'
@@ -22,6 +23,7 @@ on:
   pull_request:
     paths:
       - 'src/services/providers/meilisearch/**'
+      - 'src/services/providers/offline/**'
       - 'src/config/meilisearch.ts'
       - 'src/evaluation/**'
       - 'src/tests/**/*meilisearch*.test.ts'

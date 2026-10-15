@@ -1,0 +1,23 @@
+{
+  "baseline": {
+    "commit": "5c13693ca7e1fc6b3bde8f4d9b050f147ba10533",
+    "sha256": {
+      "src/services/providers/offline/enhancedMemoryVectorEngine.ts": "7c17f4f2c686b2b37b4a0b9f9072dda44613976b845eea912690b103c8210f09",
+      "build/services/providers/offline/enhancedMemoryVectorEngine.js": "31f81527dc063b62b32860703aa74cdb71aee5969b90391b7d6c9955f5852245",
+      "pnpm-lock.yaml": "acbcfcb48738edc29f9bf92bfe9f447bdef84ae0a106c30f19fdee0bdb959e3c",
+      "data/mcp_server_list.json": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50"
+    },
+    "node": "v24.19.0"
+  },
+  "candidate": {
+    "commit": "a86293c9590037c79b60db2b56f8f75f34835986",
+    "sha256": {
+      "src/services/providers/offline/enhancedMemoryVectorEngine.ts": "2e1f19714c912d1cdb68fd428fcb75ad5098975115f830e96353a75a195f4190",
+      "build/services/providers/offline/enhancedMemoryVectorEngine.js": "f080311332b0319ceb68b6220e1159d962c43f26c3ebfbbc012e628bda64d9a4",
+      "pnpm-lock.yaml": "acbcfcb48738edc29f9bf92bfe9f447bdef84ae0a106c30f19fdee0bdb959e3c",
+      "data/mcp_server_list.json": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50"
+    },
+    "node": "v24.19.0"
+  },
+  "captured_at": "2026-10-15T20:11:39.992714+00:00"
+}

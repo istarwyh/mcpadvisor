@@ -1,0 +1,81 @@
+Platform node has already been set. Overwriting the platform with node.
+[DEBUG] Loading fallback data from: /workspace/shared/mcpadvisor-quality-20261015/data/mcp_server_list.json
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'rabbitmq', 'publish', 'and', 'consume', 'messages' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'aws', 'cost', 'explorer', 'regional', 'spending' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'redis', 'in-memory', 'key-value', 'caching' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'rijksmuseum', 'artwork', 'image', 'tiles', 'collections' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'qgis', 'load', 'layers', 'into', 'project' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'excel', 'worksheets', 'charts', 'pivot', 'tables' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'pandoc', 'convert', 'docx', 'to', 'markdown' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'google', 'calendar', 'search', 'events', 'by', 'location' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'nasa', 'apod', 'neo', 'epic', 'data' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'docker', 'manage', 'containers', 'images', 'volumes', 'networks' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'home', 'assistant', 'entity', 'management', 'automation' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'dutch', 'railways', 'ns', 'train', 'disruptions' ]
+{"mode":"sequential","output":"/workspace/shared/offline-holdout-20261015/results/provider/candidate-sequential.json","initializations":1,"hit":0.8333333333333334,"errors":[]}

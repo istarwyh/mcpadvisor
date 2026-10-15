@@ -1,0 +1,635 @@
+{
+  "mode": "concurrent",
+  "repo": "/workspace/shared/mcpadvisor-quality-baseline-20261015",
+  "surface": "provider",
+  "fixture_sha256": "eae6b07ef453d6e468a49be7865e5420e127daca546a2a7e28492e314089754c",
+  "started_at": "2026-10-15T20:13:48.074Z",
+  "cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 32,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": 1.5847761179067608,
+          "similarity": 1.5847761179067608
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "sourceUrl": "https://github.com/Automata-Labs-team/code-sandbox-mcp",
+          "title": "Code Sandbox",
+          "score": 0.50785,
+          "similarity": 0.50785
+        },
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": 0.36574999999999996,
+          "similarity": 0.36574999999999996
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "query": "AWS Cost Explorer regional spending",
+      "returned_count": 30,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "aws-cost-explorer",
+          "sourceUrl": "https://github.com/aarora79/aws-cost-explorer-mcp-server",
+          "title": "AWS Cost Explorer",
+          "score": 1.7514704769411158,
+          "similarity": 1.7514704769411158
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "everything-search",
+          "sourceUrl": "https://github.com/mamertofabian/mcp-everything-search",
+          "title": "Everything Search",
+          "score": 0.3122,
+          "similarity": 0.3122
+        },
+        {
+          "id": "dune-analytics-mcp",
+          "sourceUrl": "https://github.com/kukapay/dune-analytics-mcp",
+          "title": "Dune Analytics",
+          "score": 0.287,
+          "similarity": 0.287
+        }
+      ]
+    },
+    {
+      "case_id": "H03",
+      "query": "Redis in-memory key-value caching",
+      "returned_count": 34,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "redis",
+          "sourceUrl": "https://github.com/prajwalnayak7/mcp-server-redis",
+          "title": "Redis",
+          "score": 1.0142986180696139,
+          "similarity": 1.0142986180696139
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "linear",
+          "sourceUrl": "https://github.com/jerhadf/linear-mcp-server",
+          "title": "Linear",
+          "score": 0.49874999999999997,
+          "similarity": 0.49874999999999997
+        },
+        {
+          "id": "windows-cli",
+          "sourceUrl": "https://github.com/SimonB97/win-cli-mcp-server",
+          "title": "Windows CLI",
+          "score": 0.49874999999999997,
+          "similarity": 0.49874999999999997
+        }
+      ]
+    },
+    {
+      "case_id": "H04",
+      "query": "Rijksmuseum artwork image tiles collections",
+      "returned_count": 31,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rijksmuseum",
+          "sourceUrl": "https://github.com/r-huijts/rijksmuseum-mcp",
+          "title": "Rijksmuseum",
+          "score": 1.5878267248266127,
+          "similarity": 1.5878267248266127
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "cfbd-api",
+          "sourceUrl": "https://github.com/lenwood/cfbd-mcp-server",
+          "title": "College Football Data API",
+          "score": 0.287,
+          "similarity": 0.287
+        },
+        {
+          "id": "world-bank-data-api",
+          "sourceUrl": "https://github.com/anshumax/world_bank_mcp_server",
+          "title": "World Bank Data API",
+          "score": 0.287,
+          "similarity": 0.287
+        }
+      ]
+    },
+    {
+      "case_id": "H05",
+      "query": "QGIS load layers into a project",
+      "returned_count": 26,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mariadb",
+          "sourceUrl": "https://github.com/abel9851/mcp-server-mariadb",
+          "title": "MariaDB Database Integration",
+          "score": 0.22959999999999994,
+          "similarity": 0.22959999999999994
+        },
+        {
+          "id": "linear",
+          "sourceUrl": "https://github.com/jerhadf/linear-mcp-server",
+          "title": "Linear",
+          "score": 0.19284999999999997,
+          "similarity": 0.19284999999999997
+        },
+        {
+          "id": "gitlab",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "GitLab",
+          "score": 0.18000000000000008,
+          "similarity": 0.18000000000000008
+        }
+      ]
+    },
+    {
+      "case_id": "H06",
+      "query": "Excel worksheets charts pivot tables",
+      "returned_count": 17,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "world-bank-data-api",
+          "sourceUrl": "https://github.com/anshumax/world_bank_mcp_server",
+          "title": "World Bank Data API",
+          "score": 0.3122,
+          "similarity": 0.3122
+        },
+        {
+          "id": "chatmcp",
+          "sourceUrl": "https://github.com/AI-QL/chat-mcp",
+          "title": "Chat Desktop App",
+          "score": 0.2996,
+          "similarity": 0.2996
+        },
+        {
+          "id": "mariadb",
+          "sourceUrl": "https://github.com/abel9851/mcp-server-mariadb",
+          "title": "MariaDB Database Integration",
+          "score": 0.287,
+          "similarity": 0.287
+        }
+      ]
+    },
+    {
+      "case_id": "H07",
+      "query": "Pandoc convert DOCX to Markdown",
+      "returned_count": 40,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "chatmcp",
+          "sourceUrl": "https://github.com/AI-QL/chat-mcp",
+          "title": "Chat Desktop App",
+          "score": 0.514675,
+          "similarity": 0.514675
+        },
+        {
+          "id": "code-executor",
+          "sourceUrl": "https://github.com/bazinga012/mcp_code_executor",
+          "title": "Code Executor",
+          "score": 0.4588499999999999,
+          "similarity": 0.4588499999999999
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "sourceUrl": "https://github.com/Automata-Labs-team/code-sandbox-mcp",
+          "title": "Code Sandbox",
+          "score": 0.392175,
+          "similarity": 0.392175
+        }
+      ]
+    },
+    {
+      "case_id": "H08",
+      "query": "Google Calendar search events by location",
+      "returned_count": 31,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "everything-search",
+          "sourceUrl": "https://github.com/mamertofabian/mcp-everything-search",
+          "title": "Everything Search",
+          "score": 0.7200000000000003,
+          "similarity": 0.7200000000000003
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "openai-websearch-mcp",
+          "sourceUrl": "https://github.com/ConechoAI/openai-websearch-mcp",
+          "title": "OpenAI WebSearch",
+          "score": 0.5249999999999999,
+          "similarity": 0.5249999999999999
+        },
+        {
+          "id": "linear",
+          "sourceUrl": "https://github.com/jerhadf/linear-mcp-server",
+          "title": "Linear",
+          "score": 0.32549999999999996,
+          "similarity": 0.32549999999999996
+        }
+      ]
+    },
+    {
+      "case_id": "H09",
+      "query": "NASA APOD NEO EPIC data",
+      "returned_count": 13,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "world-bank-data-api",
+          "sourceUrl": "https://github.com/anshumax/world_bank_mcp_server",
+          "title": "World Bank Data API",
+          "score": 0.8999999999999997,
+          "similarity": 0.8999999999999997
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "cfbd-api",
+          "sourceUrl": "https://github.com/lenwood/cfbd-mcp-server",
+          "title": "College Football Data API",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        },
+        {
+          "id": "mariadb",
+          "sourceUrl": "https://github.com/abel9851/mcp-server-mariadb",
+          "title": "MariaDB Database Integration",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        }
+      ]
+    },
+    {
+      "case_id": "H10",
+      "query": "Docker manage containers images volumes networks",
+      "returned_count": 35,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": 0.5400000000000001,
+          "similarity": 0.5400000000000001
+        },
+        {
+          "id": "kubernetes",
+          "sourceUrl": "https://github.com/Flux159/mcp-server-kubernetes",
+          "title": "Kubernetes",
+          "score": 0.36137499999999995,
+          "similarity": 0.36137499999999995
+        },
+        {
+          "id": "alphavantage",
+          "sourceUrl": "https://github.com/calvernaz/alphavantage",
+          "title": "Alphavantage",
+          "score": 0.3605,
+          "similarity": 0.3605
+        }
+      ]
+    },
+    {
+      "case_id": "H11",
+      "query": "Home Assistant entity management automation",
+      "returned_count": 38,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": 0.5400000000000001,
+          "similarity": 0.5400000000000001
+        },
+        {
+          "id": "chroma",
+          "sourceUrl": "https://github.com/privetin/chroma",
+          "title": "Chroma",
+          "score": 0.34159999999999996,
+          "similarity": 0.34159999999999996
+        },
+        {
+          "id": "alphavantage",
+          "sourceUrl": "https://github.com/calvernaz/alphavantage",
+          "title": "Alphavantage",
+          "score": 0.32899999999999996,
+          "similarity": 0.32899999999999996
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 21,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "drupal",
+          "sourceUrl": "https://github.com/Omedia/mcp-server-drupal",
+          "title": "Drupal Server",
+          "score": 0.33669999999999994,
+          "similarity": 0.33669999999999994
+        },
+        {
+          "id": "base-free-usdc-transfer",
+          "sourceUrl": "https://github.com/magnetai/mcp-free-usdc-transfer",
+          "title": "Free USDC Transfer",
+          "score": 0.28314999999999996,
+          "similarity": 0.28314999999999996
+        },
+        {
+          "id": "mariadb",
+          "sourceUrl": "https://github.com/abel9851/mcp-server-mariadb",
+          "title": "MariaDB Database Integration",
+          "score": 0.22959999999999994,
+          "similarity": 0.22959999999999994
+        }
+      ]
+    }
+  ],
+  "initializations": 28,
+  "errors": [],
+  "first_access_initializations": 24,
+  "warm_cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 32,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": 1.5847761179067608,
+          "similarity": 1.5847761179067608
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "sourceUrl": "https://github.com/Automata-Labs-team/code-sandbox-mcp",
+          "title": "Code Sandbox",
+          "score": 0.50785,
+          "similarity": 0.50785
+        },
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": 0.36574999999999996,
+          "similarity": 0.36574999999999996
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 21,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "drupal",
+          "sourceUrl": "https://github.com/Omedia/mcp-server-drupal",
+          "title": "Drupal Server",
+          "score": 0.33669999999999994,
+          "similarity": 0.33669999999999994
+        },
+        {
+          "id": "base-free-usdc-transfer",
+          "sourceUrl": "https://github.com/magnetai/mcp-free-usdc-transfer",
+          "title": "Free USDC Transfer",
+          "score": 0.28314999999999996,
+          "similarity": 0.28314999999999996
+        },
+        {
+          "id": "mariadb",
+          "sourceUrl": "https://github.com/abel9851/mcp-server-mariadb",
+          "title": "MariaDB Database Integration",
+          "score": 0.22959999999999994,
+          "similarity": 0.22959999999999994
+        }
+      ]
+    }
+  ],
+  "additional_warm_initializations": 0,
+  "independent_scope_initializations": 4,
+  "mean_hit_at_5": 0.3333333333333333,
+  "mean_reciprocal_rank": 0.3333333333333333,
+  "finished_at": "2026-10-15T20:14:04.756Z"
+}

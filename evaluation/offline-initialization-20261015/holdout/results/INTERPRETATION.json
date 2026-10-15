@@ -1,0 +1,81 @@
+{
+  "interpretation": "Candidate passes all preservation and single-initialization criteria. Raw comparator exit 1/pass false records baseline concurrency corruption; it is not a candidate failure. Comparator scope wording is generic and inaccurate about fixed fallback mode: production embedding provider selection was unchanged, identity not captured. Provider results are supplementary actual-provider cohort, not direct-engine results.",
+  "embedding_mode": "Natural production selection unchanged; actual provider identity unrecorded. Do not infer learned or simple embedding mode.",
+  "runs": "One sequential and one concurrent process for each surface and revision; eight completed processes, no reruns, no fixture changes, no ranking/model tuning.",
+  "results": {
+    "engine": {
+      "candidate_criteria_pass": true,
+      "candidate_failures": [],
+      "baseline_concurrency_diagnostic_failures": [
+        "H01: baseline concurrent/sequential outputs differ",
+        "H02: baseline concurrent/sequential outputs differ",
+        "H03: baseline concurrent/sequential outputs differ",
+        "H04: baseline concurrent/sequential outputs differ",
+        "H05: baseline concurrent/sequential outputs differ",
+        "H06: baseline concurrent/sequential outputs differ",
+        "H07: baseline concurrent/sequential outputs differ",
+        "H08: baseline concurrent/sequential outputs differ",
+        "H09: baseline concurrent/sequential outputs differ",
+        "H10: baseline concurrent/sequential outputs differ",
+        "H11: baseline concurrent/sequential outputs differ",
+        "H12: baseline concurrent/sequential outputs differ"
+      ],
+      "metrics": {
+        "baseline": {
+          "hit_at_5": 1,
+          "mrr": 1,
+          "first_access_initializations": 12
+        },
+        "candidate": {
+          "hit_at_5": 1,
+          "mrr": 1,
+          "first_access_initializations": 1,
+          "warm_initializations": 0,
+          "independent_scope_initializations": 1
+        },
+        "baseline_misses": []
+      }
+    },
+    "provider": {
+      "candidate_criteria_pass": true,
+      "candidate_failures": [],
+      "baseline_concurrency_diagnostic_failures": [
+        "H01: baseline concurrent/sequential outputs differ",
+        "H02: baseline concurrent/sequential outputs differ",
+        "H03: baseline concurrent/sequential outputs differ",
+        "H04: baseline concurrent/sequential outputs differ",
+        "H05: baseline concurrent/sequential outputs differ",
+        "H06: baseline concurrent/sequential outputs differ",
+        "H07: baseline concurrent/sequential outputs differ",
+        "H08: baseline concurrent/sequential outputs differ",
+        "H09: baseline concurrent/sequential outputs differ",
+        "H10: baseline concurrent/sequential outputs differ",
+        "H11: baseline concurrent/sequential outputs differ",
+        "H12: baseline concurrent/sequential outputs differ"
+      ],
+      "metrics": {
+        "baseline": {
+          "hit_at_5": 0.8333333333333334,
+          "mrr": 0.548611111111111,
+          "first_access_initializations": 24
+        },
+        "candidate": {
+          "hit_at_5": 0.8333333333333334,
+          "mrr": 0.548611111111111,
+          "first_access_initializations": 1,
+          "warm_initializations": 0,
+          "independent_scope_initializations": 1
+        },
+        "baseline_misses": [
+          "H03",
+          "H07"
+        ]
+      }
+    }
+  },
+  "limits": [
+    "Small 12-case brand-qualified catalog holdout, not a general semantic benchmark.",
+    "Known-positive IDs derived from catalog; absence of a positive at top 5 is measured rather than used to edit fixtures.",
+    "Recovery/retry after loader failure and missing data handling are outside this holdout."
+  ]
+}

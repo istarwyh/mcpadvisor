@@ -30,6 +30,19 @@ const globals = {
 export default [
   eslint.configs.recommended,
   {
+    // Preserve independently frozen Node harness bytes while declaring their runtime.
+    files: ['evaluation/offline-initialization-20261015/holdout/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setImmediate: 'readonly',
+      },
+    },
+  },
+  {
     files: ['**/*.{ts,tsx,mts,cts}'],
     languageOptions: {
       parser: tsParser,
