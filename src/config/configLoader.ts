@@ -20,7 +20,7 @@ export function loadConfig() {
         ? customConfigPath
         : path.join(process.cwd(), customConfigPath);
 
-      console.log(`Loading custom config from: ${absolutePath}`);
+      console.error(`Loading custom config from: ${absolutePath}`);
 
       // For JSON files
       if (absolutePath.endsWith('.json')) {

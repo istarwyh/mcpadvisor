@@ -1,0 +1,32 @@
+Platform node has already been set. Overwriting the platform with node.
+[DEBUG] Loading fallback data from: default path
+[DEBUG] Loaded 212 fallback entries with vectors
+[DEBUG] Including 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Successfully added 212 fallback entries to the memory engine
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'github' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'postgresql' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'slack' ]
+[DEBUG] Text search - loaded 212 servers
+[DEBUG] Text search - found 2 RedNote-related servers: [
+  { id: 'rednote-mcp', title: 'RedNote MCP' },
+  { id: 'mcp-hotnews-server', title: 'Mcp-Hotnews-Server' }
+]
+[DEBUG] Text search - query keywords: [ 'filesystem' ]

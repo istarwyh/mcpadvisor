@@ -1,0 +1,67 @@
+{
+  "index": "offline_protocol_50cfe1744baa48229a6543705b836a6e",
+  "provenance": {
+    "commit": "a7ff4e5fc1f872cd565159025e4bcd09fd3437a3",
+    "source": "59294e99d335bc33931a28e1a5ed3abedf35a9606fdcd12dde62df1e721900ad",
+    "build": "83e44147672dc97248cb7ebed32fd0559b11680e8d1d075ec444db9d2d52e57c",
+    "catalog": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "runner": "b712ba880e3c190be111d1ed2cbfd7d555d5872c9364af74e0c2e4be4470ebbd",
+    "fixture": "166191216820a8aa39cd5f1f4a50f3a42b71e18760427fbe74a74aebb03280f4"
+  },
+  "queries": [
+    "GitHub",
+    "PostgreSQL",
+    "Slack",
+    "Filesystem"
+  ],
+  "errors": [],
+  "results": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: GitHub Actions\nDescription: A Model Context Protocol (MCP) server for interacting with Github Actions.\nSource URL: https://github.com/ko1ynnky/github-actions-mcp-server\nScore: 63.0%\n\nServer 2:\nTitle: GitHub\nDescription: MCP Server for the GitHub API, enabling file operations, repository management, search functionality, and more.\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 63.0%\n\nServer 3:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 4:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 5:\nTitle: HubSpot CRM Integration\nDescription: HubSpot CRM integration for managing contacts and companies. Create and retrieve CRM data directly through Claude chat.\nSource URL: https://github.com/buryhuang/mcp-hubspot\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 2:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 3:\nTitle: Postman\nDescription: MCP server for running Postman Collections locally via Newman. Allows for simple execution of Postman Server and returns the results of whether the collection passed all the tests.\nSource URL: https://github.com/shannonlal/mcp-postman\nScore: 45.5%\n\nServer 4:\nTitle: Crypto Fear & Greed Index\nDescription: Providing real-time and historical Crypto Fear & Greed Index data.\nSource URL: https://github.com/kukapay/crypto-feargreed-mcp\nScore: 45.5%\n\nServer 5:\nTitle: MySQL Database Integration\nDescription: MySQL database integration in Python with configurable access controls and schema inspection\nSource URL: https://github.com/designcomputer/mysql_mcp_server\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 2:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 3:\nTitle: Placid.app\nDescription: Generate image and video creatives using Placid.app templates\nSource URL: https://github.com/felores/placid-mcp-server\nScore: 45.5%\n\nServer 4:\nTitle: Whale Tracker\nDescription: A mcp server for tracking cryptocurrency whale transactions.\nSource URL: https://github.com/kukapay/whale-tracker-mcp\nScore: 45.5%\n\nServer 5:\nTitle: Slack\nDescription: Channel management and messaging capabilities\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 44.1%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: Filesystem\nDescription: Secure file operations with configurable access controls\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 57.8%\n\nServer 2:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 3:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 4:\nTitle: Salesforce Connector\nDescription: Interact with Salesforce Data and Metadata\nSource URL: https://github.com/smn2gnt/MCP-Salesforce\nScore: 45.5%\n\nServer 5:\nTitle: Multi-Cluster Server\nDescription: The gateway for GenAI systems to interact with multiple Kubernetes clusters.\nSource URL: https://github.com/yanmxa/multicluster-mcp-server\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    }
+  ],
+  "failure": "MeiliSearchRequestError: Request to http://127.0.0.1:17718/indexes/offline_protocol_50cfe1744baa48229a6543705b836a6e/stats has failed\n    at #request (file:///workspace/scratch/b10cf8cc5589/mcpadvisor-cline-20261009/node_modules/meilisearch/dist/esm/http-requests.js:177:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async Index.getStats (file:///workspace/scratch/b10cf8cc5589/mcpadvisor-cline-20261009/node_modules/meilisearch/dist/esm/indexes.js:191:16)\n    at async file:///workspace/scratch/b10cf8cc5589/mcpadvisor-protocol-20261016/evaluation/offline-initialization-20261015/capture-mcp.mjs:94:5",
+  "cleanupError": "Request to http://127.0.0.1:17718/indexes/offline_protocol_50cfe1744baa48229a6543705b836a6e has failed",
+  "provenanceAfter": {
+    "commit": "a7ff4e5fc1f872cd565159025e4bcd09fd3437a3",
+    "source": "59294e99d335bc33931a28e1a5ed3abedf35a9606fdcd12dde62df1e721900ad",
+    "build": "83e44147672dc97248cb7ebed32fd0559b11680e8d1d075ec444db9d2d52e57c",
+    "catalog": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "runner": "b712ba880e3c190be111d1ed2cbfd7d555d5872c9364af74e0c2e4be4470ebbd",
+    "fixture": "166191216820a8aa39cd5f1f4a50f3a42b71e18760427fbe74a74aebb03280f4"
+  },
+  "provenanceUnchanged": true
+}

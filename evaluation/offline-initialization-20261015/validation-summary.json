@@ -1,0 +1,74 @@
+{
+  "baseline": "5c13693ca7e1fc6b3bde8f4d9b050f147ba10533",
+  "candidate": "4b1d45b2984542e8f4ead7f1032760b3f6084109",
+  "runtimeSourceSha256": "2e1f19714c912d1cdb68fd428fcb75ad5098975115f830e96353a75a195f4190",
+  "node": "24.19.0",
+  "pnpm": "8.15.9",
+  "build": "passed",
+  "testTypes": "passed",
+  "newConcurrencyTests": {
+    "pass": 6
+  },
+  "fullVitest": {
+    "pass": 258,
+    "skip": 11,
+    "todo": 20,
+    "maxWorkers": 1
+  },
+  "earlierFullVitest": {
+    "pass": 257,
+    "fail": 1,
+    "reason": "offlineSearch timeout at existing 30s limit",
+    "maxWorkers": 2
+  },
+  "baselineOfflineVitest": {
+    "pass": 6,
+    "skip": 1
+  },
+  "nodeAndShellTests": {
+    "pass": 35
+  },
+  "realMeilisearch": {
+    "pass": 13,
+    "version": "1.15.2"
+  },
+  "existingMcpProtocol": {
+    "pass": 4,
+    "offlineEnabled": false,
+    "catalogRecords": 2
+  },
+  "defaultOfflineMcp": {
+    "toolResponses": 4,
+    "toolErrors": 0,
+    "parserErrors": 31,
+    "loaderCalls": 1,
+    "addEntryCalls": 212,
+    "cleanProtocol": false
+  },
+  "inspectorUi": "not run",
+  "fullCheck": {
+    "pass": true,
+    "lintErrors": 0,
+    "existingWarnings": 161,
+    "format": "passed"
+  },
+  "independentReview": "No remaining blockers after clear synchronization fix; evidence review completed",
+  "failedExperiments": [
+    "baseline regression tests fail as expected",
+    "initial fixture missing similarity type",
+    "initial full suite offline timeout",
+    "initial check used unwritable pnpm home",
+    "initial replay self-rejected changed runner",
+    "capture lint missing explicit node:url imports"
+  ],
+  "observedInitialization": {
+    "baseline": {
+      "loads": 2,
+      "insertions": 424
+    },
+    "candidate": {
+      "loads": 1,
+      "insertions": 212
+    }
+  }
+}

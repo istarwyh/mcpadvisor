@@ -1,0 +1,8 @@
+{
+  "captured_at": "2026-10-15T20:15:17.645717+00:00",
+  "head": "4b1d45b2984542e8f4ead7f1032760b3f6084109",
+  "sha256": {
+    "src/services/providers/offline/enhancedMemoryVectorEngine.ts": "2e1f19714c912d1cdb68fd428fcb75ad5098975115f830e96353a75a195f4190",
+    "build/services/providers/offline/enhancedMemoryVectorEngine.js": "f080311332b0319ceb68b6220e1159d962c43f26c3ebfbbc012e628bda64d9a4"
+  }
+}

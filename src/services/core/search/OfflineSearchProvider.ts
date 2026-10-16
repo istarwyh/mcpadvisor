@@ -286,7 +286,9 @@ export class OfflineSearchProvider implements SearchProvider {
       });
 
       // 调试信息：检查加载的服务器数据
-      console.log(`[DEBUG] Text search - loaded ${allServers.length} servers`);
+      console.error(
+        `[DEBUG] Text search - loaded ${allServers.length} servers`,
+      );
 
       // 检查是否包含小红书相关服务器
       const redNoteServers = allServers.filter(
@@ -294,7 +296,7 @@ export class OfflineSearchProvider implements SearchProvider {
           server.id === 'rednote-mcp' || server.id === 'mcp-hotnews-server',
       );
 
-      console.log(
+      console.error(
         `[DEBUG] Text search - found ${redNoteServers.length} RedNote-related servers:`,
         redNoteServers.map(s => ({ id: s.id, title: s.title })),
       );
@@ -305,11 +307,11 @@ export class OfflineSearchProvider implements SearchProvider {
         .split(/\s+/)
         .filter(k => k.length > 1);
 
-      console.log(`[DEBUG] Text search - query keywords:`, keywords);
+      console.error(`[DEBUG] Text search - query keywords:`, keywords);
 
       // 如果没有有效关键词，返回空结果
       if (keywords.length === 0) {
-        console.log(
+        console.error(
           `[DEBUG] Text search - no valid keywords; returning no results`,
         );
         return [];

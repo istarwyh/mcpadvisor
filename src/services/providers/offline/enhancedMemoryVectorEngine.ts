@@ -28,6 +28,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
   private memoryEngine: WritableInMemoryVectorEngine;
   private offlineLoader: OfflineDataLoader;
   private fallbackDataLoaded: boolean = false;
+  private fallbackLoadPromise?: Promise<void>;
   private lastFallbackLoadTime: number = 0;
   private fallbackLoadIntervalMs: number = 3600000; // 1小时
   private customFallbackPath?: string;
@@ -103,6 +104,8 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
    */
   async clear(): Promise<void> {
     try {
+      // Do not clear a partially inserted fallback batch.
+      if (this.fallbackLoadPromise) await this.fallbackLoadPromise;
       await this.memoryEngine.clear();
       this.fallbackDataLoaded = false;
       await this.ensureFallbackDataLoaded();
@@ -126,6 +129,17 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
    * 确保兜底数据已加载
    */
   private async ensureFallbackDataLoaded(): Promise<void> {
+    // Vector and text searches can reach first initialization concurrently.
+    // Share the complete load, including insertion, rather than only embeddings.
+    if (!this.fallbackLoadPromise) {
+      this.fallbackLoadPromise = this.loadFallbackData().finally(() => {
+        this.fallbackLoadPromise = undefined;
+      });
+    }
+    await this.fallbackLoadPromise;
+  }
+
+  private async loadFallbackData(): Promise<void> {
     const currentTime = Date.now();
 
     // 如果数据尚未加载或者已经过期，则重新加载
@@ -134,14 +148,14 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
       currentTime - this.lastFallbackLoadTime > this.fallbackLoadIntervalMs
     ) {
       try {
-        console.log(
+        console.error(
           `[DEBUG] Loading fallback data from: ${this.customFallbackPath || 'default path'}`,
         );
         logger.info('Loading fallback data into memory engine');
         const fallbackEntries =
           await this.offlineLoader.loadFallbackDataWithEmbeddings();
 
-        console.log(
+        console.error(
           `[DEBUG] Loaded ${fallbackEntries.length} fallback entries with vectors`,
         );
 
@@ -152,7 +166,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
             entry.data.id === 'mcp-hotnews-server',
         );
 
-        console.log(
+        console.error(
           `[DEBUG] Including ${redNoteEntries.length} RedNote-related servers:`,
           redNoteEntries.map(e => ({ id: e.data.id, title: e.data.title })),
         );
@@ -174,7 +188,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
             );
           }
           this.fallbackDataLoaded = true;
-          console.log(
+          console.error(
             `[DEBUG] Successfully added ${fallbackEntries.length} fallback entries to the memory engine`,
           );
           logger.info(

@@ -42,4 +42,5 @@ jobs:
       - run: pnpm run build
       - run: pnpm exec tsc --noEmit -p tsconfig.test.json
       - run: node --test scripts/evaluation/*.test.mjs
+      - run: node --test tests/e2e/offline-stdio.test.mjs
       - run: pnpm test

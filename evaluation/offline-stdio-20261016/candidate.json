@@ -1,0 +1,79 @@
+{
+  "generatedAt": "2026-10-16T02:30:39.646Z",
+  "commit": "3cd5a6919753f768ab07b5eda6cad7fc14ef320b",
+  "sources": {
+    "src/utils/logger.ts": "4b950b90eb4eac6ffbd755f583238fdd958948b44eb094b21d88363d27dc6d4a",
+    "src/services/core/search/OfflineSearchProvider.ts": "e90978f2040caea21acd6118c2e5e5a28de94f7ac3a98a1da01ee4522ab8a33f",
+    "src/services/providers/offline/enhancedMemoryVectorEngine.ts": "59294e99d335bc33931a28e1a5ed3abedf35a9606fdcd12dde62df1e721900ad",
+    "data/mcp_server_list.json": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "build/utils/logger.js": "5769fd9ed62c0185d6946e506eb787140417699a53c7e70dd96e6666fa10d06d",
+    "build/services/core/search/OfflineSearchProvider.js": "8f871afecd23576dda2ceccff32b983a7b5bf337ef2f90e9c8bdae4c1a2befd9",
+    "build/services/providers/offline/enhancedMemoryVectorEngine.js": "83e44147672dc97248cb7ebed32fd0559b11680e8d1d075ec444db9d2d52e57c",
+    "tests/e2e/fixtures/offline-stdio-server.mjs": "faca9a3ea54015d1874b2e761bc151fe0cadec5324f13aae19843b7feb82532a"
+  },
+  "runnerSha256": "2b0b9bc9a64a3a86b9c64b0f77d33f5dda0ae394407d9839b05fcf1fa95f868d",
+  "helperSha256": "af474e734d7e234549ff63f503c6e6dd45a773c6cd39a64b5baa9eab0289a443",
+  "queries": [
+    "GitHub",
+    "PostgreSQL",
+    "Slack",
+    "Filesystem"
+  ],
+  "protocolMessages": 6,
+  "invalidStdoutLines": 0,
+  "responses": [
+    {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Server 1:\nTitle: GitHub Actions\nDescription: A Model Context Protocol (MCP) server for interacting with Github Actions.\nSource URL: https://github.com/ko1ynnky/github-actions-mcp-server\nScore: 63.0%\n\nServer 2:\nTitle: GitHub\nDescription: MCP Server for the GitHub API, enabling file operations, repository management, search functionality, and more.\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 63.0%\n\nServer 3:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 4:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 5:\nTitle: HubSpot CRM Integration\nDescription: HubSpot CRM integration for managing contacts and companies. Create and retrieve CRM data directly through Claude chat.\nSource URL: https://github.com/buryhuang/mcp-hubspot\nScore: 45.5%\n"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Server 1:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 2:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 3:\nTitle: Postman\nDescription: MCP server for running Postman Collections locally via Newman. Allows for simple execution of Postman Server and returns the results of whether the collection passed all the tests.\nSource URL: https://github.com/shannonlal/mcp-postman\nScore: 45.5%\n\nServer 4:\nTitle: Crypto Fear & Greed Index\nDescription: Providing real-time and historical Crypto Fear & Greed Index data.\nSource URL: https://github.com/kukapay/crypto-feargreed-mcp\nScore: 45.5%\n\nServer 5:\nTitle: MySQL Database Integration\nDescription: MySQL database integration in Python with configurable access controls and schema inspection\nSource URL: https://github.com/designcomputer/mysql_mcp_server\nScore: 45.5%\n"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Server 1:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 2:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 3:\nTitle: Placid.app\nDescription: Generate image and video creatives using Placid.app templates\nSource URL: https://github.com/felores/placid-mcp-server\nScore: 45.5%\n\nServer 4:\nTitle: Whale Tracker\nDescription: A mcp server for tracking cryptocurrency whale transactions.\nSource URL: https://github.com/kukapay/whale-tracker-mcp\nScore: 45.5%\n\nServer 5:\nTitle: Slack\nDescription: Channel management and messaging capabilities\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 44.1%\n"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Server 1:\nTitle: Filesystem\nDescription: Secure file operations with configurable access controls\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 57.8%\n\nServer 2:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 3:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 4:\nTitle: Salesforce Connector\nDescription: Interact with Salesforce Data and Metadata\nSource URL: https://github.com/smn2gnt/MCP-Salesforce\nScore: 45.5%\n\nServer 5:\nTitle: Multi-Cluster Server\nDescription: The gateway for GenAI systems to interact with multiple Kubernetes clusters.\nSource URL: https://github.com/yanmxa/multicluster-mcp-server\nScore: 45.5%\n"
+          }
+        ],
+        "isError": false
+      }
+    }
+  ],
+  "limitation": "Full catalog and default offline configuration; model fetch fails explicitly in the test fixture so production SimpleEmbeddingProvider fallback is deterministic. No Meilisearch provider or Inspector UI in this capture. Does not measure ranking uplift."
+}

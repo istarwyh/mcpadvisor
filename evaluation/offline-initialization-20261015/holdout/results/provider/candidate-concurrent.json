@@ -1,0 +1,635 @@
+{
+  "mode": "concurrent",
+  "repo": "/workspace/shared/mcpadvisor-quality-20261015",
+  "surface": "provider",
+  "fixture_sha256": "eae6b07ef453d6e468a49be7865e5420e127daca546a2a7e28492e314089754c",
+  "started_at": "2026-10-15T20:14:29.408Z",
+  "cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 170,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": 0.5823999999999999,
+          "similarity": 0.5823999999999999
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mac-messages-mcp",
+          "sourceUrl": "https://github.com/carterlasalle/mac_messages_mcp",
+          "title": "Mac Messages",
+          "score": 0.5327,
+          "similarity": 0.5327
+        },
+        {
+          "id": "algorand",
+          "sourceUrl": "https://github.com/GoPlausible/algorand-mcp",
+          "title": "Algorand Implementation",
+          "score": 0.5082,
+          "similarity": 0.5082
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "query": "AWS Cost Explorer regional spending",
+      "returned_count": 163,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.3333333333333333,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "aws-cost-explorer",
+          "sourceUrl": "https://github.com/aarora79/aws-cost-explorer-mcp-server",
+          "title": "AWS Cost Explorer",
+          "score": 0.5585999999999999,
+          "similarity": 0.5585999999999999
+        },
+        {
+          "id": "aws-athena",
+          "sourceUrl": "https://github.com/lishenxydlgzs/aws-athena-mcp",
+          "title": "AWS Athena",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        },
+        {
+          "id": "aws-resources-operations",
+          "sourceUrl": "https://github.com/baryhuang/mcp-server-aws-resources-python",
+          "title": "AWS Resources",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        }
+      ]
+    },
+    {
+      "case_id": "H03",
+      "query": "Redis in-memory key-value caching",
+      "returned_count": 185,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "memory",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Knowledge Graph Memory",
+          "score": 0.5249999999999999,
+          "similarity": 0.5249999999999999
+        },
+        {
+          "id": "influxdb",
+          "sourceUrl": "https://github.com/idoru/influxdb-mcp-server",
+          "title": "InfluxDB",
+          "score": 0.5249999999999999,
+          "similarity": 0.5249999999999999
+        },
+        {
+          "id": "starwind-ui",
+          "sourceUrl": "https://github.com/Boston343/starwind-ui-mcp",
+          "title": "Starwind UI",
+          "score": 0.5249999999999999,
+          "similarity": 0.5249999999999999
+        }
+      ]
+    },
+    {
+      "case_id": "H04",
+      "query": "Rijksmuseum artwork image tiles collections",
+      "returned_count": 159,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rijksmuseum",
+          "sourceUrl": "https://github.com/r-huijts/rijksmuseum-mcp",
+          "title": "Rijksmuseum",
+          "score": 0.5823999999999999,
+          "similarity": 0.5823999999999999
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "image-generation",
+          "sourceUrl": "https://github.com/GongRzhe/Image-Generation-MCP-Server",
+          "title": "Image Generation",
+          "score": 0.4675999999999999,
+          "similarity": 0.4675999999999999
+        },
+        {
+          "id": "docker",
+          "sourceUrl": "https://github.com/ckreiling/mcp-server-docker",
+          "title": "Docker Integration",
+          "score": 0.38534999999999997,
+          "similarity": 0.38534999999999997
+        }
+      ]
+    },
+    {
+      "case_id": "H05",
+      "query": "QGIS load layers into a project",
+      "returned_count": 150,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.3333333333333333,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": 0.5133333333333333,
+          "similarity": 0.5133333333333333
+        },
+        {
+          "id": "unity-integration-advanced",
+          "sourceUrl": "https://github.com/quazaai/UnityMCPIntegration",
+          "title": "Unity Integration",
+          "score": 0.36049999999999993,
+          "similarity": 0.36049999999999993
+        },
+        {
+          "id": "productboard",
+          "sourceUrl": "https://github.com/kenjihikmatullah/productboard-mcp",
+          "title": "Productboard",
+          "score": 0.33635,
+          "similarity": 0.33635
+        }
+      ]
+    },
+    {
+      "case_id": "H06",
+      "query": "Excel worksheets charts pivot tables",
+      "returned_count": 94,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.3333333333333333,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "excel",
+          "sourceUrl": "https://github.com/haris-musa/excel-mcp-server",
+          "title": "Excel",
+          "score": 0.5529999999999999,
+          "similarity": 0.5529999999999999
+        },
+        {
+          "id": "quickchart",
+          "sourceUrl": "https://github.com/GongRzhe/Quickchart-MCP-Server",
+          "title": "Quickchart",
+          "score": 0.4095,
+          "similarity": 0.4095
+        },
+        {
+          "id": "bitable-mcp",
+          "sourceUrl": "https://github.com/lloydzhou/bitable-mcp",
+          "title": "Bitable",
+          "score": 0.36049999999999993,
+          "similarity": 0.36049999999999993
+        }
+      ]
+    },
+    {
+      "case_id": "H07",
+      "query": "Pandoc convert DOCX to Markdown",
+      "returned_count": 198,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "markdownify",
+          "sourceUrl": "https://github.com/zcaceres/mcp-markdownify-server",
+          "title": "Markdownify",
+          "score": 0.551425,
+          "similarity": 0.551425
+        },
+        {
+          "id": "obsidian-markdown-notes",
+          "sourceUrl": "https://github.com/calclavia/mcp-obsidian",
+          "title": "Obsidian Markdown Notes",
+          "score": 0.5330499999999999,
+          "similarity": 0.5330499999999999
+        },
+        {
+          "id": "todoist",
+          "sourceUrl": "https://github.com/abhiz123/todoist-mcp-server",
+          "title": "Todoist",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        }
+      ]
+    },
+    {
+      "case_id": "H08",
+      "query": "Google Calendar search events by location",
+      "returned_count": 164,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "google-calendar",
+          "sourceUrl": "https://github.com/nspady/google-calendar-mcp",
+          "title": "Google Calendar",
+          "score": 0.602,
+          "similarity": 0.602
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "google-custom-search",
+          "sourceUrl": "https://github.com/adenot/mcp-google-search",
+          "title": "Google Custom Search",
+          "score": 0.5529999999999999,
+          "similarity": 0.5529999999999999
+        },
+        {
+          "id": "google-drive",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Google Drive",
+          "score": 0.5355,
+          "similarity": 0.5355
+        }
+      ]
+    },
+    {
+      "case_id": "H09",
+      "query": "NASA APOD NEO EPIC data",
+      "returned_count": 62,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "nasa",
+          "sourceUrl": "https://github.com/ProgramComputer/NASA-MCP-server",
+          "title": "NASA",
+          "score": 0.5823999999999999,
+          "similarity": 0.5823999999999999
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "neo4j",
+          "sourceUrl": "https://github.com/da-okazaki/mcp-neo4j-server",
+          "title": "Neo4j Server",
+          "score": 0.5446,
+          "similarity": 0.5446
+        },
+        {
+          "id": "dataset-viewer",
+          "sourceUrl": "https://github.com/privetin/dataset-viewer",
+          "title": "Dataset Viewer",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        }
+      ]
+    },
+    {
+      "case_id": "H10",
+      "query": "Docker manage containers images volumes networks",
+      "returned_count": 167,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "docker",
+          "sourceUrl": "https://github.com/ckreiling/mcp-server-docker",
+          "title": "Docker Integration",
+          "score": 0.5775,
+          "similarity": 0.5775
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "claudepost",
+          "sourceUrl": "https://github.com/ZilongXue/claude-post",
+          "title": "Claude Post Email Management",
+          "score": 0.4374999999999999,
+          "similarity": 0.4374999999999999
+        },
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": 0.38733333333333325,
+          "similarity": 0.38733333333333325
+        }
+      ]
+    },
+    {
+      "case_id": "H11",
+      "query": "Home Assistant entity management automation",
+      "returned_count": 163,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.25,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "puppeteer",
+          "sourceUrl": "https://github.com/modelcontextprotocol/servers",
+          "title": "Puppeteer Browser Automation",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        },
+        {
+          "id": "home-assistant",
+          "sourceUrl": "https://github.com/voska/hass-mcp",
+          "title": "Hass",
+          "score": 0.4683,
+          "similarity": 0.4683
+        },
+        {
+          "id": "claudepost",
+          "sourceUrl": "https://github.com/ZilongXue/claude-post",
+          "title": "Claude Post Email Management",
+          "score": 0.4514999999999999,
+          "similarity": 0.4514999999999999
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 126,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.3333333333333333,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "ns-travel-information",
+          "sourceUrl": "https://github.com/r-huijts/ns-mcp-server",
+          "title": "NS Travel Information",
+          "score": 0.5427333333333333,
+          "similarity": 0.5427333333333333
+        },
+        {
+          "id": "mcp-installer",
+          "sourceUrl": "https://github.com/anaisbetts/mcp-installer",
+          "title": "Installer",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        },
+        {
+          "id": "typesense",
+          "sourceUrl": "https://github.com/suhail-ak-s/mcp-typesense-server",
+          "title": "Typesense",
+          "score": 0.50785,
+          "similarity": 0.50785
+        }
+      ]
+    }
+  ],
+  "initializations": 2,
+  "errors": [],
+  "first_access_initializations": 1,
+  "warm_cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 170,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": 0.5823999999999999,
+          "similarity": 0.5823999999999999
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mac-messages-mcp",
+          "sourceUrl": "https://github.com/carterlasalle/mac_messages_mcp",
+          "title": "Mac Messages",
+          "score": 0.5327,
+          "similarity": 0.5327
+        },
+        {
+          "id": "algorand",
+          "sourceUrl": "https://github.com/GoPlausible/algorand-mcp",
+          "title": "Algorand Implementation",
+          "score": 0.5082,
+          "similarity": 0.5082
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 126,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.3333333333333333,
+      "rows": [
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "sourceUrl": "https://github.com/wopal-cn/mcp-hotnews-server",
+          "title": "Mcp-Hotnews-Server",
+          "score": 0.5599999999999999,
+          "similarity": 0.5599999999999999
+        },
+        {
+          "id": "ns-travel-information",
+          "sourceUrl": "https://github.com/r-huijts/ns-mcp-server",
+          "title": "NS Travel Information",
+          "score": 0.5427333333333333,
+          "similarity": 0.5427333333333333
+        },
+        {
+          "id": "mcp-installer",
+          "sourceUrl": "https://github.com/anaisbetts/mcp-installer",
+          "title": "Installer",
+          "score": 0.5319999999999999,
+          "similarity": 0.5319999999999999
+        },
+        {
+          "id": "typesense",
+          "sourceUrl": "https://github.com/suhail-ak-s/mcp-typesense-server",
+          "title": "Typesense",
+          "score": 0.50785,
+          "similarity": 0.50785
+        }
+      ]
+    }
+  ],
+  "additional_warm_initializations": 0,
+  "independent_scope_initializations": 1,
+  "mean_hit_at_5": 0.8333333333333334,
+  "mean_reciprocal_rank": 0.548611111111111,
+  "finished_at": "2026-10-15T20:14:51.424Z"
+}

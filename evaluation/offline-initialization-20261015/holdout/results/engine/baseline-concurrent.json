@@ -1,0 +1,299 @@
+{
+  "mode": "concurrent",
+  "repo": "/workspace/shared/mcpadvisor-quality-baseline-20261015",
+  "surface": "engine",
+  "fixture_sha256": "eae6b07ef453d6e468a49be7865e5420e127daca546a2a7e28492e314089754c",
+  "started_at": "2026-10-15T20:12:40.188Z",
+  "cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 1,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": null,
+          "similarity": 2.882587059689201
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "query": "AWS Cost Explorer regional spending",
+      "returned_count": 1,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "aws-cost-explorer",
+          "sourceUrl": "https://github.com/aarora79/aws-cost-explorer-mcp-server",
+          "title": "AWS Cost Explorer",
+          "score": null,
+          "similarity": 3.138234923137056
+        }
+      ]
+    },
+    {
+      "case_id": "H03",
+      "query": "Redis in-memory key-value caching",
+      "returned_count": 1,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "redis",
+          "sourceUrl": "https://github.com/prajwalnayak7/mcp-server-redis",
+          "title": "Redis",
+          "score": null,
+          "similarity": 1.8809953935653805
+        }
+      ]
+    },
+    {
+      "case_id": "H04",
+      "query": "Rijksmuseum artwork image tiles collections",
+      "returned_count": 1,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rijksmuseum",
+          "sourceUrl": "https://github.com/r-huijts/rijksmuseum-mcp",
+          "title": "Rijksmuseum",
+          "score": null,
+          "similarity": 2.89275574942204
+        }
+      ]
+    },
+    {
+      "case_id": "H05",
+      "query": "QGIS load layers into a project",
+      "returned_count": 1,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "qgis",
+          "sourceUrl": "https://github.com/jjsantos01/qgis_mcp",
+          "title": "QGIS Model Context Protocol Integration",
+          "score": null,
+          "similarity": 1.8560016385089548
+        }
+      ]
+    },
+    {
+      "case_id": "H06",
+      "query": "Excel worksheets charts pivot tables",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "excel",
+          "sourceUrl": "https://github.com/haris-musa/excel-mcp-server",
+          "title": "Excel",
+          "score": null,
+          "similarity": 0.350592260799344
+        },
+        {
+          "id": "bitable-mcp",
+          "sourceUrl": "https://github.com/lloydzhou/bitable-mcp",
+          "title": "Bitable",
+          "score": null,
+          "similarity": 0.30000000000000004
+        }
+      ]
+    },
+    {
+      "case_id": "H07",
+      "query": "Pandoc convert DOCX to Markdown",
+      "returned_count": 2,
+      "hit_at_5": 0,
+      "reciprocal_rank": 0,
+      "rows": [
+        {
+          "id": "mindmap",
+          "sourceUrl": "https://github.com/YuChenSSR/mindmap-mcp-server",
+          "title": "Mindmap",
+          "score": null,
+          "similarity": 0.8999999999999998
+        },
+        {
+          "id": "markdownify",
+          "sourceUrl": "https://github.com/zcaceres/mcp-markdownify-server",
+          "title": "Markdownify",
+          "score": null,
+          "similarity": 0.4206023955398592
+        }
+      ]
+    },
+    {
+      "case_id": "H08",
+      "query": "Google Calendar search events by location",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.5,
+      "rows": [
+        {
+          "id": "google-custom-search",
+          "sourceUrl": "https://github.com/adenot/mcp-google-search",
+          "title": "Google Custom Search",
+          "score": null,
+          "similarity": 2.7
+        },
+        {
+          "id": "google-calendar",
+          "sourceUrl": "https://github.com/nspady/google-calendar-mcp",
+          "title": "Google Calendar",
+          "score": null,
+          "similarity": 0.5253368562590583
+        }
+      ]
+    },
+    {
+      "case_id": "H09",
+      "query": "NASA APOD NEO EPIC data",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.5,
+      "rows": [
+        {
+          "id": "world-bank-data-api",
+          "sourceUrl": "https://github.com/anshumax/world_bank_mcp_server",
+          "title": "World Bank Data API",
+          "score": null,
+          "similarity": 1.4999999999999998
+        },
+        {
+          "id": "nasa",
+          "sourceUrl": "https://github.com/ProgramComputer/NASA-MCP-server",
+          "title": "NASA",
+          "score": null,
+          "similarity": 0.3575971462798267
+        }
+      ]
+    },
+    {
+      "case_id": "H10",
+      "query": "Docker manage containers images volumes networks",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.5,
+      "rows": [
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": null,
+          "similarity": 0.8999999999999998
+        },
+        {
+          "id": "docker",
+          "sourceUrl": "https://github.com/ckreiling/mcp-server-docker",
+          "title": "Docker Integration",
+          "score": null,
+          "similarity": 0.509089240352394
+        }
+      ]
+    },
+    {
+      "case_id": "H11",
+      "query": "Home Assistant entity management automation",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 0.5,
+      "rows": [
+        {
+          "id": "contentful-mcp",
+          "sourceUrl": "https://github.com/ivo-toby/contentful-mcp",
+          "title": "Contentful Management",
+          "score": null,
+          "similarity": 0.8999999999999998
+        },
+        {
+          "id": "home-assistant",
+          "sourceUrl": "https://github.com/voska/hass-mcp",
+          "title": "Hass",
+          "score": null,
+          "similarity": 0.4693336344097122
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "ns-travel-information",
+          "sourceUrl": "https://github.com/r-huijts/ns-mcp-server",
+          "title": "NS Travel Information",
+          "score": null,
+          "similarity": 0.4108803173740043
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": null,
+          "similarity": 0
+        }
+      ]
+    }
+  ],
+  "initializations": 14,
+  "errors": [],
+  "first_access_initializations": 12,
+  "warm_cases": [
+    {
+      "case_id": "H01",
+      "query": "RabbitMQ publish and consume messages",
+      "returned_count": 1,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "rabbitmq",
+          "sourceUrl": "https://github.com/kenliao94/mcp-server-rabbitmq",
+          "title": "RabbitMQ",
+          "score": null,
+          "similarity": 2.882587059689201
+        }
+      ]
+    },
+    {
+      "case_id": "H12",
+      "query": "Dutch Railways NS train disruptions",
+      "returned_count": 2,
+      "hit_at_5": 1,
+      "reciprocal_rank": 1,
+      "rows": [
+        {
+          "id": "ns-travel-information",
+          "sourceUrl": "https://github.com/r-huijts/ns-mcp-server",
+          "title": "NS Travel Information",
+          "score": null,
+          "similarity": 0.4108803173740043
+        },
+        {
+          "id": "rednote-mcp",
+          "sourceUrl": "https://github.com/ifuryst/rednote-mcp",
+          "title": "RedNote MCP",
+          "score": null,
+          "similarity": 0
+        }
+      ]
+    }
+  ],
+  "additional_warm_initializations": 0,
+  "independent_scope_initializations": 2,
+  "mean_hit_at_5": 0.9166666666666666,
+  "mean_reciprocal_rank": 0.75,
+  "finished_at": "2026-10-15T20:12:55.369Z"
+}

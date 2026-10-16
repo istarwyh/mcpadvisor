@@ -33,7 +33,7 @@ export class McpConfigurationExtractor
   public extractInstallationSection(
     readmeContent: string,
   ): InstallationSection | null {
-    console.log(
+    console.error(
       'First 500 characters of the README:',
       readmeContent.substring(0, 500),
     );
@@ -90,7 +90,7 @@ export class McpConfigurationExtractor
     readmeContent: string,
   ): string | null {
     const headings = this.extractHeadings(readmeContent);
-    console.log('All discovered headings:', headings);
+    console.error('All discovered headings:', headings);
 
     // Find headings that contain MCP-related keywords
     const mcpHeadings = headings.filter(heading =>
@@ -99,7 +99,7 @@ export class McpConfigurationExtractor
       ),
     );
 
-    console.log('Found MCP configuration headings:', mcpHeadings.join(', '));
+    console.error('Found MCP configuration headings:', mcpHeadings.join(', '));
 
     if (mcpHeadings.length > 0) {
       // Use the first MCP-related heading

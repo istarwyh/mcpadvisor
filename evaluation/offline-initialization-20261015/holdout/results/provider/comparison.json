@@ -1,0 +1,34 @@
+{
+  "pass": false,
+  "failures": [
+    "H01: baseline concurrent/sequential outputs differ",
+    "H02: baseline concurrent/sequential outputs differ",
+    "H03: baseline concurrent/sequential outputs differ",
+    "H04: baseline concurrent/sequential outputs differ",
+    "H05: baseline concurrent/sequential outputs differ",
+    "H06: baseline concurrent/sequential outputs differ",
+    "H07: baseline concurrent/sequential outputs differ",
+    "H08: baseline concurrent/sequential outputs differ",
+    "H09: baseline concurrent/sequential outputs differ",
+    "H10: baseline concurrent/sequential outputs differ",
+    "H11: baseline concurrent/sequential outputs differ",
+    "H12: baseline concurrent/sequential outputs differ"
+  ],
+  "baseline": {
+    "hit_at_5": 0.8333333333333334,
+    "mrr": 0.548611111111111,
+    "first_access_initializations": 24
+  },
+  "candidate": {
+    "hit_at_5": 0.8333333333333334,
+    "mrr": 0.548611111111111,
+    "first_access_initializations": 1,
+    "warm_initializations": 0,
+    "independent_scope_initializations": 1
+  },
+  "baseline_misses": [
+    "H03",
+    "H07"
+  ],
+  "scope": "Frozen catalog-derived 12-case engine holdout; fixed fallback mode; no ranking or model tuning."
+}
