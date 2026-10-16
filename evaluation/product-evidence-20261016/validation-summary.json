@@ -1,0 +1,166 @@
+{
+  "baselineCommit": "9b409117b356e36ce157ef980493cbe1856a8ad4",
+  "candidateRuntimeCommit": "8b073cdd68662ec06d67f7c7a7719dcc467ad3b8",
+  "runtime": "Node 24.19.0; reused dependency tree whose pnpm-lock.yaml exactly matches; not a fresh local install",
+  "stages": [
+    {
+      "name": "production build",
+      "command": "node node_modules/typescript/bin/tsc",
+      "status": "passed",
+      "detail": "Both baseline and candidate freshly rebuilt by capture.mjs; hashes stable during capture"
+    },
+    {
+      "name": "test project types",
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p tsconfig.test.json",
+      "status": "passed"
+    },
+    {
+      "name": "static independent scoped review",
+      "status": "passed",
+      "tests": 65,
+      "detail": "33 evidence,16 planner,13 professional reranking,3 SearchService; before unblind"
+    },
+    {
+      "name": "repository lint",
+      "command": "node node_modules/eslint/bin/eslint.js .",
+      "status": "passed",
+      "errors": 0,
+      "existingWarnings": 161
+    },
+    {
+      "name": "source format",
+      "command": "node node_modules/prettier/bin/prettier.cjs --check 'src/**/*.ts'",
+      "status": "passed"
+    },
+    {
+      "name": "pnpm run check wrapper",
+      "status": "blocked",
+      "detail": "Available pnpm11 attempted an automatic dependency-status install and could not initialize its home store. Direct installed ESLint+Prettier equivalents passed. No dependency or credential change made."
+    },
+    {
+      "name": "full Vitest before test isolation",
+      "command": "node node_modules/vitest/vitest.mjs run --minWorkers=1 --maxWorkers=1",
+      "status": "failed",
+      "passed": 290,
+      "failed": 1,
+      "skipped": 11,
+      "todo": 20,
+      "detail": "Existing offline RedNote first search exceeded30000ms; frozen production runtime; no timeout relaxed"
+    },
+    {
+      "name": "baseline isolated offline suite",
+      "status": "passed",
+      "passed": 6,
+      "skipped": 1,
+      "firstSearchMs": 16953
+    },
+    {
+      "name": "candidate isolated offline suite",
+      "status": "passed",
+      "passed": 6,
+      "skipped": 1,
+      "firstSearchMs": 24147
+    },
+    {
+      "name": "real Meilisearch integration",
+      "command": "vitest run src/tests/integration/providers/meilisearch-fulltext.test.ts src/tests/integration/providers/meilisearch-evaluation.test.ts src/tests/integration/providers/meilisearch-judgment-pool.test.ts --minWorkers=1 --maxWorkers=1",
+      "status": "passed",
+      "passed": 13,
+      "engine": "Meilisearch1.15.2"
+    },
+    {
+      "name": "existing real MCP protocol",
+      "command": "node --test tests/e2e/meilisearch-mcp.test.mjs",
+      "status": "passed",
+      "passed": 4
+    },
+    {
+      "name": "raw default offline and diagnostics subprocess",
+      "command": "node --test tests/e2e/offline-stdio.test.mjs",
+      "status": "passed",
+      "passed": 8
+    },
+    {
+      "name": "evaluation Node regressions",
+      "command": "node --test scripts/evaluation/*.test.mjs",
+      "status": "passed",
+      "passed": 31
+    },
+    {
+      "name": "shell regressions",
+      "command": "node --test scripts/e2e/e2e.meilisearch.test.mjs",
+      "status": "passed",
+      "passed": 4
+    },
+    {
+      "name": "frozen actual service capture",
+      "status": "completed",
+      "file": "verification-results.json",
+      "broadGate": "FAIL",
+      "targetedSlice": "PASS; aggregate/offline p01,p04 0/2 to2/2; independent AI-authored synthetic probes"
+    },
+    {
+      "name": "frozen raw MCP protocol/parity",
+      "status": "passed",
+      "file": "verification-results.json",
+      "toolResponses": 32,
+      "schemaValidatedStdoutLines": 36,
+      "malformedLines": 0,
+      "toolErrors": 0,
+      "exactFormattedAggregateMatches": 32
+    },
+    {
+      "name": "Inspector UI",
+      "status": "not_run"
+    },
+    {
+      "name": "packaged CLI/native sharp startup",
+      "status": "not_run"
+    },
+    {
+      "name": "GitHub latest-head CI",
+      "status": "pending_publication"
+    },
+    {
+      "name": "baseline full Vitest",
+      "status": "passed",
+      "passed": 258,
+      "skipped": 11,
+      "todo": 20
+    },
+    {
+      "name": "final full Vitest after unit-test isolation",
+      "command": "node node_modules/vitest/vitest.mjs run --minWorkers=1 --maxWorkers=1",
+      "status": "passed",
+      "passed": 291,
+      "skipped": 11,
+      "todo": 20,
+      "detail": "Only unit-test import mocked; production, quality suite and all real integration tests unchanged"
+    },
+    {
+      "name": "post-isolation types/lint/format",
+      "status": "passed",
+      "lintErrors": 0,
+      "existingWarnings": 161
+    }
+  ],
+  "failedAttempts": [
+    "Intermediate full run:283 passed,1 offline first-search timeout,11 skipped,20 todo; not final source verification.",
+    "Initial raw MCP capture candidate tools/call exceeded30000ms while cold model initialized. Raw records retained outside the public branch. Retry increased evaluation-only client timeout to120000ms; no application or regression-test timeout changed.",
+    "Initial integration command ran7 actual full-text tests and8 old local tests that early-returned. These8 are not counted as validated; final CI-equivalent suite selection passed13 real engine tests."
+  ],
+  "knownLimits": [
+    "Broad frozen output contract remainsFAIL",
+    "Only clear-boundary single-Latin-token -specific requirements are in scope",
+    "Chinese/multiword/multiple-product/exclusion semantics unchanged",
+    "Metadata mention is not proof of dedicated integration",
+    "Existing displayed scores above100% remain unchanged, not confidence estimates",
+    "No release/deployment/merge performed"
+  ],
+  "postFreezeTestOnlyEdit": {
+    "file": "src/tests/unit/services/product-evidence.test.ts",
+    "sha256": "97288f022df24eac044fc38c97e9f0af2c220230841cac5966cadfe827696db3",
+    "description": "File-local embedding mock prevents an unused eager download when all service cases disable offline. This is appropriate unit isolation, not proof of the earlier timeout cause. Captured production runtime unchanged."
+  },
+  "rawRecords": "Retained outside the public branch. Local paths, environment diagnostics, raw stdout/stderr and duplicated catalog metadata are not published."
+}

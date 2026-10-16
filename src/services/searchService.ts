@@ -8,6 +8,7 @@ import type { SearchParams } from '../types/search.js';
 import { OfflineSearchProvider } from './core/search/OfflineSearchProvider.js';
 import logger from '../utils/logger.js';
 import type { ProfessionalReranker } from './core/search/ProfessionalReranker.js';
+import { filterSpecificProductResults } from './core/search/productEvidence.js';
 
 /**
  * 提供者优先级配置
@@ -192,7 +193,10 @@ export class SearchService {
       // Collect results from all providers in parallel
       const providerPromises = this.searchAllProviders(allProviders, params);
 
-      const namedProviderResults = await Promise.all(providerPromises);
+      const namedProviderResults = filterSpecificProductResults(
+        params,
+        await Promise.all(providerPromises),
+      );
       this.logProviderResults(namedProviderResults);
       const fallback = this.reranker.reRank(
         namedProviderResults,
