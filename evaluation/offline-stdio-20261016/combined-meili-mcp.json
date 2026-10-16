@@ -1,0 +1,72 @@
+{
+  "index": "offline_protocol_eb248672926344cdb356d1d227e54f10",
+  "provenance": {
+    "commit": "3cd5a6919753f768ab07b5eda6cad7fc14ef320b",
+    "source": "59294e99d335bc33931a28e1a5ed3abedf35a9606fdcd12dde62df1e721900ad",
+    "build": "83e44147672dc97248cb7ebed32fd0559b11680e8d1d075ec444db9d2d52e57c",
+    "catalog": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "runner": "b712ba880e3c190be111d1ed2cbfd7d555d5872c9364af74e0c2e4be4470ebbd",
+    "fixture": "166191216820a8aa39cd5f1f4a50f3a42b71e18760427fbe74a74aebb03280f4"
+  },
+  "queries": [
+    "GitHub",
+    "PostgreSQL",
+    "Slack",
+    "Filesystem"
+  ],
+  "errors": [],
+  "results": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: GitHub\nDescription: MCP Server for the GitHub API, enabling file operations, repository management, search functionality, and more.\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: GitHub Actions\nDescription: A Model Context Protocol (MCP) server for interacting with Github Actions.\nSource URL: https://github.com/ko1ynnky/github-actions-mcp-server\nScore: 896.6%\n\nServer 3:\nTitle: DeepSeek\nDescription: Model Context Protocol server integrating DeepSeek's advanced language models, in addition to [other useful API endpoints](https://github.com/DMontgomery40/deepseek-mcp-server?tab=readme-ov-file#features)\nSource URL: https://github.com/DMontgomery40/deepseek-mcp-server\nScore: 709.1%\n\nServer 4:\nTitle: Chat Desktop App\nDescription: – An Open Source Cross-platform GUI Desktop application compatible with Linux, macOS, and Windows, enabling seamless interaction with MCP servers across dynamically selectable LLMs, by **[AIQL](https://github.com/AI-QL/chat-mcp)**\nSource URL: https://github.com/AI-QL/chat-mcp\nScore: 709.1%\n\nServer 5:\nTitle: Mesh Agent\nDescription: Access specialized web3 AI agents for blockchain analysis, smart contract security, token metrics, and blockchain interactions through the [Heurist Mesh network](https://github.com/heurist-network/heurist-agent-framework/tree/main/mesh).\nSource URL: https://github.com/heurist-network/heurist-mesh-mcp-server\nScore: 709.1%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: PostgreSQL\nDescription: Read-only database access with schema inspection\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: DBHub - Universal Database Gateway\nDescription: Universal database MCP server connecting to MySQL, PostgreSQL, SQLite, DuckDB and etc.\nSource URL: https://github.com/bytebase/dbhub\nScore: 793.2%\n\nServer 3:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 4:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 5:\nTitle: Postman\nDescription: MCP server for running Postman Collections locally via Newman. Allows for simple execution of Postman Server and returns the results of whether the collection passed all the tests.\nSource URL: https://github.com/shannonlal/mcp-postman\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: Slack\nDescription: Channel management and messaging capabilities\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 3:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n\nServer 4:\nTitle: Placid.app\nDescription: Generate image and video creatives using Placid.app templates\nSource URL: https://github.com/felores/placid-mcp-server\nScore: 45.5%\n\nServer 5:\nTitle: Whale Tracker\nDescription: A mcp server for tracking cryptocurrency whale transactions.\nSource URL: https://github.com/kukapay/whale-tracker-mcp\nScore: 45.5%\n"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "Server 1:\nTitle: Filesystem\nDescription: Secure file operations with configurable access controls\nSource URL: https://github.com/modelcontextprotocol/servers\nScore: 900.0%\n\nServer 2:\nTitle: Headless Gmail Server\nDescription: Remote hostable MCP server that can get and send Gmail messages without local credential or file system setup.\nSource URL: https://github.com/baryhuang/mcp-headless-gmail\nScore: 485.2%\n\nServer 3:\nTitle: Terminal Controller\nDescription: A MCP server that enables secure terminal command execution, directory navigation, and file system operations through a standardized interface.\nSource URL: https://github.com/GongRzhe/terminal-controller-mcp\nScore: 478.4%\n\nServer 4:\nTitle: RedNote MCP\nDescription: 小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容、认证管理和命令行初始化工具\nSource URL: https://github.com/ifuryst/rednote-mcp\nScore: 56.0%\n\nServer 5:\nTitle: Mcp-Hotnews-Server\nDescription: 获取和分析各大平台热点新闻和话题的MCP服务，支持小红书、微博、知乎等多个中文社交媒体平台\nSource URL: https://github.com/wopal-cn/mcp-hotnews-server\nScore: 56.0%\n"
+        }
+      ],
+      "isError": false
+    }
+  ],
+  "documentCount": 212,
+  "loaderCalls": 1,
+  "addEntryCalls": 212,
+  "toolErrors": 0,
+  "limitations": [
+    "Instrumentation counts actual loader/insertion calls. No runtime behavior, ranking, or model is replaced. Existing stdout diagnostics are retained and parser errors recorded. Four observed product queries, not independent holdout."
+  ],
+  "provenanceAfter": {
+    "commit": "3cd5a6919753f768ab07b5eda6cad7fc14ef320b",
+    "source": "59294e99d335bc33931a28e1a5ed3abedf35a9606fdcd12dde62df1e721900ad",
+    "build": "83e44147672dc97248cb7ebed32fd0559b11680e8d1d075ec444db9d2d52e57c",
+    "catalog": "c323f16b1a24075f21655fb15780db9f4af3e105bc9a40b698f2c9b2e4205e50",
+    "runner": "b712ba880e3c190be111d1ed2cbfd7d555d5872c9364af74e0c2e4be4470ebbd",
+    "fixture": "166191216820a8aa39cd5f1f4a50f3a42b71e18760427fbe74a74aebb03280f4"
+  },
+  "provenanceUnchanged": true
+}

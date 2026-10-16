@@ -148,14 +148,14 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
       currentTime - this.lastFallbackLoadTime > this.fallbackLoadIntervalMs
     ) {
       try {
-        console.log(
+        console.error(
           `[DEBUG] Loading fallback data from: ${this.customFallbackPath || 'default path'}`,
         );
         logger.info('Loading fallback data into memory engine');
         const fallbackEntries =
           await this.offlineLoader.loadFallbackDataWithEmbeddings();
 
-        console.log(
+        console.error(
           `[DEBUG] Loaded ${fallbackEntries.length} fallback entries with vectors`,
         );
 
@@ -166,7 +166,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
             entry.data.id === 'mcp-hotnews-server',
         );
 
-        console.log(
+        console.error(
           `[DEBUG] Including ${redNoteEntries.length} RedNote-related servers:`,
           redNoteEntries.map(e => ({ id: e.data.id, title: e.data.title })),
         );
@@ -188,7 +188,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
             );
           }
           this.fallbackDataLoaded = true;
-          console.log(
+          console.error(
             `[DEBUG] Successfully added ${fallbackEntries.length} fallback entries to the memory engine`,
           );
           logger.info(

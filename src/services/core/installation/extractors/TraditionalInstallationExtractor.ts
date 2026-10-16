@@ -38,7 +38,7 @@ export class TraditionalInstallationExtractor
     readmeContent: string,
   ): InstallationSection | null {
     const headings = this.extractHeadings(readmeContent);
-    console.log('All discovered headings:', headings);
+    console.error('All discovered headings:', headings);
 
     let bestScore = 0;
     let bestMatch: { heading: string; index: number } | null = null;
@@ -72,7 +72,7 @@ export class TraditionalInstallationExtractor
     }
 
     if (bestMatch) {
-      console.log('Best matching heading:', bestMatch.heading);
+      console.error('Best matching heading:', bestMatch.heading);
       const content = this.extractSectionContent(
         readmeContent,
         bestMatch.heading,

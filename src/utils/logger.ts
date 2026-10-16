@@ -129,6 +129,8 @@ if (isMainApplication || process.env.ENABLE_FILE_LOGGING === 'true') {
 const isConsoleEnabled = process.env.ENABLE_CONSOLE_LOGGING === 'true';
 transports.push(
   new winston.transports.Console({
+    // stdout belongs to the MCP stdio transport, even when diagnostics are enabled.
+    stderrLevels: Object.keys(levels),
     format: consoleFormat,
     silent: !isConsoleEnabled && !isMainApplication,
     handleExceptions: false,
@@ -141,7 +143,10 @@ const logger = winston.createLogger({
   levels,
   defaultMeta: { service: 'mcpadvisor' },
   transports,
-  silent: !isMainApplication && process.env.ENABLE_FILE_LOGGING !== 'true', // Silence all logging when used as a dependency
+  silent:
+    !isMainApplication &&
+    !isConsoleEnabled &&
+    process.env.ENABLE_FILE_LOGGING !== 'true', // Silent unless a logging destination is enabled
   exitOnError: false, // Don't crash on logging errors
 });
 

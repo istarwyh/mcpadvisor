@@ -1,5 +1,10 @@
 # Offline initialization single-flight
 
+This report preserves the initial PR snapshot. The later
+[stdio repair and new verification](../offline-stdio-20261016/README.md) resolves
+the stdout pollution described below. Its diagnostic-only runtime changes have
+new source hashes; the original frozen evidence here is unchanged.
+
 Related to [issue #13](https://github.com/istarwyh/mcpadvisor/issues/13).
 This is a bounded concurrency repair, not a ranking/model change or completion of
 that issue. Parallel vector/text first access previously loaded the 212-record
