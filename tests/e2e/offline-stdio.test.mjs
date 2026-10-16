@@ -160,3 +160,64 @@ for (const mode of ['default', 'console', 'file', 'main']) {
     }
   });
 }
+
+test(
+  'default offline MCP does not recommend unrelated products for an explicit specific request',
+  { timeout: 45000 },
+  async () => {
+    const client = startRawClient(fixture, {
+      cwd: root,
+      env: {
+        PATH: process.env.PATH,
+        ENABLE_CONSOLE_LOGGING: 'false',
+        ENABLE_FILE_LOGGING: 'false',
+      },
+    });
+    try {
+      await client.request('initialize', {
+        protocolVersion: LATEST_PROTOCOL_VERSION,
+        capabilities: {},
+        clientInfo: { name: 'product-evidence-regression', version: '1.0.0' },
+      });
+      client.notify('notifications/initialized');
+      const search = taskDescription =>
+        client.request('tools/call', {
+          name: 'recommend-mcp-servers',
+          arguments: { taskDescription },
+        });
+      for (const query of [
+        'I need a NeverKnown-specific database tool',
+        '需要 neverknown-specific 数据库工具',
+      ]) {
+        const response = await search(query);
+        assert.equal(response.result.isError, false);
+        assert.ok(
+          response.result.content.some(
+            item =>
+              item.type === 'text' &&
+              item.text.includes('No matching MCP servers found') &&
+              !item.text.includes('Title:'),
+          ),
+        );
+      }
+      const known = await search('I need a GitHub-specific MCP tool');
+      assert.equal(known.result.isError, false);
+      assert.ok(
+        known.result.content.some(
+          item => item.type === 'text' && item.text.includes('Title: GitHub'),
+        ),
+      );
+      const generic = await search('I need a task-specific database tool');
+      assert.equal(generic.result.isError, false);
+      assert.ok(
+        generic.result.content.some(
+          item => item.type === 'text' && item.text.includes('Title:'),
+        ),
+      );
+    } finally {
+      await client.close();
+    }
+    assert.equal(client.report.messages.length, 5);
+    assert.deepEqual(client.report.violations, []);
+  },
+);

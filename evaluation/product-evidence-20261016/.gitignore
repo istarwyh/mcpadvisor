@@ -1,0 +1,6 @@
+# Generated raw captures can contain local paths and environment diagnostics.
+*.raw.json
+*.stdout
+*.stderr
+capture.json
+mcp-*.json

@@ -71,6 +71,11 @@ const GENERIC_NAMES = new Set([
     ' ',
   ),
 ]);
+/** Shared vocabulary for non-product `-specific` modifiers. */
+export function isGenericSpecificModifier(value: string): boolean {
+  return GENERIC_NAMES.has(value.toLowerCase());
+}
+
 const segmenter = new Intl.Segmenter('zh', { granularity: 'word' });
 
 function tokens(text: string): string[] {

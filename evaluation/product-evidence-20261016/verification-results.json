@@ -1,0 +1,1014 @@
+{
+  "label": "independent synthetic output-contract validation; not production traffic or human relevance labels",
+  "baseline_commit": "9b409117b356e36ce157ef980493cbe1856a8ad4",
+  "captured_runtime_commit": "8b073cdd68662ec06d67f7c7a7719dcc467ad3b8",
+  "production_gate_sha256": "755453cdde77185d1914cf13e0dac0be487d4161af2b122529387fc049841d6a",
+  "original_suite_sha256": "2d02decec84f1e79cff0da8f3fe034cbe3886c7fadf7dade5f5b74602b02ddb9",
+  "public_suite_sha256": "315bef16aa1d60dd73bbf89bd783c1b0d4dd0e8da1776d23170a1d619049b821",
+  "raw_capture_sha256": "560cf1e2d44dacca315529b8d63576e30361daa95ccddbabb1c971c963076653",
+  "raw_mcp_capture_sha256": "f18f2282abfe6fe2781eea1cbe60d8194248c82c527ad8ddeea9be3549469e41",
+  "raw_records_publication": "Raw execution records are not included; local paths, environment diagnostics and duplicated catalog metadata are omitted. Reproduction scripts operate on the unchanged public query/expectation projection.",
+  "engine_version": "1.15.2",
+  "catalog_count": 212,
+  "broad_gate": "FAIL",
+  "targeted_p01_p04": "PASS",
+  "summary": {
+    "provider": {
+      "baseline": 11,
+      "candidate": 11
+    },
+    "isolated": {
+      "baseline": 11,
+      "candidate": 11
+    },
+    "aggregate": {
+      "baseline": 4,
+      "candidate": 6
+    },
+    "offline": {
+      "baseline": 3,
+      "candidate": 5
+    }
+  },
+  "raw_mcp_protocol_parity": {
+    "responses": 32,
+    "exact_formatted_aggregate_matches": 32,
+    "jsonrpc_stdout_messages": 36,
+    "protocol_violations": 0,
+    "tool_errors": 0,
+    "remaining_indexes": 0
+  },
+  "provenance_limits": [
+    "Raw MCP source manifest omitted tsconfig.json; service capture includes it. All shared source and built SearchService hashes matched.",
+    "Runtime production source unchanged after unblinding. A later unit-test-only embedding mock avoids an unused eager model download.",
+    "Meilisearch pkgVersion known; build commit/date unknown."
+  ],
+  "cases": [
+    {
+      "id": "p01",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "slack"
+          ],
+          "candidate_ids": [
+            "slack"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "slack"
+          ],
+          "candidate_ids": [
+            "slack"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "slack",
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "ns-travel-information",
+            "salesforce-mcp"
+          ],
+          "candidate_ids": [
+            "slack"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "slack",
+            "ns-travel-information",
+            "salesforce-mcp"
+          ],
+          "candidate_ids": [
+            "slack"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p02",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "sentry"
+          ],
+          "candidate_ids": [
+            "sentry"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "sentry"
+          ],
+          "candidate_ids": [
+            "sentry"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "sentry"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "sentry"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "sentry"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "sentry"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p03",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "rednote-mcp"
+          ],
+          "candidate_ids": [
+            "rednote-mcp"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "rednote-mcp"
+          ],
+          "candidate_ids": [
+            "rednote-mcp"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "xiyan-mcp-server",
+            "mcp-proxy"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "xiyan-mcp-server",
+            "mcp-proxy"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "xiyan-mcp-server",
+            "mcp-proxy"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "xiyan-mcp-server",
+            "mcp-proxy"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p04",
+      "paths": {
+        "provider": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "todoist",
+            "puppeteer"
+          ],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "todoist",
+            "puppeteer"
+          ],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p05",
+      "paths": {
+        "provider": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "prometheus",
+            "promptx",
+            "productboard"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "prometheus",
+            "promptx",
+            "productboard"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "prometheus",
+            "promptx",
+            "productboard"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "prometheus",
+            "promptx",
+            "productboard"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p06",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "google-tasks",
+            "todoist",
+            "ntfy-mcp"
+          ],
+          "candidate_ids": [
+            "google-tasks",
+            "todoist",
+            "ntfy-mcp"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-tasks",
+            "todoist",
+            "code-sandbox-mcp"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-tasks",
+            "todoist",
+            "code-sandbox-mcp"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-tasks",
+            "todoist",
+            "code-sandbox-mcp"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-tasks",
+            "todoist",
+            "code-sandbox-mcp"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p07",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "linear",
+            "sentry",
+            "atlassian"
+          ],
+          "candidate_ids": [
+            "linear",
+            "sentry",
+            "atlassian"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "linear"
+          ],
+          "candidate_ids": [
+            "linear"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "linear",
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "algorand"
+          ],
+          "candidate_ids": [
+            "linear",
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "algorand"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "algorand",
+            "pandoc"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "algorand",
+            "pandoc"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p08",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "algorand"
+          ],
+          "candidate_ids": [
+            "algorand"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "salesforce-mcp",
+            "obsidian-markdown-notes",
+            "markdownify"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "salesforce-mcp",
+            "obsidian-markdown-notes",
+            "markdownify"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "salesforce-mcp",
+            "obsidian-markdown-notes",
+            "markdownify"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "salesforce-mcp",
+            "obsidian-markdown-notes",
+            "markdownify"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p09",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "google-drive"
+          ],
+          "candidate_ids": [
+            "google-drive"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-calendar",
+            "google-drive",
+            "google-tasks"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-calendar",
+            "google-drive",
+            "google-tasks"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-calendar",
+            "google-drive",
+            "google-tasks"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "google-calendar",
+            "google-drive",
+            "google-tasks"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p10",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "aws-cost-explorer"
+          ],
+          "candidate_ids": [
+            "aws-cost-explorer"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "aws-cost-explorer"
+          ],
+          "candidate_ids": [
+            "aws-cost-explorer"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "aws-cost-explorer",
+            "aws-kb-retrieval",
+            "aws-resources-operations"
+          ],
+          "candidate_ids": [
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "aws-cost-explorer",
+            "aws-kb-retrieval",
+            "aws-resources-operations"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "aws-cost-explorer",
+            "aws-kb-retrieval",
+            "aws-resources-operations"
+          ],
+          "candidate_ids": [
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "aws-cost-explorer",
+            "aws-kb-retrieval",
+            "aws-resources-operations"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p11",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "home-assistant"
+          ],
+          "candidate_ids": [
+            "home-assistant"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "home-assistant"
+          ],
+          "candidate_ids": [
+            "home-assistant"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "home-assistant",
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "ableton-live",
+            "volcengine-tos"
+          ],
+          "candidate_ids": [
+            "home-assistant",
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "ableton-live",
+            "volcengine-tos"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "ableton-live",
+            "volcengine-tos",
+            "code-sandbox-mcp"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "ableton-live",
+            "volcengine-tos",
+            "code-sandbox-mcp"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p12",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "firebase"
+          ],
+          "candidate_ids": [
+            "firebase"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "firebase"
+          ],
+          "candidate_ids": [
+            "firebase"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "firebase",
+            "mcp-hotnews-server",
+            "rednote-mcp"
+          ],
+          "candidate_ids": [
+            "firebase",
+            "mcp-hotnews-server",
+            "rednote-mcp"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "mcp-hotnews-server",
+            "rednote-mcp"
+          ],
+          "candidate_ids": [
+            "mcp-hotnews-server",
+            "rednote-mcp"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p13",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "kubernetes-and-openshift",
+            "kubernetes",
+            "multicluster-mcp-sever"
+          ],
+          "candidate_ids": [
+            "kubernetes-and-openshift",
+            "kubernetes",
+            "multicluster-mcp-sever"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [
+            "kubernetes-and-openshift"
+          ],
+          "candidate_ids": [
+            "kubernetes-and-openshift"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "kubernetes-and-openshift",
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "kubernetes"
+          ],
+          "candidate_ids": [
+            "kubernetes-and-openshift",
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "kubernetes"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "kubernetes-and-openshift",
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "kubernetes"
+          ],
+          "candidate_ids": [
+            "kubernetes-and-openshift",
+            "mcp-hotnews-server",
+            "rednote-mcp",
+            "kubernetes"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p14",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "notion"
+          ],
+          "candidate_ids": [
+            "notion"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "salesforce-mcp",
+            "notion"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "salesforce-mcp",
+            "notion"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "salesforce-mcp",
+            "notion"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "code-sandbox-mcp",
+            "salesforce-mcp",
+            "notion"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p15",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "markdownify"
+          ],
+          "candidate_ids": [
+            "markdownify"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "mcp-proxy",
+            "time"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "mcp-proxy",
+            "time"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "mcp-proxy",
+            "time"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "mcp-proxy",
+            "time"
+          ],
+          "baseline_pass": true,
+          "candidate_pass": true,
+          "accepted_ids_lost": []
+        }
+      }
+    },
+    {
+      "id": "p16",
+      "paths": {
+        "provider": {
+          "baseline_ids": [
+            "starwind-ui",
+            "pif",
+            "context7"
+          ],
+          "candidate_ids": [
+            "starwind-ui",
+            "pif",
+            "context7"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "isolated": {
+          "baseline_ids": [],
+          "candidate_ids": [],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "aggregate": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "obsidian-markdown-notes",
+            "markdownify",
+            "xiyan-mcp-server"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "obsidian-markdown-notes",
+            "markdownify",
+            "xiyan-mcp-server"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        },
+        "offline": {
+          "baseline_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "obsidian-markdown-notes",
+            "markdownify",
+            "xiyan-mcp-server"
+          ],
+          "candidate_ids": [
+            "rednote-mcp",
+            "mcp-hotnews-server",
+            "obsidian-markdown-notes",
+            "markdownify",
+            "xiyan-mcp-server"
+          ],
+          "baseline_pass": false,
+          "candidate_pass": false,
+          "accepted_ids_lost": []
+        }
+      }
+    }
+  ]
+}
