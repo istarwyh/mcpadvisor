@@ -3,8 +3,10 @@
  * 测试离线模式下的推荐效果，包括小红书、GitHub、文档等不同场景
  */
 
-import { describe, expect, test, beforeAll, afterAll } from 'vitest';
+import { describe, expect, test, beforeAll, afterAll, vi } from 'vitest';
+import { load as loadSentenceEncoder } from '@tensorflow-models/universal-sentence-encoder';
 import { searchOffline } from '../../../../services/core/search/SearchMcpFactory.js';
+import { getEmbeddingProvider } from '../../../../utils/embedding.js';
 import { getMcpServerListPath } from '../../../../utils/pathUtils.js';
 import {
   redbookTestCases,
@@ -13,6 +15,15 @@ import {
   edgeCaseTestCases,
 } from '../../../fixtures/search/cases/index.js';
 import { createSearchTest } from '../../../fixtures/search/testUtils.js';
+
+// Exercise real offline fallback without depending on a model download. Keep
+// embedding generation, catalog loading, search and every result assertion real.
+// Mock this dependency before imports: embedding.ts eagerly starts model loading.
+vi.mock('@tensorflow-models/universal-sentence-encoder', () => ({
+  load: vi
+    .fn()
+    .mockRejectedValue(new Error('Model unavailable in offline unit suite')),
+}));
 
 const FALLBACK_DATA_PATH = getMcpServerListPath();
 
@@ -25,6 +36,9 @@ const ALL_TEST_CASES = [
 
 describe('离线搜索功能测试', () => {
   beforeAll(() => {
+    // Import-time calls are cleared by the global beforeEach, so check them here.
+    expect(loadSentenceEncoder).toHaveBeenCalledTimes(1);
+    expect(getEmbeddingProvider().getName()).toBe('SimpleEmbeddingProvider');
     console.log('开始执行离线搜索测试...');
   });
 
