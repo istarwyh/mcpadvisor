@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "suite_id": "mcpadvisor-explicit-product-independent-20261016-public-projection",
+  "original_frozen_at_utc": "2026-10-16T20:06:26.191026+00:00",
+  "original_suite_sha256": "2d02decec84f1e79cff0da8f3fe034cbe3886c7fadf7dade5f5b74602b02ddb9",
+  "projection_note": "Only catalog metadata/source duplication and authoring provenance removed. IDs, queries, expected IDs, expectations and reasoning are unchanged. This is a public projection, not the original frozen byte sequence.",
+  "query_count": 16,
+  "probes": [
+    {
+      "id": "p01",
+      "language": "en",
+      "query": "I need a Slack-specific MCP for channel messaging.",
+      "coverage": [
+        "explicit_hyphen_specific",
+        "exact_title",
+        "ordinary_user"
+      ],
+      "mandatory_products": [
+        "Slack"
+      ],
+      "accepted_ids": [
+        "slack"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "Slack is the named integration requirement, and the catalog contains a matching channel-management and messaging server."
+    },
+    {
+      "id": "p02",
+      "language": "zh",
+      "query": "帮我找 Sentry 专用的 MCP，用来查看和分析线上错误。",
+      "coverage": [
+        "explicit_chinese_dedicated",
+        "exact_title",
+        "developer"
+      ],
+      "mandatory_products": [
+        "Sentry"
+      ],
+      "accepted_ids": [
+        "sentry"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "The request names Sentry explicitly; generic monitoring and issue-tracking integrations are insufficient."
+    },
+    {
+      "id": "p03",
+      "language": "zh",
+      "query": "我想用小红书专用 MCP 按关键词搜索笔记、打开笔记链接。",
+      "coverage": [
+        "explicit_chinese_dedicated",
+        "chinese_product_alias",
+        "ordinary_user"
+      ],
+      "mandatory_products": [
+        "小红书"
+      ],
+      "accepted_ids": [
+        "rednote-mcp"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "RedNote explicitly documents keyword note search and note URL access. The hot-news aggregator mentions the platform but describes trending topics, not the requested note access."
+    },
+    {
+      "id": "p04",
+      "language": "en",
+      "query": "Find a QuasarDesk-specific MCP to manage my team tasks and projects.",
+      "coverage": [
+        "unknown_product",
+        "explicit_hyphen_specific",
+        "developer"
+      ],
+      "mandatory_products": [
+        "QuasarDesk"
+      ],
+      "accepted_ids": [],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true,
+        "allowed_explanatory_text": true
+      },
+      "forbidden_expectations": [
+        "Do not substitute generic task, project, messaging, page, or workflow servers for the explicitly required product(s)."
+      ],
+      "reasoning": "QuasarDesk is a deliberately synthetic product absent from the frozen catalog. Generic task and project overlap must not override that requirement."
+    },
+    {
+      "id": "p05",
+      "language": "zh",
+      "query": "我要知舟工单 Pro 专用的 MCP，处理我公司的工单和待办。",
+      "coverage": [
+        "unknown_product",
+        "chinese_dedicated",
+        "multiword_unknown",
+        "ordinary_user"
+      ],
+      "mandatory_products": [
+        "知舟工单 Pro"
+      ],
+      "accepted_ids": [],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true,
+        "allowed_explanatory_text": true
+      },
+      "forbidden_expectations": [
+        "Do not substitute generic task, project, messaging, page, or workflow servers for the explicitly required product(s)."
+      ],
+      "reasoning": "This deliberately synthetic product is absent from the catalog; ordinary ticket or task servers do not meet the dedicated-product requirement."
+    },
+    {
+      "id": "p06",
+      "language": "en",
+      "query": "I need task-specific MCP tools to create, update, and complete my daily tasks.",
+      "coverage": [
+        "generic_task_specific",
+        "ordinary_user"
+      ],
+      "mandatory_products": [],
+      "accepted_ids": [
+        "todoist",
+        "google-tasks"
+      ],
+      "expectation": {
+        "mode": "generic_preservation",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": false,
+        "no_rank_requirement": true,
+        "must_not_infer_mandatory_product_from_generic_modifier": true
+      },
+      "forbidden_expectations": [
+        "Do not hard-filter the result set by treating an ordinary adjective, task type, or file format as a named product constraint."
+      ],
+      "reasoning": "Task-specific is an ordinary task-type modifier. It must not become a requirement for a product literally named Task. Todoist documents task CRUD and completion; Google Tasks is also a task service."
+    },
+    {
+      "id": "p07",
+      "language": "en",
+      "query": "Recommend project-specific MCP tools for project management and issue tracking.",
+      "coverage": [
+        "generic_project_specific",
+        "developer"
+      ],
+      "mandatory_products": [],
+      "accepted_ids": [
+        "linear",
+        "gitlab",
+        "atlassian"
+      ],
+      "expectation": {
+        "mode": "generic_preservation",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": false,
+        "no_rank_requirement": true,
+        "must_not_infer_mandatory_product_from_generic_modifier": true
+      },
+      "forbidden_expectations": [
+        "Do not hard-filter the result set by treating an ordinary adjective, task type, or file format as a named product constraint."
+      ],
+      "reasoning": "Project-specific scopes the work. It does not name a product. The catalog includes project and issue-management integrations."
+    },
+    {
+      "id": "p08",
+      "language": "en",
+      "query": "I need privacy-specific MCP tooling for local-first knowledge management and searching Markdown notes.",
+      "coverage": [
+        "generic_privacy_specific",
+        "ordinary_user"
+      ],
+      "mandatory_products": [],
+      "accepted_ids": [
+        "basic-memory",
+        "obsidian-markdown-notes",
+        "minima"
+      ],
+      "expectation": {
+        "mode": "generic_preservation",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": false,
+        "no_rank_requirement": true,
+        "must_not_infer_mandatory_product_from_generic_modifier": true
+      },
+      "forbidden_expectations": [
+        "Do not hard-filter the result set by treating an ordinary adjective, task type, or file format as a named product constraint."
+      ],
+      "reasoning": "Privacy-specific is a preference, not a product identity. The selected records document local-first knowledge, Markdown directory search, or local-file RAG. This probe does not certify any server privacy or security guarantee."
+    },
+    {
+      "id": "p09",
+      "language": "en",
+      "query": "Find a Google Drive-specific MCP for accessing and searching my files.",
+      "coverage": [
+        "known_multiword_product",
+        "explicit_hyphen_specific",
+        "exact_title",
+        "ordinary_user"
+      ],
+      "mandatory_products": [
+        "Google Drive"
+      ],
+      "accepted_ids": [
+        "google-drive"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "Google Drive is a complete multiword product name; interpreting only Drive or Google would weaken the requirement."
+    },
+    {
+      "id": "p10",
+      "language": "zh",
+      "query": "需要 AWS Cost Explorer 专用 MCP，按区域和服务分析云账单。",
+      "coverage": [
+        "known_multiword_product",
+        "chinese_dedicated",
+        "exact_title",
+        "developer"
+      ],
+      "mandatory_products": [
+        "AWS Cost Explorer"
+      ],
+      "accepted_ids": [
+        "aws-cost-explorer"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "The complete named cost-analysis product must remain mandatory; generic AWS resource tools are insufficient."
+    },
+    {
+      "id": "p11",
+      "language": "en",
+      "query": "I need a Home Assistant-specific MCP to manage entities and home automations.",
+      "coverage": [
+        "known_multiword_product",
+        "display_title_mismatch",
+        "ordinary_user"
+      ],
+      "mandatory_products": [
+        "Home Assistant"
+      ],
+      "accepted_ids": [
+        "home-assistant"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "The matching catalog title is Hass, while description and tags explicitly name Home Assistant. Exact display-title matching alone should not reject direct integration evidence."
+    },
+    {
+      "id": "p12",
+      "language": "zh",
+      "query": "请推荐 Firestore 专用 MCP，让助手连接我的数据库。",
+      "coverage": [
+        "description_only_product",
+        "chinese_dedicated",
+        "developer"
+      ],
+      "mandatory_products": [
+        "Firestore"
+      ],
+      "accepted_ids": [
+        "firebase"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "Firestore appears only in the Firebase record description among its identity, title, description and tag fields. The record explicitly supports it, so a literal-title-only product filter would be too restrictive."
+    },
+    {
+      "id": "p13",
+      "language": "zh",
+      "query": "找一个必须同时支持 Kubernetes 和 OpenShift 的 MCP，来管理集群里的资源。",
+      "coverage": [
+        "multiple_mandatory_products",
+        "conjunction",
+        "developer"
+      ],
+      "mandatory_products": [
+        "Kubernetes",
+        "OpenShift"
+      ],
+      "accepted_ids": [
+        "kubernetes-and-openshift"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true,
+        "no_rank_requirement": true
+      },
+      "forbidden_expectations": [
+        "Do not fill the result list with catalog entries that lack direct metadata evidence for the mandatory product(s).",
+        "Do not silently drop a mandatory product to produce generic recommendations."
+      ],
+      "reasoning": "The request requires both platforms in a single result. Only the combined catalog integration explicitly documents both; Kubernetes-only entries are insufficient."
+    },
+    {
+      "id": "p14",
+      "language": "en",
+      "query": "Recommend one MCP server that must support both Slack and Notion for messages and pages.",
+      "coverage": [
+        "multiple_mandatory_products",
+        "conjunction",
+        "no_joint_integration",
+        "ordinary_user"
+      ],
+      "mandatory_products": [
+        "Slack",
+        "Notion"
+      ],
+      "accepted_ids": [],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true,
+        "allowed_explanatory_text": true
+      },
+      "forbidden_expectations": [
+        "Do not substitute generic task, project, messaging, page, or workflow servers for the explicitly required product(s)."
+      ],
+      "reasoning": "Each product has a separate catalog integration, but no catalog record explicitly supports both. Returning one integration for each would not satisfy the request for one server."
+    },
+    {
+      "id": "p15",
+      "language": "en",
+      "query": "Which MCP can convert times between timezones?",
+      "coverage": [
+        "unrelated_preservation",
+        "ordinary_user"
+      ],
+      "mandatory_products": [],
+      "accepted_ids": [
+        "time"
+      ],
+      "expectation": {
+        "mode": "generic_preservation",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": false,
+        "no_rank_requirement": true,
+        "must_not_infer_mandatory_product_from_generic_modifier": true
+      },
+      "forbidden_expectations": [
+        "Do not hard-filter the result set by treating an ordinary adjective, task type, or file format as a named product constraint."
+      ],
+      "reasoning": "This plain capability request has no product-specific syntax. The direct time-conversion catalog entry should remain available."
+    },
+    {
+      "id": "p16",
+      "language": "zh",
+      "query": "有什么 MCP 可以把 Markdown 文档转换成 PDF？",
+      "coverage": [
+        "unrelated_preservation",
+        "format_not_product",
+        "ordinary_user"
+      ],
+      "mandatory_products": [],
+      "accepted_ids": [
+        "pandoc"
+      ],
+      "expectation": {
+        "mode": "generic_preservation",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": false,
+        "no_rank_requirement": true,
+        "must_not_infer_mandatory_product_from_generic_modifier": true
+      },
+      "forbidden_expectations": [
+        "Do not hard-filter the result set by treating an ordinary adjective, task type, or file format as a named product constraint."
+      ],
+      "reasoning": "Markdown and PDF are formats in a capability request. Pandoc explicitly documents Markdown-to-PDF conversion; the product-constraint change should preserve that route."
+    }
+  ]
+}
