@@ -31,8 +31,8 @@ Nacos when `NACOS_SERVER_ADDR`, `NACOS_USERNAME`, and `NACOS_PASSWORD` are all s
 
 ```mermaid
 graph TD
-    Client["MCP client"] --> Transport["Stdio, SSE, or REST transport"]
-    Transport --> Server["ServerService request handlers"]
+    Client["MCP client"] --> Transport["MCP 2026-07-28: stdio or HTTP /mcp"]
+    Transport --> Server["Per-request server factory and shared handlers"]
     Server --> Recommend["Recommendation tool"]
     Server --> Install["Installation guidance tool"]
     Server --> Logs["Log-reading resources"]
@@ -188,19 +188,36 @@ thresholds. An empty final result list remains possible.
 
 ### 5. Transport Layer
 
-[ServerService](../src/services/core/server/ServerService.ts) supports:
+The [server factory](../src/services/core/server/stateless/McpServerFactory.ts) and
+[HTTP adapter](../src/services/core/server/stateless/StatelessHttpServer.ts) use the official TypeScript SDK: server/core/client
+2.3.1 and the Node adapter 2.1.1. Both entry points require MCP 2026-07-28:
 
-- **Stdio:** Default MCP transport for local client processes.
-- **SSE:** HTTP event and message endpoints.
-- **REST:** The REST transport supplied by `@chatmcp/sdk`.
+- **Stdio:** The default local entry uses `serveStdio(factory, { legacy: 'reject' })`.
+- **HTTP:** `createMcpHandler(factory, { legacy: 'reject', responseMode: 'auto' })`
+  creates a fresh server for each request at the fixed `/mcp` endpoint.
+- **Shared business behavior:** The factory registers recommendation and
+  installation-guidance tools and log-reading resources against shared services.
+  Search providers and caching may remain process-scoped; protocol/client state
+  is not stored in an MCP session.
+- **Legacy isolation:** Old server/transport wiring is retained under
+  `src/services/core/server/legacy/`, excluded from production compilation and
+  imports. Selecting old SSE/REST modes fails; the old HTTP paths return 410.
 
-The server registers recommendation and installation-guidance tool handlers and
-log-reading resources. The CLI reads `TRANSPORT_TYPE`, `SERVER_PORT`,
-`SERVER_HOST`, and `ENDPOINT`; see the [Quick Start Guide](./GETTING_STARTED.md)
-for current settings. HTTP health checks do not apply to stdio. Keep diagnostic
-console output off the stdio protocol stream. HTTP binding is not authentication;
-use localhost unless suitable network restrictions and authentication are in
-place.
+The SDK owns discovery, per-request metadata, HTTP/body agreement, protocol
+errors, and response encoding. There is no legacy initialize/initialized flow,
+MCP session ID, resumable session store, or standalone GET stream. `GET` and
+`DELETE /mcp` return 405. SSE can still encode a response to a modern POST.
+
+The HTTP adapter owns routing, SDK Host/Origin guards, and listener lifecycle;
+`GET /health` and `POST /api/sources` remain separate application routes. The CLI
+selects stdio or HTTP and reads the settings in the [Quick Start Guide](./GETTING_STARTED.md).
+Diagnostic output must stay off stdout in stdio mode.
+
+There is no built-in authentication or cross-origin browser CORS feature. Binding
+defaults to `127.0.0.1`; explicit host/origin allow-lists do not replace network
+restrictions and authentication. Transport cancellation closes the exchange, but
+existing business providers do not necessarily abort their underlying work.
+See the [migration guide](./MCP_2026_MIGRATION.md) for client setup and rollback.
 
 ## Data Flow
 

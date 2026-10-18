@@ -1,25 +1,14 @@
 #!/usr/bin/env node
 
-import { createOptionalClineProvider } from './config/cline.js';
-import { SearchService } from './services/searchService.js';
-import { CompassSearchProvider } from './services/core/search/CompassSearchProvider.js';
-import {
-  ServerService,
-  TransportType,
-  TransportConfig,
-} from './services/core/server/index.js';
 import logger from './utils/logger.js';
 import path from 'path';
 import { spawn } from 'child_process';
 import fs from 'fs';
 import os from 'os';
 import { randomBytes } from 'crypto';
-import { GetMcpSearchProvider } from './services/core/search/GetMcpSearchProvider.js';
-import { MeilisearchSearchProvider } from './services/core/search/MeilisearchSearchProvider.js';
-import { getParamValue } from '@chatmcp/sdk/utils/index.js';
-import { NacosMcpProvider } from './services/core/search/NacosMcpProvider.js';
+import { readTransportConfiguration } from './config/mcpTransport.js';
+import { installShutdownHandlers } from './config/serverLifecycle.js';
 import type { SearchProvider } from './types/index.js';
-import { createOptionalProfessionalReranker } from './services/core/search/ProfessionalReranker.js';
 
 /**
  * Main application entry point
@@ -29,26 +18,28 @@ async function main() {
   try {
     logger.info('Starting MCP Advisor application');
 
-    // Get parameters from command line or environment variables
-    const mode = getParamValue('mode') || process.env.TRANSPORT_TYPE || 'stdio';
-    const port = parseInt(
-      getParamValue('port') || process.env.SERVER_PORT || '3000',
-      10,
-    );
-    const host =
-      getParamValue('host') || process.env.SERVER_HOST || 'localhost';
-    const messagePath = getParamValue('messagePath') || '/messages';
-    const endpoint =
-      getParamValue('endpoint') || process.env.ENDPOINT || '/rest';
+    const { type: transportType, config: transportConfig } =
+      readTransportConfiguration();
 
-    // Configure transport
-    const transportConfig: TransportConfig = {
-      port,
-      host,
-      ssePath: '/sse',
-      messagePath,
-      endpoint,
-    };
+    // Reject obsolete modes before loading optional model/native dependencies.
+    const { createOptionalClineProvider } = await import('./config/cline.js');
+    const { SearchService } = await import('./services/searchService.js');
+    const { CompassSearchProvider } = await import(
+      './services/core/search/CompassSearchProvider.js'
+    );
+    const { ServerService } = await import('./services/core/server/index.js');
+    const { GetMcpSearchProvider } = await import(
+      './services/core/search/GetMcpSearchProvider.js'
+    );
+    const { MeilisearchSearchProvider } = await import(
+      './services/core/search/MeilisearchSearchProvider.js'
+    );
+    const { NacosMcpProvider } = await import(
+      './services/core/search/NacosMcpProvider.js'
+    );
+    const { createOptionalProfessionalReranker } = await import(
+      './services/core/search/ProfessionalReranker.js'
+    );
 
     const clineProvider = createOptionalClineProvider();
 
@@ -162,24 +153,20 @@ async function main() {
       logger.warn('Skip Meilisearch bootstrap');
     }
 
-    // Determine transport type
-    let transportType = TransportType.STDIO;
-    if (mode === 'sse') {
-      transportType = TransportType.SSE;
-    } else if (mode === 'rest') {
-      transportType = TransportType.REST;
-    }
-
     // Start server
     const serverService = new ServerService(searchService);
     await serverService.start(transportType, transportConfig);
+    installShutdownHandlers(serverService);
 
     logger.info(
-      `MCP Advisor server started with ${transportType} transport,endpoint:${endpoint}`,
+      `MCP Advisor server started with ${transportType} transport (MCP 2026-07-28)`,
     );
   } catch (error) {
     logger.error(
       `Fatal error in main(): ${error instanceof Error ? error.message : String(error)}`,
+    );
+    process.stderr.write(
+      `MCP Advisor: ${error instanceof Error ? error.message : String(error)}\n`,
     );
     process.exit(1);
   }

@@ -1,6 +1,7 @@
-import { BaseToolHandler } from '../tools/BaseToolHandler.js';
-import { BaseResourceHandler } from '../resources/BaseResourceHandler.js';
-import logger from '../../../../utils/logger.js';
+/** @deprecated Archived v1 transport. Not imported or built by the active application. */
+import { BaseToolHandler } from '../../tools/BaseToolHandler.js';
+import { BaseResourceHandler } from '../../resources/BaseResourceHandler.js';
+import logger from '../../../../../utils/logger.js';
 
 export class RequestHandlerFactory {
   public static createListToolsHandler(toolHandlers: BaseToolHandler[]) {

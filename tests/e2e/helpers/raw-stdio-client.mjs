@@ -2,7 +2,16 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { setTimeout, clearTimeout } from 'node:timers';
 import process from 'node:process';
-import { JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
+import { JSONRPCMessageSchema } from '@modelcontextprotocol/core';
+
+const envelope = {
+  'io.modelcontextprotocol/protocolVersion': '2026-07-28',
+  'io.modelcontextprotocol/clientInfo': {
+    name: 'raw-stdio-regression',
+    version: '1.0.0',
+  },
+  'io.modelcontextprotocol/clientCapabilities': {},
+};
 
 // Record every stdout byte, including malformed lines that an SDK could recover
 // from. Keep parsing after a violation so returned responses cannot hide it.
@@ -60,7 +69,7 @@ export function startRawClient(script, options = {}) {
         JSON.stringify({ jsonrpc: '2.0', method, params }) + '\n',
       );
     },
-    request(method, params) {
+    request(method, params = {}, meta = envelope) {
       const id = ++nextId;
       return new Promise((resolve, reject) => {
         const timer = setTimeout(() => {
@@ -69,7 +78,12 @@ export function startRawClient(script, options = {}) {
         }, 30000);
         pending.set(id, { resolve, reject, timer });
         child.stdin.write(
-          JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n',
+          JSON.stringify({
+            jsonrpc: '2.0',
+            id,
+            method,
+            params: meta === null ? params : { ...params, _meta: meta },
+          }) + '\n',
         );
       });
     },

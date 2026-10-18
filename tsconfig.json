@@ -18,6 +18,7 @@
       "tests", 
       "src/tests/**/*",
       "**/*.test.ts",
-      "**/*.spec.ts"
+      "**/*.spec.ts",
+      "src/services/core/server/legacy/**"
     ]
   }

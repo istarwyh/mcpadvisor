@@ -1,4 +1,8 @@
-import { CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import type {
+  CallToolRequest,
+  CallToolResult,
+  ContentBlock,
+} from '@modelcontextprotocol/server';
 import { ToolDefinition } from '../types.js';
 
 export abstract class BaseToolHandler {
@@ -6,12 +10,9 @@ export abstract class BaseToolHandler {
 
   abstract canHandle(name: string): boolean;
 
-  abstract handleRequest(request: typeof CallToolRequestSchema._type): Promise<{
-    content: Array<{ type: string; [key: string]: unknown }>;
-    isError: boolean;
-  }>;
+  abstract handleRequest(request: CallToolRequest): Promise<CallToolResult>;
 
-  protected createErrorResponse(message: string) {
+  protected createErrorResponse(message: string): CallToolResult {
     return {
       content: [
         {
@@ -24,8 +25,8 @@ export abstract class BaseToolHandler {
   }
 
   protected createSuccessResponse(
-    content: string | Array<{ type: string; [key: string]: unknown }>,
-  ) {
+    content: string | ContentBlock[],
+  ): CallToolResult {
     return {
       content: Array.isArray(content)
         ? content

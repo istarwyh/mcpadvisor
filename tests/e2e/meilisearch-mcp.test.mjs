@@ -2,8 +2,8 @@ import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath, URL } from 'node:url';
 import process from 'node:process';
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { Client } from '@modelcontextprotocol/client';
+import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 import { MeiliSearch, MeiliSearchApiError } from 'meilisearch';
 
 const host = process.env.MEILI_FULLTEXT_TEST_HOST;
@@ -29,7 +29,7 @@ async function connect(failing = false) {
       name: 'fulltext-protocol-test',
       version: '1.0.0',
     },
-    { capabilities: {} },
+    { capabilities: {}, versionNegotiation: { mode: { pin: '2026-07-28' } } },
   );
   clients.push(client);
   const env = Object.fromEntries(
@@ -69,7 +69,7 @@ after(async () => {
   }
 });
 test(
-  '真实 MCP 初始化、工具发现及全文搜索输出',
+  '真实无握手 MCP 发现、工具列表及全文搜索输出',
   { timeout: 15000 },
   async () => {
     const { client, index } = await connect();

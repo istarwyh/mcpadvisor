@@ -4,6 +4,10 @@ import { EventEmitter } from 'node:events';
 import logger from '../../../../utils/logger.js';
 import path from 'node:path';
 
+vi.mock('../../../../config/serverLifecycle.js', () => ({
+  installShutdownHandlers: () => {},
+}));
+
 const mocks = vi.hoisted(() => ({
   searchService: vi.fn(),
   start: vi.fn(),
@@ -31,9 +35,6 @@ vi.mock('../../../../services/core/search/GetMcpSearchProvider.js', () => ({
 }));
 vi.mock('../../../../services/core/search/NacosMcpProvider.js', () => ({
   NacosMcpProvider: class {},
-}));
-vi.mock('@chatmcp/sdk/utils/index.js', () => ({
-  getParamValue: () => undefined,
 }));
 vi.mock('../../../../services/core/server/index.js', () => ({
   ServerService: class {
