@@ -1,34 +1,44 @@
-params:
-  type: object
-  properties:
-    mode:
-      type: string
-      description: Transport mode (stdio, sse, rest)
-      enum: [stdio, sse, rest]
-    port:
-      type: string
-      description: Port for HTTP server when using sse or rest mode
-    host:
-      type: string
-      description: Host for HTTP server when using sse or rest mode
-    path:
-      type: string
-      description: SSE path for HTTP server when using sse mode
-    messagePath:
-      type: string
-      description: Message path for HTTP server when using sse mode
-    endpoint:
-      type: string
-      description: REST endpoint for HTTP server when using rest mode
-
-rest:
-  name: mcpadvisor
-  port: 3000
-  endpoint: /rest
+# Legacy-only local-launch reference in ChatMCP/MCP.so format, for 1.0.5.
+# Hosted deployment is disabled here; npx-only platform acceptance is unverified.
+# This is NOT a deployment configuration for the current source build
+# (Node.js >=20, MCP 2026-07-28, stdio or HTTP /mcp).
+# Platform support/configuration for that modern protocol has not been verified.
+# See docs/MCP_2026_MIGRATION.md for modern clients and explicit rollback.
+# Keep the npm version pinned; do not substitute latest or a source build here.
+#
+# Historical hosted transport metadata is retained as comments, not active
+# configuration: it must not start the current source with retired modes/paths.
+# params:
+#   type: object
+#   properties:
+#     mode:
+#       type: string
+#       description: Transport mode (stdio, sse, rest)
+#       enum: [stdio, sse, rest]
+#     port:
+#       type: string
+#       description: Port for HTTP server when using sse or rest mode
+#     host:
+#       type: string
+#       description: Host for HTTP server when using sse or rest mode
+#     path:
+#       type: string
+#       description: SSE path for HTTP server when using sse mode
+#     messagePath:
+#       type: string
+#       description: Message path for HTTP server when using sse mode
+#     endpoint:
+#       type: string
+#       description: REST endpoint for HTTP server when using rest mode
+#
+# rest:
+#   name: mcpadvisor
+#   port: 3000
+#   endpoint: /rest
 
 npx:
   command: |
-    npx -y @xiaohui-wang/mcpadvisor
+    npx -y @xiaohui-wang/mcpadvisor@1.0.5
   config: |
     {
       "mcpServers": {
@@ -36,28 +46,13 @@ npx:
           "command": "npx",
           "args": [
             "-y",
-            "@xiaohui-wang/mcpadvisor"
+            "@xiaohui-wang/mcpadvisor@1.0.5"
           ],
           "env": {}
         }
       }
     }
 
-docker:
-  command: |
-    docker run -i --rm mcp/mcpadvisor
-  config: |
-    {
-      "mcpServers": {
-        "mcpadvisor": {
-          "command": "docker",
-          "args": [
-            "run",
-            "-i",
-            "--rm",
-            "mcp/mcpadvisor"
-          ],
-          "env": {}
-        }
-      }
-    }
+# No Docker launch is provided: the historical mcp/mcpadvisor image was unpinned,
+# and a matching 1.0.5 tag/digest has not been verified. Do not use that floating
+# image as a rollback artifact or infer its protocol from the npm version.
