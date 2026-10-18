@@ -22,7 +22,7 @@
 
 ### 前提条件
 
-- **Node.js** (>= 18.x)
+- **Node.js** (>= 20；`.nvmrc` 选择 Node.js 22 用于开发和 CI)
 - **pnpm** (>= 9.x) - 项目使用 pnpm 作为包管理器
 - **Git**
 
@@ -47,7 +47,7 @@ pnpm install
 # 开发模式
 NODE_ENV=development
 
-# 传输类型 (stdio, sse, rest)
+# 传输类型 (stdio 或 http，均要求 MCP 2026-07-28；HTTP 固定使用 /mcp)
 TRANSPORT_TYPE=stdio
 
 # 日志配置

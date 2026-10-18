@@ -52,9 +52,8 @@ checked-in scripts or types, use the current source references below.
 
 ### Prerequisites
 
-- **Node.js**: the repository's [.nvmrc](./.nvmrc) pins `18.18.0`.
-  The original guide says Node.js 18 or later; this pin records the repository's
-  baseline, not a claim that every newer release has been tested.
+- **Node.js**: version 20 or newer is required; the repository's
+  [.nvmrc](./.nvmrc) selects Node.js 22 for development and CI.
 - **pnpm**: [package.json](./package.json) specifies `pnpm@8.15.9`.
 - **Git**
 - A POSIX-compatible shell for the checked-in shell scripts and build command's
@@ -94,11 +93,13 @@ export LOG_LEVEL=debug
 export LOGS_DIR="$PWD/logs"
 ```
 
-[The entry point](./src/index.ts) reads `TRANSPORT_TYPE` (`stdio`, `sse`, or
-`rest`), `SERVER_PORT` (default `3000`), `SERVER_HOST` (default `localhost`), and
-`ENDPOINT` (REST path, default `/rest`). Command-line values take precedence for
-these settings. The SSE path is `/sse`; its message path defaults to `/messages`
-and is configurable through the `messagePath` command-line parameter.
+[Transport configuration](./src/config/mcpTransport.ts) reads `TRANSPORT_TYPE`
+(`stdio` or `http`), `SERVER_PORT` (default `3000`), and `SERVER_HOST` (default
+`127.0.0.1`). Command-line values take precedence for these settings. HTTP uses
+the fixed `/mcp` endpoint. Both transports require MCP 2026-07-28; legacy
+`sse`/`rest` modes and `ENDPOINT`/`--endpoint`/`--messagePath` settings are
+rejected. See the [migration guide](./docs/MCP_2026_MIGRATION.md) for client
+configuration and rollback.
 
 **Correction to the original `.env` recipe:** merely creating `.env` does not
 load it into the CLI process. You can put the same settings into a local `.env`
@@ -153,10 +154,10 @@ node build/index.js
 ```
 
 There is no `pnpm run dev` script in the current package. Stdio mode waits for an
-MCP client; silence alone does not indicate failure. To develop against REST:
+MCP client; silence alone does not indicate failure. To develop against HTTP:
 
 ```bash
-TRANSPORT_TYPE=rest SERVER_HOST=localhost SERVER_PORT=3000 ENDPOINT=/rest node build/index.js
+TRANSPORT_TYPE=http SERVER_HOST=127.0.0.1 SERVER_PORT=3000 node build/index.js
 ```
 
 From another terminal, check the HTTP transport:
