@@ -6,6 +6,10 @@ import logger from '../../../utils/logger.js';
 import ts from 'typescript';
 import { EventEmitter } from 'node:events';
 
+vi.mock('../../../config/serverLifecycle.js', () => ({
+  installShutdownHandlers: () => {},
+}));
+
 const mocks = vi.hoisted(() => ({
   start: vi.fn(),
   spawn: vi.fn(),
@@ -32,9 +36,6 @@ vi.mock('../../../services/core/search/GetMcpSearchProvider.js', () => ({
 }));
 vi.mock('../../../services/core/search/NacosMcpProvider.js', () => ({
   NacosMcpProvider: class {},
-}));
-vi.mock('@chatmcp/sdk/utils/index.js', () => ({
-  getParamValue: () => undefined,
 }));
 vi.mock('child_process', () => ({ spawn: mocks.spawn }));
 vi.mock('../../../services/core/server/index.js', () => ({
@@ -190,6 +191,8 @@ it.each([false, true])(
         unref() {}
       };
     }
+    export function installShutdownHandlers() {}
+    export function readTransportConfiguration() { return { type: 'stdio', config: { port: 3000 } }; }
     export class ServerService {
       async start() { console.log(JSON.stringify({ spawns })); }
     }
@@ -213,7 +216,7 @@ it.each([false, true])(
       loaderPath,
       `
     export async function resolve(specifier, context, nextResolve) {
-      if (specifier.startsWith('./') || specifier === '@chatmcp/sdk/utils/index.js'
+      if (specifier.startsWith('./')
           || specifier === 'child_process') {
         return { url: ${JSON.stringify(stubUrl)}, shortCircuit: true };
       }

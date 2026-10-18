@@ -51,16 +51,15 @@ export const SourcesSchema = z.object({
 
 export enum TransportType {
   STDIO = 'stdio',
-  SSE = 'sse',
-  REST = 'rest',
+  HTTP = 'http',
 }
 
 export interface TransportConfig {
   port: number;
   host?: string;
-  ssePath?: string;
-  messagePath?: string;
-  endpoint?: string;
+  allowedHostnames?: string[];
+  allowedOriginHostnames?: string[];
+  responseMode?: 'auto' | 'json' | 'sse';
 }
 
 export interface ToolDefinition {

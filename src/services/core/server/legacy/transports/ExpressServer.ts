@@ -1,7 +1,8 @@
+/** @deprecated Archived v1 transport. Not imported or built by the active application. */
 import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
-import logger from '../../../../utils/logger.js';
+import logger from '../../../../../utils/logger.js';
 
 type SSETransportMap = { [sessionId: string]: SSEServerTransport };
 

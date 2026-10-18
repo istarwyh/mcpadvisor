@@ -61,9 +61,45 @@ Search for MCP servers with natural language processing capabilities
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
 - [Roadmap](docs/ROADMAP.md) - Future development plans
 
+## Protocol compatibility: source branch vs. published package
+
+This source branch implements MCP **2026-07-28 only**. It requires **Node.js 20
+or newer** (`.nvmrc` selects Node.js 22) and a client that explicitly negotiates
+that revision. Local **stdio remains the default**; remote MCP uses **HTTP
+`/mcp`**. The old SSE/REST entry points are deprecated and cannot be enabled.
+
+The npm installation examples below are pinned to the published **1.0.5**
+compatibility/rollback version. They do **not** install this source migration.
+Registry badges and third-party installers also do not establish support for this
+branch. Compatibility with named desktop clients has not been verified for the
+new protocol. See the [migration guide](docs/MCP_2026_MIGRATION.md) for a supported
+SDK client configuration, endpoint changes, security boundaries, and rollback.
+
 ## Quick Start
 
-### Installation
+### Run the modern source branch
+
+From a checkout containing the issue #36 changes:
+
+```bash
+nvm use
+pnpm install --frozen-lockfile
+pnpm run build
+
+# Local stdio (default; use a 2026-07-28-capable client)
+node build/index.js
+
+# Alternatively, start the HTTP server at http://127.0.0.1:3000/mcp
+TRANSPORT_TYPE=http node build/index.js
+# Equivalent: node build/index.js --mode=http
+```
+
+These are separate launch modes. The HTTP server has no built-in authentication;
+keep the loopback default unless an authenticated, restricted deployment is in
+place. Use the [SDK client example](docs/MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
+to verify the modern protocol.
+
+### Published compatibility version (1.0.5)
 
 The fastest way is to integrate MCP Advisor through MCP configuration:
 
@@ -72,7 +108,7 @@ The fastest way is to integrate MCP Advisor through MCP configuration:
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
     }
   }
 }
@@ -116,7 +152,7 @@ Or enable it automatically with a single flag when launching MCPAdvisor (no manu
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor", "--local-meilisearch"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5", "--local-meilisearch"]
     }
   }
 }
@@ -207,8 +243,8 @@ src/
 
 4. **Transport Layer**
    - Stdio (CLI default)
-   - SSE (Web integration)
-   - REST API endpoints
+   - Stateless HTTP `/mcp` (MCP 2026-07-28)
+   - Old SSE/REST code isolated in `server/legacy/`, excluded from build/runtime
 
 For more detailed architecture documentation, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -216,7 +252,7 @@ For more detailed architecture documentation, see [ARCHITECTURE.md](docs/ARCHITE
 
 ### Development Environment Setup
 
-1. Clone the repository
+1. Clone the repository and use Node.js >= 20 (`nvm use` selects 22)
 2. Install dependencies:
    ```bash
    pnpm install
@@ -263,8 +299,12 @@ console.log(results);
 MCP Advisor supports multiple transport methods:
 
 1. **Stdio Transport** (default) - Suitable for command-line tools
-2. **SSE Transport** - Suitable for web integration
-3. **REST Transport** - Provides REST API endpoints
+2. **HTTP Transport** - `TRANSPORT_TYPE=http` or `--mode=http`, fixed endpoint `/mcp`
+
+Both modes require MCP 2026-07-28. `--mode=sse` / `--mode=rest` fails with a migration error;
+old `/sse`, `/messages`, and `/rest` paths return HTTP 410. SSE response streaming
+inside `/mcp` is still possible; it does not restore the old SSE entry point.
+See the [migration guide](docs/MCP_2026_MIGRATION.md).
 
 For more development details, see [Contributing Guide](CONTRIBUTING.md).
 

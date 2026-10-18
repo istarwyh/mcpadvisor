@@ -40,7 +40,7 @@ export const formatServersToMCPContent = (servers: MCPServerResponse[]) => {
   if (!servers || servers.length === 0) {
     return [
       {
-        type: 'text',
+        type: 'text' as const,
         text: 'No matching MCP servers found for your query. Try being more specific about the platform, operation, or service you need.',
       },
     ];
@@ -50,7 +50,7 @@ export const formatServersToMCPContent = (servers: MCPServerResponse[]) => {
 
   return [
     {
-      type: 'text',
+      type: 'text' as const,
       text: serversText,
     },
   ];

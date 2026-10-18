@@ -134,11 +134,29 @@ class SearchService {
 
 ### 5. 传输层
 
-传输层处理与客户端的通信：
+现代主链路使用官方 TypeScript SDK（server/core/client 2.3.1、Node 适配器 2.1.1），
+仅支持 MCP 2026-07-28：
 
-- **Stdio**：默认用于命令行工具
-- **SSE**：用于 Web 集成的服务器发送事件
-- **REST API**：提供 RESTful 端点
+- **Stdio**：默认本地入口，使用 `serveStdio(factory, { legacy: 'reject' })`。
+- **HTTP**：固定 `/mcp` 端点，使用
+  `createMcpHandler(factory, { legacy: 'reject', responseMode: 'auto' })`；每个 HTTP 请求创建独立服务实例。
+- **共享业务**：工厂统一注册推荐工具、安装指导工具和日志资源；搜索服务／缓存可以进程级复用，
+  但不保存 MCP 会话或跨请求的客户端协议状态。
+- **旧实现隔离**：旧 server／transport 代码保留在 `src/services/core/server/legacy/`，
+  排除在生产构建和运行导入链路之外。旧 SSE/REST 模式启动失败，旧 HTTP 路径返回 410。
+
+SDK 负责发现、每请求元数据、HTTP 头与请求体一致性、协议错误和响应编码。
+没有旧 `initialize`／`initialized` 流程、MCP 会话 ID、会话恢复或独立 GET 流；
+`GET` 和 `DELETE /mcp` 返回 405。现代 POST 的响应仍可以采用 SSE 编码。
+
+HTTP 适配层负责路由、SDK Host／Origin 校验和监听器生命周期。
+`GET /health` 与 `POST /api/sources` 保持为独立应用路由。
+CLI 配置见[快速开始](./GETTING_STARTED.zh-CN.md)，stdio 的诊断输出不能写入 stdout。
+
+服务没有内置认证或跨域浏览器 CORS 功能，默认绑定 `127.0.0.1`。
+显式 Host／Origin 白名单不能替代认证和网络限制。
+传输取消会关闭当前交换，但现有业务提供者不一定中止底层工作。
+客户端配置和回滚步骤见[迁移指南](./MCP_2026_MIGRATION.md)。
 
 ## 数据流
 

@@ -1,10 +1,7 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { BaseResourceHandler } from '../../../../services/core/server/resources/BaseResourceHandler.js';
 import { LogResourceHandler } from '../../../../services/core/server/resources/LogResourceHandler.js';
-import {
-  Resource,
-  ReadResourceResult,
-} from '@modelcontextprotocol/sdk/types.js';
+import { Resource, ReadResourceResult } from '@modelcontextprotocol/server';
 import fs from 'fs/promises';
 import path from 'path';
 

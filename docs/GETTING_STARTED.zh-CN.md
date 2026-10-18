@@ -4,6 +4,16 @@
 
 这是 MCP Advisor 的完整安装、配置和使用指南，让您快速上手并充分利用 MCP Advisor 的功能。
 
+## 源码迁移与已发布版本
+
+本指南的传输配置对应 issue #36 源码分支：要求 Node.js >= 20（`.nvmrc` 为 22）
+及支持 MCP 2026-07-28 的客户端。执行
+`pnpm install --frozen-lockfile && pnpm run build` 后，按[传输方式配置](#传输方式配置)启动。
+
+下方包安装示例明确固定到已发布的 1.0.5 兼容／回滚版本，不会安装本次源码迁移。
+具名客户端设置和第三方安装器不能作为现代分支兼容性证明。
+受支持的 SDK 配置、协议要求和回滚步骤见[迁移指南](./MCP_2026_MIGRATION.md)。
+
 ## 目录
 
 - [安装方式](#安装方式)
@@ -32,14 +42,14 @@
 
 ### 通过 MCP 配置集成（推荐）
 
-最快的方式是通过 MCP 配置集成 MCP Advisor：
+如需使用已发布的 1.0.5 兼容版本，可采用以下 MCP 配置：
 
 ```json
 {
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
     }
   }
 }
@@ -58,13 +68,13 @@
 
 ```bash
 # 使用 npm
-npm install @xiaohui-wang/mcpadvisor
+npm install @xiaohui-wang/mcpadvisor@1.0.5
 
 # 使用 yarn
-yarn add @xiaohui-wang/mcpadvisor
+yarn add @xiaohui-wang/mcpadvisor@1.0.5
 
 # 使用 pnpm
-pnpm add @xiaohui-wang/mcpadvisor
+pnpm add @xiaohui-wang/mcpadvisor@1.0.5
 ```
 
 ### 全局安装
@@ -73,7 +83,7 @@ pnpm add @xiaohui-wang/mcpadvisor
 
 ```bash
 # 全局安装
-npm install -g @xiaohui-wang/mcpadvisor
+npm install -g @xiaohui-wang/mcpadvisor@1.0.5
 
 # 运行
 mcpadvisor
@@ -85,10 +95,10 @@ mcpadvisor
 
 ```bash
 # 使用 npx 运行（无需安装）
-npx @xiaohui-wang/mcpadvisor
+npx @xiaohui-wang/mcpadvisor@1.0.5
 
 # 或者使用 npx 运行特定版本
-npx @xiaohui-wang/mcpadvisor@latest
+npx @xiaohui-wang/mcpadvisor@1.0.5
 ```
 
 ### 通过 Smithery 安装
@@ -173,7 +183,7 @@ MCP Advisor 返回的结果包含以下信息：
      "mcpServers": {
        "mcpadvisor": {
          "command": "npx",
-         "args": ["-y", "@xiaohui-wang/mcpadvisor"]
+         "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
        }
      }
    }
@@ -192,7 +202,7 @@ MCP Advisor 返回的结果包含以下信息：
 
 1. **全局安装 MCP Advisor**：
    ```bash
-   npm install -g @xiaohui-wang/mcpadvisor
+   npm install -g @xiaohui-wang/mcpadvisor@1.0.5
    ```
 
 2. **配置助手使用 MCP Advisor 作为服务器**
@@ -209,20 +219,25 @@ MCP Advisor 可以使用以下环境变量进行配置。所有环境变量都�
 
 | 变量 | 描述 | 默认值 | 必需 |
 |------|------|--------|------|
-| `TRANSPORT_TYPE` | 传输方法 (stdio, sse, rest) | `stdio` | 否 |
+| `TRANSPORT_TYPE` | 传输方法 (stdio, http) | `stdio` | 否 |
 | `LOG_LEVEL` | 日志级别 (debug, info, warn, error) | `info` | 否 |
 | `DEBUG` | 启用调试日志 | `false` | 否 |
 | `ENABLE_FILE_LOGGING` | 启用文件日志 | `false` | 否 |
 
-#### HTTP 服务器配置（SSE/REST 传输）
+#### HTTP 服务器配置
 
-| 变量 | 描述 | 默认值 | 必需 |
-|------|------|--------|------|
-| `SERVER_PORT` | HTTP 服务器端口 | `3000` | 否 |
-| `SERVER_HOST` | HTTP 服务器主机 | `localhost` | 否 |
-| `SSE_PATH` | SSE 端点路径 | `/sse` | 否 |
-| `MESSAGE_PATH` | 消息端点路径 | `/messages` | 否 |
-| `ENDPOINT` | REST 端点路径 | `/rest` | 否 |
+| 变量 | 描述 | 默认值 |
+| --- | --- | --- |
+| `SERVER_HOST` | 绑定地址；未配置安全部署前请保持本地访问 | `127.0.0.1` |
+| `SERVER_PORT` | HTTP 服务器端口 | `3000` |
+| `MCP_HTTP_RESPONSE_MODE` | 响应编码：`auto`、`json` 或 `sse` | `auto` |
+| `MCP_ALLOWED_HOSTS` | 显式部署使用的 Host 主机名白名单，逗号分隔 | 回环主机名 |
+| `MCP_ALLOWED_ORIGINS` | 显式部署使用的 Origin 主机名白名单，逗号分隔 | 回环主机名 |
+
+MCP 端点固定为 `/mcp`。`ENDPOINT`、`SSE_PATH`、`MESSAGE_PATH` 和 `messagePath`
+不能配置现代协议端点。SDK 提供 Host 和 Origin 校验，但这不是认证，也不等于浏览器 CORS
+配置。白名单填写主机名而不是 URL 路径；本阶段不新增跨域浏览器支持。
+修改回环默认值前请阅读[部署说明](./MCP_2026_MIGRATION.md#deployment-and-security)。
 
 #### 搜索配置
 
@@ -262,69 +277,59 @@ MCP Advisor 可以使用以下环境变量进行配置。所有环境变量都�
 
 ### 配置文件设置
 
-您也可以使用配置文件进行设置。创建 `.mcpadvisorrc.json` 文件：
-
-```json
-{
-  "transport": "stdio",
-  "port": 3000,
-  "enableFileLogging": true,
-  "logLevel": "info",
-  "vectorEngineType": "memory",
-  "search": {
-    "provider": "hybrid",
-    "limit": 5,
-    "minSimilarity": 0.3
-  }
-}
-```
-
-或者使用 `config/default.json`：
-
-```json
-{
-  "server": {
-    "port": 3000,
-    "transportType": "stdio"
-  },
-  "search": {
-    "provider": "hybrid",
-    "limit": 5,
-    "minSimilarity": 0.3
-  }
-}
-```
+当前 CLI 不自动加载 `.mcpadvisorrc.json`，也不从 `config/default.json` 读取传输模式。
+请使用本页列出的环境变量或 `--mode=stdio/http`。数据源配置与传输配置相互独立；
+数据源细节请查看 [configLoader.ts](../src/config/configLoader.ts)。
 
 ### 传输方式配置
 
-MCP Advisor 支持多种传输方式：
+以下命令用于已构建的 issue #36 源码，要求 Node.js >= 20。
+两种入口均拒绝旧版协议流量。
 
 #### 1. Stdio Transport（默认）
-适用于命令行工具：
 
 ```bash
 node build/index.js
+# 显式写法：node build/index.js --mode=stdio
 ```
 
-#### 2. SSE Transport
-适用于 Web 集成：
+客户端必须配置为 MCP 2026-07-28。即使使用 SDK v2 包，默认的旧 `initialize`
+握手也不能连接此分支。
+
+#### 2. 无状态 HTTP 传输
 
 ```bash
-TRANSPORT_TYPE=sse SERVER_PORT=3000 DEBUG=true ENABLE_FILE_LOGGING=true node build/index.js
+TRANSPORT_TYPE=http SERVER_HOST=127.0.0.1 SERVER_PORT=3000 node build/index.js
+# 等价写法：node build/index.js --mode=http
 ```
 
-#### 3. REST Transport
-提供 RESTful 端点：
+现代客户端连接 `http://127.0.0.1:3000/mcp`，不需要会话 ID 或 `initialize` 握手。
+`GET` 和 `DELETE /mcp` 返回 405。请使用[官方 SDK 客户端示例](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
+验证发现、工具列表和工具调用。
+
+`MCP_HTTP_RESPONSE_MODE=auto` 默认返回 JSON，存在需要流式传送的关联消息时改用 SSE；
+`json` 不传送中间进度／日志通知，`sse` 使用流式响应。这些是 `/mcp` 内部的响应编码，
+不是已经废弃的 `TRANSPORT_TYPE=sse` 模式。
+
+#### 从 SSE 或 REST 迁移
+
+`TRANSPORT_TYPE=sse` / `TRANSPORT_TYPE=rest` 和 `--mode=sse` / `--mode=rest` 会被拒绝并给出迁移提示。
+HTTP 模式下，`/sse`、`/messages`、`/rest` 返回 410 和迁移 JSON。
+需要一起修改启动模式、端点和客户端协议支持，不能仅替换旧客户端 URL。
+旧实现保留在 `src/services/core/server/legacy/`，不进入构建或运行链路。
+
+`GET /health` 仍用于 HTTP 健康检查；`POST /api/sources` 保持为独立应用 API，
+不是 MCP 端点。服务没有内置认证；配置带认证的反向代理和网络限制前请保留回环绑定。
+Host／Origin 白名单不能替代认证。
+
+调试文件日志示例：
 
 ```bash
-TRANSPORT_TYPE=rest SERVER_PORT=8080 ENDPOINT=/api/mcp node build/index.js
+mkdir -p logs
+TRANSPORT_TYPE=http LOG_LEVEL=debug ENABLE_FILE_LOGGING=true node build/index.js
 ```
 
-#### 生产配置示例
-
-```bash
-TRANSPORT_TYPE=rest SERVER_PORT=8080 SERVER_HOST=0.0.0.0 LOG_LEVEL=warn ENABLE_FILE_LOGGING=true node build/index.js
-```
+完整兼容性、安全边界和回滚步骤见[迁移指南](./MCP_2026_MIGRATION.md)。
 
 ## 使用技巧
 
@@ -387,10 +392,10 @@ const results = await searchService.search("vector database", {
 
 ```bash
 # macOS/Linux
-sudo npm install -g @xiaohui-wang/mcpadvisor
+sudo npm install -g @xiaohui-wang/mcpadvisor@1.0.5
 
 # Windows (以管理员身份运行命令提示符)
-npm install -g @xiaohui-wang/mcpadvisor
+npm install -g @xiaohui-wang/mcpadvisor@1.0.5
 ```
 
 #### 2. 版本冲突
@@ -398,7 +403,7 @@ npm install -g @xiaohui-wang/mcpadvisor
 如果与其他包有版本冲突：
 
 ```bash
-npm install @xiaohui-wang/mcpadvisor --force
+npm install @xiaohui-wang/mcpadvisor@1.0.5 --force
 ```
 
 #### 3. 找不到命令
@@ -439,11 +444,11 @@ cat ~/.../claude_desktop_config.json | python -m json.tool
 ```bash
 # Linux/macOS
 echo $TRANSPORT_TYPE
-export TRANSPORT_TYPE=sse
+export TRANSPORT_TYPE=http
 
 # Windows
 echo %TRANSPORT_TYPE%
-set TRANSPORT_TYPE=sse
+set TRANSPORT_TYPE=http
 ```
 
 ### 运行时问题
@@ -458,7 +463,7 @@ netstat -an | grep 3000
 lsof -i :3000
 
 # 检查服务状态
-curl http://localhost:3000/health
+curl http://127.0.0.1:3000/health
 ```
 
 #### 2. 搜索无结果
@@ -492,20 +497,17 @@ ping registry.mcphub.io
 
 ### 验证安装
 
-运行以下命令验证安装：
+CLI 没有专用的 `--version` 或 `--help` 处理，不能据此验证启动成功。
+使用[官方 SDK 客户端示例](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
+连接现代源码服务，确认工具列表包含 `recommend-mcp-servers`，再发起调用。
+
+HTTP 模式可以先检查监听状态：
 
 ```bash
-# 检查版本
-mcpadvisor --version
-
-# 或者
-npx @xiaohui-wang/mcpadvisor --version
-
-# 测试基本功能
-mcpadvisor --help
+curl http://127.0.0.1:3000/health
 ```
 
-如果显示版本号和帮助信息，则表示安装成功。
+该端点不适用于 stdio。健康检查成功不等于协议兼容，也不证明外部搜索提供者可用。
 
 ---
 

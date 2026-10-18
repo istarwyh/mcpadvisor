@@ -1,4 +1,4 @@
-import { CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolRequest } from '@modelcontextprotocol/server';
 import { InstallationGuideService } from '../../installation/installationGuideService.js';
 import { ConfigurationGuideService } from '../../installation/configurationGuideService.js';
 import { BaseToolHandler } from './BaseToolHandler.js';
@@ -48,7 +48,7 @@ export class InstallMcpServerToolHandler extends BaseToolHandler {
     return name === 'install-mcp-server';
   }
 
-  async handleRequest(request: typeof CallToolRequestSchema._type) {
+  async handleRequest(request: CallToolRequest) {
     try {
       const { arguments: args } = request.params;
       const parsedArgs = GeneralArgumentsSchema.parse(args);

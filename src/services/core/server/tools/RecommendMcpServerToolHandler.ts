@@ -1,4 +1,4 @@
-import { CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolRequest } from '@modelcontextprotocol/server';
 import { SearchService } from '../../../searchService.js';
 import { formatServersToMCPContent } from '../../../../utils/formatter.js';
 import { BaseToolHandler } from './BaseToolHandler.js';
@@ -40,22 +40,31 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
               2. Required capabilities, such as risk analysis, strategy deployment or feature development
             `,
           },
+          query: {
+            type: 'string',
+            minLength: 1,
+            description: 'Compatibility alias for taskDescription.',
+          },
           keywords: {
-            type: 'array',
-            items: { type: 'string' },
+            anyOf: [
+              { type: 'string' },
+              { type: 'array', items: { type: 'string' } },
+            ],
             description:
               'Optional search keywords used alongside the task description.',
             default: [],
           },
           capabilities: {
-            type: 'array',
-            items: { type: 'string' },
+            anyOf: [
+              { type: 'string' },
+              { type: 'array', items: { type: 'string' } },
+            ],
             description:
               'Optional required capabilities used alongside the task description.',
             default: [],
           },
         },
-        required: ['taskDescription'],
+        anyOf: [{ required: ['taskDescription'] }, { required: ['query'] }],
       },
     };
   }
@@ -64,7 +73,7 @@ export class RecommendMcpServerToolHandler extends BaseToolHandler {
     return name === 'recommend-mcp-servers';
   }
 
-  async handleRequest(request: typeof CallToolRequestSchema._type) {
+  async handleRequest(request: CallToolRequest) {
     try {
       const { arguments: args } = request.params;
       const parsedArgs = GeneralArgumentsSchema.parse(args);

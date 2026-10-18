@@ -87,9 +87,42 @@ src/
 - [路线图](ROADMAP.md) - 项目未来发展计划
 - [贡献指南](CONTRIBUTING.md) - 如何贡献代码
 
+## 协议兼容性：源码分支与已发布包
+
+此源码分支仅支持 MCP **2026-07-28**，要求 **Node.js 20 或更新版本**
+（`.nvmrc` 选择 Node.js 22），客户端必须明确协商该协议版本。
+本地仍默认使用 **stdio**；远程 MCP 统一使用 **HTTP `/mcp`**。
+旧 SSE/REST 入口已废弃，不能重新启用。
+
+下方 npm 安装示例固定使用已发布的 **1.0.5** 兼容／回滚版本，**不会安装本次源码迁移**。
+包徽章和第三方安装器也不能证明支持此分支。尚未验证具名桌面客户端对新协议的兼容性。
+受支持的 SDK 客户端配置、端点变化、安全边界和回滚步骤见
+[迁移指南](docs/MCP_2026_MIGRATION.md)。
+
 ## 快速开始
 
-### 安装
+### 运行现代协议源码分支
+
+在包含 issue #36 变更的源码目录中执行：
+
+```bash
+nvm use
+pnpm install --frozen-lockfile
+pnpm run build
+
+# 本地 stdio（默认；需要支持 2026-07-28 的客户端）
+node build/index.js
+
+# 或启动 HTTP 服务：http://127.0.0.1:3000/mcp
+TRANSPORT_TYPE=http node build/index.js
+# 等价写法：node build/index.js --mode=http
+```
+
+以上是两个独立启动模式。HTTP 服务没有内置认证；在配置带认证和访问限制的部署前，
+请保留回环地址默认值。使用[官方 SDK 客户端示例](docs/MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
+验证现代协议。
+
+### 已发布兼容版本（1.0.5）
 
 最快的方式是通过 MCP 配置集成 MCP Advisor：
 
@@ -98,7 +131,7 @@ src/
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
     }
   }
 }
@@ -133,7 +166,7 @@ source ~/.meilisearch/env
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor", "--local-meilisearch"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5", "--local-meilisearch"]
     }
   }
 }
@@ -196,8 +229,8 @@ graph TD
 
 4. **传输层**
    - Stdio（CLI 默认）
-   - SSE（Web 集成）
-   - REST API 端点
+   - 无状态 HTTP `/mcp`（MCP 2026-07-28）
+   - 旧 SSE/REST 代码隔离在 `server/legacy/`，不进入构建或运行链路
 
 更详细的架构文档请参阅 [架构文档](docs/ARCHITECTURE.md)。
 
@@ -239,7 +272,7 @@ MCP Advisor 实现了强大的错误处理和日志系统：
 
 ### 开发环境设置
 
-1. 克隆仓库
+1. 克隆仓库，使用 Node.js >= 20（`nvm use` 选择 22）
 2. 安装依赖项：
    ```bash
    pnpm install
@@ -317,8 +350,11 @@ console.log(results);
 MCP Advisor 支持多种传输方式：
 
 1. **Stdio 传输**（默认） - 适用于命令行工具
-2. **SSE 传输** - 适用于 Web 集成
-3. **REST 传输** - 提供 REST API 端点
+2. **HTTP 传输** - `TRANSPORT_TYPE=http` 或 `--mode=http`，固定端点 `/mcp`
+
+两种模式均仅支持 MCP 2026-07-28。`--mode=sse` / `--mode=rest` 会报告迁移错误；
+旧 `/sse`、`/messages`、`/rest` 返回 HTTP 410。`/mcp` 的 SSE 响应仍可能用于流式结果，
+这不代表旧 SSE 入口仍然可用。详见[迁移指南](docs/MCP_2026_MIGRATION.md)。
 
 更多开发详情请参阅 [贡献指南](CONTRIBUTING.md)。
 

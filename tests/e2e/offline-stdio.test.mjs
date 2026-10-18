@@ -7,7 +7,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 import process from 'node:process';
-import { LATEST_PROTOCOL_VERSION } from '@modelcontextprotocol/sdk/types.js';
 import { startRawClient } from './helpers/raw-stdio-client.mjs';
 
 const execFileAsync = promisify(execFile);
@@ -40,16 +39,10 @@ for (const mode of ['default', 'console', 'main']) {
         },
       });
       try {
-        const initialized = await client.request('initialize', {
-          protocolVersion: LATEST_PROTOCOL_VERSION,
-          capabilities: {},
-          clientInfo: {
-            name: 'raw-offline-protocol-regression',
-            version: '1.0.0',
-          },
-        });
-        assert.ok(initialized.result.serverInfo);
-        client.notify('notifications/initialized');
+        const discovered = await client.request('server/discover');
+        assert.deepEqual(discovered.result.supportedVersions, ['2026-07-28']);
+        assert.equal(discovered.result.resultType, 'complete');
+        assert.equal(discovered.result.cacheScope, 'private');
         const tools = await client.request('tools/list');
         assert.ok(
           tools.result.tools.some(
@@ -174,12 +167,7 @@ test(
       },
     });
     try {
-      await client.request('initialize', {
-        protocolVersion: LATEST_PROTOCOL_VERSION,
-        capabilities: {},
-        clientInfo: { name: 'product-evidence-regression', version: '1.0.0' },
-      });
-      client.notify('notifications/initialized');
+      await client.request('server/discover');
       const search = taskDescription =>
         client.request('tools/call', {
           name: 'recommend-mcp-servers',

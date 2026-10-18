@@ -1,7 +1,7 @@
-import {
+import type {
   Resource,
   ReadResourceResult,
-} from '@modelcontextprotocol/sdk/types.js';
+} from '@modelcontextprotocol/server';
 import { BaseResourceHandler } from './BaseResourceHandler.js';
 import fs from 'fs/promises';
 import path from 'path';

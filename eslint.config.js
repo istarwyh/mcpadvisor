@@ -137,6 +137,7 @@ export default [
   {
     ignores: [
       'build/**',
+      'src/services/core/server/legacy/**',
       'node_modules/**',
       'coverage/**',
       'playwright-report/**',

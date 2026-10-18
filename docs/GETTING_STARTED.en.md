@@ -11,14 +11,19 @@ English [technical reference](./TECHNICAL_REFERENCE.md) and
 [contribution](../CONTRIBUTING.md) guides are available too. Runtime messages
 may still contain Chinese.
 
-## Translation and Current-Source Updates
+## Source migration and published-package compatibility
 
-This English guide follows the Chinese guide's structure, with source-verified
-corrections to configuration, response fields, logging, and verification steps.
-These corrections are documented in the relevant sections; the Chinese original
-is unchanged. The instructions were checked against source, not exercised in a
-full installation or runtime test. Advanced reference examples marked historical
-or illustrative are not supported configuration recipes.
+This guide's transport settings describe the issue #36 source branch, which
+requires Node.js >= 20 (`.nvmrc`: 22) and MCP 2026-07-28 clients. Build it with
+`pnpm install --frozen-lockfile && pnpm run build`, then follow
+[Transport Configuration](#transport-configuration).
+
+The package installation examples below explicitly use published version 1.0.5
+for compatibility/rollback; they do not install this source migration. Named
+client settings and third-party installers are not evidence of compatibility
+with the modern branch. See the [migration guide](./MCP_2026_MIGRATION.md) for the
+supported SDK configuration and rollback steps. The other source corrections in
+this guide are based on inspection, not a full installation or provider test.
 
 ## Contents
 
@@ -48,14 +53,14 @@ or illustrative are not supported configuration recipes.
 
 ### Integrate Through MCP Configuration (Recommended)
 
-The fastest way to integrate MCP Advisor is through MCP configuration:
+For the published 1.0.5 compatibility version, use the following MCP configuration:
 
 ```json
 {
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
     }
   }
 }
@@ -75,13 +80,13 @@ To integrate MCP Advisor into a project:
 
 ```bash
 # Using npm
-npm install @xiaohui-wang/mcpadvisor
+npm install @xiaohui-wang/mcpadvisor@1.0.5
 
 # Using yarn
-yarn add @xiaohui-wang/mcpadvisor
+yarn add @xiaohui-wang/mcpadvisor@1.0.5
 
 # Using pnpm
-pnpm add @xiaohui-wang/mcpadvisor
+pnpm add @xiaohui-wang/mcpadvisor@1.0.5
 ```
 
 ### Global Installation
@@ -90,7 +95,7 @@ A global installation makes the `mcpadvisor` command available from any director
 
 ```bash
 # Install globally
-npm install -g @xiaohui-wang/mcpadvisor
+npm install -g @xiaohui-wang/mcpadvisor@1.0.5
 
 # Run
 mcpadvisor
@@ -102,10 +107,10 @@ Run without a separate installation step:
 
 ```bash
 # Run using npx (no separate installation required)
-npx @xiaohui-wang/mcpadvisor
+npx @xiaohui-wang/mcpadvisor@1.0.5
 
 # Or select a version with npx
-npx @xiaohui-wang/mcpadvisor@latest
+npx @xiaohui-wang/mcpadvisor@1.0.5
 ```
 
 ### Install Through Smithery
@@ -200,7 +205,7 @@ the Chinese source guide uses the older `github_url` example.
      "mcpServers": {
        "mcpadvisor": {
          "command": "npx",
-         "args": ["-y", "@xiaohui-wang/mcpadvisor"]
+         "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
        }
      }
    }
@@ -221,7 +226,7 @@ For other AI assistants that support the Model Context Protocol:
 1. **Install MCP Advisor globally**:
 
    ```bash
-   npm install -g @xiaohui-wang/mcpadvisor
+   npm install -g @xiaohui-wang/mcpadvisor@1.0.5
    ```
 
 2. **Configure the assistant to use MCP Advisor as a server**
@@ -234,14 +239,13 @@ For other AI assistants that support the Model Context Protocol:
 
 The tables below describe settings read by the current
 [CLI entry point](../src/index.ts), [logger](../src/utils/logger.ts), and
-[configuration modules](../src/config/constants.ts). They correct stale settings
-in the Chinese source guide.
+[configuration modules](../src/config/constants.ts). The transport settings apply to the source migration, not the published 1.0.5 package.
 
 #### Core Configuration
 
 | Variable              | Description                                         | Default  | Required |
 | --------------------- | --------------------------------------------------- | -------- | -------- |
-| `TRANSPORT_TYPE`      | Transport method (stdio, sse, rest)                 | `stdio`  | No       |
+| `TRANSPORT_TYPE`      | Transport method (stdio, http)                 | `stdio`  | No       |
 | `LOG_LEVEL`           | Log level (debug, info, warn, error)                | `info`   | No       |
 | `ENABLE_FILE_LOGGING` | Enable file logging; create the log directory first | `false`  | No       |
 | `LOGS_DIR`            | Directory for `all.log` and `error.log`             | `./logs` | No       |
@@ -254,17 +258,22 @@ mkdir -p logs
 ENABLE_FILE_LOGGING=true LOG_LEVEL=debug node build/index.js
 ```
 
-#### HTTP Server Configuration (SSE/REST Transports)
+#### HTTP Server Configuration
 
-| Variable      | Description        | Default     | Required |
-| ------------- | ------------------ | ----------- | -------- |
-| `SERVER_PORT` | HTTP server port   | `3000`      | No       |
-| `SERVER_HOST` | HTTP server host   | `localhost` | No       |
-| `ENDPOINT`    | REST endpoint path | `/rest`     | No       |
+| Variable | Description | Default |
+| --- | --- | --- |
+| `SERVER_HOST` | Bind address; keep local unless the deployment is secured | `127.0.0.1` |
+| `SERVER_PORT` | HTTP server port | `3000` |
+| `MCP_HTTP_RESPONSE_MODE` | Response encoding: `auto`, `json`, or `sse` | `auto` |
+| `MCP_ALLOWED_HOSTS` | Comma-separated allowed hostnames for explicit deployments | Loopback hostnames |
+| `MCP_ALLOWED_ORIGINS` | Comma-separated allowed Origin hostnames for explicit deployments | Loopback hostnames |
 
-The CLI fixes the SSE path at `/sse`. It reads the `messagePath` command-line
-parameter, defaulting to `/messages`. The source guide's `SSE_PATH` and
-`MESSAGE_PATH` environment variables are not read by this entry point.
+The MCP endpoint is fixed at `/mcp`. `ENDPOINT`, `SSE_PATH`, `MESSAGE_PATH`, and
+`messagePath` are not modern endpoint settings. Host and Origin validation is
+provided by SDK guards; it is not authentication or browser CORS configuration.
+The allow-list values are hostnames, not URL paths. This phase does not add
+cross-origin browser support. See the [deployment notes](./MCP_2026_MIGRATION.md#deployment-and-security)
+before changing the loopback defaults.
 
 #### Search Configuration
 
@@ -333,44 +342,58 @@ and [config/default.json](../config/default.json) when changing data sources.
 
 ### Transport Configuration
 
-MCP Advisor supports multiple transports. The commands below assume a source
-checkout with dependencies installed and `pnpm run build` already completed:
+These commands require a built checkout containing the issue #36 changes and
+Node.js >= 20. Both entry points reject pre-2026 protocol traffic.
 
 #### 1. Stdio Transport (Default)
 
-Suitable for command-line tools:
-
 ```bash
 node build/index.js
+# Explicit form: node build/index.js --mode=stdio
 ```
 
-#### 2. SSE Transport
+Use a client configured for MCP 2026-07-28. An ordinary legacy `initialize`
+handshake will not work, even when the client uses an SDK v2 package.
 
-Suitable for web integration:
+#### 2. Stateless HTTP Transport
 
 ```bash
-TRANSPORT_TYPE=sse SERVER_PORT=3000 node build/index.js
+TRANSPORT_TYPE=http SERVER_HOST=127.0.0.1 SERVER_PORT=3000 node build/index.js
+# Equivalent: node build/index.js --mode=http
 ```
 
-#### 3. REST Transport
+Connect the modern client to `http://127.0.0.1:3000/mcp`. No session ID or
+`initialize` exchange is needed. `GET` and `DELETE /mcp` return 405; use the
+[official SDK client example](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
+for discovery, tool listing, and a call.
 
-Provides RESTful endpoints:
+`MCP_HTTP_RESPONSE_MODE=auto` selects JSON unless related messages require an SSE
+response stream. `json` suppresses intermediate progress/log notifications;
+`sse` selects streaming. These are response encodings within `/mcp`, not the
+retired `TRANSPORT_TYPE=sse` mode.
 
-```bash
-TRANSPORT_TYPE=rest SERVER_PORT=8080 ENDPOINT=/api/mcp node build/index.js
-```
+#### Migration from SSE or REST
 
-#### REST with File Logging
+`TRANSPORT_TYPE=sse` / `TRANSPORT_TYPE=rest` and `--mode=sse` / `--mode=rest` are rejected with a migration
+message. Under HTTP mode, `/sse`, `/messages`, and `/rest` return 410 with migration
+JSON. Update the launch mode, endpoint, **and client protocol support** together.
+Do not merely rename the URL in a legacy client. Old implementation code remains
+in `src/services/core/server/legacy/` but is excluded from the build and runtime.
 
-This example binds to localhost. The server has no built-in authentication layer;
-binding to all interfaces as in the Chinese source guide is not production
-hardening. Keep it local unless you have appropriate network restrictions and an
-authenticated reverse proxy.
+`GET /health` remains an HTTP health endpoint. `POST /api/sources` remains a
+separate application API, not an MCP endpoint. The HTTP server has no built-in
+authentication, so retain loopback binding unless an authenticated and restricted
+reverse proxy/network is configured. Host/Origin allow-lists alone are insufficient.
+
+For debug file logging, create the directory first:
 
 ```bash
 mkdir -p logs
-TRANSPORT_TYPE=rest SERVER_PORT=8080 SERVER_HOST=localhost LOG_LEVEL=warn ENABLE_FILE_LOGGING=true node build/index.js
+TRANSPORT_TYPE=http LOG_LEVEL=debug ENABLE_FILE_LOGGING=true node build/index.js
 ```
+
+See the [migration and rollback guide](./MCP_2026_MIGRATION.md) for the complete
+compatibility boundary and security caveats.
 
 ## Usage Tips
 
@@ -480,11 +503,11 @@ Confirm your environment variable settings:
 ```bash
 # Linux/macOS
 echo $TRANSPORT_TYPE
-export TRANSPORT_TYPE=sse
+export TRANSPORT_TYPE=http
 
 # Windows
 echo %TRANSPORT_TYPE%
-set TRANSPORT_TYPE=sse
+set TRANSPORT_TYPE=http
 ```
 
 ### Runtime Issues
@@ -500,7 +523,7 @@ netstat -an | grep 3000
 lsof -i :3000
 
 # Check service status
-curl http://localhost:3000/health
+curl http://127.0.0.1:3000/health
 ```
 
 #### 2. No Search Results
@@ -537,13 +560,14 @@ Consider the following optimizations:
 
 The CLI has no explicit `--version` or `--help` handling, so the source guide's
 commands are not reliable installation checks. Instead, restart your configured
-MCP client, confirm that it lists MCP Advisor's `recommend-mcp-servers` tool,
+MCP 2026-07-28 client (see the SDK example in the migration guide),
+confirm that it lists MCP Advisor's `recommend-mcp-servers` tool,
 and run a query from [Basic Usage](#basic-usage).
 
-For a built source checkout using SSE or REST, the HTTP server exposes `/health`:
+For a built source checkout using HTTP mode, the server exposes `/health`:
 
 ```bash
-curl http://localhost:3000/health
+curl http://127.0.0.1:3000/health
 ```
 
 Use the port you configured. This health endpoint does not apply to stdio
