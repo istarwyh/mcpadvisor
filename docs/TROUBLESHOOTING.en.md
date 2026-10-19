@@ -8,6 +8,8 @@ Transport instructions target the modern source build: Node.js >= 20 (`.nvmrc`: 
 and MCP 2026-07-28 on `stdio` or HTTP `/mcp`. They do not describe a new npm
 release. For explicitly pinned 1.0.5 compatibility/rollback instructions, see the
 [migration guide](./MCP_2026_MIGRATION.md).
+For ChatMCP/MCP.so hosting evidence and deployment limitations, see the
+[hosting migration note](./CHATMCP_HOSTING.md).
 
 > Scope: This English edition translates the Chinese troubleshooting guide and corrects verified differences from the current source. Examples marked illustrative or historical require adaptation; they are not supported configuration instructions. Check the [Getting Started Guide](./GETTING_STARTED.md), [Technical Reference](./TECHNICAL_REFERENCE.md), and current source before applying an example. Redact secrets before sharing environment variables or logs.
 

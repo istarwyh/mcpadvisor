@@ -7,6 +7,7 @@
 传输配置对应现代源码构建：Node.js >= 20（`.nvmrc` 为 22），通过 `stdio` 或 HTTP
 `/mcp` 使用 MCP 2026-07-28。这不代表 npm 已发布新版本。固定 1.0.5 制品的兼容与回滚
 步骤见[迁移指南](./MCP_2026_MIGRATION.md)；下方其他历史诊断示例需按当前源码调整。
+ChatMCP／MCP.so 的托管现状、协议边界与迁移验收见[托管迁移说明](./CHATMCP_HOSTING.md)。
 
 ## 目录
 
