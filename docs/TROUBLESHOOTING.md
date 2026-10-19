@@ -4,14 +4,21 @@
 
 This document provides solutions and diagnostic techniques for common MCP Advisor issues.
 
+Transport instructions target the modern source build: Node.js >= 20 (`.nvmrc`: 22)
+and MCP 2026-07-28 on `stdio` or HTTP `/mcp`. They do not describe a new npm
+release. For explicitly pinned 1.0.5 compatibility/rollback instructions, see the
+[migration guide](./MCP_2026_MIGRATION.md).
+For ChatMCP/MCP.so hosting evidence and deployment limitations, see the
+[hosting migration note](./CHATMCP_HOSTING.md).
+
 > Scope: This English edition translates the Chinese troubleshooting guide and corrects verified differences from the current source. Examples marked illustrative or historical require adaptation; they are not supported configuration instructions. Check the [Getting Started Guide](./GETTING_STARTED.md), [Technical Reference](./TECHNICAL_REFERENCE.md), and current source before applying an example. Redact secrets before sharing environment variables or logs.
 
 ## Current Implementation Caveats
 
 The sections below correct practical commands where verified against source and label illustrative examples where they are not implemented. These checks inspect source code only; they do not constitute runtime validation.
 
-- **Startup and logging:** [`package.json`](../package.json) defines no `start` or `restart` script. Build with `pnpm run build`, then run `node build/index.js` (set `TRANSPORT_TYPE=sse` for SSE). The [logger](../src/utils/logger.ts) writes `all.log` and `error.log` under `LOGS_DIR`, or `logs` by default, rather than `mcpadvisor.log`. File logging requires `MCP_COMPASS_MAIN=true` or `ENABLE_FILE_LOGGING=true` and an existing log directory; the main-application mode can create that directory. `ENABLE_PERFORMANCE_LOGGING` has no handler in the current source.
-- **SSE:** The `EventSource` example only enables credentials; it does not set a timeout. WebSocket is not an implemented alternative: the supported [transport types](../src/services/core/server/types.ts) are `stdio`, `sse`, and `rest`.
+- **Startup and logging:** [`package.json`](../package.json) defines no `start` or `restart` script. Build with `pnpm run build`, then run `node build/index.js` (set `TRANSPORT_TYPE=http` for HTTP `/mcp`). The [logger](../src/utils/logger.ts) writes `all.log` and `error.log` under `LOGS_DIR`, or `logs` by default, rather than `mcpadvisor.log`. File logging requires `MCP_COMPASS_MAIN=true` or `ENABLE_FILE_LOGGING=true` and an existing log directory; the main-application mode can create that directory. `ENABLE_PERFORMANCE_LOGGING` has no handler in the current source.
+- **Transports:** The supported [transport types](../src/services/core/server/types.ts) are `stdio` and `http`. SSE may encode a POST `/mcp` response; it is not the retired `/sse` transport. `sse`/`rest` launch modes are rejected. WebSocket and cross-origin browser integration are not implemented alternatives.
 - **Search APIs and defaults:** The [GetMCP endpoint](../src/config/constants.ts) defaults to `https://getmcp.io/api/servers.json`. The [search service](../src/services/searchService.ts) defaults to `minSimilarity: 0.4`, not `0.5`; its provider priorities use class names (`GetMcpSearchProvider: 10`, `MeilisearchSearchProvider: 9`, `CompassSearchProvider: 8`, `OfflineSearchProvider: 5`). `textMatchWeight` and `vectorMatchWeight` are not fields in the current [`SearchOptions`](../src/types/index.ts). The public TypeScript search overload takes structured `SearchParams`, although the implementation also handles a string. Cache, batching, PCA, and memory-monitoring examples are illustrative and may require additional implementation or dependencies.
 - **Development and diagnostics:** [`pnpm run check`](../package.json) runs lint and formatting checks; `pnpm run build` invokes TypeScript compilation. The named `ERR_*` codes below are diagnostic categories from the source guide, not a guaranteed exported error-code API. A rejected commit does not create a commit to amend: use `git commit` after fixing it, and use `--amend` only when you intend to change the existing last commit. Deleting `pnpm-lock.yaml` can change dependency versions; preserve it unless deliberately regenerating the lockfile.
 
@@ -74,46 +81,39 @@ The sections below correct practical commands where verified against source and 
    echo $SERVER_HOST
    ```
 
-### SSE Disconnections
+### HTTP and Streaming Response Errors
 
-**Symptom**: The Server-Sent Events (SSE) connection disconnects frequently.
-
-**Possible causes**:
-
-1. The client timeout is too short
-2. Server resource limits
-3. An unstable network
-4. CORS configuration issues
-
-**Solutions**:
-
-1. Check client connection handling. The source guide presents the following as a timeout change, but it only enables credentials; the browser `EventSource` constructor has no timeout option:
-
-   ```javascript
-   const eventSource = new EventSource('/sse', {
-     withCredentials: true,
-   });
-   ```
-
-2. Check the server logs for error messages:
+1. Build and start a separate HTTP process with a supported runtime:
 
    ```bash
-   tail -f logs/error.log
+   pnpm run build
+   TRANSPORT_TYPE=http node build/index.js
    ```
 
-3. Ensure that CORS is configured correctly (when connecting from a browser). This is illustrative Express code, not a configuration setting; restrict origins to trusted clients before enabling credentials:
+   In another terminal, check the listener:
 
-   ```javascript
-   // Server-side CORS configuration
-   app.use(
-     cors({
-       origin: true,
-       credentials: true,
-     }),
-   );
+   ```bash
+   curl -i http://127.0.0.1:3000/health
    ```
 
-4. The source guide suggests WebSocket as an alternative. MCP Advisor implements no WebSocket transport; use a supported transport (`stdio`, `sse`, or `rest`) and diagnose network or proxy interruptions.
+2. Connect a client explicitly configured for MCP 2026-07-28 to
+   `http://127.0.0.1:3000/mcp`; use the [official SDK example](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk).
+   An old `initialize` handshake is unsupported. `GET`/`DELETE /mcp` returning
+   405 and old `/sse`, `/messages`, `/rest` returning 410 are expected retirement
+   responses, not evidence that the HTTP process failed.
+
+3. The default `MCP_HTTP_RESPONSE_MODE=auto` uses JSON unless related messages
+   require streaming. `sse` forces SSE within a POST response; `json` omits
+   intermediate progress/log messages. Do not use `EventSource('/sse')` or switch
+   to WebSocket. Check client cancellation, proxy buffering, and network errors
+   when an actual modern response stream is interrupted. Cancellation does not
+   guarantee that every business provider stops underlying work.
+
+4. Check stderr or enabled file logs (`logs/error.log`). For Host/Origin errors,
+   use the narrowly scoped settings in the [deployment guide](./MCP_2026_MIGRATION.md#deployment-and-security).
+   The default listener is loopback-only. Host/Origin guards are neither
+   authentication nor CORS configuration; do not expose the service publicly
+   without authenticated access and network restrictions.
 
 ## Search Issues
 
@@ -327,7 +327,7 @@ async function cachedSearch(query, options) {
 
 ```bash
 # Correct format
-export TRANSPORT_TYPE=sse
+export TRANSPORT_TYPE=http
 
 # The CLI does not automatically load a .env file.
 # Export settings in the launching shell or configure your MCP client.
@@ -494,18 +494,17 @@ export TRANSPORT_TYPE=sse
 
 **Incompatible Node.js version**:
 
-The source guide uses Node.js 18 below. This is a historical example, not a current supported-version recommendation; choose a maintained release compatible with the project and its dependencies.
+The modern source requires Node.js >= 20. The checked-in `.nvmrc` selects Node.js 22 for development and CI.
 
 ```bash
 # Check the current Node.js version
 node --version
 
-# Historical source-guide example: switch with nvm
-nvm use 18
+# Install the development/CI version if needed
+nvm install 22
 
-# Historical source-guide example: install with nvm
-nvm install 18
-nvm alias default 18
+# Select the checked-in .nvmrc version from the repository root
+nvm use
 ```
 
 **Dependency installation issues**:
@@ -523,10 +522,9 @@ pnpm install --frozen-lockfile
 
 ## Logging and Debugging
 
-Keep console logging disabled for stdio MCP transport: diagnostic output on
-stdout can corrupt protocol messages. The examples below use file-only logging.
-Do not set `MCP_COMPASS_MAIN=true` or `ENABLE_CONSOLE_LOGGING=true` for a stdio
-client connection.
+The modern stdio entry keeps diagnostics on stderr, including when console or
+main-application logging is enabled; stdout is reserved for MCP messages. Never
+add diagnostic writes to stdout. The examples below use file-only logging.
 
 ### Enable Verbose Logging
 
