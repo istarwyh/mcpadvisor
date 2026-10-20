@@ -1,0 +1,771 @@
+{
+  "schema_version": 1,
+  "suite_id": "mcpadvisor-explicit-fullphrase-new-independent-20261020",
+  "frozen_at_utc": "2026-10-20T20:07:14.753296+00:00",
+  "baseline_commit": "769ea22683bc7875562983b6fdb6067d95e8257d",
+  "authoring_provenance": "Reviewer authored after reading issue 13, baseline productEvidence.ts/meilisearchQuery.ts/tests and public evaluation/product-evidence-20261016. Candidate implementation/results not read. Public cases are replay, not this new holdout. Synthetic illustrative expectations; metadata evidence is not proof of dedicated capability.",
+  "fixtures": [
+    {
+      "id": "harbor-full",
+      "title": "Cloud Harbor",
+      "description": "Manage deployments"
+    },
+    {
+      "id": "harbor-tail",
+      "title": "Harbor",
+      "description": "Generic ports"
+    },
+    {
+      "id": "cloud-tail",
+      "title": "Cloud",
+      "description": "Generic cloud deployments"
+    },
+    {
+      "id": "harbor-prefix",
+      "title": "Cloud HarborPlus",
+      "description": "A different product"
+    },
+    {
+      "id": "harbor-reverse",
+      "title": "Harbor Cloud",
+      "description": "A different product"
+    },
+    {
+      "id": "harbor-cross",
+      "title": "Cloud",
+      "description": "Harbor deployment tool"
+    },
+    {
+      "id": "harbor-description",
+      "title": "Operations Bridge",
+      "description": "Supports Cloud Harbor deployments"
+    },
+    {
+      "id": "harbor-tags",
+      "title": "Connector",
+      "tags": [
+        "Cloud Harbor"
+      ]
+    },
+    {
+      "id": "harbor-split-tags",
+      "title": "Connector",
+      "tags": [
+        "Cloud",
+        "Harbor"
+      ]
+    },
+    {
+      "id": "harbor-url",
+      "title": "Connector",
+      "sourceUrl": "https://example.test/cloud-harbor"
+    },
+    {
+      "id": "harbor-normalized",
+      "title": "CLOUD_HARBOR",
+      "description": "Compatible spelling"
+    },
+    {
+      "id": "cloud-harbor-mcp",
+      "title": "Connector",
+      "description": "No product clue"
+    },
+    {
+      "id": "plain",
+      "title": "Generic Database",
+      "description": "Search tasks and projects"
+    },
+    {
+      "id": "xinghe",
+      "title": "星河工单",
+      "description": "工单查询工具"
+    },
+    {
+      "id": "xinghe-desc",
+      "title": "客服助手",
+      "description": "连接星河工单并读取任务"
+    },
+    {
+      "id": "xinghe-tail",
+      "title": "工单",
+      "description": "通用工具"
+    },
+    {
+      "id": "mixed-full",
+      "title": "星河工单 Pro",
+      "description": "Extended ticket system"
+    },
+    {
+      "id": "mixed-tail",
+      "title": "Pro",
+      "description": "Generic productivity"
+    },
+    {
+      "id": "deep-full",
+      "title": "Azure DevOps Server",
+      "description": "Version control"
+    },
+    {
+      "id": "deep-tail",
+      "title": "DevOps Server",
+      "description": "Generic development"
+    },
+    {
+      "id": "deep-part",
+      "title": "Azure DevOps",
+      "description": "Different edition"
+    },
+    {
+      "id": "long-full",
+      "title": "North Star Query Studio Pro",
+      "description": "Analytics"
+    },
+    {
+      "id": "long-tail",
+      "title": "Query Studio Pro",
+      "description": "Different product"
+    },
+    {
+      "id": "hanname",
+      "title": "晨光",
+      "description": "Synthetic product"
+    }
+  ],
+  "unit_cases": [
+    {
+      "id": "h01",
+      "query": "Find a Cloud Harbor-specific MCP for managing deployments.",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "full_phrase",
+        "negative_partial",
+        "description_only",
+        "field_separation",
+        "url_only"
+      ]
+    },
+    {
+      "id": "h02",
+      "query": "Cloud Harbor-specific MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "bare_full_phrase"
+      ]
+    },
+    {
+      "id": "h03",
+      "query": "USE Cloud Harbor-specific tools",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "uppercase_boundary"
+      ]
+    },
+    {
+      "id": "h04",
+      "query": "I need a cloud   harbor-specific integration",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "case_whitespace"
+      ]
+    },
+    {
+      "id": "h05",
+      "query": "Find a Ｃｌｏｕｄ Ｈａｒｂｏｒ-specific MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "nfkc"
+      ]
+    },
+    {
+      "id": "h06",
+      "query": "I need a Cloud-Harbor-specific tool",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "hyphenated_name"
+      ]
+    },
+    {
+      "id": "h07",
+      "query": "I need an Azure DevOps Server-specific MCP",
+      "expected_ids": [
+        "deep-full"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "three_word_full_phrase"
+      ]
+    },
+    {
+      "id": "h08",
+      "query": "North Star Query Studio Pro-specific MCP",
+      "expected_ids": [
+        "long-full"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "five_word_full_phrase"
+      ]
+    },
+    {
+      "id": "h09",
+      "query": "Find a Hollow Harbor-specific MCP for deployment management.",
+      "expected_ids": [],
+      "expectation": "exact_ids",
+      "coverage": [
+        "unknown_multiword_tail_collision"
+      ]
+    },
+    {
+      "id": "h10",
+      "query": "需要 Cloud Harbor 专用的 MCP 来管理部署",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "chinese_explicit_suffix_latin"
+      ]
+    },
+    {
+      "id": "h11",
+      "query": "请推荐 Cloud Harbor 专用 MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "chinese_request_boundary"
+      ]
+    },
+    {
+      "id": "h12",
+      "query": "需要星河工单专用 MCP",
+      "expected_ids": [
+        "xinghe",
+        "xinghe-desc",
+        "mixed-full"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "han_unspaced_suffix",
+        "description_only"
+      ]
+    },
+    {
+      "id": "h13",
+      "query": "请推荐 星河工单 Pro 专用的 MCP",
+      "expected_ids": [
+        "mixed-full"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "mixed_chinese_latin_full_phrase"
+      ]
+    },
+    {
+      "id": "h14",
+      "query": "我要月砂工单 Pro 专用 MCP 来管理任务",
+      "expected_ids": [],
+      "expectation": "exact_ids",
+      "coverage": [
+        "unknown_chinese_mixed_tail_collision"
+      ]
+    },
+    {
+      "id": "h15",
+      "query": "需要 晨光 专用 MCP",
+      "expected_ids": [
+        "hanname"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "han_product_short"
+      ]
+    },
+    {
+      "id": "h16",
+      "query": "Cloud Harbor 专用 MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "bare_chinese_suffix"
+      ]
+    },
+    {
+      "id": "h17",
+      "query": "I need a task-specific Cloud Harbor-specific MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "generic_modifier_then_product"
+      ]
+    },
+    {
+      "id": "h18",
+      "query": "I need a Cloud Harbor-specific MCP; existing projects use Azure DevOps Server.",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "later_product_does_not_change_requirement"
+      ]
+    },
+    {
+      "id": "h19",
+      "query": "Show tools to manage deployment tasks",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "ordinary_regression"
+      ]
+    },
+    {
+      "id": "h20",
+      "query": "有什么 MCP 可以查询数据库和导出报表？",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "ordinary_chinese_regression"
+      ]
+    },
+    {
+      "id": "h21",
+      "query": "I need task-specific integrations for assignments",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "generic_modifier_regression"
+      ]
+    },
+    {
+      "id": "h22",
+      "query": "Recommend privacy-specific local-first tools",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "generic_modifier_regression"
+      ]
+    },
+    {
+      "id": "h23",
+      "query": "Cloud Harbor and Azure DevOps Server-specific integrations",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "conjunction_guard_no_new_boolean"
+      ]
+    },
+    {
+      "id": "h24",
+      "query": "Cloud Harbor-specific and Azure DevOps Server-specific tools",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "multi_product_guard"
+      ]
+    },
+    {
+      "id": "h25",
+      "query": "Cloud Harbor-specific or Azure DevOps Server-specific tools",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "alternative_guard"
+      ]
+    },
+    {
+      "id": "h26",
+      "query": "I do not want a Cloud Harbor-specific MCP",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "negative_guard"
+      ]
+    },
+    {
+      "id": "h27",
+      "query": "不要 Cloud Harbor 专用 MCP",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "chinese_negative_guard"
+      ]
+    },
+    {
+      "id": "h28",
+      "query": "I need a secure Cloud Harbor-specific tool",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "unresolved_adjacent_modifier_guard"
+      ]
+    },
+    {
+      "id": "h29",
+      "query": "Find a Sunrise Cloud Harbor-specific MCP",
+      "expected_ids": [],
+      "expectation": "exact_ids",
+      "coverage": [
+        "unknown_complete_phrase_must_not_shorten_to_known_suffix"
+      ]
+    },
+    {
+      "id": "h30",
+      "query": "需要 Azure DevOps Server 专用 MCP",
+      "expected_ids": [
+        "deep-full"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "chinese_suffix_three_words"
+      ]
+    },
+    {
+      "id": "h31",
+      "query": "Use Cloud Harbor-specific integration, not Azure DevOps Server.",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "negative_scope_unchanged"
+      ]
+    },
+    {
+      "id": "h32",
+      "query": "需要任务专用的 MCP",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "generic_chinese_not_product"
+      ]
+    },
+    {
+      "id": "h33",
+      "query": "需要数据库专用 MCP",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "generic_chinese_not_product"
+      ]
+    },
+    {
+      "id": "h34",
+      "query": "请推荐一个 Cloud Harbor 专用的 MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "chinese_determiner_boundary"
+      ]
+    },
+    {
+      "id": "h35",
+      "query": "Find a “Cloud Harbor”-specific MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "quoted_product"
+      ]
+    },
+    {
+      "id": "h36",
+      "query": "Find a \"Cloud Harbor\"-specific MCP",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "quoted_product"
+      ]
+    },
+    {
+      "id": "h37",
+      "query": "Find a Cloud Harbor-specific MCP. Return metadata without ranking guarantees.",
+      "expected_ids": null,
+      "expectation": "unchanged",
+      "coverage": [
+        "existing_negative_token_guard_remains"
+      ]
+    },
+    {
+      "id": "h38",
+      "query": "Recommend Cloud Harbor-specific tooling",
+      "expected_ids": [
+        "harbor-full",
+        "harbor-description",
+        "harbor-tags",
+        "harbor-normalized",
+        "cloud-harbor-mcp"
+      ],
+      "expectation": "exact_ids",
+      "coverage": [
+        "capitalized_boundary"
+      ]
+    }
+  ],
+  "probes": [
+    {
+      "id": "c01",
+      "query": "Use Brave Search-specific MCP for web search.",
+      "accepted_ids": [
+        "brave-search"
+      ],
+      "coverage": [
+        "english_full_phrase"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c02",
+      "query": "Find a Google Tasks-specific MCP for managing tasks.",
+      "accepted_ids": [
+        "google-tasks"
+      ],
+      "coverage": [
+        "english_full_phrase"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c03",
+      "query": "需要 Google Maps 专用 MCP 来查询地点和规划路线。",
+      "accepted_ids": [
+        "google-maps",
+        "travel-planner"
+      ],
+      "coverage": [
+        "chinese_suffix_multiword"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c04",
+      "query": "请推荐 Confluence 专用的 MCP 来搜索和阅读知识库页面。",
+      "accepted_ids": [
+        "atlassian"
+      ],
+      "coverage": [
+        "chinese_suffix_non_title_evidence"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c05",
+      "query": "需要 DuckDB 专用 MCP 连接数据库。",
+      "accepted_ids": [
+        "dbhub"
+      ],
+      "coverage": [
+        "chinese_suffix_description_only"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c06",
+      "query": "Find an Orion Maps-specific MCP for route calculations.",
+      "accepted_ids": [],
+      "coverage": [
+        "unknown_multiword"
+      ],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true
+      }
+    },
+    {
+      "id": "c07",
+      "query": "请推荐远潮计划 Plus 专用的 MCP 来管理任务。",
+      "accepted_ids": [],
+      "coverage": [
+        "unknown_mixed_chinese"
+      ],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true
+      }
+    },
+    {
+      "id": "c08",
+      "query": "Find a Brave Search Enterprise-specific MCP for web search.",
+      "accepted_ids": [],
+      "coverage": [
+        "unknown_edition_no_shortening"
+      ],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true
+      }
+    },
+    {
+      "id": "c09",
+      "query": "需要 Brave Search 专用 MCP 搜索网页。",
+      "accepted_ids": [
+        "brave-search"
+      ],
+      "coverage": [
+        "chinese_suffix"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c10",
+      "query": "Find a Google Maps-specific MCP for route planning.",
+      "accepted_ids": [
+        "google-maps",
+        "travel-planner"
+      ],
+      "coverage": [
+        "full_phrase_known_description"
+      ],
+      "expectation": {
+        "mode": "product_positive",
+        "require_nonempty": true,
+        "require_any_accepted_id": true,
+        "forbid_ids_outside_accepted": true
+      }
+    },
+    {
+      "id": "c11",
+      "query": "需要 Blue DuckDB 专用 MCP 来查询数据库。",
+      "accepted_ids": [],
+      "coverage": [
+        "unknown_prefix_known_tail"
+      ],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true
+      }
+    },
+    {
+      "id": "c12",
+      "query": "I need a Cyber Google Tasks-specific MCP for task management.",
+      "accepted_ids": [],
+      "coverage": [
+        "unknown_prefix_known_phrase"
+      ],
+      "expectation": {
+        "mode": "product_negative",
+        "require_empty_results": true
+      }
+    }
+  ],
+  "non_specific_catalog_queries": [
+    "Search database tables and schemas",
+    "查找可以创建待办和完成任务的 MCP",
+    "I need project-specific issue tracking tools",
+    "Convert documents between formats",
+    "Find local-first Markdown note search tools"
+  ],
+  "scope": "Single explicit complete product phrase only. Preserve existing non-specific and unresolved Boolean/exclusion behavior. No ranking or catalog modifications. Quoted-name cases are robustness probes, not minimum required acceptance."
+}

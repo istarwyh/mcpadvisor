@@ -189,6 +189,104 @@ describe.skipIf(!host)(
       ).toBe('postgres');
     });
 
+    it('retains complete explicit product names through real retrieval and aggregation', async () => {
+      const productIndex = `${indexName}_products`;
+      indexes.push(productIndex);
+      const products = Object.fromEntries(
+        [
+          ['google-drive', 'Google Drive', 'File access and search'],
+          ['drive', 'Drive', 'Generic file access and search'],
+          ['sentry', 'Sentry', 'Analyze application errors'],
+          ['aws-cost-explorer', 'AWS Cost Explorer', 'Analyze cloud bills'],
+          ['aws', 'AWS', 'Generic cloud resources'],
+          ['home-assistant', 'Hass', 'Manage Home Assistant entities'],
+          ['firebase', 'Firebase', 'Supports Firestore databases'],
+          [
+            'rednote-mcp',
+            'RedNote MCP',
+            '小红书内容访问的MCP服务，支持关键词搜索笔记、通过URL访问笔记内容',
+          ],
+          [
+            'mcp-hotnews-server',
+            'Hot News',
+            '获取和分析热点新闻和话题，支持小红书、微博等平台',
+          ],
+        ].map(([id, title, description]) => [
+          id,
+          {
+            ...catalog.filesystem,
+            name: id,
+            display_name: title,
+            description,
+          },
+        ]),
+      );
+      const provider = new MeilisearchSearchProvider(
+        { fetchData: async () => products },
+        undefined,
+        new LocalMeilisearchController({
+          type: 'local',
+          host: host!,
+          masterKey: key,
+          indexName: productIndex,
+          autoIndex: true,
+        }),
+      );
+      const unrelated = {
+        search: async () => [
+          {
+            id: 'generic',
+            title: 'Generic MCP',
+            description: 'Files, errors, databases and cloud resources',
+            sourceUrl: 'https://example.com/generic',
+            similarity: 1,
+          },
+        ],
+      };
+      const service = new SearchService([unrelated, provider], {
+        enabled: false,
+      });
+      for (const [taskDescription, expected] of [
+        [
+          'Find a Google Drive-specific MCP for accessing and searching my files.',
+          'google-drive',
+        ],
+        ['帮我找 Sentry 专用的 MCP，用来查看和分析线上错误。', 'sentry'],
+        [
+          '需要 AWS Cost Explorer 专用 MCP，按区域和服务分析云账单。',
+          'aws-cost-explorer',
+        ],
+        [
+          'I need a Home Assistant-specific MCP to manage entities and home automations.',
+          'home-assistant',
+        ],
+        ['请推荐 Firestore 专用 MCP，让助手连接我的数据库。', 'firebase'],
+        ['我要知舟工单 Pro 专用的 MCP，处理我公司的工单和待办。', null],
+        ['Find a NeverKnown Drive-specific MCP for accessing my files.', null],
+        ['Find a Google Drive Pro-specific MCP for accessing my files.', null],
+        [
+          '我想用小红书专用 MCP 按关键词搜索笔记、打开笔记链接。',
+          'rednote-mcp',
+        ],
+        ['请推荐未知工单专用 MCP，读取本地文件。', null],
+      ]) {
+        const ids = expected ? [expected] : [];
+        expect(
+          (await provider.search({ taskDescription: taskDescription! })).map(
+            row => row.id,
+          ),
+        ).toEqual(ids);
+        expect(
+          (
+            await service.search(
+              { taskDescription: taskDescription! },
+              { limit: 1 },
+            )
+          ).map(row => row.id),
+        ).toEqual(ids);
+      }
+    });
+
     it('does not create or write an index without explicit opt-in', async () => {
       const untouched = `${indexName}_disabled`;
       const controller = new LocalMeilisearchController({
