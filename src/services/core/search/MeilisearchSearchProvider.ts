@@ -21,6 +21,7 @@ import {
 } from '../../providers/meilisearch/controller.js';
 import logger from '../../../utils/logger.js';
 import { buildMeilisearchQuery } from './meilisearchQuery.js';
+import { filterSpecificProductResults } from './productEvidence.js';
 
 /**
  * 将 GetMCP API 响应转换为 Meilisearch 文档
@@ -129,7 +130,9 @@ export class MeilisearchSearchProvider implements SearchProvider {
       const serverResponses = results.hits.map(convertHitToServerResponse);
 
       logger.debug(`Found ${serverResponses.length} results from Meilisearch`);
-      return serverResponses;
+      return filterSpecificProductResults(params, [
+        { providerName: 'MeilisearchSearchProvider', results: serverResponses },
+      ])[0].results;
     } catch (error) {
       logger.error(
         `Error searching with Meilisearch: ${error instanceof Error ? error.message : String(error)}`,

@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "provenance": "Post-unblind independent diagnostics, not fresh blind validation. The 16 cases cover observed parser regressions and complete-phrase integrity.",
+  "groups": [
+    {
+      "provenance": "Independent diagnostic probes added after initial holdout unblinding. These are not fresh blind validation.",
+      "cases": [
+        {
+          "id": "d01",
+          "query": "Could you find a PostgreSQL-specific MCP?",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d02",
+          "query": "Show me a PostgreSQL-specific MCP",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d03",
+          "query": "I need a task-specific tool. Find a PostgreSQL-specific MCP",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d04",
+          "query": "I need a PostgreSQL-specific MCP. I also need a task-specific tool",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d05",
+          "query": "Find a PostgreSQL-specific MCP for user-specific tasks",
+          "expected_ids": [
+            "postgre"
+          ]
+        }
+      ],
+      "fixtures": [
+        {
+          "id": "postgre",
+          "title": "PostgreSQL",
+          "description": "DB"
+        },
+        {
+          "id": "other",
+          "title": "Other",
+          "description": "unrelated"
+        }
+      ]
+    },
+    {
+      "provenance": "Independent diagnostic probes added after initial holdout unblinding and revision2 review. Not fresh blind validation.",
+      "fixtures": [
+        {
+          "id": "code-with-me",
+          "title": "Code With Me",
+          "description": "Synthetic full phrase evidence"
+        },
+        {
+          "id": "need-for-speed",
+          "title": "Need for Speed",
+          "description": "Synthetic full phrase evidence"
+        },
+        {
+          "id": "speed",
+          "title": "Speed",
+          "description": "Partial phrase only"
+        },
+        {
+          "id": "google-drive",
+          "title": "Google Drive",
+          "description": "File search"
+        },
+        {
+          "id": "generic",
+          "title": "Search",
+          "description": "Unrelated generic metadata"
+        }
+      ],
+      "cases": [
+        {
+          "id": "d06",
+          "query": "Find a Code With Me-specific MCP",
+          "expected_ids": [
+            "code-with-me"
+          ]
+        },
+        {
+          "id": "d07",
+          "query": "Find a NeverKnown For Search-specific MCP",
+          "expected_ids": []
+        },
+        {
+          "id": "d08",
+          "query": "I need a Need for Speed-specific MCP",
+          "expected_ids": [
+            "need-for-speed"
+          ]
+        },
+        {
+          "id": "d09",
+          "query": "Find a tool-specific MCP for Google Drive-specific tasks",
+          "expected_ids": [
+            "google-drive"
+          ]
+        }
+      ]
+    },
+    {
+      "provenance": "Independent diagnostic probes added after initial holdout unblinding. Preservation checks for existing finite Chinese capability glossary, not new blind validation.",
+      "fixtures": [
+        {
+          "id": "filesystem",
+          "title": "Filesystem",
+          "description": "File operations"
+        },
+        {
+          "id": "email",
+          "title": "Email",
+          "description": "Mail operations"
+        },
+        {
+          "id": "knowledge-graph",
+          "title": "Knowledge Graph",
+          "description": "Graph operations"
+        }
+      ],
+      "cases": [
+        {
+          "id": "d10",
+          "query": "需要文件系统专用 MCP",
+          "expected_ids": [
+            "filesystem",
+            "email",
+            "knowledge-graph"
+          ]
+        },
+        {
+          "id": "d11",
+          "query": "需要电子邮件专用 MCP",
+          "expected_ids": [
+            "filesystem",
+            "email",
+            "knowledge-graph"
+          ]
+        },
+        {
+          "id": "d12",
+          "query": "需要知识图谱专用 MCP",
+          "expected_ids": [
+            "filesystem",
+            "email",
+            "knowledge-graph"
+          ]
+        }
+      ]
+    },
+    {
+      "provenance": "Independent diagnostic probes added after initial holdout unblinding and later grammar review. Not fresh blind validation.",
+      "fixtures": [
+        {
+          "id": "postgre",
+          "title": "PostgreSQL",
+          "description": "DB"
+        },
+        {
+          "id": "other",
+          "title": "Other",
+          "description": "unrelated"
+        }
+      ],
+      "cases": [
+        {
+          "id": "d13",
+          "query": "I want to use a PostgreSQL-specific MCP",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d14",
+          "query": "I would like a PostgreSQL-specific MCP",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d15",
+          "query": "I am looking for a PostgreSQL-specific MCP",
+          "expected_ids": [
+            "postgre"
+          ]
+        },
+        {
+          "id": "d16",
+          "query": "Can you help me find a PostgreSQL-specific MCP",
+          "expected_ids": [
+            "postgre"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -76,6 +76,87 @@ export function isGenericSpecificModifier(value: string): boolean {
   return GENERIC_NAMES.has(value.toLowerCase());
 }
 
+// Syntactic lead-ins only: product extraction must not depend on catalog titles
+// or the candidates returned by any provider. Do not strip words inside a name.
+const COMMAND_VERB =
+  '(?:find|recommend|suggest|show|give|get|use|using|require|requires|connect)';
+const REQUEST_VERB =
+  '(?:need|want|require|would\\s+like|(?:am|are)\\s+looking\\s+for)';
+const SPECIFIC_LEAD_IN = new RegExp(
+  `^(?:(?:(?:i|we)(?:\\s+also)?\\s+${REQUEST_VERB}(?:\\s+to\\s+${COMMAND_VERB})?|` +
+    `(?:(?:can|could|would)\\s+you\\s+)?(?:please\\s+)?(?:help\\s+(?:me|us)\\s+)?${COMMAND_VERB}|need|want)` +
+    '\\s+(?:(?:me|us)\\s+)?(?:(?:a|an)\\s+)?|(?:a|an|for|with)\\s+)',
+  'iu',
+);
+const CHINESE_LEAD_IN =
+  /^(?:(?:请|麻烦)?(?:帮我)?(?:寻找|推荐|找|需要|想用|想要|要|用)|我(?:需要|想用|想要|要)|我们(?:需要|想用|想要|要))(?:\s*一个)?\s*/u;
+const GENERIC_CHINESE_MODIFIERS = new Set([
+  ...CAPABILITY_TERMS.map(([source]) => source),
+  ...'任务 项目 隐私 领域 上下文 语言 用户 应用 环境 客户 角色 工作流 行业 平台 框架 系统 数据'.split(
+    ' ',
+  ),
+]);
+
+/**
+ * Extract one complete explicit `<name>-specific` or `<name> 专用` phrase.
+ * This deliberately bounded grammar does not interpret exclusions, alternatives,
+ * conjunctions, or adjective-prefixed names. Null leaves existing behavior alone.
+ */
+export function extractSpecificProduct(description: string): string | null {
+  const text = description.normalize('NFKC');
+  if (
+    /\b(?:not|no|without|except|exclude|excluding|rather than|instead of|or)\b|不|排除/iu.test(
+      text,
+    )
+  )
+    return null;
+  const qualifiers = [...text.matchAll(/-specific\b|专用(?:的)?/giu)];
+  const products: string[] = [];
+  let start = 0;
+  for (const qualifier of qualifiers) {
+    const hasEarlierQualifier = start > 0;
+    const prefix = text.slice(start, qualifier.index);
+    start = qualifier.index! + qualifier[0].length;
+    // Sentence/clause punctuation marks a fresh grammatical boundary; dots
+    // inside product names are not sentence endings.
+    let phrase = prefix
+      .split(/[\n\r,;:!?，；：！？。]|\.(?=\s|$)/u)
+      .at(-1)!
+      .trim();
+    // A later qualifier may be attached to the first qualifier's MCP noun.
+    // Never apply this to the first phrase or to words inside a product name.
+    if (hasEarlierQualifier)
+      phrase = phrase.replace(
+        /^(?:mcp(?:\s+(?:server|tool))?|tools?|servers?|integrations?)\s+(?:for|with)\s+/iu,
+        '',
+      );
+    phrase = phrase.replace(SPECIFIC_LEAD_IN, '');
+    phrase = phrase.replace(CHINESE_LEAD_IN, '').trim();
+    // Explicit quoting can delimit names containing grammatical words.
+    const quoted = phrase.match(/^["“「『]([^"“”「」『』]+)["”」』]$/u);
+    if (quoted) phrase = quoted[1];
+    if (
+      !/^[\p{Script=Latin}\p{Script=Han}][\p{Script=Latin}\p{Script=Han}\p{N}._-]*(?:\s+[\p{Script=Latin}\p{Script=Han}\p{N}][\p{Script=Latin}\p{Script=Han}\p{N}._-]*)*$/u.test(
+        phrase,
+      ) ||
+      /\b(?:and|both|either)\b|和|以及|同时|与|或/iu.test(phrase) ||
+      (!quoted && /^(?:secure|private|local|dedicated)\s+/iu.test(phrase))
+    )
+      return null;
+    const product = phrase
+      .toLowerCase()
+      .replace(/[-_]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (
+      !isGenericSpecificModifier(product) &&
+      !GENERIC_CHINESE_MODIFIERS.has(product)
+    )
+      products.push(product);
+  }
+  return products.length === 1 ? products[0] : null;
+}
+
 const segmenter = new Intl.Segmenter('zh', { granularity: 'word' });
 
 function tokens(text: string): string[] {
@@ -103,6 +184,14 @@ export function buildMeilisearchQuery(
   catalog: Record<string, CatalogRecord>,
 ): { query: string; matchingStrategy?: 'last' } | null {
   const description = params.taskDescription.trim();
+  const specificProduct = extractSpecificProduct(description);
+  // Preserve established Han lexical ordering: a broad leading product mention
+  // would otherwise admit weaker capability matches through `last` relaxation.
+  // The provider still applies the complete product-evidence gate to its output.
+  const explicitProduct =
+    specificProduct && /[\p{Script=Latin}\p{N}]/u.test(specificProduct)
+      ? specificProduct
+      : null;
   const explicit = [...(params.keywords || []), ...(params.capabilities || [])]
     .map(value => value.trim())
     .filter(Boolean);
@@ -114,7 +203,8 @@ export function buildMeilisearchQuery(
     !explicit.length &&
     !/\p{Script=Han}/u.test(raw) &&
     (/^["“][\s\S]*["”]$/u.test(raw) ||
-      (!/-specific\b/iu.test(raw) &&
+      (!explicitProduct &&
+        !/-specific\b/iu.test(raw) &&
         rawWords.length <= 5 &&
         rawWords.every(word => !STOP_WORDS.has(word.toLowerCase()))))
   )
@@ -179,7 +269,7 @@ export function buildMeilisearchQuery(
     ...description.matchAll(/\b([a-z][\w.-]*)-specific\b/giu),
   ];
   const specificProducts: string[] = [];
-  for (const match of specificWords) {
+  for (const match of explicitProduct ? [] : specificWords) {
     const word = match[1];
     const prefix = description.slice(0, match.index + word.length);
     const recognized = named.find(name => literalMention(prefix, name, true));
@@ -191,6 +281,7 @@ export function buildMeilisearchQuery(
     else return null;
   }
   const specific =
+    explicitProduct ||
     specificProducts[0] ||
     description
       .match(/专门(?:对接|针对|连接)\s*([a-z][a-z0-9 ._-]*[a-z0-9])/iu)?.[1]
