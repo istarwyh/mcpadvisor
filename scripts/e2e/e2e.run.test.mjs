@@ -33,10 +33,14 @@ if [[ "\${INSPECTOR_STATUS:-}" != "" ]]; then exit "$INSPECTOR_STATUS"; fi
 sleep 60 &
 echo $! > "$FIXTURE_ROOT/descendant.pid"
 if [[ "\${NO_URL:-}" != 1 ]]; then
- echo 'Open inspector with token pre-filled: http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=abcdef123456'
+ echo 'Open inspector with token pre-filled: http://127.0.0.1:6274?MCP_INSPECTOR_API_TOKEN=abcdef123456'
 fi
 wait`,
-    npx: `echo "$*" > "$FIXTURE_ROOT/playwright.args"
+    npx: `if [[ "$1" == --yes ]]; then
+ [[ "$2" == --package=@modelcontextprotocol/inspector@2.10.1 && "$3" == mcp-inspector && "$4" == --protocol-era && "$5" == modern ]] || exit 98
+ exec mcp-inspector
+fi
+echo "$*" > "$FIXTURE_ROOT/playwright.args"
 echo $$ > "$FIXTURE_ROOT/playwright.pid"
 if [[ "\${WAIT_TEST:-}" == 1 ]]; then sleep 60 & wait; fi
 exit "\${TEST_STATUS:-0}"`,
@@ -49,18 +53,22 @@ exit "\${TEST_STATUS:-0}"`,
   return { root, bin };
 }
 function launch(f, env = {}, mode = 'headless') {
-  const child = spawn('bash', [join(f.root, 'scripts/e2e/e2e.run.sh'), mode], {
-    cwd: tmpdir(),
-    env: {
-      ...process.env,
-      PATH: `${f.bin}:/usr/bin:/bin`,
-      FIXTURE_ROOT: f.root,
-      E2E_STARTUP_TIMEOUT: '3',
-      E2E_HEALTH_TIMEOUT: '1',
-      ...env,
+  const child = spawn(
+    'bash',
+    [join(f.root, 'scripts/e2e/e2e.run.sh'), ...[mode].flat()],
+    {
+      cwd: tmpdir(),
+      env: {
+        ...process.env,
+        PATH: `${f.bin}:/usr/bin:/bin`,
+        FIXTURE_ROOT: f.root,
+        E2E_STARTUP_TIMEOUT: '3',
+        E2E_HEALTH_TIMEOUT: '1',
+        ...env,
+      },
+      stdio: ['ignore', 'pipe', 'pipe'],
     },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
+  );
   let output = '';
   child.stdout.on('data', b => {
     output += b;
@@ -143,7 +151,7 @@ for (const [name, env, expected] of [
   });
 }
 test(
-  'missing Inspector is an explicit failure',
+  'failed pinned Inspector execution is an explicit failure',
   { timeout: 12000 },
   async () => {
     await check({}, 127, { 'mcp-inspector': null });
@@ -214,4 +222,29 @@ for (const signal of ['SIGTERM', 'SIGINT']) {
       }
     },
   );
+}
+
+for (const [mode, expected] of [
+  ['headless', 'playwright test'],
+  [
+    ['headless', 'tests/e2e/mcp-inspector.spec.ts', '--retries=0'],
+    'playwright test tests/e2e/mcp-inspector.spec.ts --retries=0',
+  ],
+]) {
+  test(`preserves Playwright scope: ${expected}`, async () => {
+    const f = await fixture();
+    const r = launch(f, {}, mode);
+    try {
+      const result = await r.done;
+      assert.equal(result.status, 0, result.output);
+      assert.equal(
+        (await readFile(join(f.root, 'playwright.args'), 'utf8')).trim(),
+        expected,
+      );
+    } finally {
+      r.child.kill('SIGTERM');
+      await r.done;
+      await rm(f.root, { recursive: true, force: true });
+    }
+  });
 }

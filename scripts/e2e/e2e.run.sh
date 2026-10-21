@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Legacy Inspector UI harness. Passing this runner does not establish modern
-# MCP compatibility; use test:protocol for the current protocol contract.
+# Official Inspector v2 UI harness; protocol and provider quality gates remain separate.
 set -euo pipefail
 # Give only the processes we launch their own groups, including their children.
 set -m
@@ -12,6 +11,7 @@ MCP_INSPECTOR_PID=""
 PLAYWRIGHT_PID=""
 BUILD_PID=""
 TEST_MODE=${1:-headed}
+[[ $# -eq 0 ]] || shift
 STARTUP_TIMEOUT=${E2E_STARTUP_TIMEOUT:-30}
 HEALTH_TIMEOUT=${E2E_HEALTH_TIMEOUT:-20}
 
@@ -52,14 +52,14 @@ for timeout in "$STARTUP_TIMEOUT" "$HEALTH_TIMEOUT"; do
 done
 
 # Fail before starting anything when dependencies or ports are unavailable.
-for command in pnpm mcp-inspector npx curl; do
+for command in pnpm npx curl; do
     if ! command -v "$command" >/dev/null 2>&1; then
         echo "Required command unavailable: $command" >&2
         exit 127
     fi
 done
 if command -v lsof >/dev/null 2>&1; then
-    for port in 6274 6277; do
+    for port in 6274 6275; do
         if lsof -tiTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
             echo "Port $port is already in use; no existing process was stopped" >&2
             exit 1
@@ -76,7 +76,7 @@ BUILD_PID=""
 umask 077
 : > mcp-inspector.log
 chmod 600 mcp-inspector.log
-ENABLE_FILE_LOGGING=true mcp-inspector node "$PROJECT_ROOT/build/index.js" > mcp-inspector.log 2>&1 &
+MCP_INSPECTOR_SECRET_STORE=memory BROWSER=none ENABLE_FILE_LOGGING=true npx --yes --package=@modelcontextprotocol/inspector@2.10.1 mcp-inspector --protocol-era modern node "$PROJECT_ROOT/build/index.js" > mcp-inspector.log 2>&1 &
 MCP_INSPECTOR_PID=$!
 
 INSPECTOR_URL=""
@@ -88,7 +88,7 @@ for ((count=0; count<=STARTUP_TIMEOUT; count++)); do
         echo "MCP Inspector exited before becoming ready ($status)" >&2
         exit "$status"
     fi
-    INSPECTOR_URL=$(grep -o 'http://localhost:[0-9]*/?MCP_PROXY_AUTH_TOKEN=[a-f0-9]*' mcp-inspector.log | head -1 || true)
+    INSPECTOR_URL=$(grep -Eo 'http://127[.]0[.]0[.]1:[0-9]+/?[?]MCP_INSPECTOR_API_TOKEN=[a-f0-9]+' mcp-inspector.log | head -1 || true)
     [[ -z "$INSPECTOR_URL" ]] || break
     [[ "$count" -lt "$STARTUP_TIMEOUT" ]] || break
     sleep 1
@@ -105,7 +105,7 @@ if [[ -z "$INSPECTOR_URL" ]]; then
     exit 1
 fi
 BASE_URL=${INSPECTOR_URL%%\?*}
-AUTH_TOKEN=${INSPECTOR_URL##*MCP_PROXY_AUTH_TOKEN=}
+AUTH_TOKEN=${INSPECTOR_URL##*MCP_INSPECTOR_API_TOKEN=}
 [[ -n "$AUTH_TOKEN" ]] || { echo "Missing Inspector token" >&2; exit 1; }
 
 ready=false
@@ -124,7 +124,7 @@ fi
 
 export MCP_AUTH_TOKEN="$AUTH_TOKEN"
 export MCP_INSPECTOR_URL="$BASE_URL"
-args=(test)
+args=(test "$@")
 case "$TEST_MODE" in
     headed) args+=(--headed) ;;
     debug) args+=(--debug) ;;
