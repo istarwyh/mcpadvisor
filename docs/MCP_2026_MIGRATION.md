@@ -233,6 +233,11 @@ actual protocol verification; opening `/mcp` in a browser is not a connection te
 
 ## Deployment and security
 
+For ChatMCP/MCP.so specifically, see the [hosting migration status](./CHATMCP_HOSTING.md).
+Its historical REST manifest is not a modern hosting recipe; platform deployment
+and gateway compatibility remain unverified. The instructions below describe
+the source server's requirements.
+
 There is **no built-in authentication**. The loopback default is intentional.
 Before exposing the service, provide authenticated access, TLS where appropriate,
 and network restrictions. Apply them to every route, including the source-management
