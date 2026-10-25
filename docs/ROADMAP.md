@@ -1,3 +1,20 @@
+# Roadmap and historical vision
+
+## Current implementation checkpoint — 2026-10-25
+
+The current source implements opt-in [Cline Marketplace](cline-marketplace.md)
+and [FlashRank reranking](professional-reranking.md), plus
+[search-quality evaluation tooling](search-quality-evaluation.md). They do not
+establish production ranking quality or automatic installation. The
+[README](../README.md) distinguishes defaults, opt-ins, and runtime artifacts.
+
+## Historical vision (not delivery commitments)
+
+The original dated phases below are retained as design history. Their dates are
+not current deadlines; inclusion does not mean implementation or authorization.
+Agent orchestration, learning, and personalization remain proposals unless a
+separate accepted issue and source implementation establish otherwise.
+
 # Roadmap: The Future of MCP Advisor
 
 MCP Advisor is evolving from a simple recommendation system to an intelligent agent orchestration platform. Our vision is to create a system that not only recommends the right MCP servers but also learns from interactions and helps agents dynamically plan and execute complex tasks.

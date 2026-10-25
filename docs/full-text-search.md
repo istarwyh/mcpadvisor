@@ -6,7 +6,7 @@ Opt in to populating a dedicated local index from the GetMCP catalog:
 ```sh
 export MEILISEARCH_INSTANCE=local
 export MEILISEARCH_LOCAL_HOST=http://localhost:7700
-export MEILISEARCH_MASTER_KEY=<your-local-master-key>
+export MEILISEARCH_MASTER_KEY='replace-with-your-local-master-key'
 export MEILISEARCH_INDEX_NAME=mcp_servers
 export MEILISEARCH_AUTO_INDEX=true
 node build/index.js
@@ -30,7 +30,7 @@ Run the isolated real-engine integration test with a local Meilisearch 1.15:
 
 ```sh
 MEILI_FULLTEXT_TEST_HOST=http://localhost:7700 \
-MEILI_FULLTEXT_TEST_KEY=<your-local-master-key> \
+MEILI_FULLTEXT_TEST_KEY='replace-with-your-local-master-key' \
 pnpm test src/tests/integration/providers/meilisearch-fulltext.test.ts
 ```
 
@@ -48,7 +48,7 @@ After building, run the protocol suite with the same host/key configuration:
 
 ```sh
 MEILI_FULLTEXT_TEST_HOST=http://localhost:7700 \
-MEILI_FULLTEXT_TEST_KEY=<your-local-master-key> \
+MEILI_FULLTEXT_TEST_KEY='replace-with-your-local-master-key' \
 node --test tests/e2e/meilisearch-mcp.test.mjs
 ```
 

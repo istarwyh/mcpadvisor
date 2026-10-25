@@ -1,59 +1,36 @@
 # MCP Advisor Quick Start Guide
 
-[English](./GETTING_STARTED.md) | [Simplified Chinese](./GETTING_STARTED.zh-CN.md)
+[English](./GETTING_STARTED.md) | [简体中文](./GETTING_STARTED.zh-CN.md)
 
-This guide covers installing, configuring, and using MCP Advisor to help you get
-started and make the most of its features.
-
-This is the English translation of the [Chinese guide](./GETTING_STARTED.zh-CN.md).
-English [technical reference](./TECHNICAL_REFERENCE.md) and
-[troubleshooting](./TROUBLESHOOTING.md) guides are also available. English [architecture](./ARCHITECTURE.md) and
-[contribution](../CONTRIBUTING.md) guides are available too. Runtime messages
-may still contain Chinese.
-
-## Source migration and published-package compatibility
-
-This guide's transport settings describe the issue #36 source branch, which
-requires Node.js >= 20 (`.nvmrc`: 22) and MCP 2026-07-28 clients. Build it with
-`pnpm install --frozen-lockfile && pnpm run build`, then follow
-[Transport Configuration](#transport-configuration).
-
-The package installation examples below explicitly use published version 1.0.5
-for compatibility/rollback; they do not install this source migration. Named
-client settings and third-party installers are not evidence of compatibility
-with the modern branch. See the [migration guide](./MCP_2026_MIGRATION.md) for the
-supported SDK configuration and rollback steps. The other source corrections in
-this guide are based on inspection, not a full installation or provider test.
-
-## Contents
-
-- [Installation Methods](#installation-methods)
-  - [Integrate Through MCP Configuration (Recommended)](#integrate-through-mcp-configuration-recommended)
-  - [NPM Package Installation](#npm-package-installation)
-  - [Global Installation](#global-installation)
-  - [Run Directly](#run-directly)
-  - [Install Through Smithery](#install-through-smithery)
-- [Basic Usage](#basic-usage)
-  - [Find MCP Servers](#find-mcp-servers)
-  - [Understand Search Results](#understand-search-results)
-  - [Integrate with AI Assistants](#integrate-with-ai-assistants)
-- [Configuration Options](#configuration-options)
-  - [Environment Variables](#environment-variables)
-  - [Configuration Files](#configuration-files)
-  - [Transport Configuration](#transport-configuration)
-- [Usage Tips](#usage-tips)
-  - [Write Effective Queries](#write-effective-queries)
-  - [Advanced Search Options](#advanced-search-options)
-- [Common Troubleshooting](#common-troubleshooting)
-  - [Installation Issues](#installation-issues)
-  - [Configuration Issues](#configuration-issues)
-  - [Runtime Issues](#runtime-issues)
+This is a current-source operating guide, checked against main `94829fd` on
+2026-10-25. Choose an artifact first; source changes do not establish that the
+same capabilities are published to npm or available through a hosted gateway.
 
 ## Installation Methods
 
-### Integrate Through MCP Configuration (Recommended)
+### Modern source build
 
-For the published 1.0.5 compatibility version, use the following MCP configuration:
+Requires Node.js >=20, pnpm **8.15.9**, Git and a POSIX shell. `.nvmrc` selects
+Node.js 22. The optional Inspector UI harness requires **Node.js >=22.19.0**.
+
+```bash
+git clone https://github.com/istarwyh/mcpadvisor.git
+cd mcpadvisor
+pnpm install --frozen-lockfile
+pnpm run build
+node build/index.js
+```
+
+The last command starts stdio and waits for an MCP client; it is not a search
+prompt. Use a client explicitly configured for **MCP 2026-07-28**. Follow the
+[official SDK example](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
+for discovery, tools/list and a first call. SDK v2 alone does not imply modern
+protocol negotiation. Named desktop-client compatibility is not established here.
+
+### Published compatibility version
+
+For historical clients and rollback, the documented npm artifact is fixed at
+**1.0.5**. This does not install the modern source transport.
 
 ```json
 {
@@ -66,524 +43,162 @@ For the published 1.0.5 compatibility version, use the following MCP configurati
 }
 ```
 
-Add this configuration to your AI assistant's MCP settings file:
-
-- **macOS (Claude Desktop)**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%AppData%\Claude\claude_desktop_config.json`
-
-For Linux or a different MCP client, use that client's documented settings path.
-Restart your AI assistant after configuring it.
-
-### NPM Package Installation
-
-To integrate MCP Advisor into a project:
-
-```bash
-# Using npm
-npm install @xiaohui-wang/mcpadvisor@1.0.5
-
-# Using yarn
-yarn add @xiaohui-wang/mcpadvisor@1.0.5
-
-# Using pnpm
-pnpm add @xiaohui-wang/mcpadvisor@1.0.5
-```
-
-### Global Installation
-
-A global installation makes the `mcpadvisor` command available from any directory:
-
-```bash
-# Install globally
-npm install -g @xiaohui-wang/mcpadvisor@1.0.5
-
-# Run
-mcpadvisor
-```
-
-### Run Directly
-
-Run without a separate installation step:
-
-```bash
-# Run using npx (no separate installation required)
-npx @xiaohui-wang/mcpadvisor@1.0.5
-
-# Or select a version with npx
-npx @xiaohui-wang/mcpadvisor@1.0.5
-```
-
-### Install Through Smithery
-
-Use [Smithery](https://smithery.ai/server/@istarwyh/mcpadvisor) to install
-MCP Advisor for Claude Desktop automatically:
-
-```bash
-npx -y @smithery/cli install @istarwyh/mcpadvisor --client claude
-```
+For Claude Desktop, the historical settings paths are
+`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS and
+`%AppData%\Claude\claude_desktop_config.json` on Windows. Use the client's own
+instructions on Linux or with another client. These paths are not proof of
+modern-protocol support. Third-party install buttons and hosted listings are
+not versioned acceptance evidence; hosting migration is tracked separately in
+[#36](https://github.com/istarwyh/mcpadvisor/issues/36) and draft
+[#40](https://github.com/istarwyh/mcpadvisor/pull/40).
 
 ## Basic Usage
 
 ### Find MCP Servers
 
-MCP Advisor lets you discover and use MCP servers through natural-language
-queries. Here are some examples:
+Ask your client to call `recommend-mcp-servers`, for example with these tool
+arguments (not a complete JSON-RPC envelope):
 
-#### 1. Direct Queries
-
-Ask your AI assistant for MCP servers suited to a particular task:
-
-```text
-Which MCP servers can be used for vector database integration?
+```json
+{
+  "taskDescription": "Find MCP servers to query PostgreSQL schema metadata",
+  "keywords": ["PostgreSQL"],
+  "capabilities": ["schema inspection"]
+}
 ```
 
-```text
-Find MCP servers for natural language processing
-```
-
-#### 2. Feature-Oriented Queries
-
-Ask for servers with specific capabilities:
-
-```text
-Find an MCP server for image generation
-```
-
-```text
-I need an MCP server for image generation
-```
-
-#### 3. Task-Oriented Queries
-
-Describe the task you want to complete:
-
-```text
-I need to analyze financial data. Which MCP server should I use?
-```
-
-```text
-I need to analyze financial data, which MCP server should I use?
-```
+Use a specific workflow and constraints rather than only a broad category.
+`query` is a compatibility alias for `taskDescription`; prefer the latter.
+The tool accepts optional keywords/capabilities as strings or string arrays.
 
 ### Understand Search Results
 
-MCP Advisor returns results containing the following information:
+Expect MCP text content containing candidate names, descriptions, source URLs
+and available metadata. An empty result is possible. Scores are ranking signals,
+not calibrated confidence or proof of suitability. Check each candidate's
+source, permissions, maintenance and instructions before use. Provider network
+access and catalog freshness can affect results; an offline result does not
+prove an online provider succeeded.
 
-- **Server name**: The name of the MCP server
-- **Description**: A brief description of the server's capabilities
-- **GitHub URL**: A link to the server's repository
-- **Relevance score**: How closely the server matches your query
+### Installation guidance
 
-The recommendation tool currently formats these fields as text. The following
-JSON illustrates the underlying server data, not the exact MCP wire response.
-The `sourceUrl` field follows [the current response type](../src/types/index.ts);
-the Chinese source guide uses the older `github_url` example.
-
-#### Example Result
-
-```json
-[
-  {
-    "title": "NLP Toolkit",
-    "description": "Comprehensive natural language processing toolkit with sentiment analysis, entity recognition, and text summarization capabilities.",
-    "sourceUrl": "https://github.com/example/nlp-toolkit",
-    "similarity": 0.92
-  }
-]
-```
-
-### Integrate with AI Assistants
-
-#### Claude Desktop
-
-1. **Configure MCP Advisor**:
-
-   Add the following configuration to `claude_desktop_config.json`:
-
-   ```json
-   {
-     "mcpServers": {
-       "mcpadvisor": {
-         "command": "npx",
-         "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
-       }
-     }
-   }
-   ```
-
-2. **Restart Claude Desktop**
-
-3. **Start using it**:
-
-   ```text
-   Claude, please help me find an MCP server for database operations
-   ```
-
-#### Other AI Assistants
-
-For other AI assistants that support the Model Context Protocol:
-
-1. **Install MCP Advisor globally**:
-
-   ```bash
-   npm install -g @xiaohui-wang/mcpadvisor@1.0.5
-   ```
-
-2. **Configure the assistant to use MCP Advisor as a server**
-
-3. **Consult your assistant's documentation for its specific MCP integration steps**
+`install-mcp-server` requires `mcpName` and `sourceUrl`, with optional `mcpClient`.
+It returns installation/configuration **guidance only**. It does not install,
+start or verify another MCP server. Follow and validate that guidance separately.
 
 ## Configuration Options
 
 ### Environment Variables
 
-The tables below describe settings read by the current
-[CLI entry point](../src/index.ts), [logger](../src/utils/logger.ts), and
-[configuration modules](../src/config/constants.ts). The transport settings apply to the source migration, not the published 1.0.5 package.
+Set variables in the launching shell or client configuration. The CLI does not
+automatically load `.env` or `.mcpadvisorrc.json`. Do not commit real credentials.
 
-#### Core Configuration
+| Setting | Current source behavior |
+| --- | --- |
+| `TRANSPORT_TYPE` | `stdio` (default) or `http`; CLI `--mode` takes precedence |
+| `SERVER_HOST`, `SERVER_PORT` | `127.0.0.1`, `3000`; CLI `--host`/`--port` override |
+| `MCP_HTTP_RESPONSE_MODE` | `auto` (default), `json`, `sse`; response encoding, not legacy transport |
+| `MCP_ALLOWED_HOSTS`, `MCP_ALLOWED_ORIGINS` | Comma-separated hostnames; defaults use SDK loopback guards |
+| `LOG_LEVEL` | `info` by default; use `debug` for diagnosis |
+| `ENABLE_FILE_LOGGING`, `LOGS_DIR` | File logging is opt-in; directory defaults to `./logs` |
+| `COMPASS_API_BASE` | Default `https://registry.mcphub.io` |
+| `GETMCP_API_URL` | Default `https://getmcp.io/api/servers.json` |
+| `CLINE_MARKETPLACE_ENABLED` | Disabled unless exactly `true`; see [Cline](./cline-marketplace.md) |
+| `RERANK_PROVIDER` | Unset/`none` disables professional reranking; `flashrank` opts in |
+| `RERANK_URL`, `RERANK_TIMEOUT_MS` | `http://127.0.0.1:8001/rerank`, `5000`; separate service required |
 
-| Variable              | Description                                         | Default  | Required |
-| --------------------- | --------------------------------------------------- | -------- | -------- |
-| `TRANSPORT_TYPE`      | Transport method (stdio, http)                 | `stdio`  | No       |
-| `LOG_LEVEL`           | Log level (debug, info, warn, error)                | `info`   | No       |
-| `ENABLE_FILE_LOGGING` | Enable file logging; create the log directory first | `false`  | No       |
-| `LOGS_DIR`            | Directory for `all.log` and `error.log`             | `./logs` | No       |
-
-`DEBUG=true` alone does not enable the current logger. For debug file logging in
-a source checkout after building:
+Create the log directory before requesting file logging:
 
 ```bash
 mkdir -p logs
 ENABLE_FILE_LOGGING=true LOG_LEVEL=debug node build/index.js
 ```
 
-#### HTTP Server Configuration
-
-| Variable | Description | Default |
-| --- | --- | --- |
-| `SERVER_HOST` | Bind address; keep local unless the deployment is secured | `127.0.0.1` |
-| `SERVER_PORT` | HTTP server port | `3000` |
-| `MCP_HTTP_RESPONSE_MODE` | Response encoding: `auto`, `json`, or `sse` | `auto` |
-| `MCP_ALLOWED_HOSTS` | Comma-separated allowed hostnames for explicit deployments | Loopback hostnames |
-| `MCP_ALLOWED_ORIGINS` | Comma-separated allowed Origin hostnames for explicit deployments | Loopback hostnames |
-
-The MCP endpoint is fixed at `/mcp`. `ENDPOINT`, `SSE_PATH`, `MESSAGE_PATH`, and
-`messagePath` are not modern endpoint settings. Host and Origin validation is
-provided by SDK guards; it is not authentication or browser CORS configuration.
-The allow-list values are hostnames, not URL paths. This phase does not add
-cross-origin browser support. See the [deployment notes](./MCP_2026_MIGRATION.md#deployment-and-security)
-before changing the loopback defaults.
+`DEBUG=true` alone does not control this logger. `LOGS_DIR` configures logger
+output; `LOG_DIR` (with `LOGS_DIR` fallback) configures the log-reading resource.
+Do not confuse these with transport or search settings.
 
 #### Search Configuration
 
-[SearchService](../src/services/searchService.ts) defines defaults of `limit: 5`
-and `minSimilarity: 0.4`; programmatic callers can provide search options as
-shown under [Advanced Search Options](#advanced-search-options). The source
-guide's `MIN_SIMILARITY`, `MAX_RESULTS`, `ENABLE_CACHE`, and `CACHE_TTL`
-environment settings are not wired into this service and should not be used as
-configuration instructions.
+The CLI constructs Meilisearch, Compass and GetMCP together; Cline is opt-in,
+Nacos is conditional, and SearchService adds offline search by default.
+`SEARCH_PROVIDER` does not select this list. `MIN_SIMILARITY`, `MAX_RESULTS`,
+`ENABLE_CACHE` and `CACHE_TTL` are not CLI SearchService controls. Its programmatic
+search defaults are `limit: 5`, `minSimilarity: 0.4`; offline defaults are
+`enabled: true`, `minSimilarity: 0.3`.
 
-`VECTOR_ENGINE_TYPE` is read by the vector-engine implementation and defaults to
-`oceanbase` in [constants.ts](../src/config/constants.ts), rather than the
-source guide's `memory`. It is not a switch for selecting the CLI's provider
-list. The CLI initializes Meilisearch, Compass, and GetMCP, with Nacos conditional
-on its credentials and offline fallback managed by SearchService.
-
-#### API Configuration
-
-| Variable           | Description                          | Default                              | Required             |
-| ------------------ | ------------------------------------ | ------------------------------------ | -------------------- |
-| `COMPASS_API_BASE` | Base URL for the COMPASS API         | `https://registry.mcphub.io`         | No                   |
-| `GETMCP_API_URL`   | GetMCP server-list URL               | `https://getmcp.io/api/servers.json` | No                   |
-| `OCEANBASE_URL`    | OceanBase database connection string | None                                 | When using OceanBase |
-
-For local/cloud Meilisearch settings, see the English
-[Local Meilisearch Guide](./MEILISEARCH_LOCAL.md) and
-[current configuration source](../src/config/meilisearch.ts).
+Meilisearch defaults to the `cloud` instance. For local configuration and the
+explicitly opt-in catalog-writing operation, see [Local Meilisearch](./MEILISEARCH_LOCAL.md).
+`VECTOR_ENGINE_TYPE` defaults to `oceanbase` in the vector-engine configuration;
+it does not select the CLI provider list. `OCEANBASE_URL` belongs to that engine,
+not an automatically enabled CLI provider.
 
 #### Nacos Provider Configuration
 
-The CLI only initializes Nacos when all three connection credentials below are
-set. This corrects the source guide's conditional credential requirements.
-
-| Environment Variable | Description                                | Default      | Required |
-| -------------------- | ------------------------------------------ | ------------ | -------- |
-| `NACOS_SERVER_ADDR`  | Nacos server address                       | None         | Yes      |
-| `NACOS_USERNAME`     | Nacos username                             | None         | Yes      |
-| `NACOS_PASSWORD`     | Nacos password                             | None         | Yes      |
-| `MCP_HOST`           | MCP host passed to Nacos provider          | `localhost`  | No       |
-| `MCP_PORT`           | MCP port passed to Nacos provider          | `3000`       | No       |
-| `AUTH_TOKEN`         | Auth token passed to Nacos provider        | Empty string | No       |
-| `NACOS_DEBUG`        | Enable Nacos debug mode when set to `true` | `false`      | No       |
-
-The source guide's `NACOS_NAMESPACE`, `NACOS_GROUP`, and `MCP_SERVICE_NAME`
-settings are not passed by this CLI entry point. Use the source-linked
-configuration above rather than assuming those variables change its behavior.
-
-#### Logging Configuration
-
-`LOGS_DIR` selects the logger's output directory. `LOG_DIR` (or `LOGS_DIR` as its
-fallback) instead selects directories for the
-[log-reading MCP resource](../src/services/core/server/resources/LogResourceHandler.ts).
-These are distinct settings, unlike the source guide's generic `LOG_DIR` row.
+All three of `NACOS_SERVER_ADDR`, `NACOS_USERNAME` and `NACOS_PASSWORD` must be
+present, and initialization must succeed, before the CLI adds Nacos. It also
+passes `MCP_HOST` (default `localhost`), `MCP_PORT` (`3000`), `AUTH_TOKEN` (empty),
+and `NACOS_DEBUG` (`true` enables debug). The CLI does **not** forward
+`NACOS_NAMESPACE`, `NACOS_GROUP` or `MCP_SERVICE_NAME`. Constructor-level support
+must not be confused with automatic environment wiring.
 
 ### Configuration Files
 
-The current CLI does not automatically load `.mcpadvisorrc.json`.
-The source guide's `.mcpadvisorrc.json` and `config/default.json` transport/search
-examples are historical examples, not working alternatives to the CLI settings
-above.
-
-[configLoader.ts](../src/config/configLoader.ts) is used by the data-loading
-service and supports a custom `CONFIG_FILE` plus MCP source overrides. This does
-not mean it configures the CLI's transport or provider list. Consult that module
-and [config/default.json](../config/default.json) when changing data sources.
+[configLoader.ts](../src/config/configLoader.ts) supports data-source configuration
+including `CONFIG_FILE`; this does not configure the CLI transport/provider list.
+Use [src/index.ts](../src/index.ts), [transport config](../src/config/mcpTransport.ts)
+and the [technical reference](./TECHNICAL_REFERENCE.md) as the current contract.
 
 ### Transport Configuration
 
-These commands require a built checkout containing the issue #36 changes and
-Node.js >= 20. Both entry points reject pre-2026 protocol traffic.
-
-#### 1. Stdio Transport (Default)
-
 ```bash
-node build/index.js
-# Explicit form: node build/index.js --mode=stdio
+# Alternative to stdio, not an additional simultaneous launch
+TRANSPORT_TYPE=http node build/index.js
 ```
 
-Use a client configured for MCP 2026-07-28. An ordinary legacy `initialize`
-handshake will not work, even when the client uses an SDK v2 package.
+HTTP uses fixed `http://127.0.0.1:3000/mcp`. `GET /health` is a health probe;
+GET/DELETE `/mcp` return 405, not a browser UI. `POST /api/sources` is a separate
+application API. No built-in authentication is provided: keep loopback binding
+unless an authenticated, restricted deployment is in place. Host/Origin guards
+are not authentication or CORS support.
 
-#### 2. Stateless HTTP Transport
+Legacy `sse`/`rest` modes and `ENDPOINT`/`--endpoint`/`--messagePath` settings are
+rejected. HTTP `/sse`, `/messages`, `/rest` return 410. Modern `/mcp` may still
+encode a response as SSE. Retained [legacy source](../src/services/core/server/legacy/README.md)
+is reference-only, excluded from the modern build. See [migration/security/rollback](./MCP_2026_MIGRATION.md).
 
-```bash
-TRANSPORT_TYPE=http SERVER_HOST=127.0.0.1 SERVER_PORT=3000 node build/index.js
-# Equivalent: node build/index.js --mode=http
-```
+## Advanced Search Options
 
-Connect the modern client to `http://127.0.0.1:3000/mcp`. No session ID or
-`initialize` exchange is needed. `GET` and `DELETE /mcp` return 405; use the
-[official SDK client example](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)
-for discovery, tool listing, and a call.
-
-`MCP_HTTP_RESPONSE_MODE=auto` selects JSON unless related messages require an SSE
-response stream. `json` suppresses intermediate progress/log notifications;
-`sse` selects streaming. These are response encodings within `/mcp`, not the
-retired `TRANSPORT_TYPE=sse` mode.
-
-#### Migration from SSE or REST
-
-`TRANSPORT_TYPE=sse` / `TRANSPORT_TYPE=rest` and `--mode=sse` / `--mode=rest` are rejected with a migration
-message. Under HTTP mode, `/sse`, `/messages`, and `/rest` return 410 with migration
-JSON. Update the launch mode, endpoint, **and client protocol support** together.
-Do not merely rename the URL in a legacy client. Old implementation code remains
-in `src/services/core/server/legacy/` but is excluded from the build and runtime.
-
-`GET /health` remains an HTTP health endpoint. `POST /api/sources` remains a
-separate application API, not an MCP endpoint. The HTTP server has no built-in
-authentication, so retain loopback binding unless an authenticated and restricted
-reverse proxy/network is configured. Host/Origin allow-lists alone are insufficient.
-
-For debug file logging, create the directory first:
-
-```bash
-mkdir -p logs
-TRANSPORT_TYPE=http LOG_LEVEL=debug ENABLE_FILE_LOGGING=true node build/index.js
-```
-
-See the [migration and rollback guide](./MCP_2026_MIGRATION.md) for the complete
-compatibility boundary and security caveats.
-
-## Usage Tips
-
-### Write Effective Queries
-
-To get the best results from MCP Advisor:
-
-#### 1. Be Specific
-
-Include the capabilities you need:
-
-```text
-Find an MCP server for OCR that supports multiple languages
-```
-
-```text
-Find an MCP server for OCR with support for multiple languages
-```
-
-#### 2. Include Domain Context
-
-Mention your application domain:
-
-```text
-I need an MCP server for financial data analysis with compliance features
-```
-
-```text
-MCP server for financial data analysis with regulatory compliance features
-```
-
-#### 3. Specify Technical Requirements
-
-Include any technical constraints:
-
-```text
-Find a lightweight MCP server for offline image processing
-```
-
-```text
-Find a lightweight MCP server for image processing that works offline
-```
-
-### Advanced Search Options
-
-When using MCP Advisor programmatically, you can specify additional search
-parameters. This uses the current public `SearchParams`/`SearchOptions` types;
-the source guide's `includeMetadata` option is not defined in those types:
-
-```typescript
-const results = await searchService.search(
-  { taskDescription: 'vector database' },
-  { limit: 10, minSimilarity: 0.2 },
-);
-```
+Library integration is source-level, not a supported package-root export:
+[SearchService](../src/services/searchService.ts) exposes structured `SearchParams`
+and optional `SearchOptions`. Importing the npm package root executes the CLI;
+it does not export SearchService. Use the complete source example in the
+[technical reference](./TECHNICAL_REFERENCE.md#developing-custom-providers).
 
 ## Common Troubleshooting
 
-### Installation Issues
+- A stdio process waiting silently needs a compatible MCP client, not a browser.
+- Legacy handshake/mode errors require a compatible artifact and client, not
+  only replacing `/sse` with `/mcp`.
+- Empty/partial recommendations require provider/log inspection; do not infer
+  that every catalog or optional model ran successfully.
+- Check Node/package-manager versions and build output before debugging clients.
 
-#### 1. Permission Errors
+[Troubleshooting](./TROUBLESHOOTING.md) is being aligned in draft #40; its older
+instructions are not authority to enable retired transports. Prefer the current
+[migration guide](./MCP_2026_MIGRATION.md) for protocol errors.
 
-Avoid using administrator privileges to work around a global-install problem.
-Use the MCP configuration's `npx` invocation above, or a user-writable Node.js
-installation. This replaces the source guide's `sudo npm install` workaround.
+## Testing and evidence
 
-#### 2. Version Conflicts
-
-Read the package manager's conflict details and use a compatible dependency
-version. Do not use `--force` as the default fix; it can bypass compatibility
-checks. The source guide's force-install example is not recommended here.
-
-#### 3. Command Not Found
-
-For a global npm installation, inspect the prefix:
-
-```bash
-npm prefix -g
-```
-
-On macOS/Linux, the command directory is the prefix's `bin` subdirectory. On
-Windows, it is the prefix itself. Add the appropriate directory to PATH using
-your operating system's settings, then reopen the terminal. This replaces the
-source guide's `npm bin -g` command, which newer npm versions removed.
-
-### Configuration Issues
-
-#### 1. MCP Configuration Has No Effect
-
-Check the configuration file path:
-
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%AppData%\Claude\claude_desktop_config.json`
-
-On macOS, with Python available, check that the JSON is valid
-(use your actual settings path on other platforms):
+`pnpm run test:protocol` checks protocol behavior after building. `pnpm test`
+runs the configured Vitest unit/integration suite. For the selected Inspector UI
+suite, prerequisites and scope are in [Inspector validation](./inspector-ui-testing.md):
 
 ```bash
-# Validate JSON formatting
-python -m json.tool "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+pnpm run test:e2e headless tests/e2e/mcp-inspector.spec.ts
 ```
 
-#### 2. Environment Variables Have No Effect
-
-Confirm your environment variable settings:
-
-```bash
-# Linux/macOS
-echo $TRANSPORT_TYPE
-export TRANSPORT_TYPE=http
-
-# Windows
-echo %TRANSPORT_TYPE%
-set TRANSPORT_TYPE=http
-```
-
-### Runtime Issues
-
-#### 1. Connection Refused
-
-Make sure the server is running on the specified port and check your firewall
-settings:
-
-```bash
-# Check port usage
-netstat -an | grep 3000
-lsof -i :3000
-
-# Check service status
-curl http://127.0.0.1:3000/health
-```
-
-#### 2. No Search Results
-
-Try a more general query:
-
-```text
-# Change a specific query
-"advanced machine learning vector database with GPU acceleration"
-
-# To a more general query
-"machine learning" or "vector database"
-```
-
-Check your network connection:
-
-```bash
-# Test connectivity to external APIs
-curl -I https://getmcp.io/api/servers.json
-ping registry.mcphub.io
-```
-
-#### 3. Performance Issues
-
-Consider the following optimizations:
-
-- Use more specific search terms
-- Check server resources (CPU/memory)
-- For programmatic callers, adjust the `limit` search option
-- Do not rely on the source guide's `ENABLE_CACHE` or `MAX_RESULTS` variables;
-  they are not read by the search service
-
-### Verify the Installation
-
-The CLI has no explicit `--version` or `--help` handling, so the source guide's
-commands are not reliable installation checks. Instead, restart your configured
-MCP 2026-07-28 client (see the SDK example in the migration guide),
-confirm that it lists MCP Advisor's `recommend-mcp-servers` tool,
-and run a query from [Basic Usage](#basic-usage).
-
-For a built source checkout using HTTP mode, the server exposes `/health`:
-
-```bash
-curl http://127.0.0.1:3000/health
-```
-
-Use the port you configured. This health endpoint does not apply to stdio
-transport, and a successful health response alone does not verify external
-search providers.
-
----
-
-If you encounter a problem that this guide does not cover:
-
-1. Read the [Troubleshooting Guide](./TROUBLESHOOTING.md)
-2. Check [GitHub Issues](https://github.com/istarwyh/mcpadvisor/issues)
-3. Open a new issue to ask for help
-
-For advanced configuration and technical details, see:
-
-- [Technical Reference](./TECHNICAL_REFERENCE.md)
-- [Architecture Documentation](./ARCHITECTURE.md)
-- [Contributing Guide](../CONTRIBUTING.md)
+Omitting the test path selects all Playwright tests, not just the migrated suite.
+These checks do not establish search quality, live hosted compatibility, or
+installation of a recommended server. Record the tested SHA, commands, skips and
+failures rather than treating this guide as an execution report.

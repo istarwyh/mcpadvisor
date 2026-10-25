@@ -25,7 +25,9 @@ MCP Advisor separates transport handling, tool handlers, search providers, resul
 processing, and shared utilities. The [CLI entry point](../src/index.ts)
 constructs Meilisearch, Compass, and GetMCP providers. It additionally initializes
 Nacos when `NACOS_SERVER_ADDR`, `NACOS_USERNAME`, and `NACOS_PASSWORD` are all set.
-`SearchService` enables an offline provider by default.
+`SearchService` enables an offline provider by default. Cline is added only with
+`CLINE_MARKETPLACE_ENABLED=true`; optional FlashRank is injected into SearchService
+with `RERANK_PROVIDER=flashrank` and needs a separately started service.
 
 ### System Diagram
 
@@ -41,6 +43,7 @@ graph TD
     Search --> Compass["Compass recommendation API"]
     Search --> GetMCP["GetMCP feed and vector engine"]
     Search --> Nacos["Nacos discovery, when configured"]
+    Search --> Cline["Cline Marketplace, opt-in lexical search"]
     Search --> Offline["Offline data: text and vector search"]
     Meili --> MeiliService["Local or cloud Meilisearch"]
     Compass --> CompassAPI["Compass API"]
@@ -79,6 +82,7 @@ declare class SearchService {
   constructor(
     providers?: SearchProvider[],
     offlineConfig?: Partial<OfflineConfig>,
+    professionalReranker?: ProfessionalReranker,
   );
   search(
     params: SearchParams,
@@ -186,6 +190,14 @@ then applies:
 This corrects the original description of priority-first sorting and adaptive
 thresholds. An empty final result list remains possible.
 
+The disabled processor above is not the optional FlashRank integration.
+`SearchService` separately obtains up to 50 deduplicated, filtered candidates,
+invokes an injected `ProfessionalReranker`, then applies the final limit. It
+requires a positive limit no greater than 50, score sorting, at least two
+candidates and a nonempty query. A service error preserves the original ranking.
+Model relevance scores are not comparable quality guarantees; see
+[FlashRank](./professional-reranking.md) and [evaluation](./search-quality-evaluation.md).
+
 ### 5. Transport Layer
 
 The [server factory](../src/services/core/server/stateless/McpServerFactory.ts) and
@@ -243,6 +255,7 @@ sequenceDiagram
     Rerank->>Rerank: Calculate score and filter
     Rerank->>Rerank: Sort and apply limit
     Rerank-->>Search: Processed server results
+    Note over Search: Optional FlashRank on up to 50 candidates, then final limit; failure uses original ranking
     Search-->>Tool: Server results
     Tool->>Tool: Format results as MCP text content
     Tool-->>Client: Recommendation response
@@ -329,8 +342,7 @@ const PROVIDER_PRIORITIES = {
 These keys are provider class names. Unknown provider names have priority zero at
 merge time, and score calculation falls back to factor 1 when no nonzero priority
 is available. Priorities influence duplicate tie-breaking and calculated scores;
-existing scores are retained. They are not a separate priority-first sort as in
-the Chinese guide's older sample.
+existing scores are retained. They are not a separate priority-first sort.
 
 ## Summary
 

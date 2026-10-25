@@ -5,26 +5,12 @@
 Thank you for contributing to MCP Advisor! This guide covers development setup,
 code conventions, testing, commits, pull requests, and releases.
 
-## Translation and Current-Source Updates
+## Current-source scope
 
-This English counterpart retains the sections of the [Chinese guide](./CONTRIBUTING.zh-CN.md),
-with corrections checked against the current repository. Commands and examples
-were reviewed against source, not validated by installing dependencies or running
-the application. The Chinese original may still contain older instructions.
-
-Important corrections are explained where they apply:
-
-- Use the build-and-run workflow: there is no `dev` script in [package.json](./package.json).
-- The CLI does not automatically load `.env`; export variables before launch or
-  explicitly preload the installed `dotenv` package.
-- Logging requires the current logger settings and an existing directory.
-  Vector-engine configuration does not select the CLI's search providers.
-- Test examples use current types and paths. The default Vitest suite includes
-  both unit and integration tests.
-- The actual hooks run type checking at pre-commit and commitlint at commit-msg;
-  linting and tests remain explicit contributor checks.
-- Release instructions avoid creating a second tag after a version command that
-  already creates one.
+The English and Chinese guides describe repository source at `94829fd`
+(2026-10-25), not the npm `1.0.5` artifact or hosted service. Follow the actual
+scripts and report executed checks separately from examples in documentation.
+The `.en.md` file mirrors this English guide.
 
 For implementation context, see the [Architecture Guide](./docs/ARCHITECTURE.md),
 [Technical Reference](./docs/TECHNICAL_REFERENCE.md), and repository guidance in
@@ -115,8 +101,8 @@ Do not commit secrets. `.env` is ignored by [.gitignore](./.gitignore).
 [The logger](./src/utils/logger.ts) uses `ENABLE_FILE_LOGGING=true`, `LOG_LEVEL`,
 and `LOGS_DIR`. Its ordinary CLI path only attaches file transports if the
 selected directory already exists. `DEBUG=true` alone does not enable it.
-Keep console logging disabled for stdio transport so logs do not contaminate
-MCP protocol output.
+The logger sends console diagnostics to stderr. Keep diagnostics off stdout
+in stdio mode; do not add direct `console.log` calls to the protocol process.
 
 For work specifically on vector engines, the
 [factory](./src/services/vectorEngineFactory.ts) supports `memory`, `oceanbase`,
@@ -333,12 +319,10 @@ The project includes Inspector/proxy cleanup, modular environment helpers, and
 script-based startup. Prefer readiness checks over fixed sleeps when writing or
 improving tests.
 
-**Current script caveat:** [e2e.run.sh](./scripts/e2e/e2e.run.sh) kills processes
-on ports `6274` and `6277` and uses `pkill -f "inspector"`. Run it only in an
-isolated development environment where those processes can safely be stopped.
-Its cleanup function exits with status zero, including some startup-failure
-paths; inspect logs and Playwright results rather than treating a zero exit as
-proof of success. These are existing behaviors, not guarantees of test stability.
+[e2e.run.sh](./scripts/e2e/e2e.run.sh) now preserves failure status and cleans up
+only its own process groups. When `lsof` is available it refuses occupied
+Inspector ports (`6274`/`6275`) rather than killing unrelated processes. Its
+private log may contain authentication tokens: do not publish logs or traces.
 
 ### Test Structure
 
@@ -377,7 +361,6 @@ pnpm run test
 pnpm run test:watch
 ```
 
-The original guide labels `pnpm run test` as unit-only, but
 [vitest.config.ts](./vitest.config.ts) includes matching test files throughout
 `src/`. Use the directory filter when you need only unit tests.
 
@@ -393,24 +376,33 @@ These can need running services and network access. Follow the
 
 #### End-to-End Tests
 
+Inspector 2.10.1 requires Node.js **22.19.0 or newer**. The runner obtains the
+pinned version via `npx`; a global Inspector installation is not required.
+Install Playwright Chromium and its system dependencies first; see the
+[Inspector guide](./docs/inspector-ui-testing.md), including the native `sharp`
+prerequisite when dependency install scripts were disabled.
+
 ```bash
+# Deterministic offline protocol checks
+pnpm run test:protocol
+# Migrated Inspector suite only
+pnpm run test:e2e headless tests/e2e/mcp-inspector.spec.ts
+# Full default selection, headed (includes other suites)
 pnpm run test:e2e
+# Separate local Meilisearch harness
 pnpm run test:meilisearch:e2e
 ```
 
-The first command runs [e2e.run.sh](./scripts/e2e/e2e.run.sh), which expects
-`mcp-inspector` on PATH and Playwright's browser dependencies. The second runs
-[e2e.meilisearch.sh](./scripts/e2e/e2e.meilisearch.sh). Review their service and
-cleanup behavior before running them. The standard E2E script defaults to headed
-mode; use `pnpm run test:e2e headless` to pass the headless mode to that script.
+The first Inspector command does not validate the legacy Meilisearch UI suite,
+real external-provider quality, hosted service, or third-party clients. Running
+`test:e2e:headless` directly does not start the harness for you. Review service
+and cleanup behavior before running separate harnesses.
 
 ### Test Example
 
 This example is intended for a file in `src/tests/unit/services/`. It uses the
 current structured search parameters and response fields, and disables offline
-fallback so a unit test does not depend on local fallback data. Unlike the
-original illustration, it does not use an undefined `MockProvider` type or call
-`search()` with a string against its public TypeScript overload.
+fallback so a unit test does not depend on local fallback data. Use a structured search request, not a string, against the public TypeScript overload.
 
 ```typescript
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
@@ -611,7 +603,6 @@ The checked-in hooks are:
 2. [.husky/commit-msg](./.husky/commit-msg): runs commitlint against the commit
    message supplied by Git.
 
-This corrects the original guide's claim that all three checks run in pre-commit.
 Run quality checks yourself rather than relying on hooks alone:
 
 ```bash
@@ -733,7 +724,7 @@ the workflow; they do not authorize a contributor to publish.
    ```
 
    Run relevant provider suites as well. Inspect E2E results and logs, including
-   the script exit-code caveat under [Testing Guide](#testing-guide).
+   the coverage boundaries under [Testing Guide](#testing-guide).
 
 3. **Build and inspect the package contents**:
 

@@ -1,8 +1,12 @@
 # MCP Advisor 贡献指南
 
-[English](./CONTRIBUTING.en.md) | [简体中文](./CONTRIBUTING.zh-CN.md)
+[English](./CONTRIBUTING.md) | [简体中文](./CONTRIBUTING.zh-CN.md)
 
 欢迎为 MCP Advisor 项目做出贡献！本文档提供了开发环境设置、代码规范、测试指南和提交流程的完整指导。
+
+## 当前源码范围
+
+本指南与英文版对应 2026-10-25 的源码 `94829fd`，不代表 npm `1.0.5` 发布产物或托管服务。应遵循实际脚本，区分文档示例与真正执行的验证；英文 `.en.md` 是英文主文件镜像。
 
 ## 目录
 
@@ -23,7 +27,7 @@
 ### 前提条件
 
 - **Node.js** (>= 20；`.nvmrc` 选择 Node.js 22 用于开发和 CI)
-- **pnpm** (>= 9.x) - 项目使用 pnpm 作为包管理器
+- **pnpm** (8.15.9) - 项目使用 pnpm 作为包管理器
 - **Git**
 
 ### 克隆仓库
@@ -36,31 +40,21 @@ cd mcpadvisor
 ### 安装依赖
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 ### 配置环境变量
 
-创建 `.env` 文件：
+CLI 不会自动加载 `.env` 或 `.mcpadvisorrc`。请在启动前导出变量，或显式预加载 `dotenv`。
 
 ```bash
-# 开发模式
-NODE_ENV=development
-
-# 传输类型 (stdio 或 http，均要求 MCP 2026-07-28；HTTP 固定使用 /mcp)
-TRANSPORT_TYPE=stdio
-
-# 日志配置
-DEBUG=true
-ENABLE_FILE_LOGGING=true
-LOG_LEVEL=debug
-
-# 向量引擎类型 (memory, oceanbase, meilisearch)
-VECTOR_ENGINE_TYPE=memory
-
-# 用于向量搜索的 OceanBase 连接字符串（可选）
-OCEANBASE_URL=mysql://username:password@localhost:3306/mcpadvisor
+mkdir -p logs
+export TRANSPORT_TYPE=stdio
+export ENABLE_FILE_LOGGING=true
+export LOGS_DIR="$PWD/logs"
 ```
+
+`DEBUG=true` 不是日志开关。向量引擎配置不选择 CLI 提供者；Nacos 需要地址、用户名、密码三者齐全。完整配置与协议边界见[快速开始](./docs/GETTING_STARTED.zh-CN.md)。
 
 ### 构建项目
 
@@ -71,10 +65,7 @@ pnpm run build
 ### 运行开发服务器
 
 ```bash
-# 启动开发模式
-pnpm run dev
-
-# 或直接运行构建后的文件
+# package.json 没有 dev 脚本；先构建再运行
 node build/index.js
 ```
 
@@ -96,8 +87,7 @@ mcpadvisor/
 │   ├── utils/          # 工具函数
 │   └── tests/          # 测试文件
 │       ├── unit/       # 单元测试
-│       ├── integration/# 集成测试
-│       └── e2e/        # 端到端测试
+│       └── integration/# 集成测试
 ├── tests/              # E2E 测试 (Playwright)
 ├── scripts/            # 自动化脚本
 ├── package.json        # 项目配置
@@ -119,28 +109,29 @@ mcpadvisor/
 - **类型安全**: 始终为函数参数和返回值定义类型
 - **避免 `any`**: 尽量避免使用 `any` 类型，使用 `unknown` 或具体类型
 - **接口优于类型别名**: 对于对象类型，优先使用接口而非类型别名
-- **可空类型**: 使用联合类型 `string | null` 而非可选参数 `string?`
+- **可空类型**: 区分显式 `string | null` 与可选属性；两者表达不同契约
 - **枚举**: 对于有限集合的值，使用枚举类型
 - **类型守卫**: 使用类型守卫进行类型收窄
 - **泛型**: 适当使用泛型提高代码复用性和类型安全性
 - **导入/导出**: 使用命名导出而非默认导出，保持一致性
 
-**示例**:
+以下示例使用现有类型；假设文件位于 `src/`。它仅演示类型和结果上限，不代表完整服务的排序行为；当前 `SearchOptions.limit` 为可选属性。
 
 ```typescript
-// 好的实践
-export interface SearchOptions {
-  minSimilarity?: number;
-  limit: number;
-}
+import type {
+  SearchOptions,
+  SearchProvider,
+  MCPServerResponse,
+} from './types/index.js';
+import type { SearchParams } from './types/search.js';
 
-export function search<T>(query: string, options: SearchOptions): Promise<T[]> {
-  // 实现
-}
-
-// 避免的实践
-export default function search(query: any, options?: any): any {
-  // 实现
+export async function searchProvider(
+  provider: SearchProvider,
+  params: SearchParams,
+  options: SearchOptions = {},
+): Promise<MCPServerResponse[]> {
+  const results = await provider.search(params);
+  return results.slice(0, options.limit ?? 5);
 }
 ```
 
@@ -153,16 +144,14 @@ export default function search(query: any, options?: any): any {
 - **高阶函数**: 适当使用高阶函数如 `map`, `filter`, `reduce`
 - **避免深度嵌套**: 使用函数组合或 Promise 链避免回调地狱
 
-```typescript
-// 好的实践
-function normalizeVector(vector: number[]): number[] {
-  const magnitude = calculateMagnitude(vector);
-  return vector.map(value => value / magnitude);
-}
+以下是自包含的函数示例，包含零向量保护；避免在同一个函数中混杂计算、归一化和过滤等职责。
 
-// 避免的实践
-function processVector(vector: number[]): number[] {
-  // 做多件事: 计算、归一化、过滤等
+```typescript
+function normalizeVector(vector: number[]): number[] {
+  const magnitude = Math.sqrt(
+    vector.reduce((sum, value) => sum + value ** 2, 0),
+  );
+  return magnitude === 0 ? [...vector] : vector.map(value => value / magnitude);
 }
 ```
 
@@ -197,9 +186,7 @@ const dataPath = path.resolve(__dirname, '../../../../data/file.json');
 
 ### 端到端测试改进
 
-- 对 MCP Inspector 和代理端口的自动清理改进，避免端口冲突问题。
-- 采用模块化的测试辅助工具类进行环境管理。
-- 使用新脚本结构与智能等待机制确保测试稳定性。
+当前 [e2e.run.sh](./scripts/e2e/e2e.run.sh) 保留失败退出码，只清理自己创建的进程组；可用 `lsof` 时发现 `6274`/`6275` 已占用会拒绝启动，不会杀死无关进程。私有日志可能含认证令牌，不要公开日志或跟踪文件。编写测试应使用就绪检查，而不是固定等待。
 
 ### 测试结构
 
@@ -222,7 +209,10 @@ const dataPath = path.resolve(__dirname, '../../../../data/file.json');
 
 #### 单元测试
 ```bash
-# 运行所有单元测试
+# 只运行单元测试
+pnpm run test src/tests/unit/
+
+# 默认 Vitest 范围含单元与集成测试
 pnpm run test
 
 # 运行特定测试文件
@@ -242,60 +232,82 @@ pnpm run test:meilisearch:local
 ```
 
 #### 端到端测试
-```bash
-# 运行 E2E 测试
-pnpm run test:e2e
 
-# Meilisearch E2E 测试
+Inspector 2.10.1 需要 Node.js **22.19.0 或更新版本**。脚本用 `npx` 获取固定版本，不要求全局安装 Inspector。预先安装 Playwright Chromium 及系统依赖；禁用安装脚本时还需处理 `sharp` 原生依赖，详见 [Inspector 指南](./docs/inspector-ui-testing.md)。
+
+```bash
+# 确定性离线协议测试
+pnpm run test:protocol
+# 仅已迁移的 Inspector 测试文件
+pnpm run test:e2e headless tests/e2e/mcp-inspector.spec.ts
+# 默认完整选择（有界面）
+pnpm run test:e2e
+# 独立本地 Meilisearch 测试脚本
 pnpm run test:meilisearch:e2e
 ```
 
+指定文件通过不等于旧 Meilisearch UI 测试、真实提供者质量、托管服务或第三方客户端均验证通过。直接运行 `test:e2e:headless` 不会替你启动测试服务。运行独立脚本前检查服务和清理行为。
+
 ### 测试示例
 
+示例适用于 `src/tests/unit/services/` 下的文件，使用当前结构化搜索参数及响应字段，并关闭离线兜底以隔离测试数据。
+
 ```typescript
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { SearchService } from '../../../services/searchService.js';
+import type {
+  MCPServerResponse,
+  SearchProvider,
+} from '../../../types/index.js';
+
 describe('SearchService', () => {
   let service: SearchService;
-  let mockProvider: MockProvider;
-  let originalEnvVars: Record<string, string | undefined> = {};
+  let mockProvider: SearchProvider;
+  let originalLogLevel: string | undefined;
 
   beforeEach(() => {
-    // 保存原始环境变量
-    originalEnvVars = {
-      API_KEY: process.env.API_KEY,
-      DATABASE_URL: process.env.DATABASE_URL
+    originalLogLevel = process.env.LOG_LEVEL;
+    process.env.LOG_LEVEL = 'error';
+
+    const response: MCPServerResponse = {
+      id: '1',
+      title: 'Test server',
+      description: 'A test search provider',
+      sourceUrl: 'https://example.com/test-server',
+      similarity: 1,
+      score: 1,
     };
-    
     mockProvider = {
-      search: vi.fn().mockResolvedValue([{ id: '1', name: 'Test' }])
+      search: vi.fn().mockResolvedValue([response]),
     };
-    service = new SearchService([mockProvider]);
+    service = new SearchService([mockProvider], { enabled: false });
   });
 
   afterEach(() => {
-    // 恢复原始环境变量
-    Object.entries(originalEnvVars).forEach(([key, value]) => {
-      if (value === undefined) {
-        delete process.env[key];
-      } else {
-        process.env[key] = value;
-      }
-    });
+    if (originalLogLevel === undefined) {
+      delete process.env.LOG_LEVEL;
+    } else {
+      process.env.LOG_LEVEL = originalLogLevel;
+    }
+    vi.restoreAllMocks();
   });
 
-  test('should return search results', async () => {
+  test('returns provider results for structured search parameters', async () => {
     // Given
-    const query = 'test query';
-    
+    const params = { taskDescription: 'test query' };
+
     // When
-    const results = await service.search(query);
-    
+    const results = await service.search(params);
+
     // Then
     expect(results).toHaveLength(1);
-    expect(results[0]).toHaveProperty('name', 'Test');
-    expect(mockProvider.search).toHaveBeenCalledWith(query);
+    expect(results[0]).toHaveProperty('title', 'Test server');
+    expect(mockProvider.search).toHaveBeenCalledWith(params);
   });
 });
 ```
+
+环境变量保存/恢复展示测试隔离；模块加载时已初始化的日志器不会因之后改变 `LOG_LEVEL` 而自动重配。该片段已对照源码签名核查，未作为新测试执行。
 
 ## 错误处理最佳实践
 
@@ -306,6 +318,8 @@ describe('SearchService', () => {
 - **错误日志**: 记录错误详情以便调试
 - **优雅降级**: 尽可能提供优雅的降级方案
 - **脚本退出码**: 脚本必须返回适当的退出码（成功 0，失败 1+）
+
+下例为错误处理概念草图，`Data`、`url`、`HttpError`、`logger` 需由调用方定义，不是可直接运行的代码。只有明确允许降级时才应返回空结果。
 
 ```typescript
 // 好的实践
@@ -359,7 +373,7 @@ async function loadData(): Promise<Data[]> {
 
 ### 提交示例
 
-```bash
+```text
 # ✅ 正确格式
 feat(search): Add vector similarity search with Meilisearch
 
@@ -386,11 +400,12 @@ Closes #123
 
 ### Pre-commit 钩子
 
-项目配置了以下 pre-commit 检查：
+实际钩子：
 
-1. **TypeScript 类型检查**: 确保代码无类型错误
-2. **ESLint 检查**: 确保代码风格符合规范
-3. **Commitlint 检查**: 验证提交消息格式
+1. [.husky/pre-commit](./.husky/pre-commit) 运行 `npx tsc --noEmit`；测试命令已注释，不运行 ESLint。
+2. [.husky/commit-msg](./.husky/commit-msg) 用 commitlint 检查提交消息。
+
+lint 和测试需要显式运行，不应仅依赖提交钩子。
 
 如果遇到提交被拦截的情况：
 
@@ -403,7 +418,7 @@ pnpm run build
 pnpm run lint:fix
 
 # 如果提交消息格式错误，修正后重新提交
-git commit --amend -m "feat: Add new feature description"
+git commit -m "feat: Add new feature description"
 ```
 
 ## PR 流程
@@ -433,7 +448,7 @@ pnpm run build
 
 # 提交更改
 git add .
-git commit -m "feat: add new feature"
+git commit -m "feat: Add new feature"
 ```
 
 ### 3. 推送和创建 PR
@@ -476,35 +491,13 @@ git push origin feature/your-feature-name
 
 ### 发布步骤
 
-1. **更新版本号**:
-   ```bash
-   # 自动更新版本号
-   pnpm version patch  # 或 minor, major
-   ```
+仅在获得该版本发布授权后，由维护者执行。文档维护或普通合并不自动授权发布。
 
-2. **运行完整测试**:
-   ```bash
-   pnpm run check
-   pnpm run test
-   pnpm run test:e2e
-   ```
-
-3. **构建和验证**:
-   ```bash
-   pnpm run build
-   npm pack --dry-run
-   ```
-
-4. **发布到 npm**:
-   ```bash
-   npm publish
-   ```
-
-5. **创建 Git 标签**:
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
+1. 在干净分支核对目标提交、版本、发布说明和 registry。
+2. 执行 `pnpm run check`、`pnpm run test`、所需 E2E、`pnpm run build` 与 `npm pack --dry-run`；记录失败、跳过及明确接受的验证缺口。
+3. 使用 `pnpm version patch --no-git-tag-version`（或经确认的 minor/major）更新版本，核查 manifest/锁文件，再创建经过审查的版本提交。该选项不自动创建标签。
+4. 核对实际生成的包与版本提交，再按项目授权推送并执行 `npm publish`；使用实际包版本创建并推送匹配标签。若改用自动创建提交和标签的版本命令，应复用该标签，不能重复创建。不得扩展凭据权限或绕过保护。
+5. 从 registry 回读发布版本并验证安装；单独记录源码合并、包发布与部署状态，不把发布当成部署。
 
 ## 安全和质量检查清单
 
