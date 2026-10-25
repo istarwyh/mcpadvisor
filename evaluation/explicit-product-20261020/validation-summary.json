@@ -1,0 +1,115 @@
+{
+  "baseline_commit": "769ea22683bc7875562983b6fdb6067d95e8257d",
+  "production_sha256": {
+    "src/services/core/search/meilisearchQuery.ts": "d5093c6a83840395c27a861559955757b6a2a9b66876984f0c20f187cdccd05d",
+    "src/services/core/search/productEvidence.ts": "d59cdac789b464ecddde0ac2e29f00d366e5010c127a85c171883444157a8fdb",
+    "src/services/core/search/MeilisearchSearchProvider.ts": "8690f45b0a00d0b07199a812c55744f02e29edd00ba3ebe79e7076655ff83476"
+  },
+  "dependencies": {
+    "pnpm": "8.15.9",
+    "fresh_locked_install": true,
+    "install_command": "pnpm install --frozen-lockfile --ignore-scripts",
+    "lockfile_changed": false,
+    "lockfile_sha256": "078de757230eaa74e847442186dabd2c4794426f80c06d4385e9d041df553fc1"
+  },
+  "node_24_19_0": {
+    "check": {
+      "status": "passed",
+      "eslint_errors": 0,
+      "eslint_warnings": 159
+    },
+    "build": "passed",
+    "test_project_types": "passed",
+    "focused_tests": {
+      "status": "passed",
+      "tests": 130
+    },
+    "vitest": {
+      "status": "passed",
+      "passed": 402,
+      "skipped": 12,
+      "todo": 20
+    },
+    "real_engine_integration": {
+      "status": "passed",
+      "tests": 14
+    },
+    "evaluation_scripts": {
+      "status": "passed",
+      "tests": 31
+    },
+    "protocol_startup": {
+      "status": "passed",
+      "tests": 13
+    },
+    "shell_regressions": {
+      "status": "passed",
+      "tests": 4
+    },
+    "real_engine_mcp": {
+      "status": "passed",
+      "tests": 4
+    }
+  },
+  "node_22_23_3": {
+    "check": {
+      "status": "passed",
+      "eslint_errors": 0,
+      "eslint_warnings": 159
+    },
+    "build": "passed",
+    "test_project_types": "passed",
+    "vitest": {
+      "status": "failed",
+      "passed": 401,
+      "failed": 1,
+      "skipped": 12,
+      "todo": 20
+    },
+    "real_engine_integration": {
+      "status": "failed",
+      "passed": 12,
+      "failed": 2
+    },
+    "evaluation_scripts": {
+      "status": "passed",
+      "tests": 31
+    },
+    "protocol_startup": {
+      "status": "passed",
+      "tests": 13
+    },
+    "shell_regressions": {
+      "status": "passed",
+      "tests": 4
+    },
+    "real_engine_mcp": {
+      "status": "passed",
+      "tests": 4
+    },
+    "failure_reason": "Inherited proxy support emits an UNDICI-EHPA experimental warning before expected CLI error text. Existing exact-stderr assertions fail without any source/test changes to those cases.",
+    "baseline_reproduction": {
+      "commit": "769ea22683bc7875562983b6fdb6067d95e8257d",
+      "same_failed_cli_tests": 2,
+      "other_real_engine_tests_passed": 11
+    },
+    "warnings_suppressed": false,
+    "assertions_weakened": false
+  },
+  "legacy_inspector_ui": {
+    "status": "blocked",
+    "command": "pnpm run test:e2e",
+    "reason": "mcp-inspector command not found; no UI tests ran. Existing wrapper cleanup returned zero after startup failure, which is not counted as success."
+  },
+  "meilisearch": {
+    "version": "1.15.2",
+    "binary_sha256": "7c5160f9aebadfa7f33ed3d131090b52407dda074be53e4e9ac3ffe19d65eb8c",
+    "disposable_indexes_only": true,
+    "remaining_indexes": 0
+  },
+  "limits": [
+    "No live deployment or package publication.",
+    "No human relevance, broad production quality, nDCG or satisfaction claim.",
+    "Existing configured skips and todo cases remain visible; no check requirement was weakened."
+  ]
+}

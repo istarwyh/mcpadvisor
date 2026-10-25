@@ -153,4 +153,35 @@ describe('Meilisearch full-text catalog ingestion', () => {
       'org/server name',
     );
   });
+  it('gates direct Han product results without replacing their lexical query or scores', async () => {
+    const { provider, search } = setup();
+    search.mockResolvedValue({
+      hits: [
+        {
+          id: 'unrelated',
+          title: 'Files',
+          description: 'Read local files',
+          _rankingScore: 1,
+        },
+        {
+          id: 'bridge',
+          title: 'Bridge',
+          description: '星河文件访问',
+          _rankingScore: 0.8,
+        },
+      ],
+    });
+    expect(
+      await provider.search({
+        taskDescription: '请推荐星河专用 MCP，读取本地文件',
+      }),
+    ).toEqual([expect.objectContaining({ id: 'bridge', similarity: 0.8 })]);
+    expect(search.mock.calls[0][0]).not.toContain('星河');
+    expect(
+      await provider.search({
+        taskDescription: '请推荐未知工单专用 MCP，读取本地文件',
+      }),
+    ).toEqual([]);
+    expect(search).toHaveBeenCalledTimes(2);
+  });
 });
