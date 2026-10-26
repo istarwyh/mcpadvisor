@@ -35,7 +35,7 @@ Static checking of a command is not execution of it. Local mocked/unit/protocol
 tests do not establish live provider quality, all desktop clients, a released
 artifact, or hosted-gateway readiness. Those boundaries remain open in #13/#36.
 
-## Cloud verification for this documentation-only change
+## Previous cloud verification (2026-10-25; before follow-up corrections)
 
 - Node.js 24.22.1, pnpm 8.15.9, frozen lockfile install.
 - `pnpm run check`: pass, 158 existing lint warnings, no errors.
@@ -50,8 +50,40 @@ artifact, or hosted-gateway readiness. Those boundaries remain open in #13/#36.
   `MEILI_FULLTEXT_TEST_HOST` was not configured for real-engine tests. This is not
   a passing aggregate run and does not establish provider or hosting acceptance.
 
-No runtime, dependency, workflow or hosting files changed. Runtime/browser/live
-service acceptance is not a required gate for this documentation-only correction;
-there is no assertion that the existing integration gaps have been closed.
+The original documentation revision changed no runtime, dependency, workflow or
+hosting files. The previous request to mark PR #45 ready was explicitly denied because remote
+CI and browser/real-service verification were missing. Those gaps remain open
+acceptance conditions; this documentation change does not waive them.
 The final PR records exact head, independent review, remote checks and any focused
 Inspector result. Reverting the documentation commit restores the prior guides.
+
+
+## Follow-up verification — 2026-10-26
+
+Based on PR head `073c0e6e3efc70a5bb0c6414b9590e648c58375a`, with only
+follow-up documentation edits and Core workflow path coverage added. The final
+commit and remote CI results are recorded in PR #45.
+
+- Reread both award sources: the inaugural OceanBase AI Hackathon in 2025
+  awarded second prize to the `mcpadvisor` team. The organizer describes its MCP
+  search/recommendation project; the author's post directly links this repository.
+- Corrected the local Meilisearch guide's key wiring, log path, placeholder cloud
+  key, missing best-effort bootstrap and unsupported 256 MB memory-limit claim.
+- Node 24.22.1; frozen dependency installation using pnpm 8.15.9 succeeded.
+- Lint/format, source build and test-project typecheck passed (158 existing lint
+  warnings, zero errors). Offline protocol: 13 passed. Script tests: 51 passed.
+- Playwright Chromium build 1179 installed and launched. The documented focused
+  Inspector command passed all six browser tests with Inspector 2.10.1.
+- Isolated loopback Meilisearch 1.15.2: fulltext/evaluation/judgment-pool integration
+  selection passed 14 tests; `node --test tests/e2e/meilisearch-mcp.test.mjs`
+  passed four real-engine protocol tests. No external production service modified.
+- Initial full Vitest run overlapped a clean build and failed three CLI tests due
+  to absent build output. This is an invalid execution order, not a passing run;
+  the complete suite was rerun after the build (result recorded in PR).
+- Core CI now includes README, contribution guides and docs paths, without changing
+  its test steps. Empty statuses are never treated as success. Ready/merge remains
+  conditional on actual verification and existing approval boundaries.
+
+The selected Inspector suite does not cover the legacy environment-switching UI
+suite. No npm release, third-party client certification, live ranking-quality
+acceptance (#13) or hosted-gateway acceptance (#36/#40) is asserted.
