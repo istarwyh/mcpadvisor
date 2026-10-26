@@ -6,7 +6,8 @@ before the final output limit. Returned `score` then means the model's relevance
 score; `similarity` retains the original retrieval value. Model scores do not
 establish a universal probability of relevance.
 
-From a repository checkout (or the installed package directory):
+From a current-source checkout after building the application (not the older
+published npm 1.0.5 artifact):
 
 ```sh
 python3 -m venv .venv-flashrank
