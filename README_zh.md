@@ -17,7 +17,8 @@ MCP Advisor 帮助 MCP 客户端按任务发现服务器并获取安装指导。
 ### 获奖背景
 
 据[主办方 2025 年 5 月 19 日报道](https://www.modb.pro/db/1924452526657646592)，
-MCP Advisor 在 2025 年 5 月 17 日广州 MCP 黑客松获得二等奖。
+MCP Advisor 由 `mcpadvisor` 团队开发，该团队获得了 **2025 年首届 OceanBase AI 黑客松大赛二等奖**。
+报道介绍了团队的 MCP 搜索推荐项目；赛事于 2025 年 5 月 17 日在广州收官。
 [作者在 OceanBase 社区的介绍](https://ask.oceanbase.com/t/topic/35625183)
 将该项目与本仓库关联。这是历史获奖记录，不是当前所有功能的质量测评或背书。
 
