@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { buildMeilisearchQuery } from '../../../services/core/search/meilisearchQuery.js';
+import {
+  buildMeilisearchQuery,
+  extractSpecificProduct,
+} from '../../../services/core/search/meilisearchQuery.js';
 const catalog = {
   postgresql: {
     display_name: 'PostgreSQL',
@@ -181,13 +184,13 @@ describe('Meilisearch natural-language query planning', () => {
       )?.query.startsWith('postgresql'),
     ).toBe(true);
   });
-  it('does not weaken an ambiguous unknown specific request into unrelated results', () => {
+  it('keeps an explicit lowercase unknown name rather than generic fallback terms', () => {
     expect(
       buildMeilisearchQuery(
         { taskDescription: 'I need a neverknown-specific database tool' },
         catalog,
-      ),
-    ).toBeNull();
+      )?.query.startsWith('neverknown'),
+    ).toBe(true);
   });
   it('does not reintroduce a generic specific modifier through corpus vocabulary', () => {
     const withTasks = {
@@ -268,4 +271,143 @@ describe('Meilisearch natural-language query planning', () => {
       )?.query.startsWith('"github actions"'),
     ).toBe(true);
   });
+  it.each([
+    ['Find a Google Drive-specific MCP for searching files', 'google drive'],
+    [
+      'I need a Home Assistant-specific MCP for home automations',
+      'home assistant',
+    ],
+    ['需要 AWS Cost Explorer 专用 MCP，分析云账单。', 'aws cost explorer'],
+    ['请推荐 Firestore 专用 MCP，让助手连接我的数据库。', 'firestore'],
+    ['帮我找 Sentry 专用的 MCP', 'sentry'],
+    ['我要知舟工单 Pro 专用的 MCP，处理工单。', '知舟工单 pro'],
+    [
+      'Find a NeverKnown Actions-specific MCP for workflows',
+      'neverknown actions',
+    ],
+    ['Use PostgreSQL-specific tools', 'postgresql'],
+    ['I need a "Google Drive"-specific MCP', 'google drive'],
+  ])(
+    'extracts a complete explicit phrase independently of the catalog: %s',
+    (taskDescription, product) => {
+      expect(extractSpecificProduct(taskDescription)).toBe(product);
+      const catalogs: Parameters<typeof buildMeilisearchQuery>[1][] = [
+        {},
+        catalog,
+        {
+          drive: { display_name: 'Drive' },
+          home: { display_name: 'Assistant' },
+        },
+      ];
+      for (const data of catalogs) {
+        const actual = buildMeilisearchQuery({ taskDescription }, data);
+        expect(
+          actual?.query.startsWith(
+            product.includes(' ') ? `"${product}"` : product,
+          ),
+        ).toBe(true);
+        expect(actual?.matchingStrategy).toBe('last');
+      }
+    },
+  );
+  it.each([
+    'I need a task-specific MCP',
+    'I need a secure PostgreSQL-specific MCP',
+    'I need a GitHub-specific and PostgreSQL-specific MCP',
+    'I need a GitHub And PostgreSQL-specific MCP',
+    'I need a -specific MCP',
+    'GitHub-specific and -specific MCP',
+    '不要 Sentry 专用 MCP',
+    'Slack 和 Notion 专用 MCP',
+    'Slack 专用或 Notion 专用 MCP',
+    '任务专用 MCP',
+  ])(
+    'keeps unsupported or generic scope outside the new product grammar: %s',
+    query => {
+      expect(extractSpecificProduct(query)).toBeNull();
+    },
+  );
+  it.each([
+    '请推荐一个 Cloud Harbor 专用的 MCP',
+    '请推荐 一个 Cloud Harbor 专用的 MCP',
+    '帮我找一个 Cloud Harbor 专用 MCP',
+    '请帮我推荐一个 Cloud Harbor 专用 MCP',
+    '我需要一个Cloud Harbor专用 MCP',
+    '我要一个 Cloud Harbor 专用 MCP',
+  ])(
+    'removes a Chinese introductory determiner without dropping product words: %s',
+    taskDescription => {
+      expect(extractSpecificProduct(taskDescription)).toBe('cloud harbor');
+      expect(buildMeilisearchQuery({ taskDescription }, {})?.query).toBe(
+        '"cloud harbor"',
+      );
+    },
+  );
+  it.each([
+    'Could you find a NeverKnown Actions-specific MCP?',
+    'I want to use a NeverKnown Actions-specific MCP',
+    'I would like a NeverKnown Actions-specific MCP',
+    'I am looking for a NeverKnown Actions-specific MCP',
+    'Can you help me find a NeverKnown Actions-specific MCP',
+    'Show me a NeverKnown Actions-specific MCP',
+    'I need a task-specific tool. Find a NeverKnown Actions-specific MCP',
+    'I need a NeverKnown Actions-specific MCP. I also need a task-specific tool',
+    'Find a NeverKnown Actions-specific MCP for user-specific tasks',
+  ])(
+    'retains full unknown names with grammatical lead-ins and generic adjuncts: %s',
+    taskDescription => {
+      expect(extractSpecificProduct(taskDescription)).toBe(
+        'neverknown actions',
+      );
+      expect(
+        buildMeilisearchQuery({ taskDescription }, catalog)?.query.startsWith(
+          '"neverknown actions"',
+        ),
+      ).toBe(true);
+    },
+  );
+  it('does not mistake a generic final product word for an adjunct or split an internal dot', () => {
+    expect(extractSpecificProduct('Find a Google Search-specific MCP')).toBe(
+      'google search',
+    );
+    expect(extractSpecificProduct('Find an Acme.IO Pro-specific MCP')).toBe(
+      'acme.io pro',
+    );
+  });
+  it.each([
+    ['Find a Code With Me-specific MCP', 'code with me'],
+    ['Find a NeverKnown For Search-specific MCP', 'neverknown for search'],
+    ['I need a Need for Speed-specific MCP', 'need for speed'],
+    [
+      'Find a tool-specific MCP for Google Drive-specific tasks',
+      'google drive',
+    ],
+  ])(
+    'never strips grammatical words inside a complete product name: %s',
+    (taskDescription, product) => {
+      expect(extractSpecificProduct(taskDescription)).toBe(product);
+      expect(buildMeilisearchQuery({ taskDescription }, {})?.query).toBe(
+        `"${product}"`,
+      );
+    },
+  );
+  it('preserves corpus lexical ordering for Han-only names while extracting the full requirement', () => {
+    const hanCatalog = {
+      notes: { display_name: 'Notes', description: '小红书关键词搜索笔记' },
+      news: { display_name: 'News', description: '小红书热点新闻' },
+    };
+    expect(extractSpecificProduct('我想用小红书专用 MCP')).toBe('小红书');
+    expect(
+      buildMeilisearchQuery(
+        { taskDescription: '我想用小红书专用 MCP 按关键词搜索笔记' },
+        hanCatalog,
+      )?.query.startsWith('小红书'),
+    ).toBe(false);
+  });
+  it.each(['文件系统', '电子邮件', '知识图谱'])(
+    'preserves known generic Chinese capability modifiers: %s',
+    capability => {
+      expect(extractSpecificProduct(`需要${capability}专用 MCP`)).toBeNull();
+    },
+  );
 });

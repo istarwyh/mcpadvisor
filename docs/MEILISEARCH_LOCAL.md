@@ -7,7 +7,8 @@ This integration allows MCPAdvisor to use a local self-hosted Meilisearch instan
 ### 1. Start Local Meilisearch
 
 ```bash
-# Start the local Meilisearch instance
+# Requires an installed ./meilisearch binary; keep this shell and its key.
+export MEILI_MASTER_KEY="$(openssl rand -hex 32)"
 pnpm meilisearch:start
 
 # Check if it's running
@@ -19,12 +20,17 @@ pnpm meilisearch:health
 ```bash
 export MEILISEARCH_INSTANCE=local
 export MEILISEARCH_LOCAL_HOST=http://localhost:7700
-export MEILISEARCH_MASTER_KEY=developmentKey123
+export MEILISEARCH_MASTER_KEY="$MEILI_MASTER_KEY"
 ```
 
 ### 3. Run MCPAdvisor
 
-MCPAdvisor will now use the local Meilisearch instance for search operations.
+After building, run `node build/index.js` in the configured shell. The local
+index must already contain data, or you must explicitly enable catalog indexing
+as described in [Full-text search](./full-text-search.md). The startup script
+references an absent bootstrap file; its best-effort bootstrap is not proof that
+the index is populated. Do not share its output or `~/.meilisearch/env`, which
+contain the local key.
 
 ## Environment Variables
 
@@ -34,7 +40,7 @@ MCPAdvisor will now use the local Meilisearch instance for search operations.
 | `MEILISEARCH_LOCAL_HOST` | Local Meilisearch URL | 'http://localhost:7700' |
 | `MEILISEARCH_MASTER_KEY` | Master key for local instance | 'developmentKey' |
 | `MEILISEARCH_INDEX_NAME` | Index name for local instance | 'mcp_servers' |
-| `MEILISEARCH_CLOUD_API_KEY` | API key for cloud instance | (built-in default) |
+| `MEILISEARCH_CLOUD_API_KEY` | API key for cloud instance | Placeholder only; supply a valid key |
 
 ## Testing
 
@@ -56,17 +62,22 @@ pnpm test:meilisearch:local
 pnpm test:meilisearch:e2e
 ```
 
+The legacy Inspector environment-switching suite is not covered by the migrated
+Inspector suite. These commands do not establish that all E2E tests pass; see
+[Inspector validation boundaries](./inspector-ui-testing.md).
+
 ## Management Commands
 
 ```bash
 # Start local Meilisearch
 pnpm meilisearch:start
 
-# Stop local Meilisearch
+# Legacy helper: stops all processes matching meilisearch; use only in isolation.
+# Otherwise stop the specific PID printed by the startup script.
 pnpm meilisearch:stop
 
-# View logs
-pnpm meilisearch:logs
+# Logs written by the current startup script
+tail -f ~/.meilisearch/meilisearch.log
 
 # Check health
 pnpm meilisearch:health
@@ -111,7 +122,7 @@ ls -la ./meilisearch
 lsof -i :7700
 
 # View detailed logs
-tail -f meilisearch.log
+tail -f ~/.meilisearch/meilisearch.log
 ```
 
 ### Tests Failing
@@ -128,7 +139,7 @@ MEILISEARCH_INSTANCE=local pnpm test:meilisearch:local
 ```
 
 ### Performance Issues
-- Check available memory: Local Meilisearch is configured with 256MB limit
+- Check available memory and configure the engine explicitly; the startup script does not set a 256 MB limit
 - Monitor response times using the built-in monitoring tools
 - Consider adjusting Meilisearch configuration for your system resources
 

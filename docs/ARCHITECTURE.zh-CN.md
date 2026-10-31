@@ -1,315 +1,112 @@
 # 系统架构
 
-[English](./ARCHITECTURE.en.md) | [简体中文](./ARCHITECTURE.zh-CN.md)
+[English](./ARCHITECTURE.md) | [简体中文](./ARCHITECTURE.zh-CN.md)
 
-本文档详细介绍了 MCP Advisor 的系统架构、核心组件和数据流。
-
-## 目录
-
-- [架构概述](#架构概述)
-- [核心组件](#核心组件)
-- [数据流](#数据流)
-- [搜索策略](#搜索策略)
-- [技术实现](#技术实现)
+本指南按 2026-10-25 的 main `94829fd` 核对源码，描述当前实现而非历史设想。
+默认、可选能力和历史 npm 包的区别见[README](../README_zh.md)。
 
 ## 架构概述
 
-MCP Advisor 采用模块化架构，遵循函数式编程原则和关注点分离。系统由以下主要部分组成：
-
-### 系统架构图
+[CLI](../src/index.ts) 负责配置及装配；传输层处理协议，工具处理器负责参数校验与结果呈现，
+SearchService 编排提供者，提供者负责各自数据源，重排组件负责合并和排序。
+安装工具只生成指导，不执行安装。
 
 ```mermaid
 graph TD
-    Client["客户端应用"] --> |"MCP 协议"| Transport["传输层"]
-    
-    subgraph "MCP Advisor 服务器"
-        Transport --> |"请求"| SearchService["搜索服务"]
-        SearchService --> |"查询"| Providers["搜索提供者"]
-        
-        subgraph "搜索提供者"
-            Providers --> MeilisearchProvider["Meilisearch 提供者"]
-            Providers --> GetMcpProvider["GetMCP 提供者"]
-            Providers --> CompassProvider["Compass 提供者"]
-            Providers --> NacosProvider["Nacos 服务发现"]
-            Providers --> OfflineProvider["离线提供者"]
-        end
-        
-        OfflineProvider --> |"混合搜索"| HybridSearch["混合搜索引擎"]
-        HybridSearch --> TextMatching["文本匹配"]
-        HybridSearch --> VectorSearch["向量搜索"]
-        
-        MeilisearchProvider --> |"API 调用"| MeilisearchAPI["Meilisearch API"]
-        GetMcpProvider --> |"API 调用"| GetMcpAPI["GetMCP API"]
-        CompassProvider --> |"API 调用"| CompassAPI["Compass API"]
-        NacosProvider --> |"服务发现"| NacosServer["Nacos 注册中心"]
-        
-        SearchService --> |"合并和过滤"| ResultProcessor["结果处理器"]
-        ResultProcessor --> |"优先级"| PriorityEngine["提供者优先级引擎"]
-        ResultProcessor --> |"去重"| Deduplicator["结果去重器"]
-        ResultProcessor --> |"过滤"| SimilarityFilter["相似度过滤器"]
-        
-        SearchService --> Logger["日志系统"]
-    end
-    
-    GetMcpAPI --> |"数据"| ExternalMCPRegistry[("外部 MCP 注册表")]
-    CompassAPI --> |"数据"| ExternalMCPRegistry
-    MeilisearchAPI --> |"数据"| MeilisearchDB[("Meilisearch 数据库")]
+    Client["MCP 客户端"] --> Transport["现代 stdio / HTTP /mcp"]
+    Transport --> Factory["请求级协议服务器 / 共享工具处理器"]
+    Factory --> Search["SearchService"]
+    Search --> Defaults["Meilisearch / Compass / GetMCP"]
+    Search --> Optional["Nacos / Cline，按配置启用"]
+    Search --> Offline["默认离线提供者"]
+    Search --> Ranking["去重 / 评分 / 过滤 / 排序"]
+    Ranking --> Model["可选 FlashRank / 最终条数限制"]
+    Model --> Client
 ```
 
 ## 核心组件
 
-### 1. 搜索服务层
+### 搜索服务
 
-搜索服务是系统的核心，负责协调不同的搜索提供者并处理结果：
+[SearchService](../src/services/searchService.ts) 的构造参数依次是提供者数组、
+`Partial<OfflineConfig>`、可选 `ProfessionalReranker`，不是单一 options 对象。
+`search` 接收结构化 `SearchParams`（`taskDescription`，可选 `keywords`、
+`capabilities`）及 `SearchOptions`；默认 `limit: 5`、`minSimilarity: 0.4`。
+`addProvider` 添加来源。准确可编译示例见[技术参考](./TECHNICAL_REFERENCE.zh-CN.md)。
 
-- **统一搜索接口**：提供简单的 API 用于查询 MCP 服务器
-- **提供者聚合**：从多个搜索提供者收集结果
-- **并行执行**：同时查询多个提供者以提高性能
-- **可配置选项**：支持自定义限制、相似度阈值等
-- **智能结果合并**：基于相似度和提供者优先级合并结果
-- **去重机制**：基于 GitHub URL 或标题删除重复结果
+所有启用的提供者通过 `Promise.all` 并行搜索，包括离线提供者，而非线上全部失败后才搜索离线。
+各提供者失败会被记录并转换为空结果，不阻断其他来源。
 
-```typescript
-class SearchService {
-  constructor(options?: SearchOptions);
-  search(query: string): Promise<SearchResult[]>;
-}
-```
+### 搜索提供者
 
-### 2. 搜索提供者
+所有来源实现 `SearchProvider.search(params: SearchParams)`：
 
-系统支持多个搜索提供者，每个提供者实现相同的接口但使用不同的数据源或搜索策略：
+- [Meilisearch](../src/services/core/search/MeilisearchSearchProvider.ts)：当前路径组合任务、
+  关键词和能力为文本查询，客户端请求最多 10 条结果。支持本地/云配置及失败切换。
+  仓库另有向量引擎，但不能据此把当前提供者说成 HNSW 向量搜索。
+- [Compass](../src/services/core/search/CompassSearchProvider.ts)：请求
+  `COMPASS_API_BASE` 的 `/recommend?description=...`，将 `github_url` 映射为 `sourceUrl`。
+- [GetMCP](../src/services/core/search/GetMcpSearchProvider.ts)：下载并缓存目录，在向量引擎索引和检索。
+  `GETMCP_API_URL` 默认 `https://getmcp.io/api/servers.json`；这是外部目录，不代表官方注册表或实时更新保证。
+- [Nacos](../src/services/core/search/NacosMcpProvider.ts)：CLI 只有同时提供
+  `NACOS_SERVER_ADDR`、`NACOS_USERNAME`、`NACOS_PASSWORD` 才初始化，成功后加入。
+  CLI 不读取 namespace/group/service-name 环境变量；程序化配置见快速开始。
+- [Cline](./cline-marketplace.md)：仅 `CLINE_MARKETPLACE_ENABLED=true` 启用，
+  搜索时抓取并缓存市场目录，使用词法匹配；不是语义检索，也不执行目录中的安装命令。
+- [离线提供者](../src/services/core/search/OfflineSearchProvider.ts)：默认启用，
+  本地数据结合文本匹配和向量检索。模型首次初始化可能联网下载；
+  “离线”不保证网络隔离或隐私隔离，CLI 的在线来源仍同时运行。
 
-#### Meilisearch 提供者
+## 搜索策略与数据流
 
-使用 Meilisearch 进行向量搜索：
+1. 推荐工具校验结构化参数并调用 SearchService。
+2. 启用来源并行召回；具体产品过滤在来源结果汇总后执行。
+3. `RerankMcpServer` 按 `sourceUrl` 去重，无 URL 时使用 `title:<title>`。
+   重复项优先较高 similarity，相等时按提供者优先级。
+4. 现有 score 保留，否则 similarity 乘来源优先级（无非零优先级时因子为 1）；
+   过滤阈值为 `minScore ?? minSimilarity`，默认按分数降序，应用条数限制。
+5. 若注入 FlashRank，SearchService 另取最多 50 条已去重、过滤的候选调用服务，
+   再应用最终 limit。仅正数 limit ≤50、score 排序、至少两候选且查询非空时启用。
+   服务失败回退到原排序，详见[重排指南](./professional-reranking.md)。
+6. 工具将服务器结果格式化为 MCP 文本内容返回。
 
-- 高性能向量数据库集成
-- 支持语义相似度搜索
-- 使用 HNSW 索引进行快速检索
+旧 `ProfessionalRerankProcessor` 仍是默认关闭的占位器，但不等于整个项目没有模型重排：
+真正的可选 FlashRank 集成位于 SearchService。
 
-#### GetMCP 提供者
+离线提供者构造权重默认为文本 0.7、向量 0.3，不按查询动态切换。
+识别关键词且文本命中时返回文本，后台向量结果只记录；否则并行搜索并按 ID 合并，
+重复项取最大加权 similarity 而非相加，再交全局重排。过滤后可以无结果，
+不保证固定五条或最低召回量。
 
-从 GetMCP 注册表获取数据：
+来源优先级为 Offline 5、GetMCP 10、Compass 8、Meilisearch 9。
+未知类名在去重阶段优先级为 0，在无既有 score 时评分因子回退为 1。
+优先级不是独立的“优先级第一”排序。
 
-- 直接与官方 MCP 注册表集成
-- 实时数据更新
-- 支持元数据过滤
+## 传输与安全边界
 
-#### Compass 提供者
+[服务器工厂](../src/services/core/server/stateless/McpServerFactory.ts)、
+[HTTP 适配器](../src/services/core/server/stateless/StatelessHttpServer.ts)
+使用官方 SDK core/server/client 2.3.1、Node 适配器 2.1.1，要求 MCP 2026-07-28。
 
-使用 Compass API 检索 MCP 服务器信息：
+- stdio 默认启用；诊断输出不能污染 stdout。
+- HTTP 固定 `/mcp`，每请求创建协议服务器；业务服务和缓存可以共享。
+- 无旧 initialize/initialized 握手、MCP session ID、会话恢复或独立 GET 流。
+  `GET` 和 `DELETE /mcp` 返回 405；现代 POST 响应仍可用 SSE 编码。
+- 旧 SSE/REST 模式被拒绝，旧 HTTP 路径返回 410。旧代码隔离在 legacy 目录，
+  排除于生产编译和导入，保留它不代表当前入口兼容旧协议。
+- `GET /health` 和 `POST /api/sources` 是独立应用路由。
+- 默认监听 `127.0.0.1`，Host/Origin 守卫不是认证。
+  无内置认证或跨源浏览器 CORS；远程暴露需要独立安全措施。
+- 传输取消不保证所有业务提供者中止底层任务。
 
-- 与 Compass 注册表集成
-- 支持高级过滤和排序
-- 提供额外的元数据
+详见[迁移指南](./MCP_2026_MIGRATION.md)与[配置参考](./GETTING_STARTED.zh-CN.md)。
+未合并的托管 PR #40 不属于这里已验收的运行方式。
 
-#### 离线提供者
+## 技术实现与验证边界
 
-结合文本和向量的混合搜索：
+[vectorUtils.ts](../src/utils/vectorUtils.ts) 提供 L2 归一化及余弦相似度。
+零或非有限模长返回副本；不能据此声称所有后端入库前都进行归一化。
 
-- 在本地执行搜索，无需外部 API
-- 结合关键词匹配和向量相似度
-- 可配置的权重平衡
-- 作为其他提供者的备用机制
-
-### 3. 混合搜索引擎
-
-混合搜索引擎结合了文本匹配和向量搜索的优点：
-
-- **文本匹配**：基于关键词的精确和模糊匹配
-- **向量搜索**：使用嵌入向量的语义相似度
-- **可配置权重**：文本和向量搜索之间的可调平衡
-- **智能回退**：即使在高相似度阈值下也能确保最小结果数
-
-### 4. 结果处理管道
-
-结果处理管道负责优化和过滤搜索结果：
-
-- **合并**：组合来自多个提供者的结果
-- **去重**：基于 GitHub URL 或标题删除重复结果
-- **提供者优先级**：基于提供者可靠性对结果进行排名
-- **相似度过滤**：基于可配置阈值过滤结果
-- **自适应回退**：确保最小结果数以获得更好的用户体验
-
-### 5. 传输层
-
-现代主链路使用官方 TypeScript SDK（server/core/client 2.3.1、Node 适配器 2.1.1），
-仅支持 MCP 2026-07-28：
-
-- **Stdio**：默认本地入口，使用 `serveStdio(factory, { legacy: 'reject' })`。
-- **HTTP**：固定 `/mcp` 端点，使用
-  `createMcpHandler(factory, { legacy: 'reject', responseMode: 'auto' })`；每个 HTTP 请求创建独立服务实例。
-- **共享业务**：工厂统一注册推荐工具、安装指导工具和日志资源；搜索服务／缓存可以进程级复用，
-  但不保存 MCP 会话或跨请求的客户端协议状态。
-- **旧实现隔离**：旧 server／transport 代码保留在 `src/services/core/server/legacy/`，
-  排除在生产构建和运行导入链路之外。旧 SSE/REST 模式启动失败，旧 HTTP 路径返回 410。
-
-SDK 负责发现、每请求元数据、HTTP 头与请求体一致性、协议错误和响应编码。
-没有旧 `initialize`／`initialized` 流程、MCP 会话 ID、会话恢复或独立 GET 流；
-`GET` 和 `DELETE /mcp` 返回 405。现代 POST 的响应仍可以采用 SSE 编码。
-
-HTTP 适配层负责路由、SDK Host／Origin 校验和监听器生命周期。
-`GET /health` 与 `POST /api/sources` 保持为独立应用路由。
-CLI 配置见[快速开始](./GETTING_STARTED.zh-CN.md)，stdio 的诊断输出不能写入 stdout。
-
-服务没有内置认证或跨域浏览器 CORS 功能，默认绑定 `127.0.0.1`。
-显式 Host／Origin 白名单不能替代认证和网络限制。
-传输取消会关闭当前交换，但现有业务提供者不一定中止底层工作。
-客户端配置和回滚步骤见[迁移指南](./MCP_2026_MIGRATION.md)。
-
-## 数据流
-
-以下序列图展示了 MCP Advisor 中的数据流：
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Agent as AI 代理
-    participant MCP as MCP Advisor
-    participant QP as 查询处理器
-    participant Search as 搜索提供者
-    participant Results as 结果处理器
-    
-    User->>Agent: 自然语言查询
-    Agent->>MCP: 搜索请求
-    MCP->>QP: 处理查询
-    
-    par 并行处理
-        QP->>QP: 提取关键词
-        QP->>QP: 生成嵌入向量
-    end
-    
-    par 并行搜索执行
-        QP->>Search: 基于文本的搜索（关键词）
-        Note over Search: Compass 提供者
-        Note over Search: GetMCP 提供者
-        Note over Search: 离线提供者
-        
-        QP->>QP: 归一化向量
-        QP->>Search: 向量相似度搜索
-        Note over Search: Meilisearch 提供者
-        Note over Search: 离线向量搜索
-    end
-    
-    Search->>Results: 所有搜索结果
-    
-    Results->>Results: 智能结果合并
-    Results->>Results: 基于 URL 的去重
-    Results->>Results: 提供者优先级排名
-    Results->>Results: 自适应相似度过滤
-    Results->>Results: 结果数量限制
-    
-    Results->>MCP: 处理后的结果
-    MCP->>Agent: MCP 服务器推荐
-    Agent->>User: 带上下文的推荐
-```
-
-## 搜索策略
-
-MCP Advisor 使用复杂的搜索策略来提供最相关的结果：
-
-```mermaid
-graph TD
-    Query["用户查询"] --> Analysis["查询分析"]
-    
-    Analysis --> |"包含关键词"| TextBias["文本偏向搜索"]
-    Analysis --> |"语义查询"| VectorBias["向量偏向搜索"]
-    
-    TextBias --> |"textMatchWeight: 0.7"| HybridSearch1["混合搜索引擎"]
-    VectorBias --> |"textMatchWeight: 0.3"| HybridSearch2["混合搜索引擎"]
-    
-    subgraph "向量处理"
-        RawVector["原始嵌入向量"] --> Normalization["向量归一化"]
-        Normalization --> |"单位向量"| IndexedSearch["HNSW 索引搜索"]
-        IndexedSearch --> |"余弦相似度"| VectorResults["向量结果"]
-    end
-    
-    subgraph "文本处理"
-        Keywords["提取的关键词"] --> ExactMatch["精确匹配"]
-        Keywords --> FuzzyMatch["模糊匹配"]
-        ExactMatch & FuzzyMatch --> |"匹配分数"| TextResults["文本结果"]
-    end
-    
-    subgraph "混合搜索过程"
-        HybridSearch1 & HybridSearch2 --> |"并行执行"| Providers["多个提供者"]
-        VectorResults & TextResults --> WeightedMerge["加权结果合并"]
-        Providers --> |"原始结果"| Merging["智能合并"]
-        WeightedMerge --> Merging
-        Merging --> |"提供者优先级"| Prioritization["基于优先级的选择"]
-        Prioritization --> |"唯一结果"| Filtering["自适应过滤"]
-    end
-    
-    Filtering --> |"minSimilarity: 0.5"| FinalResults["最终结果"]
-    Filtering --> |"回退"| TopResults["前 5 个结果"]
-```
-
-## 技术实现
-
-### 向量归一化
-
-所有向量在存储和搜索前都经过归一化处理：
-
-```typescript
-function normalizeVector(vector: number[]): number[] {
-  const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
-  if (magnitude === 0) return vector;
-  return vector.map(val => val / magnitude);
-}
-```
-
-### 混合搜索实现
-
-混合搜索结合了文本和向量搜索的结果：
-
-```typescript
-async function hybridSearch(query: string, options: SearchOptions): Promise<SearchResult[]> {
-  const [textResults, vectorResults] = await Promise.all([
-    textSearch(query, options),
-    vectorSearch(query, options)
-  ]);
-  
-  return mergeSearchResults(textResults, vectorResults, {
-    textMatchWeight: 0.3,
-    vectorMatchWeight: 0.7
-  });
-}
-```
-
-### 提供者优先级系统
-
-提供者优先级系统确保最可靠的结果排在前面：
-
-```typescript
-const PROVIDER_PRIORITIES = {
-  'compass': 3,
-  'getmcp': 2,
-  'meilisearch': 2,
-  'offline': 1
-};
-
-function prioritizeResults(results: SearchResult[]): SearchResult[] {
-  return results.sort((a, b) => {
-    // 首先按提供者优先级排序
-    const priorityDiff = 
-      (PROVIDER_PRIORITIES[b.provider] || 0) - 
-      (PROVIDER_PRIORITIES[a.provider] || 0);
-    
-    if (priorityDiff !== 0) return priorityDiff;
-    
-    // 然后按相似度排序
-    return b.similarity - a.similarity;
-  });
-}
-```
-
-## 总结
-
-MCP Advisor 的架构设计注重模块化、可扩展性和性能。通过结合多种搜索策略和智能结果处理，系统能够提供高质量的 MCP 服务器推荐，同时保持良好的响应时间和用户体验。
-
----
-
-有关更多技术实现细节和搜索提供者配置，请参阅：
-- [技术参考手册](./TECHNICAL_REFERENCE.zh-CN.md) - 详细的技术实现和搜索提供者
-- [快速开始指南](./GETTING_STARTED.zh-CN.md) - 安装配置和基本使用
-- [贡献指南](../CONTRIBUTING.md) - 开发环境设置和代码贡献
+本指南是源码结构说明，不是性能、真实外部服务或模型质量验收。
+[搜索质量评估](./search-quality-evaluation.md) 的示意数据也不是生产效果证据。
+开发验证与贡献要求见[贡献指南](../CONTRIBUTING.zh-CN.md)。

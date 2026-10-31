@@ -1,168 +1,148 @@
 #!/bin/bash
 
-# MCPAdvisor 端到端测试启动脚本
-# 自动启动 MCP Inspector 并运行 Playwright 测试
+# Official Inspector v2 UI harness; protocol and provider quality gates remain separate.
+set -euo pipefail
+# Give only the processes we launch their own groups, including their children.
+set -m
 
-set -e
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$PROJECT_ROOT"
+MCP_INSPECTOR_PID=""
+PLAYWRIGHT_PID=""
+BUILD_PID=""
+TEST_MODE=${1:-headed}
+[[ $# -eq 0 ]] || shift
+STARTUP_TIMEOUT=${E2E_STARTUP_TIMEOUT:-30}
+HEALTH_TIMEOUT=${E2E_HEALTH_TIMEOUT:-20}
 
-echo "🚀 开始 MCPAdvisor 端到端测试流程"
-echo "======================================="
-
-# 清理函数
-cleanup() {
-    echo ""
-    echo "🧹 清理进程..."
-    if [[ -n $MCP_INSPECTOR_PID ]]; then
-        kill $MCP_INSPECTOR_PID 2>/dev/null || true
-        echo "✅ MCP Inspector 进程已终止"
-    fi
-    
-    # 额外清理可能占用端口的进程
-    cleanup_ports
-    exit 0
+stop_owned_group() {
+    local pid=$1
+    [[ -n "$pid" ]] || return 0
+    kill -TERM -- "-$pid" 2>/dev/null || true
+    # Bound cleanup even if a child ignores TERM. Never kill by name or port.
+    for _ in {1..20}; do
+        kill -0 -- "-$pid" 2>/dev/null || break
+        sleep 0.1
+    done
+    kill -KILL -- "-$pid" 2>/dev/null || true
+    wait "$pid" 2>/dev/null || true
 }
 
-# 清理端口占用
-cleanup_ports() {
-    local ports=(6274 6277)
-    for port in "${ports[@]}"; do
-        local pids=$(lsof -ti :$port 2>/dev/null || true)
-        if [[ -n "$pids" ]]; then
-            echo "🧹 清理端口 $port 上的进程: $pids"
-            kill -9 $pids 2>/dev/null || true
+cleanup() {
+    local status=$?
+    trap - EXIT INT TERM
+    stop_owned_group "$BUILD_PID"
+    stop_owned_group "$PLAYWRIGHT_PID"
+    stop_owned_group "$MCP_INSPECTOR_PID"
+    exit "$status"
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+case "$TEST_MODE" in
+    headless|headed|debug|ui) ;;
+    *) echo "Unknown test mode: $TEST_MODE" >&2; exit 2 ;;
+esac
+for timeout in "$STARTUP_TIMEOUT" "$HEALTH_TIMEOUT"; do
+    if [[ ! "$timeout" =~ ^[1-9][0-9]*$ ]]; then
+        echo "E2E timeouts must be positive integer seconds" >&2
+        exit 2
+    fi
+done
+
+# Fail before starting anything when dependencies or ports are unavailable.
+for command in pnpm npx curl; do
+    if ! command -v "$command" >/dev/null 2>&1; then
+        echo "Required command unavailable: $command" >&2
+        exit 127
+    fi
+done
+if command -v lsof >/dev/null 2>&1; then
+    for port in 6274 6275; do
+        if lsof -tiTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
+            echo "Port $port is already in use; no existing process was stopped" >&2
+            exit 1
         fi
     done
-    # 额外清理 inspector 相关进程
-    pkill -f "inspector" 2>/dev/null || true
-    sleep 2
-}
+fi
 
-# 设置信号处理
-trap cleanup SIGINT SIGTERM
+pnpm run build &
+BUILD_PID=$!
+wait "$BUILD_PID"
+stop_owned_group "$BUILD_PID"
+BUILD_PID=""
+# Restrict the log containing Inspector's transient authentication token.
+umask 077
+: > mcp-inspector.log
+chmod 600 mcp-inspector.log
+MCP_INSPECTOR_SECRET_STORE=memory BROWSER=none ENABLE_FILE_LOGGING=true npx --yes --package=@modelcontextprotocol/inspector@2.10.1 mcp-inspector --protocol-era modern node "$PROJECT_ROOT/build/index.js" > mcp-inspector.log 2>&1 &
+MCP_INSPECTOR_PID=$!
 
-# 第一步：构建项目
-echo "📦 构建 MCPAdvisor..."
-pnpm run build
+INSPECTOR_URL=""
+for ((count=0; count<=STARTUP_TIMEOUT; count++)); do
+    if ! kill -0 "$MCP_INSPECTOR_PID" 2>/dev/null; then
+        status=0
+        wait "$MCP_INSPECTOR_PID" || status=$?
+        [[ "$status" -ne 0 ]] || status=1
+        echo "MCP Inspector exited before becoming ready ($status)" >&2
+        exit "$status"
+    fi
+    INSPECTOR_URL=$(grep -Eo 'http://127[.]0[.]0[.]1:[0-9]+/?[?]MCP_INSPECTOR_API_TOKEN=[a-f0-9]+' mcp-inspector.log | head -1 || true)
+    [[ -z "$INSPECTOR_URL" ]] || break
+    [[ "$count" -lt "$STARTUP_TIMEOUT" ]] || break
+    sleep 1
+done
+if [[ -z "$INSPECTOR_URL" ]]; then
+    if ! kill -0 "$MCP_INSPECTOR_PID" 2>/dev/null; then
+        status=0
+        wait "$MCP_INSPECTOR_PID" || status=$?
+        [[ "$status" -ne 0 ]] || status=1
+        echo "MCP Inspector exited before becoming ready ($status)" >&2
+        exit "$status"
+    fi
+    echo "MCP Inspector startup timed out; inspect mcp-inspector.log locally" >&2
+    exit 1
+fi
+BASE_URL=${INSPECTOR_URL%%\?*}
+AUTH_TOKEN=${INSPECTOR_URL##*MCP_INSPECTOR_API_TOKEN=}
+[[ -n "$AUTH_TOKEN" ]] || { echo "Missing Inspector token" >&2; exit 1; }
 
-if [ $? -ne 0 ]; then
-    echo "❌ 构建失败"
+ready=false
+for ((count=0; count<HEALTH_TIMEOUT; count++)); do
+    kill -0 "$MCP_INSPECTOR_PID" 2>/dev/null || { echo "MCP Inspector exited" >&2; exit 1; }
+    if curl --fail --silent --max-time 1 "${BASE_URL%/}/health" >/dev/null 2>&1; then
+        ready=true
+        break
+    fi
+    sleep 1
+done
+if [[ "$ready" != true ]]; then
+    echo "MCP Inspector health check timed out" >&2
     exit 1
 fi
 
-echo "✅ 构建完成"
-
-# 第二步：启动 MCP Inspector
-echo ""
-echo "🔄 启动 MCP Inspector..."
-
-# 先清理可能占用的端口
-echo "🧹 清理现有端口占用..."
-cleanup_ports
-
-ENABLE_FILE_LOGGING=true mcp-inspector node "$(pwd)/build/index.js" > mcp-inspector.log 2>&1 &
-MCP_INSPECTOR_PID=$!
-
-echo "⏳ 等待 MCP Inspector 启动..."
-
-# 等待并解析 MCP Inspector 输出
-timeout=30
-count=0
-INSPECTOR_URL=""
-AUTH_TOKEN=""
-
-while [ $count -lt $timeout ]; do
-    if [[ -f mcp-inspector.log ]]; then
-        # 检查是否有 URL 和 token
-        if grep -q "inspector with token pre-filled" mcp-inspector.log; then
-            INSPECTOR_URL=$(grep -o "http://localhost:[0-9]*/?MCP_PROXY_AUTH_TOKEN=[a-f0-9]*" mcp-inspector.log | head -1)
-            if [[ -n $INSPECTOR_URL ]]; then
-                # 提取 token
-                AUTH_TOKEN=$(echo $INSPECTOR_URL | grep -o "MCP_PROXY_AUTH_TOKEN=[a-f0-9]*" | cut -d'=' -f2)
-                BASE_URL=$(echo $INSPECTOR_URL | cut -d'?' -f1)
-                break
-            fi
-        fi
-    fi
-    sleep 1
-    count=$((count + 1))
-done
-
-if [[ -z $INSPECTOR_URL ]]; then
-    echo "❌ MCP Inspector 启动失败或超时"
-    echo "日志内容："
-    cat mcp-inspector.log 2>/dev/null || echo "无法读取日志文件"
-    cleanup
-fi
-
-echo "✅ MCP Inspector 已启动"
-echo "📍 URL: $BASE_URL"
-echo "🔑 Token: $AUTH_TOKEN"
-
-# 第三步：等待服务就绪
-echo ""
-echo "⏳ 等待服务就绪..."
-for i in {1..10}; do
-    if curl -s "$BASE_URL/health" > /dev/null 2>&1; then
-        echo "✅ 服务就绪"
-        break
-    fi
-    if [ $i -eq 10 ]; then
-        echo "❌ 服务未就绪，超时"
-        cleanup
-    fi
-    sleep 2
-done
-
-# 第四步：运行 Playwright 测试
-echo ""
-echo "🧪 运行 Playwright 测试..."
-echo "使用 URL: $INSPECTOR_URL"
-
-# 导出环境变量供 Playwright 使用
 export MCP_AUTH_TOKEN="$AUTH_TOKEN"
 export MCP_INSPECTOR_URL="$BASE_URL"
-
-# 运行测试（根据参数选择模式）
-TEST_MODE=${1:-"headed"}
-
-case $TEST_MODE in
-    "headless")
-        echo "🔧 运行无头模式测试..."
-        NODE_OPTIONS='--no-deprecation' npx playwright test
-        ;;
-    "debug")
-        echo "🐛 运行调试模式测试..."
-        NODE_OPTIONS='--no-deprecation' npx playwright test --debug
-        ;;
-    "ui")
-        echo "🎨 运行 UI 模式测试..."
-        NODE_OPTIONS='--no-deprecation' npx playwright test --ui
-        ;;
-    *)
-        echo "👀 运行有头模式测试..."
-        NODE_OPTIONS='--no-deprecation' npx playwright test --headed
-        ;;
+args=(test "$@")
+case "$TEST_MODE" in
+    headed) args+=(--headed) ;;
+    debug) args+=(--debug) ;;
+    ui) args+=(--ui) ;;
 esac
-
-TEST_EXIT_CODE=$?
-
-# 第五步：显示结果
-echo ""
-echo "======================================="
-if [ $TEST_EXIT_CODE -eq 0 ]; then
-    echo "✅ 测试完成！所有测试通过"
-else
-    echo "❌ 测试完成，但有测试失败"
-    echo "📊 查看详细报告: npx playwright show-report"
+NODE_OPTIONS='--no-deprecation' npx playwright "${args[@]}" &
+PLAYWRIGHT_PID=$!
+status=0
+wait "$PLAYWRIGHT_PID" || status=$?
+# A terminated Inspector invalidates an otherwise successful UI run.
+if [[ "$status" -eq 0 ]] && ! kill -0 "$MCP_INSPECTOR_PID" 2>/dev/null; then
+    echo "MCP Inspector exited during the test run" >&2
+    status=1
 fi
-
-echo ""
-echo "📊 测试报告和截图位置: test-results/"
-echo "🔗 Inspector 仍在运行: $INSPECTOR_URL"
-echo ""
-echo "按 Ctrl+C 停止 Inspector 并退出..."
-
-# 保持脚本运行直到用户中断
-while true; do
-    sleep 1
-done
+if [[ "$status" -eq 0 ]]; then
+    echo "Playwright completed successfully"
+else
+    echo "Playwright did not complete successfully ($status)" >&2
+fi
+# All modes exit when Playwright exits. Debug/UI remain interactive in Playwright.
+exit "$status"

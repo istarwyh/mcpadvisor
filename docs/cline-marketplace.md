@@ -18,15 +18,17 @@ The executable adds Cline to its existing sources only for the exact value `true
 Unset, empty, or `false` preserves the existing sources. Other values fail startup
 with a configuration error rather than silently enabling or ignoring the source.
 The catalog is fetched only when a search runs. This opt-in works with the existing
-stdio, SSE and REST transports. Existing source priorities are unchanged; Cline
+modern stdio and HTTP transports (MCP 2026-07-28). Existing source priorities are unchanged; Cline
 uses the reranker's default priority and is not guaranteed to rank above them.
 
 ## Programmatic selection
 
-For callers using the search factory:
+These are current-source TypeScript examples, with paths relative to a file in
+`src/`, to be compiled with the project. They are not npm-root exports;
+importing the package root starts its CLI. For callers using the search factory:
 
 ```ts
-import { getSearchFunction } from '../src/services/core/search/SearchMcpFactory.js';
+import { getSearchFunction } from './services/core/search/SearchMcpFactory.js';
 
 const search = getSearchFunction('cline');
 const results = await search('Postman API testing', { limit: 5 });
@@ -38,8 +40,8 @@ Cline provider so repeated calls share its catalog cache. To compose sources or
 customize timing directly:
 
 ```ts
-import { ClineSearchProvider } from '../src/services/core/search/ClineSearchProvider.js';
-import { SearchService } from '../src/services/searchService.js';
+import { ClineSearchProvider } from './services/core/search/ClineSearchProvider.js';
+import { SearchService } from './services/searchService.js';
 
 const cline = new ClineSearchProvider({
   timeoutMs: 10_000,
