@@ -4,6 +4,11 @@
 
 本文档提供了 MCP Advisor 常见问题的解决方案和诊断技巧。
 
+传输配置对应现代源码构建：Node.js >= 20（`.nvmrc` 为 22），通过 `stdio` 或 HTTP
+`/mcp` 使用 MCP 2026-07-28。这不代表 npm 已发布新版本。固定 1.0.5 制品的兼容与回滚
+步骤见[迁移指南](./MCP_2026_MIGRATION.md)；下方其他历史诊断示例需按当前源码调整。
+ChatMCP／MCP.so 的托管现状、协议边界与迁移验收见[托管迁移说明](./CHATMCP_HOSTING.md)。
+
 ## 目录
 
 - [连接问题](#连接问题)
@@ -55,39 +60,36 @@
    echo $SERVER_HOST
    ```
 
-### SSE 连接断开
+### HTTP 与流式响应错误
 
-**症状**: 服务器发送事件 (SSE) 连接频繁断开。
+1. 使用受支持的 Node.js 版本，构建并单独启动 HTTP 进程：
 
-**可能的原因**:
-1. 客户端超时设置太短
-2. 服务器资源限制
-3. 网络不稳定
-4. CORS 配置问题
-
-**解决方案**:
-1. 增加客户端超时设置：
-   ```javascript
-   const eventSource = new EventSource('/sse', {
-     withCredentials: true
-   });
-   ```
-
-2. 检查服务器日志中的错误消息：
    ```bash
-   tail -f logs/error.log
+   pnpm run build
+   TRANSPORT_TYPE=http node build/index.js
    ```
 
-3. 确保正确的 CORS 配置（从浏览器连接时）：
-   ```javascript
-   // 服务器端 CORS 配置
-   app.use(cors({
-     origin: true,
-     credentials: true
-   }));
+   在另一个终端中检查监听状态：
+
+   ```bash
+   curl -i http://127.0.0.1:3000/health
    ```
 
-4. 考虑使用 WebSocket 而不是 SSE 以获得更好的连接稳定性。
+2. 将明确配置为 MCP 2026-07-28 的客户端连接到 `http://127.0.0.1:3000/mcp`，
+   参考[官方 SDK 示例](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)。
+   旧 `initialize` 握手不受支持。`GET`／`DELETE /mcp` 返回 405，旧 `/sse`、
+   `/messages`、`/rest` 返回 410，都是预期退役行为，不代表 HTTP 进程未启动。
+   `sse/rest` 启动模式也会被拒绝；当前仅支持 `stdio/http`。
+
+3. `MCP_HTTP_RESPONSE_MODE=auto` 默认返回 JSON，存在相关流式消息时使用 SSE；
+   `sse` 强制在 POST 响应内使用 SSE，`json` 不传送中间进度／日志消息。
+   不要使用 `EventSource('/sse')` 或改成未实现的 WebSocket。现代响应流中断时，
+   检查客户端取消、代理缓冲和网络错误；取消不保证所有业务提供者停止底层工作。
+
+4. 检查 stderr 或已启用的文件日志（`logs/error.log`）。Host／Origin 校验失败时，
+   参考[部署说明](./MCP_2026_MIGRATION.md#deployment-and-security)配置最小白名单。
+   默认仅监听回环地址；Host／Origin 白名单不是认证或 CORS 配置，未经认证及网络
+   限制不要公开暴露服务。
 
 ## 搜索问题
 
@@ -270,15 +272,14 @@
 1. 检查环境变量格式：
    ```bash
    # 正确格式
-   export TRANSPORT_TYPE=sse
+   export TRANSPORT_TYPE=http
    
-   # 或在 .env 文件中
-   TRANSPORT_TYPE=sse
+   # CLI 不会自动加载 .env；请在启动 shell 或 MCP 客户端中设置环境变量
    ```
 
-2. 重启应用程序：
+2. 停止旧进程，然后重新启动已构建的程序（没有 `restart` 脚本）：
    ```bash
-   npm restart
+   node build/index.js
    ```
 
 3. 验证配置加载顺序：
@@ -417,16 +418,18 @@
 ### 开发环境问题
 
 **Node.js 版本不兼容**:
+
+现代源码要求 Node.js >= 20；仓库 `.nvmrc` 为开发和 CI 选择 22。
+
 ```bash
 # 检查当前 Node.js 版本
 node --version
 
-# 使用 nvm 切换到推荐版本
-nvm use 18
+# 按需安装开发／CI 版本
+nvm install 22
 
-# 或安装推荐版本
-nvm install 18
-nvm alias default 18
+# 在仓库根目录选择 .nvmrc 指定的版本
+nvm use
 ```
 
 **依赖安装问题**:
@@ -442,6 +445,9 @@ pnpm install
 ```
 
 ## 日志和调试
+
+现代 stdio 入口将诊断输出写入 stderr（包括启用控制台日志时）；stdout 只用于 MCP
+消息。不要向 stdout 添加诊断输出。
 
 ### 启用详细日志
 

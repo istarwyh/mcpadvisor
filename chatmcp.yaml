@@ -1,3 +1,13 @@
+# DEPRECATED: historical ChatMCP/MCP.so metadata for the legacy release.
+# Retained to preserve the existing integration while hosting support is checked;
+# this does not disable, migrate, or verify any live deployment.
+# DO NOT use these params/rest settings with the current source build:
+# it requires MCP 2026-07-28, Node.js >=20, and stdio or HTTP /mcp.
+# No modern ChatMCP hosting schema has been verified. Do not invent an http:
+# section or change rest.endpoint to /mcp and assume protocol compatibility.
+# See docs/CHATMCP_HOSTING.md for evidence and the modern migration checklist.
+# See docs/MCP_2026_MIGRATION.md for source launch and explicit legacy rollback.
+
 params:
   type: object
   properties:
@@ -26,9 +36,10 @@ rest:
   port: 3000
   endpoint: /rest
 
+# Explicit legacy local launch only; this does not select modern source.
 npx:
   command: |
-    npx -y @xiaohui-wang/mcpadvisor
+    npx -y @xiaohui-wang/mcpadvisor@1.0.5
   config: |
     {
       "mcpServers": {
@@ -36,13 +47,16 @@ npx:
           "command": "npx",
           "args": [
             "-y",
-            "@xiaohui-wang/mcpadvisor"
+            "@xiaohui-wang/mcpadvisor@1.0.5"
           ],
           "env": {}
         }
       }
     }
 
+# Historical floating image retained unchanged, NOT a verified launch or rollback.
+# Its contents/protocol and a matching immutable tag/digest have not been checked.
+# Do not execute this example for a migration or infer its version from npm 1.0.5.
 docker:
   command: |
     docker run -i --rm mcp/mcpadvisor
