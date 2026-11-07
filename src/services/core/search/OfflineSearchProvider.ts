@@ -8,6 +8,14 @@ import { EnhancedMemoryVectorEngine } from '../../providers/offline/enhancedMemo
 import logger from '../../../utils/logger.js';
 import { getTextEmbedding } from '../../../utils/embedding.js';
 
+const REDNOTE_KEYWORDS = [
+  '小红书',
+  'xiaohongshu',
+  'rednote',
+  'redbook',
+  'red note',
+];
+
 /**
  * 离线搜索提供者配置
  */
@@ -317,6 +325,12 @@ export class OfflineSearchProvider implements SearchProvider {
         return [];
       }
 
+      // A product-specific boost must be supported by the query as well as
+      // the candidate. Otherwise every unrelated query promotes RedNote.
+      const requestsRedNote = REDNOTE_KEYWORDS.some(keyword =>
+        query.toLowerCase().includes(keyword),
+      );
+
       // 复制服务器数据以避免修改原始数据
       const results = [...allServers];
 
@@ -353,7 +367,7 @@ export class OfflineSearchProvider implements SearchProvider {
           Math.max(categoryMatch, tagMatch) * 0.2;
 
         // 如果是小红书相关，则提高分数
-        if (isRedNoteRelated) {
+        if (requestsRedNote && isRedNoteRelated) {
           similarity = Math.max(similarity, 0.8); // 确保小红书相关结果有足够高的分数
         }
 
@@ -384,17 +398,9 @@ export class OfflineSearchProvider implements SearchProvider {
    * 检查是否与小红书相关
    */
   private isRedNoteRelated(result: MCPServerResponse): boolean {
-    const redNoteKeywords = [
-      '小红书',
-      'xiaohongshu',
-      'rednote',
-      'redbook',
-      'red note',
-    ];
-
     // 检查标题
     if (
-      redNoteKeywords.some(keyword =>
+      REDNOTE_KEYWORDS.some(keyword =>
         result.title.toLowerCase().includes(keyword.toLowerCase()),
       )
     ) {
@@ -403,7 +409,7 @@ export class OfflineSearchProvider implements SearchProvider {
 
     // 检查描述
     if (
-      redNoteKeywords.some(keyword =>
+      REDNOTE_KEYWORDS.some(keyword =>
         result.description.toLowerCase().includes(keyword.toLowerCase()),
       )
     ) {
@@ -414,7 +420,7 @@ export class OfflineSearchProvider implements SearchProvider {
     if (
       Array.isArray(result.categories) &&
       result.categories.some(category =>
-        redNoteKeywords.some(keyword =>
+        REDNOTE_KEYWORDS.some(keyword =>
           category.toLowerCase().includes(keyword.toLowerCase()),
         ),
       )
@@ -426,7 +432,7 @@ export class OfflineSearchProvider implements SearchProvider {
     if (
       Array.isArray(result.tags) &&
       result.tags.some(tag =>
-        redNoteKeywords.some(keyword =>
+        REDNOTE_KEYWORDS.some(keyword =>
           tag.toLowerCase().includes(keyword.toLowerCase()),
         ),
       )
