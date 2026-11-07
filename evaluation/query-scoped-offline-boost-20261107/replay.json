@@ -1,0 +1,605 @@
+{
+  "baseline": "4d2a1bb99cf329788f79f04c06fe2da78ff157de",
+  "scope": "Real 212-row catalog, SimpleEmbeddingProvider offline SearchService, existing 16 probes plus 3 diagnostic queries. Not a fresh holdout or production uplift.",
+  "results": [
+    {
+      "id": "p01",
+      "query": "I need a Slack-specific MCP for channel messaging.",
+      "before": [
+        {
+          "id": "slack",
+          "similarity": 0.5289999999999999,
+          "score": 0.5289999999999999
+        }
+      ],
+      "after": [
+        {
+          "id": "slack",
+          "similarity": 0.5289999999999999,
+          "score": 0.5289999999999999
+        }
+      ]
+    },
+    {
+      "id": "p02",
+      "query": "帮我找 Sentry 专用的 MCP，用来查看和分析线上错误。",
+      "before": [
+        {
+          "id": "sentry",
+          "similarity": 0.5424999999999999,
+          "score": 0.5424999999999999
+        }
+      ],
+      "after": [
+        {
+          "id": "sentry",
+          "similarity": 0.5424999999999999,
+          "score": 0.5424999999999999
+        }
+      ]
+    },
+    {
+      "id": "p03",
+      "query": "我想用小红书专用 MCP 按关键词搜索笔记、打开笔记链接。",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.8,
+          "score": 4
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.8,
+          "score": 4
+        }
+      ],
+      "after": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.8,
+          "score": 4
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.8,
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "p04",
+      "query": "Find a QuasarDesk-specific MCP to manage my team tasks and projects.",
+      "before": [],
+      "after": []
+    },
+    {
+      "id": "p05",
+      "query": "我要知舟工单 Pro 专用的 MCP，处理我公司的工单和待办。",
+      "before": [],
+      "after": []
+    },
+    {
+      "id": "p06",
+      "query": "I need task-specific MCP tools to create, update, and complete my daily tasks.",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "google-tasks",
+          "similarity": 0.5271538461538461,
+          "score": 0.5271538461538461
+        },
+        {
+          "id": "todoist",
+          "similarity": 0.5158461538461537,
+          "score": 0.5158461538461537
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.5140692307692307,
+          "score": 0.5140692307692307
+        }
+      ],
+      "after": [
+        {
+          "id": "google-tasks",
+          "similarity": 0.5271538461538461,
+          "score": 0.5271538461538461
+        },
+        {
+          "id": "todoist",
+          "similarity": 0.5158461538461537,
+          "score": 0.5158461538461537
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.5140692307692307,
+          "score": 0.5140692307692307
+        },
+        {
+          "id": "pandoc",
+          "similarity": 0.511,
+          "score": 0.511
+        },
+        {
+          "id": "google-custom-search",
+          "similarity": 0.5093846153846154,
+          "score": 0.5093846153846154
+        }
+      ]
+    },
+    {
+      "id": "p07",
+      "query": "Recommend project-specific MCP tools for project management and issue tracking.",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.5009772727272727,
+          "score": 0.5009772727272727
+        },
+        {
+          "id": "algorand",
+          "similarity": 0.4433333333333333,
+          "score": 0.4433333333333333
+        },
+        {
+          "id": "pandoc",
+          "similarity": 0.4384015151515151,
+          "score": 0.4384015151515151
+        }
+      ],
+      "after": [
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.5009772727272727,
+          "score": 0.5009772727272727
+        },
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.46009090909090905,
+          "score": 0.46009090909090905
+        },
+        {
+          "id": "algorand",
+          "similarity": 0.4433333333333333,
+          "score": 0.4433333333333333
+        },
+        {
+          "id": "pandoc",
+          "similarity": 0.4384015151515151,
+          "score": 0.4384015151515151
+        },
+        {
+          "id": "ns-travel-information",
+          "similarity": 0.43781818181818183,
+          "score": 0.43781818181818183
+        }
+      ]
+    },
+    {
+      "id": "p08",
+      "query": "I need privacy-specific MCP tooling for local-first knowledge management and searching Markdown notes.",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "salesforce-mcp",
+          "similarity": 0.5095,
+          "score": 0.5095
+        },
+        {
+          "id": "obsidian-markdown-notes",
+          "similarity": 0.5010999999999999,
+          "score": 0.5010999999999999
+        },
+        {
+          "id": "markdownify",
+          "similarity": 0.4935999999999999,
+          "score": 0.4935999999999999
+        }
+      ],
+      "after": [
+        {
+          "id": "salesforce-mcp",
+          "similarity": 0.5095,
+          "score": 0.5095
+        },
+        {
+          "id": "obsidian-markdown-notes",
+          "similarity": 0.5010999999999999,
+          "score": 0.5010999999999999
+        },
+        {
+          "id": "markdownify",
+          "similarity": 0.4935999999999999,
+          "score": 0.4935999999999999
+        },
+        {
+          "id": "claudepost",
+          "similarity": 0.4935999999999999,
+          "score": 0.4935999999999999
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.49074999999999996,
+          "score": 0.49074999999999996
+        }
+      ]
+    },
+    {
+      "id": "p09",
+      "query": "Find a Google Drive-specific MCP for accessing and searching my files.",
+      "before": [
+        {
+          "id": "google-drive",
+          "similarity": 0.5253181818181817,
+          "score": 0.5253181818181817
+        }
+      ],
+      "after": [
+        {
+          "id": "google-drive",
+          "similarity": 0.5253181818181817,
+          "score": 0.5253181818181817
+        }
+      ]
+    },
+    {
+      "id": "p10",
+      "query": "需要 AWS Cost Explorer 专用 MCP，按区域和服务分析云账单。",
+      "before": [
+        {
+          "id": "aws-cost-explorer",
+          "similarity": 0.54075,
+          "score": 0.54075
+        }
+      ],
+      "after": [
+        {
+          "id": "aws-cost-explorer",
+          "similarity": 0.54075,
+          "score": 0.54075
+        }
+      ]
+    },
+    {
+      "id": "p11",
+      "query": "I need a Home Assistant-specific MCP to manage entities and home automations.",
+      "before": [
+        {
+          "id": "home-assistant",
+          "similarity": 0.42371212121212115,
+          "score": 0.42371212121212115
+        }
+      ],
+      "after": [
+        {
+          "id": "home-assistant",
+          "similarity": 0.42371212121212115,
+          "score": 0.42371212121212115
+        }
+      ]
+    },
+    {
+      "id": "p12",
+      "query": "请推荐 Firestore 专用 MCP，让助手连接我的数据库。",
+      "before": [],
+      "after": []
+    },
+    {
+      "id": "p13",
+      "query": "找一个必须同时支持 Kubernetes 和 OpenShift 的 MCP，来管理集群里的资源。",
+      "before": [
+        {
+          "id": "kubernetes-and-openshift",
+          "similarity": 0.57575,
+          "score": 0.57575
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "kubernetes",
+          "similarity": 0.5424999999999999,
+          "score": 0.5424999999999999
+        }
+      ],
+      "after": [
+        {
+          "id": "kubernetes-and-openshift",
+          "similarity": 0.57575,
+          "score": 0.57575
+        },
+        {
+          "id": "kubernetes",
+          "similarity": 0.5424999999999999,
+          "score": 0.5424999999999999
+        }
+      ]
+    },
+    {
+      "id": "p14",
+      "query": "Recommend one MCP server that must support both Slack and Notion for messages and pages.",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.52255,
+          "score": 0.52255
+        },
+        {
+          "id": "salesforce-mcp",
+          "similarity": 0.5124,
+          "score": 0.5124
+        },
+        {
+          "id": "notion",
+          "similarity": 0.5082,
+          "score": 0.5082
+        }
+      ],
+      "after": [
+        {
+          "id": "code-sandbox-mcp",
+          "similarity": 0.52255,
+          "score": 0.52255
+        },
+        {
+          "id": "salesforce-mcp",
+          "similarity": 0.5124,
+          "score": 0.5124
+        },
+        {
+          "id": "notion",
+          "similarity": 0.5082,
+          "score": 0.5082
+        },
+        {
+          "id": "kubernetes-and-openshift",
+          "similarity": 0.5075,
+          "score": 0.5075
+        },
+        {
+          "id": "drupal",
+          "similarity": 0.498225,
+          "score": 0.498225
+        }
+      ]
+    },
+    {
+      "id": "p15",
+      "query": "Which MCP can convert times between timezones?",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-proxy",
+          "similarity": 0.44325,
+          "score": 0.44325
+        },
+        {
+          "id": "time",
+          "similarity": 0.4211249999999999,
+          "score": 0.4211249999999999
+        }
+      ],
+      "after": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.4709999999999999,
+          "score": 0.4709999999999999
+        },
+        {
+          "id": "mcp-proxy",
+          "similarity": 0.44325,
+          "score": 0.44325
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.42474999999999996,
+          "score": 0.42474999999999996
+        },
+        {
+          "id": "time",
+          "similarity": 0.4211249999999999,
+          "score": 0.4211249999999999
+        }
+      ]
+    },
+    {
+      "id": "p16",
+      "query": "有什么 MCP 可以把 Markdown 文档转换成 PDF？",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "obsidian-markdown-notes",
+          "similarity": 0.5249999999999999,
+          "score": 0.5249999999999999
+        },
+        {
+          "id": "markdownify",
+          "similarity": 0.5215,
+          "score": 0.5215
+        },
+        {
+          "id": "xiyan-mcp-server",
+          "similarity": 0.42,
+          "score": 0.42
+        }
+      ],
+      "after": [
+        {
+          "id": "obsidian-markdown-notes",
+          "similarity": 0.5249999999999999,
+          "score": 0.5249999999999999
+        },
+        {
+          "id": "markdownify",
+          "similarity": 0.5215,
+          "score": 0.5215
+        },
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.42,
+          "score": 0.42
+        },
+        {
+          "id": "xiyan-mcp-server",
+          "similarity": 0.42,
+          "score": 0.42
+        },
+        {
+          "id": "mcp-proxy",
+          "similarity": 0.42,
+          "score": 0.42
+        }
+      ]
+    },
+    {
+      "id": "unrelated",
+      "query": "zzqxv",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        }
+      ],
+      "after": []
+    },
+    {
+      "id": "postgres",
+      "query": "Postgres",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "crypto-feargreed-mcp",
+          "similarity": 0.4549999999999999,
+          "score": 0.4549999999999999
+        },
+        {
+          "id": "ghost",
+          "similarity": 0.4549999999999999,
+          "score": 0.4549999999999999
+        },
+        {
+          "id": "postman",
+          "similarity": 0.4549999999999999,
+          "score": 0.4549999999999999
+        }
+      ],
+      "after": [
+        {
+          "id": "crypto-feargreed-mcp",
+          "similarity": 0.4549999999999999,
+          "score": 0.4549999999999999
+        },
+        {
+          "id": "ghost",
+          "similarity": 0.4549999999999999,
+          "score": 0.4549999999999999
+        },
+        {
+          "id": "postman",
+          "similarity": 0.4549999999999999,
+          "score": 0.4549999999999999
+        },
+        {
+          "id": "postgresql",
+          "similarity": 0.44099999999999995,
+          "score": 0.44099999999999995
+        }
+      ]
+    },
+    {
+      "id": "weather",
+      "query": "weather forecast",
+      "before": [
+        {
+          "id": "rednote-mcp",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        },
+        {
+          "id": "mcp-hotnews-server",
+          "similarity": 0.5599999999999999,
+          "score": 0.5599999999999999
+        }
+      ],
+      "after": []
+    }
+  ]
+}
