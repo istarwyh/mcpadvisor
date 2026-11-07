@@ -347,6 +347,7 @@ export class OfflineSearchProvider implements SearchProvider {
         );
         const categoryMatch = Array.isArray(result.categories)
           ? Math.max(
+              0,
               ...result.categories.map((cat: string) =>
                 this.calculateTextSimilarity(query, cat),
               ),
@@ -354,6 +355,7 @@ export class OfflineSearchProvider implements SearchProvider {
           : 0;
         const tagMatch = Array.isArray(result.tags)
           ? Math.max(
+              0,
               ...result.tags.map((tag: string) =>
                 this.calculateTextSimilarity(query, tag),
               ),

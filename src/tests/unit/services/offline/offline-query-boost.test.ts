@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { OfflineSearchProvider } from '../../../../services/core/search/OfflineSearchProvider.js';
 import type { MCPServerResponse } from '../../../../types/index.js';
@@ -70,6 +71,68 @@ describe('offline product-specific score boost', () => {
       expect(
         results.find(row => row.id === 'rednote')?.similarity,
       ).toBeGreaterThan(0.55);
+    },
+  );
+});
+
+describe('offline text matching with optional metadata', () => {
+  it.each([
+    { categories: [], tags: [] },
+    { categories: [], tags: ['database'] },
+    { categories: ['database'], tags: [] },
+    {},
+  ])('retains exact title matches with metadata %j', async metadata => {
+    engineSearch.mockImplementation(async (vector: number[]) =>
+      vector.length
+        ? []
+        : [
+            {
+              id: 'postgres',
+              sourceUrl: 'https://example.com/postgres',
+              title: 'Postgres',
+              description: '',
+              similarity: 0,
+              ...metadata,
+            },
+          ],
+    );
+    const results = await new OfflineSearchProvider().search('Postgres');
+    expect(
+      results.find(row => row.id === 'postgres')?.similarity,
+    ).toBeGreaterThan(0.3);
+  });
+
+  it.each(['redis', 'xero-mcp-server'])(
+    'retains real catalog entry %s after missing metadata is normalized',
+    async id => {
+      const catalog = JSON.parse(
+        readFileSync(
+          new URL('../../../../../data/mcp_server_list.json', import.meta.url),
+          'utf8',
+        ),
+      );
+      const item = catalog.find((row: { id: string }) => row.id === id);
+      expect(item).toBeDefined();
+      // Mirror OfflineDataLoader's public catalog mapping, not synthetic tags.
+      const row = {
+        id: item.id,
+        title: item.display_name || item.name,
+        description: item.description || '',
+        sourceUrl: item.repository?.url || item.homepage || '',
+        categories: item.categories || [],
+        tags: item.tags || [],
+        similarity: 0,
+      };
+      expect(row.categories).toEqual([]);
+      expect(row.tags).toEqual([]);
+      // Isolate lexical fallback so vector matches cannot hide lost text hits.
+      engineSearch.mockImplementation(async (vector: number[]) =>
+        vector.length ? [] : [{ ...row }],
+      );
+      const results = await new OfflineSearchProvider().search(row.title);
+      expect(
+        results.find(result => result.id === id)?.similarity,
+      ).toBeGreaterThan(0.3);
     },
   );
 });
