@@ -234,7 +234,9 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
         for (const term of queryTerms) {
           if (term.length > 2) {
             // 忽略太短的词
-            const regex = new RegExp(term, 'gi');
+            // Search input is literal text, not a regular expression.
+            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(escapedTerm, 'gi');
             const matches = searchText.match(regex);
             if (matches) {
               matchScore += matches.length;
