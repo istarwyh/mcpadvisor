@@ -41,7 +41,7 @@ export async function searchOffline(
     const startTime = Date.now();
     const provider = new OfflineSearchProvider({
       fallbackDataPath,
-      minSimilarity: options.minSimilarity || 0.3,
+      minSimilarity: options.minSimilarity ?? 0.3,
       textMatchWeight,
       vectorSearchWeight: 1 - textMatchWeight,
     });
