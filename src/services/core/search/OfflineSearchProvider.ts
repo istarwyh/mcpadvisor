@@ -60,9 +60,9 @@ export class OfflineSearchProvider implements SearchProvider {
   constructor(config: OfflineSearchProviderConfig = {}) {
     this.config = {
       fallbackDataPath: config.fallbackDataPath,
-      minSimilarity: config.minSimilarity || 0.1, // 降低默认阈值，提高召回率
-      textMatchWeight: config.textMatchWeight || 0.7,
-      vectorSearchWeight: config.vectorSearchWeight || 0.3,
+      minSimilarity: config.minSimilarity ?? 0.1, // 降低默认阈值，提高召回率
+      textMatchWeight: config.textMatchWeight ?? 0.7,
+      vectorSearchWeight: config.vectorSearchWeight ?? 0.3,
     };
 
     this.vectorEngine = new EnhancedMemoryVectorEngine(
@@ -541,7 +541,7 @@ export class OfflineSearchProvider implements SearchProvider {
       if (result.id) {
         // 应用向量搜索权重
         const weightedSimilarity =
-          (result.similarity || 0) * (this.config.vectorSearchWeight || 0.3);
+          (result.similarity || 0) * (this.config.vectorSearchWeight ?? 0.3);
         mergedMap.set(result.id, {
           ...result,
           similarity: weightedSimilarity,
@@ -556,7 +556,7 @@ export class OfflineSearchProvider implements SearchProvider {
         if (existing) {
           // 如果已存在，合并相似度分数
           const textWeightedSimilarity =
-            (result.similarity || 0) * (this.config.textMatchWeight || 0.7);
+            (result.similarity || 0) * (this.config.textMatchWeight ?? 0.7);
           existing.similarity = Math.max(
             existing.similarity || 0,
             textWeightedSimilarity,
@@ -564,7 +564,7 @@ export class OfflineSearchProvider implements SearchProvider {
         } else {
           // 如果不存在，添加新结果
           const textWeightedSimilarity =
-            (result.similarity || 0) * (this.config.textMatchWeight || 0.7);
+            (result.similarity || 0) * (this.config.textMatchWeight ?? 0.7);
           mergedMap.set(result.id, {
             ...result,
             similarity: textWeightedSimilarity,
