@@ -211,6 +211,95 @@ describe('NacosMcpProvider', () => {
   });
 
   describe('search', () => {
+    it('preserves vector results when keyword search is unavailable', async () => {
+      mockNacosClient.searchMcpByKeyword.mockRejectedValue(
+        new Error('Keyword endpoint unavailable'),
+      );
+
+      const results = await provider.search({
+        taskDescription: 'vector search',
+      });
+
+      expect(results).toHaveLength(1);
+      expect(results[0]).toMatchObject({
+        id: 'test-server',
+        score: 0.9,
+        similarity: 0.9,
+        sourceUrl: 'nacos://test-server',
+      });
+      expect(mockNacosClient.searchMcpByKeyword).not.toHaveBeenCalled();
+    });
+
+    it('does not wait for an unused keyword search after vector success', async () => {
+      mockNacosClient.searchMcpByKeyword.mockImplementation(
+        () => new Promise(() => {}),
+      );
+
+      const results = await provider.search({
+        taskDescription: 'vector search',
+      });
+
+      expect(results[0].id).toBe('test-server');
+      expect(mockNacosClient.searchMcpByKeyword).not.toHaveBeenCalled();
+    }, 1000);
+
+    it('uses keyword fallback when vector results are empty', async () => {
+      mockMcpManager.search.mockResolvedValue([]);
+
+      const results = await provider.search({
+        taskDescription: 'keyword query',
+        keywords: ['keyword'],
+      });
+
+      expect(results[0]).toMatchObject({
+        id: 'test-server',
+        score: 0.8,
+        similarity: 0.8,
+      });
+      expect(
+        mockNacosClient.searchMcpByKeyword,
+      ).toHaveBeenCalledExactlyOnceWith('keyword');
+    });
+
+    it('preserves keyword fallback after vector search rejects', async () => {
+      mockMcpManager.search.mockRejectedValue(new Error('Vector unavailable'));
+
+      const results = await provider.search({
+        taskDescription: 'fallback query',
+      });
+
+      expect(results[0].id).toBe('test-server');
+      expect(
+        mockNacosClient.searchMcpByKeyword,
+      ).toHaveBeenCalledExactlyOnceWith('fallback');
+    });
+
+    it('retains keyword retry after empty vectors and a transient failure', async () => {
+      mockMcpManager.search.mockResolvedValue([]);
+      mockNacosClient.searchMcpByKeyword.mockRejectedValueOnce(
+        new Error('Transient keyword failure'),
+      );
+
+      const results = await provider.search({
+        taskDescription: 'fallback query',
+      });
+
+      expect(results[0].id).toBe('test-server');
+      expect(mockNacosClient.searchMcpByKeyword).toHaveBeenCalledTimes(2);
+    });
+
+    it('retains the error after empty vectors and both keyword attempts fail', async () => {
+      mockMcpManager.search.mockResolvedValue([]);
+      mockNacosClient.searchMcpByKeyword.mockRejectedValue(
+        new Error('Keyword unavailable'),
+      );
+
+      await expect(
+        provider.search({ taskDescription: 'fallback query' }),
+      ).rejects.toThrow('Vector search failed');
+      expect(mockNacosClient.searchMcpByKeyword).toHaveBeenCalledTimes(2);
+    });
+
     it('should return an array of MCPServerResponse', async () => {
       // Mock the search result
       mockMcpManager.search.mockResolvedValue([
@@ -289,11 +378,11 @@ describe('NacosMcpProvider', () => {
         tags: expect.arrayContaining([expect.any(String)]),
       });
 
-      // Verify search was called with the first keyword
-      expect(mockNacosClient.searchMcpByKeyword).toHaveBeenCalledWith('test');
+      // Vector results already win; an unused fallback must not be requested.
+      expect(mockNacosClient.searchMcpByKeyword).not.toHaveBeenCalled();
     });
 
-    it('should handle empty keywords by extracting from task description', async () => {
+    it('should preserve vector results when explicit keywords are absent', async () => {
       // Mock the search result
       mockMcpManager.search.mockResolvedValue([
         {
@@ -353,9 +442,8 @@ describe('NacosMcpProvider', () => {
         tags: expect.arrayContaining([expect.any(String)]),
       });
 
-      // Verify search was called with the first word of the task description
-      // Note: The actual implementation might call it multiple times with different keywords
-      expect(mockNacosClient.searchMcpByKeyword).toHaveBeenCalledWith('test');
+      // Extracting keywords must not request fallback after vector success.
+      expect(mockNacosClient.searchMcpByKeyword).not.toHaveBeenCalled();
     });
 
     it('should handle errors during search', async () => {

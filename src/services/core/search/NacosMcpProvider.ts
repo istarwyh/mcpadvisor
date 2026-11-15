@@ -224,17 +224,6 @@ export class NacosMcpProvider implements SearchProvider {
         this.config.limit || 10,
       );
 
-      // Also try keyword search as fallback/supplement
-      const keywordResults = await this.keywordFallbackSearch(keywords);
-
-      // Combine results, prioritizing vector search results
-      const allResults = [...(vectorResults || []), ...keywordResults];
-
-      if (allResults.length === 0) {
-        logger.warn('No results from both vector and keyword search');
-        return [];
-      }
-
       // Convert vector results to MCPServerResponse format
       const formattedVectorResults = (vectorResults || []).map((item: any) => {
         const original = item.metadata?.original || item;
@@ -264,10 +253,16 @@ export class NacosMcpProvider implements SearchProvider {
         };
       });
 
-      // Return vector results if available, otherwise keyword results
-      return formattedVectorResults.length > 0
-        ? formattedVectorResults
-        : keywordResults;
+      // Successful vector results do not depend on the keyword fallback.
+      if (formattedVectorResults.length > 0) {
+        return formattedVectorResults;
+      }
+
+      const keywordResults = await this.keywordFallbackSearch(keywords);
+      if (keywordResults.length === 0) {
+        logger.warn('No results from both vector and keyword search');
+      }
+      return keywordResults;
     } catch (error) {
       logger.warn(
         'Vector search failed, falling back to keyword search',
