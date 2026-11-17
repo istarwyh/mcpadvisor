@@ -95,7 +95,7 @@ describe('offline fallback initialization', () => {
     expect(load).toHaveBeenCalledTimes(2);
   });
 
-  it('preserves failed-load cooldown and later loader invocation', async () => {
+  it('preserves failed-load cooldown and populates the index on recovery', async () => {
     let now = 1000;
     vi.spyOn(Date, 'now').mockImplementation(() => now);
     const load = vi
@@ -107,8 +107,55 @@ describe('offline fallback initialization', () => {
     await engine.search([1, 0]);
     expect(load).toHaveBeenCalledTimes(1);
     now += 3600001;
-    await Promise.all([engine.search([1, 0]), engine.search([1, 0])]);
+    const results = await Promise.all([
+      engine.search([1, 0]),
+      engine.search([1, 0]),
+    ]);
     expect(load).toHaveBeenCalledTimes(2);
+    for (const result of results)
+      expect(result.map(row => row.id)).toEqual(['first', 'second']);
+  });
+
+  it('populates the index after an initially empty load recovers', async () => {
+    let now = 1000;
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
+    const load = vi
+      .spyOn(OfflineDataLoader.prototype, 'loadFallbackDataWithEmbeddings')
+      .mockResolvedValueOnce([])
+      .mockResolvedValue(entries);
+    const engine = new EnhancedMemoryVectorEngine();
+    expect(await engine.search([1, 0])).toEqual([]);
+    expect(await engine.search([1, 0])).toEqual([]);
+    expect(load).toHaveBeenCalledTimes(1);
+    now += 3600001;
+    expect((await engine.search([1, 0])).map(row => row.id)).toEqual([
+      'first',
+      'second',
+    ]);
+    expect(load).toHaveBeenCalledTimes(2);
+    expect((await engine.search([1, 0])).map(row => row.id)).toEqual([
+      'first',
+      'second',
+    ]);
+  });
+
+  it('does not duplicate inserted entries after a later insertion fails', async () => {
+    let now = 1000;
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
+    vi.spyOn(
+      OfflineDataLoader.prototype,
+      'loadFallbackDataWithEmbeddings',
+    ).mockResolvedValue(entries);
+    const originalAdd = WritableInMemoryVectorEngine.prototype.addEntry;
+    const add = vi
+      .spyOn(WritableInMemoryVectorEngine.prototype, 'addEntry')
+      .mockImplementationOnce(originalAdd)
+      .mockRejectedValueOnce(new Error('second insertion failed'));
+    const engine = new EnhancedMemoryVectorEngine();
+    expect((await engine.search([1, 0])).map(row => row.id)).toEqual(['first']);
+    now += 3600001;
+    expect((await engine.search([1, 0])).map(row => row.id)).toEqual(['first']);
+    expect(add).toHaveBeenCalledTimes(2);
   });
 
   it('shares expired refresh without reinserting existing entries', async () => {
