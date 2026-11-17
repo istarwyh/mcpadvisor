@@ -28,6 +28,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
   private memoryEngine: WritableInMemoryVectorEngine;
   private offlineLoader: OfflineDataLoader;
   private fallbackDataLoaded: boolean = false;
+  private fallbackLoadAttempted: boolean = false;
   private fallbackLoadPromise?: Promise<void>;
   private lastFallbackLoadTime: number = 0;
   private fallbackLoadIntervalMs: number = 3600000; // 1小时
@@ -108,6 +109,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
       if (this.fallbackLoadPromise) await this.fallbackLoadPromise;
       await this.memoryEngine.clear();
       this.fallbackDataLoaded = false;
+      this.fallbackLoadAttempted = false;
       await this.ensureFallbackDataLoaded();
       logger.info('Cleared all vector entries (except fallback data)');
     } catch (error) {
@@ -122,6 +124,7 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
     this.customFallbackPath = path;
     this.offlineLoader.setFallbackDataPath(path);
     this.fallbackDataLoaded = false;
+    this.fallbackLoadAttempted = false;
     logger.info(`Updated fallback data path to: ${path}`);
   }
 
@@ -142,9 +145,9 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
   private async loadFallbackData(): Promise<void> {
     const currentTime = Date.now();
 
-    // 如果数据尚未加载或者已经过期，则重新加载
+    // Empty or failed attempts retain the cooldown without marking the index populated.
     if (
-      !this.fallbackDataLoaded ||
+      !this.fallbackLoadAttempted ||
       currentTime - this.lastFallbackLoadTime > this.fallbackLoadIntervalMs
     ) {
       try {
@@ -186,8 +189,9 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
               entry.vector,
               fallbackData,
             );
+            // Preserve already inserted entries if a later insertion fails.
+            this.fallbackDataLoaded = true;
           }
-          this.fallbackDataLoaded = true;
           console.error(
             `[DEBUG] Successfully added ${fallbackEntries.length} fallback entries to the memory engine`,
           );
@@ -196,12 +200,13 @@ export class EnhancedMemoryVectorEngine implements IWritableVectorSearchEngine {
           );
         }
 
+        this.fallbackLoadAttempted = true;
         this.lastFallbackLoadTime = currentTime;
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         logger.error(`Error loading fallback data: ${message}`, { error });
         // 即使加载失败，也标记为已尝试加载，避免频繁重试
-        this.fallbackDataLoaded = true;
+        this.fallbackLoadAttempted = true;
         this.lastFallbackLoadTime = currentTime;
       }
     }
