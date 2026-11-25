@@ -35,7 +35,7 @@ node build/index.js
 }
 ```
 
-Claude Desktop 历史配置路径：macOS 为 `~/Library/Application Support/Claude/claude_desktop_config.json`，Windows 为 `%AppData%\Claude\claude_desktop_config.json`。Linux 或其他客户端请按其自身说明配置。这些路径不证明现代协议兼容；第三方安装按钮和托管目录不属于制品验收证据。真实托管迁移仍在 [#36](https://github.com/istarwyh/mcpadvisor/issues/36) 和草稿 [#40](https://github.com/istarwyh/mcpadvisor/pull/40) 单独跟踪。
+Claude Desktop 历史配置路径：macOS 为 `~/Library/Application Support/Claude/claude_desktop_config.json`，Windows 为 `%AppData%\Claude\claude_desktop_config.json`。Linux 或其他客户端请按其自身说明配置。这些路径不证明现代协议兼容；第三方安装按钮和托管目录不属于制品验收证据。托管迁移文档已在 [#40](https://github.com/istarwyh/mcpadvisor/pull/40) 合并；真实托管网关的验收仍由 [#36](https://github.com/istarwyh/mcpadvisor/issues/36) 跟踪。
 
 ## 基本使用
 
@@ -126,7 +126,7 @@ HTTP 固定使用 `http://127.0.0.1:3000/mcp`。`GET /health` 是健康检查；
 - 结果为空或不全，应检查 provider 和日志；不能认为全部目录或可选模型都执行成功。
 - 排查客户端前，先核对 Node、包管理器与 build 产物。
 
-[故障排查](./TROUBLESHOOTING.zh-CN.md)正在草稿 #40 中更新，其中旧说明不构成启用已退役 transport 的依据；协议问题优先使用当前[迁移指南](./MCP_2026_MIGRATION.md)。
+[故障排查](./TROUBLESHOOTING.zh-CN.md)已更新托管说明。不要依据旧说明启用已退役传输；协议问题请查阅当前[迁移指南](./MCP_2026_MIGRATION.md)。
 
 ## 测试与证据
 

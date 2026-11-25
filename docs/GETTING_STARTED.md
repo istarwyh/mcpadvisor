@@ -48,9 +48,9 @@ For Claude Desktop, the historical settings paths are
 `%AppData%\Claude\claude_desktop_config.json` on Windows. Use the client's own
 instructions on Linux or with another client. These paths are not proof of
 modern-protocol support. Third-party install buttons and hosted listings are
-not versioned acceptance evidence; hosting migration is tracked separately in
-[#36](https://github.com/istarwyh/mcpadvisor/issues/36) and draft
-[#40](https://github.com/istarwyh/mcpadvisor/pull/40).
+not versioned acceptance evidence; the hosting migration documentation merged in
+[#40](https://github.com/istarwyh/mcpadvisor/pull/40), while
+[#36](https://github.com/istarwyh/mcpadvisor/issues/36) still tracks validation on the real hosted gateway.
 
 ## Basic Usage
 
@@ -184,8 +184,8 @@ it does not export SearchService. Use the complete source example in the
   that every catalog or optional model ran successfully.
 - Check Node/package-manager versions and build output before debugging clients.
 
-[Troubleshooting](./TROUBLESHOOTING.md) is being aligned in draft #40; its older
-instructions are not authority to enable retired transports. Prefer the current
+[Troubleshooting](./TROUBLESHOOTING.md) now reflects the merged hosting guidance.
+Do not re-enable retired transports based on older instructions. Use the current
 [migration guide](./MCP_2026_MIGRATION.md) for protocol errors.
 
 ## Testing and evidence
