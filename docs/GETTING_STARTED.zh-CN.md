@@ -20,22 +20,23 @@ node build/index.js
 
 最后一行启动 stdio 并等待 MCP 客户端，不是交互式搜索提示符。客户端必须显式选择 **MCP 2026-07-28**；按[官方 SDK 示例](./MCP_2026_MIGRATION.md#connect-with-the-official-sdk)执行 discovery、tools/list 和首次调用。仅使用 SDK v2 不等于选择现代协议；本文不证明具体桌面客户端已兼容。
 
-### 已发布兼容版本
+### 通过 npm 安装
 
-历史客户端或回滚路径固定使用 npm **1.0.5**，它不包含现代源码的 transport 迁移。
+使用 Node.js >=20，以及明确支持 MCP 2026-07-28 的客户端。
 
 ```json
 {
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@2.0.0"]
     }
   }
 }
 ```
 
-Claude Desktop 历史配置路径：macOS 为 `~/Library/Application Support/Claude/claude_desktop_config.json`，Windows 为 `%AppData%\Claude\claude_desktop_config.json`。Linux 或其他客户端请按其自身说明配置。这些路径不证明现代协议兼容；第三方安装按钮和托管目录不属于制品验收证据。托管迁移文档已在 [#40](https://github.com/istarwyh/mcpadvisor/pull/40) 合并；真实托管网关的验收仍由 [#36](https://github.com/istarwyh/mcpadvisor/issues/36) 跟踪。
+请勿把这份配置用于旧客户端。协议和传输变更见[迁移指南](./MCP_2026_MIGRATION.md)。
+[#36](https://github.com/istarwyh/mcpadvisor/issues/36) 单独跟踪托管网关，npm 发布不代表托管验收通过。
 
 ## 基本使用
 
