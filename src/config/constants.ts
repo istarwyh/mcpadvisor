@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 /**
  * Application constants
  */
@@ -5,7 +7,10 @@
 export const COMPASS_API_BASE =
   process.env.COMPASS_API_BASE || 'https://registry.mcphub.io';
 export const SERVER_NAME = 'mcpadvisor';
-export const SERVER_VERSION = '1.0.0';
+const packageManifest: { version: string } = JSON.parse(
+  readFileSync(new URL('../../package.json', import.meta.url), 'utf8'),
+);
+export const SERVER_VERSION = packageManifest.version;
 
 // OceanBase configuration
 export const OCEANBASE_URL = process.env.OCEANBASE_URL;
