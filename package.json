@@ -1,6 +1,7 @@
 {
   "name": "@xiaohui-wang/mcpadvisor",
-  "version": "1.0.5",
+  "version": "2.0.0",
+  "mcpName": "io.github.istarwyh/mcpadvisor",
   "description": "MCP Advisor & Installation - Find the right MCP server for your needs",
   "main": "build/index.js",
   "type": "module",
