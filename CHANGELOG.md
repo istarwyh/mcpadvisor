@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0]
+
+- Support the MCP 2026-07-28 protocol via stdio and stateless HTTP. Older clients must migrate; legacy SSE/REST endpoints are no longer supported.
+- Add official MCP Registry ownership metadata for the npm package and a stdio registry manifest.
+
 ## [1.0.5] - 2025-07-12
 
 ### ✨ Added

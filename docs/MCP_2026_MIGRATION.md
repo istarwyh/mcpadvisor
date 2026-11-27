@@ -1,13 +1,14 @@
 # MCP 2026-07-28 migration
 
-This guide describes the issue #36 source change. It is a breaking protocol
-migration, not a claim that a new npm release has been published. The previously
-published `@xiaohui-wang/mcpadvisor@1.0.5` remains the explicit compatibility and
-rollback target. Do not use `@latest` to select this migration or a rollback.
+MCP Advisor 2.0.0 requires MCP 2026-07-28. Upgrade the client before switching
+its server configuration, and pin `@xiaohui-wang/mcpadvisor@2.0.0` for a
+reproducible npm installation. Legacy SSE/REST and the old handshake are not
+supported. Self-hosted HTTP validation is tracked separately in
+[#36](https://github.com/istarwyh/mcpadvisor/issues/36).
 
 ## Compatibility boundary
 
-| Surface | This source branch |
+| Surface | MCP Advisor 2.0.0 |
 | --- | --- |
 | Runtime | Node.js >= 20; `.nvmrc` selects 22 |
 | Protocol | MCP `2026-07-28` only, on both transports |
@@ -270,30 +271,19 @@ The SDK reads and bounds `/mcp` bodies (default 4 MiB); there is no global Expre
 JSON parser before it. The separate `/api/sources` route has a 1 MiB JSON limit.
 No legacy HTTP server is mounted alongside the new one.
 
-## Rollback
+## If the upgraded client cannot connect
 
-A rollback selects a previously published artifact/deployment; it does not enable
-`legacy/` in the modern source build.
-
-1. Keep the prior release artifact, deployment configuration, and client settings
-   before rollout. Record the exact new commit/artifact under test.
-2. If a required client cannot speak MCP 2026-07-28, stop the new process and restore
-   the previous deployment. For a local npm launch, explicitly select:
-   `npx -y @xiaohui-wang/mcpadvisor@1.0.5`.
-3. Restore that release's transport settings, endpoint, and compatible client setup
-   together. New `http`/`/mcp` settings are not a recipe for the old release.
-4. Verify tool listing and a representative call with the intended client.
-   Preserve the previous network/authentication controls when restoring HTTP service.
-
-A pinned modern client will reject a legacy-only rollback endpoint. Adjust its
-configuration deliberately or restore the original client, rather than hiding the
-protocol mismatch. Do not remove `legacy: 'reject'`, import the archived server,
-or install old SDKs into this branch as an undocumented fallback.
+Check that the client explicitly negotiates MCP 2026-07-28 and uses the transport
+settings for 2.0.0. If it only supports the old handshake, upgrade or switch
+clients. Do not enable archived transports or install old SDKs in this build to
+hide the protocol mismatch. A self-hosted operator restoring a separately
+validated deployment must restore its matching client and network and
+authentication settings together.
 
 ## 中文迁移摘要
 
-- 本次是源码分支的协议迁移，尚不代表 npm 已发布新版本。测试使用包含本次变更的源码；
-  回滚显式选择 `@xiaohui-wang/mcpadvisor@1.0.5`，不要依赖 `@latest`。
+- MCP Advisor 2.0.0 需要明确支持 MCP 2026-07-28 的客户端。通过 npm 安装时可固定
+  `@xiaohui-wang/mcpadvisor@2.0.0`；先升级客户端，再切换服务端配置。
 - Node.js 最低为 20，`.nvmrc` 选择 22。本地默认仍为 stdio；远程选择
   `TRANSPORT_TYPE=http` 或 `--mode=http`，固定连接 `/mcp`。
 - 两种入口均仅支持 MCP 2026-07-28。官方 SDK v2 客户端默认仍走旧握手，必须显式设置
@@ -305,5 +295,5 @@ or install old SDKs into this branch as an undocumented fallback.
   `auto/json/sse` 只是现代响应编码，`json` 会丢弃中间进度／日志通知。
 - `/health` 和 `/api/sources` 保持为独立应用路由。Host／Origin 校验覆盖所有 HTTP 路由。
   没有内置认证，也没有新增跨域浏览器 CORS 功能；白名单不能替代认证和网络限制。
-- 客户端取消不保证业务提供者停止底层工作。回滚应恢复旧制品及其客户端／端点配置，
-  不要重新导入归档代码作为隐式兼容层。
+- 客户端取消不保证业务提供者停止底层工作。若自托管方需恢复另行验证过的部署，应一并恢复
+  匹配的客户端和网络／认证配置，不要重新导入归档代码作为隐式兼容层。

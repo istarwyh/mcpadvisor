@@ -9,7 +9,7 @@ MCP Advisor 帮助 MCP 客户端按任务发现服务器并获取安装指导。
 
 1. **使用当前源码**：[快速开始](docs/GETTING_STARTED.zh-CN.md) 介绍 MCP 2026-07-28、
    stdio 和 HTTP。
-2. **兼容旧客户端**：npm 已发布的 `1.0.5` 是独立的旧版本，不要套用当前源码的传输配置。
+2. **通过 npm 安装**：使用 `@xiaohui-wang/mcpadvisor@2.0.0`，客户端需要支持 MCP 2026-07-28。
 3. **开发与排障**：阅读[贡献指南](CONTRIBUTING.zh-CN.md)、
    [系统架构](docs/ARCHITECTURE.zh-CN.md)和[技术参考](docs/TECHNICAL_REFERENCE.zh-CN.md)。
    当前协议问题优先看[迁移指南（英文）](docs/MCP_2026_MIGRATION.md)。
@@ -68,14 +68,14 @@ HTTP 每次请求创建协议服务器，提供者缓存仍可由进程共享。
 没有内置认证或跨源浏览器 CORS，默认保持回环绑定；远程开放需要独立安全网关，
 文档不代表托管验收通过。
 
-### 已发布 npm 1.0.5（旧版）
+### npm 安装
 
 ```sh
-npx -y @xiaohui-wang/mcpadvisor@1.0.5
+npx -y @xiaohui-wang/mcpadvisor@2.0.0
 ```
 
-这运行旧的已发布包，不是以上当前源码；请核对该版本自身的客户端兼容性和配置。
-源码 package.json 仍写 1.0.5，不代表新增改动已经发布到 npm。
+2.x 需要支持 MCP 2026-07-28 的客户端。此命令启动 stdio 服务并等待客户端连接。
+升级旧配置前请看[迁移指南](docs/MCP_2026_MIGRATION.md)。
 
 ### 第三方安装器
 

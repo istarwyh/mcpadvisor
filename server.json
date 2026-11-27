@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.istarwyh/mcpadvisor",
+  "title": "MCP Advisor",
+  "description": "Find and compare MCP servers and get installation guidance for your client.",
+  "repository": {
+    "url": "https://github.com/istarwyh/mcpadvisor",
+    "source": "github"
+  },
+  "version": "2.0.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@xiaohui-wang/mcpadvisor",
+      "version": "2.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

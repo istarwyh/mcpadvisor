@@ -27,30 +27,25 @@ prompt. Use a client explicitly configured for **MCP 2026-07-28**. Follow the
 for discovery, tools/list and a first call. SDK v2 alone does not imply modern
 protocol negotiation. Named desktop-client compatibility is not established here.
 
-### Published compatibility version
+### Install the npm release
 
-For historical clients and rollback, the documented npm artifact is fixed at
-**1.0.5**. This does not install the modern source transport.
+Use Node.js >=20 and a client explicitly configured for MCP 2026-07-28.
 
 ```json
 {
   "mcpServers": {
     "mcpadvisor": {
       "command": "npx",
-      "args": ["-y", "@xiaohui-wang/mcpadvisor@1.0.5"]
+      "args": ["-y", "@xiaohui-wang/mcpadvisor@2.0.0"]
     }
   }
 }
 ```
 
-For Claude Desktop, the historical settings paths are
-`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS and
-`%AppData%\Claude\claude_desktop_config.json` on Windows. Use the client's own
-instructions on Linux or with another client. These paths are not proof of
-modern-protocol support. Third-party install buttons and hosted listings are
-not versioned acceptance evidence; the hosting migration documentation merged in
-[#40](https://github.com/istarwyh/mcpadvisor/pull/40), while
-[#36](https://github.com/istarwyh/mcpadvisor/issues/36) still tracks validation on the real hosted gateway.
+Do not apply these settings to a legacy client. See the
+[migration guide](./MCP_2026_MIGRATION.md) for the protocol and transport changes.
+[#36](https://github.com/istarwyh/mcpadvisor/issues/36) tracks the hosted
+gateway separately; the npm release does not validate it.
 
 ## Basic Usage
 
