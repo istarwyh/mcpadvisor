@@ -11,8 +11,8 @@ server's safety for you.
 
 1. **Use the current source:** follow the [Quick Start](docs/GETTING_STARTED.md)
    for MCP 2026-07-28 clients, stdio, or HTTP.
-2. **Need an older client?** The published npm version `1.0.5` is a separate
-   legacy release. Do not apply the current source's transport configuration to it.
+2. **Install from npm:** use `@xiaohui-wang/mcpadvisor@2.0.0` with a client
+   configured for MCP 2026-07-28.
 3. **Develop or diagnose:** read [Contributing](CONTRIBUTING.md),
    [Architecture](docs/ARCHITECTURE.md), and [Technical Reference](docs/TECHNICAL_REFERENCE.md).
    For current protocol failures, start with the [migration guide](docs/MCP_2026_MIGRATION.md).
@@ -76,15 +76,15 @@ remain process-scoped. Old SSE/REST modes are rejected and old HTTP paths return
 authentication or cross-origin browser CORS: keep loopback binding unless you
 provide an independently secured gateway. Hosting acceptance is not implied.
 
-### Published npm 1.0.5 (legacy)
+### npm package
 
 ```sh
-npx -y @xiaohui-wang/mcpadvisor@1.0.5
+npx -y @xiaohui-wang/mcpadvisor@2.0.0
 ```
 
-This selects the older published artifact, not the source above. Check its own
-client compatibility and configuration. A source checkout still declaring version
-1.0.5 does not mean those source changes have been published to npm.
+Version 2 requires an MCP 2026-07-28 client. The command starts a stdio
+server and waits for a client. See the [migration guide](docs/MCP_2026_MIGRATION.md)
+before upgrading an older setup.
 
 ### Third-party installers
 
